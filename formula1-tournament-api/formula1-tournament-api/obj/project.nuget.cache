@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "wvXqD2BGJ2vALyrKofVOJNHh8SsOkk4iYcFj6egmMsT3QJBCv1hWy98C8V4em4Xxtsc5zZ4uECia/GVCwfLbaw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Levi\\Desktop\\formula1-tournament\\formula1-tournament-api\\formula1-tournament-api\\formula1-tournament-api.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Levi\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+    "C:\\Users\\Levi\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\Levi\\.nuget\\packages\\swashbuckle.aspnetcore\\6.2.3\\swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
+    "C:\\Users\\Levi\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.2.3\\swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
+    "C:\\Users\\Levi\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.2.3\\swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
+    "C:\\Users\\Levi\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.2.3\\swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512"
+  ],
+  "logs": []
+}
