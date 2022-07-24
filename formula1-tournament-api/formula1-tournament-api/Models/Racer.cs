@@ -4,6 +4,7 @@
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public Guid teamId { get; set; }
+        public Guid TeamId { get; set; }
+        public Guid SeasonId { get; set; }
     }
 }

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Levi\\Desktop\\formula1-tournament\\formula1-tournament-api\\formula1-tournament-api\\formula1-tournament-api.csproj": {}
+    "C:\\Users\\nyiro\\Desktop\\formula1-tournament\\formula1-tournament-api\\formula1-tournament-api\\formula1-tournament-api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Levi\\Desktop\\formula1-tournament\\formula1-tournament-api\\formula1-tournament-api\\formula1-tournament-api.csproj": {
+    "C:\\Users\\nyiro\\Desktop\\formula1-tournament\\formula1-tournament-api\\formula1-tournament-api\\formula1-tournament-api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Levi\\Desktop\\formula1-tournament\\formula1-tournament-api\\formula1-tournament-api\\formula1-tournament-api.csproj",
+        "projectUniqueName": "C:\\Users\\nyiro\\Desktop\\formula1-tournament\\formula1-tournament-api\\formula1-tournament-api\\formula1-tournament-api.csproj",
         "projectName": "formula1-tournament-api",
-        "projectPath": "C:\\Users\\Levi\\Desktop\\formula1-tournament\\formula1-tournament-api\\formula1-tournament-api\\formula1-tournament-api.csproj",
-        "packagesPath": "C:\\Users\\Levi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Levi\\Desktop\\formula1-tournament\\formula1-tournament-api\\formula1-tournament-api\\obj\\",
+        "projectPath": "C:\\Users\\nyiro\\Desktop\\formula1-tournament\\formula1-tournament-api\\formula1-tournament-api\\formula1-tournament-api.csproj",
+        "packagesPath": "C:\\Users\\nyiro\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\nyiro\\Desktop\\formula1-tournament\\formula1-tournament-api\\formula1-tournament-api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Levi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\nyiro\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -43,6 +43,10 @@
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[6.0.6, )"
+            },
+            "MySql.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.1, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
