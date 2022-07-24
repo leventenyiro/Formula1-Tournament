@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using formula1_tournament_api.Interfaces;
+using formula1_tournament_api.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 
@@ -39,7 +41,7 @@ namespace formula1_tournament_api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] SeasonDTO season)
+        public async Task<IActionResult> Post([FromBody] Season season)
         {
             var result = await _seasonService.AddSeason(season);
             if (result.IsSuccess)
@@ -50,7 +52,7 @@ namespace formula1_tournament_api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, [FromBody] SeasonDTO season)
+        public async Task<IActionResult> Put(Guid id, [FromBody] Season season)
         {
             var result = await _seasonService.UpdateSeason(id, season);
             if (result.IsSuccess)
