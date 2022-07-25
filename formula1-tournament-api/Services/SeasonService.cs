@@ -31,6 +31,7 @@ namespace formula1_tournament_api.Services
             if (season != null)
             {
                 _formulaDbContext.Season.Remove(season);
+                _formulaDbContext.SaveChanges();
                 return (true, null);
             }
             return (false, "Season not found");
@@ -64,6 +65,7 @@ namespace formula1_tournament_api.Services
                 seasonObj.Name = season.Name;
                 // .UserId ?
                 _formulaDbContext.Season.Update(seasonObj);
+                _formulaDbContext.SaveChanges();
                 return (true, null);
             }
             return (false, "Season not found");
