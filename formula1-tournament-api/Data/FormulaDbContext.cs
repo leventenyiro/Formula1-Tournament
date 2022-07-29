@@ -19,8 +19,6 @@ namespace formula1_tournament_api.Data
         {
             modelBuilder.Entity<User>(entity =>
             {
-                //entity.ToTable("user");
-
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Username)
                     .IsRequired();
@@ -30,8 +28,6 @@ namespace formula1_tournament_api.Data
 
             modelBuilder.Entity<Season>(entity =>
             {
-                //entity.ToTable("season");
-
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name)
                     .IsRequired();
@@ -41,8 +37,6 @@ namespace formula1_tournament_api.Data
 
             modelBuilder.Entity<Team>(entity =>
             {
-                //entity.ToTable("team");
-
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name)
                     .IsRequired();
@@ -54,8 +48,6 @@ namespace formula1_tournament_api.Data
 
             modelBuilder.Entity<Racer>(entity =>
             {
-                //entity.ToTable("racer");
-
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name)
                     .IsRequired();
@@ -67,8 +59,6 @@ namespace formula1_tournament_api.Data
 
             modelBuilder.Entity<Race>(entity =>
             {
-                //entity.ToTable("race");
-
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Position)
                     .IsRequired();
