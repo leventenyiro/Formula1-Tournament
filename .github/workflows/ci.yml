@@ -19,7 +19,7 @@ jobs:
         dotnet-version: 6.0.x
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: formula1-tournament
+      working-directory: formula1-tournament-api
     - name: Build
       run: dotnet build --no-restore
     - name: Test
