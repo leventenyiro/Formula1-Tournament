@@ -27,7 +27,7 @@ namespace formula1_tournament_api.Services
 
         public async Task<(bool IsSuccess, string ErrorMessage)> DeleteSeason(Guid id)
         {
-            var season = _formulaDbContext.Season.Where(e => e.Id == id).First();
+            var season = _formulaDbContext.Season.Where(e => e.Id == id).FirstOrDefault();
             if (season != null)
             {
                 _formulaDbContext.Season.Remove(season);
@@ -49,7 +49,7 @@ namespace formula1_tournament_api.Services
 
         public async Task<(bool IsSuccess, Season Season, string ErrorMessage)> GetSeasonById(Guid id)
         {
-            var season = _formulaDbContext.Season.Where(e => e.Id == id).First();
+            var season = _formulaDbContext.Season.Where(e => e.Id == id).FirstOrDefault();
             if (season != null)
             {
                 return (true, season, null);
@@ -59,7 +59,7 @@ namespace formula1_tournament_api.Services
 
         public async Task<(bool IsSuccess, string ErrorMessage)> UpdateSeason(Guid id, Season season)
         {
-            var seasonObj = _formulaDbContext.Season.Where(e => e.Id == id).First();
+            var seasonObj = _formulaDbContext.Season.Where(e => e.Id == id).FirstOrDefault();
             if (seasonObj != null)
             {
                 seasonObj.Name = season.Name;
