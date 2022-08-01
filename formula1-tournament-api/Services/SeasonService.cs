@@ -63,7 +63,6 @@ namespace formula1_tournament_api.Services
             if (seasonObj != null)
             {
                 seasonObj.Name = season.Name;
-                // .UserId ?
                 _formulaDbContext.Season.Update(seasonObj);
                 _formulaDbContext.SaveChanges();
                 return (true, null);

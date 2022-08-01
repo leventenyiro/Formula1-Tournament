@@ -52,6 +52,20 @@ namespace formula1_tournament_api.Tests
         }
 
         [Test]
+        public void GetAllSeason_ShouldContainElement()
+        {
+            var season = new Season { Id = new Guid(), Name = "test", UserId = new Guid() };
+            _mockDbContext.Setup(x => x.Season).Returns(AddMockSet(new List<Season> { season }).Object);
+
+            var response = _seasonController.Get();
+            var result = (OkObjectResult)response.Result;
+            var actual = result.Value as IEnumerable<Season>;
+
+            Assert.AreEqual(actual.Count(), 1);
+            Assert.AreEqual(actual.ToList()[0], season);
+        }
+
+        [Test]
         public void PostSeason_ShouldBeOk()
         {
             _mockDbContext.Setup(x => x.Season).Returns(AddMockSet(new List<Season>()).Object);
@@ -91,6 +105,21 @@ namespace formula1_tournament_api.Tests
 
             Assert.AreEqual(result.StatusCode, 404);
             Assert.IsNull(actual);
+        }
+
+        [Test]
+        public void GetSeason_ShouldBeElement()
+        {
+            var id = new Guid();
+            var season = new Season { Id = id, Name = "test", UserId = new Guid() };
+            _mockDbContext.Setup(x => x.Season).Returns(AddMockSet(new List<Season> { season }).Object);
+
+            var response = _seasonController.Get(id);
+            var result = (OkObjectResult)response.Result;
+            var actual = result.Value as Season;
+
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(actual, season);
         }
 
         [Test]
