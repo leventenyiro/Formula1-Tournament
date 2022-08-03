@@ -2,10 +2,9 @@
 
 namespace formula1_tournament_api.Interfaces
 {
-    public class IUser
+    public interface IUser
     {
-        Task<(bool IsSuccess, User user, string ErrorMessage)> Login(User user);
-
-        Task<(bool IsSuccess, string ErrorMessage)> Registration(User user);
+        Task<(bool IsSuccess, User User, string ErrorMessage)> Login(User user);
+        Task<(bool IsSuccess, string ErrorMessage)> Registration(string username, string password, string passwordAgain);
     }
 }

@@ -14,35 +14,47 @@ namespace formula1_tournament_api.Services
             _formulaDbContext = formulaDbContext;
         }
 
-        public async Task<(bool IsSuccess, string Token, string ErrorMessage)> Login(User user)
+        public async Task<(bool IsSuccess, User User, string ErrorMessage)> Login(User user)
         {
             // find by name
             var actualUser = _formulaDbContext.User.Where(x => x.Username == user.Username).FirstOrDefault();
             if (actualUser == null)
             {
-                return (false, null, "Incorrect username or password");
+                return (false, null, "Incorrect username or password!");
             }
             //return (false, null, "No seasons found");
 
             // check password
-            if (verifyPassword(actualUser.Password, user.Password))
+            if (!BCrypt.Net.BCrypt.Verify(actualUser.Password, user.Password))
             {
-                // then generate token
-                string token = "";
-                return (true, token, null);
+                return (false, null, "Incorrect username or password");
             }
-            // ...
+            return (true, user, "Successful login");
         }
 
-        public static string hashPassword(string password)
+        public async Task<(bool IsSuccess, string ErrorMessage)> Registration(string username, string password, string passwordAgain)
+        {
+            if (password != passwordAgain)
+            {
+                return (false, "Passwords aren't pass!");
+            }
+            // insert
+            _formulaDbContext.Add(new User { Id = new Guid(), Username = username, Password = HashPassword(password) });
+            _formulaDbContext.SaveChanges();
+            return (true, null);
+        }
+
+        public static string HashPassword(string password)
         {
             if (!Regex.IsMatch(password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"))
-                throw new Exception("Password should be minimum eight characters, at least one uppercase letter and one number");
+            {
+                throw new Exception("Password should be minimum eight characters, at least one uppercase letter and one number!");
+            }
 
-            return BCrypt.Net.BCrypt.HashPassword(password);
+            return BCrypt.Net.BCrypt.HashPassword(password, 10);
         }
 
-        public static bool verifyPassword(string password, string hashedPassword)
+        public static bool VerifyPassword(string password, string hashedPassword)
         {
             return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
         }
