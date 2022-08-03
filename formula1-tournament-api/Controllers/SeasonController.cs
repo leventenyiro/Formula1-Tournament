@@ -1,6 +1,5 @@
 ﻿using formula1_tournament_api.Interfaces;
 using formula1_tournament_api.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 
