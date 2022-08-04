@@ -41,9 +41,9 @@ namespace formula1_tournament_api.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] User user)
+        public async Task<IActionResult> Login([FromForm] string usernameEmail, [FromForm] string password)
         {
-            var result = await _userService.Login(user);
+            var result = await _userService.Login(usernameEmail, password);
             if (result.IsSuccess)
             {
                 return Ok(result.User);

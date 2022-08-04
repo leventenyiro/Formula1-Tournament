@@ -14,10 +14,10 @@ namespace formula1_tournament_api.Services
             _formulaDbContext = formulaDbContext;
         }
 
-        public async Task<(bool IsSuccess, User User, string ErrorMessage)> Login(User user)
+        public async Task<(bool IsSuccess, User User, string ErrorMessage)> Login(string usernameEmail, string password)
         {
             // find by name
-            var actualUser = _formulaDbContext.User.Where(x => x.Username == user.Username).FirstOrDefault();
+            var actualUser = _formulaDbContext.User.Where(x => x.Username == usernameEmail).FirstOrDefault();
             if (actualUser == null)
             {
                 return (false, null, "Incorrect username or password!");
@@ -25,11 +25,11 @@ namespace formula1_tournament_api.Services
             //return (false, null, "No seasons found");
 
             // check password
-            if (!BCrypt.Net.BCrypt.Verify(actualUser.Password, user.Password))
+            if (!BCrypt.Net.BCrypt.Verify(actualUser.Password, password))
             {
                 return (false, null, "Incorrect username or password");
             }
-            return (true, user, "Successful login");
+            return (true, actualUser, "Successful login");
         }
 
         public async Task<(bool IsSuccess, string ErrorMessage)> Registration(string username, string password, string passwordAgain)
