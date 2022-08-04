@@ -25,7 +25,7 @@ namespace formula1_tournament_api.Services
             //return (false, null, "No seasons found");
 
             // check password
-            if (!BCrypt.Net.BCrypt.Verify(actualUser.Password, password))
+            if (!BCrypt.Net.BCrypt.Verify(password, actualUser.Password))
             {
                 return (false, null, "Incorrect username or password");
             }
