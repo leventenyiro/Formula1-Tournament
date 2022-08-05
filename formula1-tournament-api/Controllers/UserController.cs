@@ -2,6 +2,8 @@
 using formula1_tournament_api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace formula1_tournament_api.Controllers
 {
@@ -46,7 +48,7 @@ namespace formula1_tournament_api.Controllers
             var result = await _userService.Login(usernameEmail, password);
             if (result.IsSuccess)
             {
-                return Ok(result.User);
+                return Accepted(result.Token);
             }
             return BadRequest(result.ErrorMessage);
         }
@@ -61,6 +63,19 @@ namespace formula1_tournament_api.Controllers
                 return StatusCode(StatusCodes.Status201Created);
             }
             return BadRequest(result.ErrorMessage);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Get()
+        {
+            return Ok("works");
+            var result = await _userService.GetUser();
+            if (result.IsSuccess)
+            {
+                return Ok(result.User);
+            }
+            return NotFound(result.ErrorMessage);
         }
 
         /*[HttpPut("{id}")]
