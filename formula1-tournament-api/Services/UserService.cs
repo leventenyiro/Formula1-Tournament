@@ -22,33 +22,15 @@ namespace formula1_tournament_api.Services
 
         public async Task<(bool IsSuccess, string Token, string ErrorMessage)> Login(string usernameEmail, string password)
         {
-            // find by name
             var actualUser = _formulaDbContext.User.Where(x => x.Username == usernameEmail).FirstOrDefault();
             if (actualUser == null || !BCrypt.Net.BCrypt.Verify(password, actualUser.Password))
             {
                 return (false, null, "Incorrect username or password!");
             }
 
-            // token
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration.GetSection("Secret").Value);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.NameIdentifier, actualUser.Id.ToString())
-                    //new Claim(ClaimTypes.GivenName, actualUser.Username),
-                    //new Claim(ClaimTypes.Email, actualUser.Email)
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
+            string token = CreateToken(actualUser);
 
-            // needs here cookie?
-
-            return (true, tokenString, "Successful login");
+            return (true, token, "Successful login");
         }
 
         public async Task<(bool IsSuccess, string ErrorMessage)> Registration(string username, string password, string passwordAgain)
@@ -57,15 +39,15 @@ namespace formula1_tournament_api.Services
             {
                 return (false, "Passwords aren't pass!");
             }
-            // insert
+
             _formulaDbContext.Add(new User { Id = new Guid(), Username = username, Password = HashPassword(password) });
             _formulaDbContext.SaveChanges();
             return (true, null);
         }
 
-        public async Task<(bool IsSuccess, User User, string ErrorMessage)> GetUser()
+        public async Task<(bool IsSuccess, User User, string ErrorMessage)> GetUser(string userId)
         {
-            var result = _formulaDbContext.User.Where(x => x.Id == new Guid(ClaimTypes.NameIdentifier)).FirstOrDefault();
+            var result = _formulaDbContext.User.Where(x => x.Id == Guid.Parse(userId)).FirstOrDefault();
             if (result != null)
             {
                 return (true, result, null);
@@ -73,7 +55,7 @@ namespace formula1_tournament_api.Services
             return (false, null, "User not found");
         }
 
-        public static string HashPassword(string password)
+        private string HashPassword(string password)
         {
             if (!Regex.IsMatch(password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"))
             {
@@ -83,9 +65,23 @@ namespace formula1_tournament_api.Services
             return BCrypt.Net.BCrypt.HashPassword(password, 10);
         }
 
-        public static bool VerifyPassword(string password, string hashedPassword)
+        private string CreateToken(User user)
         {
-            return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.Id.ToString())
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Secret").Value));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.UtcNow.AddDays(7),
+                signingCredentials: creds
+            );
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return jwt;
         }
     }
 }
