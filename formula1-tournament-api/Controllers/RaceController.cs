@@ -1,30 +1,29 @@
 ﻿using formula1_tournament_api.Interfaces;
 using formula1_tournament_api.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 
 namespace formula1_tournament_api.Controllers
 {
-    [Route("api/racer")]
+    [Route("api/race")]
     [ApiController]
-    public class RacerController : Controller
+    public class RaceController : Controller
     {
-        private IRacer _racerService;
+        private IRace _raceService;
 
-        public RacerController(IRacer racerService)
+        public RaceController(IRace raceService)
         {
-            _racerService = racerService;
+            _raceService = raceService;
         }
 
         [HttpGet]
         [EnableQuery]
         public async Task<IActionResult> Get()
         {
-            var result = await _racerService.GetAllRacers();
+            var result = await _raceService.GetAllRaces();
             if (result.IsSuccess)
             {
-                return Ok(result.Racer);
+                return Ok(result.Race);
             }
             return NotFound(result.ErrorMessage);
         }
@@ -32,19 +31,18 @@ namespace formula1_tournament_api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var result = await _racerService.GetRacerById(id);
+            var result = await _raceService.GetRaceById(id);
             if (result.IsSuccess)
             {
-                return Ok(result.Racer);
+                return Ok(result.Race);
             }
             return NotFound(result.ErrorMessage);
         }
 
         [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> Post([FromBody] Racer racer)
+        public async Task<IActionResult> Post([FromBody] Race race)
         {
-            var result = await _racerService.AddRacer(racer, new Guid(User.Identity.Name));
+            var result = await _raceService.AddRace(race);
             if (result.IsSuccess)
             {
                 return StatusCode(StatusCodes.Status201Created);
@@ -53,9 +51,9 @@ namespace formula1_tournament_api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, [FromBody] Racer racer)
+        public async Task<IActionResult> Put(Guid id, [FromBody] Race race)
         {
-            var result = await _racerService.UpdateRacer(id, racer);
+            var result = await _raceService.UpdateRace(id, race);
             if (result.IsSuccess)
             {
                 return NoContent();
@@ -66,7 +64,7 @@ namespace formula1_tournament_api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _racerService.DeleteRacer(id);
+            var result = await _raceService.DeleteRace(id);
             if (result.IsSuccess)
             {
                 return NoContent();

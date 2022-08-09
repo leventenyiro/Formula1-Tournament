@@ -13,9 +13,11 @@ namespace formula1_tournament_api.Services
             _formulaDbContext = formulaDbContext;
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> AddRacer(Racer racer)
+        public async Task<(bool IsSuccess, string ErrorMessage)> AddRacer(Racer racer, Guid adminId)
         {
-            if (racer != null)
+            // is the adminId the real admin? racer.Season.UserId
+            bool isAdmin = _formulaDbContext.Season.Where(x => x.Id == racer.SeasonId).FirstOrDefault().UserId.Equals(adminId);
+            if (racer != null || isAdmin)
             {
                 racer.Id = Guid.NewGuid();
                 _formulaDbContext.Add(racer);
