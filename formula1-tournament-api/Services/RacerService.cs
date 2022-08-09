@@ -65,6 +65,7 @@ namespace formula1_tournament_api.Services
             if (racerObj != null)
             {
                 racerObj.Name = racer.Name;
+                //racerObj.TeamId = racer.TeamId; just when point is null, every race
                 _formulaDbContext.Racer.Update(racerObj);
                 _formulaDbContext.SaveChanges();
                 return (true, null);

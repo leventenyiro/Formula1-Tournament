@@ -63,6 +63,7 @@ namespace formula1_tournament_api.Services
             if (teamObj != null)
             {
                 teamObj.Name = team.Name;
+                teamObj.Color = team.Color;
                 _formulaDbContext.Team.Update(teamObj);
                 _formulaDbContext.SaveChanges();
                 return (true, null);

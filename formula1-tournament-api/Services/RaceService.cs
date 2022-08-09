@@ -63,6 +63,8 @@ namespace formula1_tournament_api.Services
             if (raceObj != null)
             {
                 raceObj.Name = race.Name;
+                raceObj.Position = race.Position;
+                raceObj.Points = race.Points;
                 _formulaDbContext.Race.Update(raceObj);
                 _formulaDbContext.SaveChanges();
                 return (true, null);
