@@ -26,5 +26,5 @@ jobs:
       working-directory: formula1-tournament-web
     - run: npm run build --if-present
       working-directory: formula1-tournament-web
-    - run: npm test
-      working-directory: formula1-tournament-web
+    #- run: npm test
+    #  working-directory: formula1-tournament-web
