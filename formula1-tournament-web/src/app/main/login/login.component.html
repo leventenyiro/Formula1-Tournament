@@ -15,12 +15,6 @@
                 <div class="invalid-feedback">Address is required</div>
             </div>
     
-            <div class="mb-3">
-                <label for="inputPhone" class="form-label">Phone</label>
-                <input required type="text" class="form-control" id="inputPhone" name="phone" ngModel name="phone" #phone="ngModel" [class.is-invalid]="!phone.valid && phone.touched" [class.is-valid]="phone.valid">
-                <div class="invalid-feedback">Phone is required</div>
-            </div>
-    
             <button class="btn btn-primary" [disabled]="!postForm.valid">Login</button>
             
             <div class="alert alert-danger" role="alert" *ngIf="error">
