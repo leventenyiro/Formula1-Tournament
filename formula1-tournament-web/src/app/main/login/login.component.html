@@ -1,18 +1,18 @@
-<div class="container">
+<div class="container col-xs-12 col-md-4 col-md-offset-4 mt-5">
     <h1>Login</h1>
 
-    <div class="col-xs-12 col-md-6 col-md-offset-3">
+    <div>
         <form #postForm="ngForm" (ngSubmit)="onLogin(postForm)">
             <div class="mb-3">
                 <label for="inputUsernameEmail" class="form-label">Username or email</label>
-                <input required type="email" class="form-control" id="inputUsernameEmail" ngModel name="name" #name="ngModel" [class.is-invalid]="!name.valid && name.touched" [class.is-valid]="name.valid">
+                <input required type="email" class="form-control" id="inputUsernameEmail" ngModel name="usernameEmail" #usernameEmail="ngModel" [class.is-invalid]="!usernameEmail.valid && usernameEmail.touched" [class.is-valid]="usernameEmail.valid">
                 <div class="invalid-feedback">Username or email is required</div>
             </div>
     
             <div class="mb-3">
                 <label for="inputPassword" class="form-label">Password</label>
-                <input required multiple type="password" class="form-control" id="inputPassword" ngModel name="address" #address="ngModel" [class.is-invalid]="!address.valid && address.touched" [class.is-valid]="address.valid" pattern="">
-                <div class="invalid-feedback">Address is required</div>
+                <input required multiple type="password" class="form-control" id="inputPassword" ngModel name="password" #password="ngModel" [class.is-invalid]="!password.valid && password.touched" [class.is-valid]="password.valid" pattern="">
+                <div class="invalid-feedback">Password is required</div>
             </div>
     
             <button class="btn btn-primary" [disabled]="!postForm.valid">Login</button>
