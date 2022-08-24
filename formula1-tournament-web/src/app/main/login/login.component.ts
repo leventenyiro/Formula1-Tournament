@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from './user.service';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-login',
@@ -11,22 +11,18 @@ export class LoginComponent implements OnInit {
   isFetching = false;
   error = "";
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private loginService: LoginService, private router: Router) { }
 
   ngOnInit(): void {
   }
 
   onLogin(data: any) {
-    /*this.isFetching = true
-    /*if (condition) {
-      data.form.controls["name"].status = "INVALID"
-      this.errorName = "Name must be 3 char"
-    } else {
-      this.userService.addUser(data.value).subscribe({
-        next: () => this.router.navigate(['user']),
-        error: err => this.error = err,
-        complete: () => this.isFetching = false
-      })
-    //}*/
+    this.isFetching = true
+
+    this.loginService.login(data.value).subscribe({
+      next: () => this.router.navigate(['/admin']),
+      error: err => this.error = err,
+      complete: () => this.isFetching = false
+    })
   }
 }
