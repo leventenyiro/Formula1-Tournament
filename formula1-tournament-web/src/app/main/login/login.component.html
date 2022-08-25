@@ -16,10 +16,16 @@
             </div>
     
             <button class="btn btn-primary" [disabled]="!postForm.valid">Login</button>
-            
+        </form>
+
+        <div class="spinner-border" role="status" *ngIf="isFetching; else elseDiv">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+
+        <ng-template #elseDiv>
             <div class="alert alert-danger" role="alert" *ngIf="error">
                 {{error}}
             </div>
-        </form>
+        </ng-template>
     </div>
 </div>

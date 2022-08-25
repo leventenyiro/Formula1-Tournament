@@ -14,15 +14,24 @@ export class LoginComponent implements OnInit {
   constructor(private loginService: LoginService, private router: Router) { }
 
   ngOnInit(): void {
+    // check if available
+    if (document.cookie.split("token=")[1].split(";")[0]) {
+      this.router.navigate(['/admin']);
+    }
   }
 
   onLogin(data: any) {
     this.isFetching = true
 
     this.loginService.login(data.value).subscribe({
-      next: () => this.router.navigate(['/admin']),
+      next: (data) => {
+        document.cookie = `token=${data}`;
+        this.router.navigate(['/admin']);
+      },
       error: err => this.error = err,
       complete: () => this.isFetching = false
     })
+
+    this.isFetching = false;
   }
 }
