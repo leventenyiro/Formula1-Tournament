@@ -8,19 +8,21 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './main/header/header.component';
 import { LoginComponent } from './main/login/login.component';
 import { MainComponent } from './main/main.component';
+import { AdminComponent } from './admin/admin.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     HeaderComponent,
-    MainComponent
+    MainComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
