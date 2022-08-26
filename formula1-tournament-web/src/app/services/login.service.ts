@@ -28,6 +28,30 @@ export class LoginService {
     )
   }
 
+  isSessionValid(documentCookie: string) {
+    const bearerToken = documentCookie.split("session=")[1].split(";")[0];
+    if (!bearerToken) {
+      return false;
+    }
+    let headers = new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Access-Control-Allow-Origin', '*')
+    .set('Authorization', `Bearer ${bearerToken}`)
+    return this.http
+    .get<Login>(
+        `${environment.backendUrl}/authentication`,
+        {
+            headers: headers
+        }
+    ).pipe(
+        tap(data => JSON.stringify(data)),
+        catchError(this.handleError)
+    ).subscribe({
+      next: data => { return true },
+      error: err => { return false }
+    })
+  }
+
   private handleError(err: HttpErrorResponse): Observable<never> {
     let errorMessage = '';
     if (err.error instanceof ErrorEvent) {

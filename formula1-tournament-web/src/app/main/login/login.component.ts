@@ -14,8 +14,7 @@ export class LoginComponent implements OnInit {
   constructor(private loginService: LoginService, private router: Router) { }
 
   ngOnInit(): void {
-    // check if available
-    if (document.cookie.split("token=")[1].split(";")[0]) {
+    if (this.loginService.isSessionValid(document.cookie)) {
       this.router.navigate(['/admin']);
     }
   }
@@ -25,7 +24,7 @@ export class LoginComponent implements OnInit {
 
     this.loginService.login(data.value).subscribe({
       next: (data) => {
-        document.cookie = `token=${data}`;
+        document.cookie = `session=${data}`;
         this.router.navigate(['/admin']);
       },
       error: err => this.error = err,
