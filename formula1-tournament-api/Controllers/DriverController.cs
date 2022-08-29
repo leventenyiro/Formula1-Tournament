@@ -6,25 +6,25 @@ using Microsoft.AspNetCore.OData.Query;
 
 namespace formula1_tournament_api.Controllers
 {
-    [Route("api/racer")]
+    [Route("api/driver")]
     [ApiController]
-    public class RacerController : Controller
+    public class DriverController : Controller
     {
-        private IRacer _racerService;
+        private IDriver _driverService;
 
-        public RacerController(IRacer racerService)
+        public DriverController(IDriver driverService)
         {
-            _racerService = racerService;
+            _driverService = driverService;
         }
 
         [HttpGet]
         [EnableQuery]
         public async Task<IActionResult> Get()
         {
-            var result = await _racerService.GetAllRacers();
+            var result = await _driverService.GetAllDrivers();
             if (result.IsSuccess)
             {
-                return Ok(result.Racer);
+                return Ok(result.Driver);
             }
             return NotFound(result.ErrorMessage);
         }
@@ -32,19 +32,19 @@ namespace formula1_tournament_api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var result = await _racerService.GetRacerById(id);
+            var result = await _driverService.GetDriverById(id);
             if (result.IsSuccess)
             {
-                return Ok(result.Racer);
+                return Ok(result.Driver);
             }
             return NotFound(result.ErrorMessage);
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Post([FromBody] Racer racer)
+        public async Task<IActionResult> Post([FromBody] Driver driver)
         {
-            var result = await _racerService.AddRacer(racer, new Guid(User.Identity.Name));
+            var result = await _driverService.AddDriver(driver, new Guid(User.Identity.Name));
             if (result.IsSuccess)
             {
                 return StatusCode(StatusCodes.Status201Created);
@@ -53,9 +53,9 @@ namespace formula1_tournament_api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, [FromBody] Racer racer)
+        public async Task<IActionResult> Put(Guid id, [FromBody] Driver driver)
         {
-            var result = await _racerService.UpdateRacer(id, racer);
+            var result = await _driverService.UpdateDriver(id, driver);
             if (result.IsSuccess)
             {
                 return NoContent();
@@ -66,7 +66,7 @@ namespace formula1_tournament_api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _racerService.DeleteRacer(id);
+            var result = await _driverService.DeleteDriver(id);
             if (result.IsSuccess)
             {
                 return NoContent();

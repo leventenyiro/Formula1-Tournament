@@ -8,7 +8,7 @@ namespace formula1_tournament_api.Data
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<Season> Season { get; set; }
         public virtual DbSet<Team> Team { get; set; }
-        public virtual DbSet<Racer> Racer { get; set; }
+        public virtual DbSet<Driver> Driver { get; set; }
         public virtual DbSet<Race> Race { get; set; }
 
         public FormulaDbContext() { }
@@ -50,7 +50,7 @@ namespace formula1_tournament_api.Data
                     .IsRequired();
             });
 
-            modelBuilder.Entity<Racer>(entity =>
+            modelBuilder.Entity<Driver>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name)
@@ -68,9 +68,9 @@ namespace formula1_tournament_api.Data
                     .IsRequired();
                 entity.Property(e => e.Points)
                     .IsRequired();
-                entity.Property(e => e.RacerId)
+                entity.Property(e => e.DriverId)
                     .IsRequired();
-                entity.Property(e => e.RacerId)
+                entity.Property(e => e.SeasonId)
                     .IsRequired();
             });
         }
