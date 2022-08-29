@@ -27,9 +27,9 @@ namespace formula1_tournament_api.Controllers
         }
 
         [HttpPost("registration")]
-        public async Task<IActionResult> Registration([FromForm] string username, [FromForm] string password, [FromForm] string passwordAgain)
+        public async Task<IActionResult> Registration([FromForm] string username, [FromForm] string email, [FromForm] string password, [FromForm] string passwordAgain)
         {
-            var result = await _userService.Registration(username, password, passwordAgain);
+            var result = await _userService.Registration(username, email, password, passwordAgain);
             if (result.IsSuccess)
             {
                 return StatusCode(StatusCodes.Status201Created);
