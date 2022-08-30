@@ -22,7 +22,7 @@ namespace formula1_tournament_api.Services
 
         public async Task<(bool IsSuccess, string Token, string ErrorMessage)> Login(string usernameEmail, string password)
         {
-            var actualUser = _formulaDbContext.User.Where(x => x.Username == usernameEmail || x.Email == usernameEmail).FirstOrDefault();
+            var actualUser = _formulaDbContext.Users.Where(x => x.Username == usernameEmail || x.Email == usernameEmail).FirstOrDefault();
             if (actualUser == null || !BCrypt.Net.BCrypt.Verify(password, actualUser.Password))
             {
                 return (false, null, "Incorrect username or password!");
@@ -47,7 +47,7 @@ namespace formula1_tournament_api.Services
 
         public async Task<(bool IsSuccess, User User, string ErrorMessage)> GetUser(string userId)
         {
-            var result = _formulaDbContext.User.Where(x => x.Id == Guid.Parse(userId)).FirstOrDefault();
+            var result = _formulaDbContext.Users.Where(x => x.Id == Guid.Parse(userId)).FirstOrDefault();
             if (result != null)
             {
                 return (true, result, null);

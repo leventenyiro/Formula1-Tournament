@@ -24,7 +24,7 @@ namespace formula1_tournament_api.Controllers
             var result = await _driverService.GetAllDrivers();
             if (result.IsSuccess)
             {
-                return Ok(result.Driver);
+                return Ok(result.Drivers);
             }
             return NotFound(result.ErrorMessage);
         }

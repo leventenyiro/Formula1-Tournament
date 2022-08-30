@@ -5,11 +5,11 @@ namespace formula1_tournament_api.Data
 {
     public class FormulaDbContext : DbContext
     {
-        public virtual DbSet<User> User { get; set; }
-        public virtual DbSet<Season> Season { get; set; }
-        public virtual DbSet<Team> Team { get; set; }
-        public virtual DbSet<Driver> Driver { get; set; }
-        public virtual DbSet<Race> Race { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Season> Seasons { get; set; }
+        public virtual DbSet<Team> Teams { get; set; }
+        public virtual DbSet<Driver> Drivers { get; set; }
+        public virtual DbSet<Race> Races { get; set; }
 
         public FormulaDbContext() { }
 

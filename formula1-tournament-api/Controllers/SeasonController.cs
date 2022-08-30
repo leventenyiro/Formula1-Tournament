@@ -23,7 +23,7 @@ namespace formula1_tournament_api.Controllers
             var result = await _seasonService.GetAllSeasons();
             if (result.IsSuccess)
             {
-                return Ok(result.Season);
+                return Ok(result.Seasons);
             }
             return NotFound(result.ErrorMessage);
         }

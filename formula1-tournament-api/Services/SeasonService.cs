@@ -27,19 +27,19 @@ namespace formula1_tournament_api.Services
 
         public async Task<(bool IsSuccess, string ErrorMessage)> DeleteSeason(Guid id)
         {
-            var season = _formulaDbContext.Season.Where(e => e.Id == id).FirstOrDefault();
+            var season = _formulaDbContext.Seasons.Where(e => e.Id == id).FirstOrDefault();
             if (season != null)
             {
-                _formulaDbContext.Season.Remove(season);
+                _formulaDbContext.Seasons.Remove(season);
                 _formulaDbContext.SaveChanges();
                 return (true, null);
             }
             return (false, "Season not found");
         }
 
-        public async Task<(bool IsSuccess, List<Season> Season, string ErrorMessage)> GetAllSeasons()
+        public async Task<(bool IsSuccess, List<Season> Seasons, string ErrorMessage)> GetAllSeasons()
         {
-            var seasons = _formulaDbContext.Season.ToList();
+            var seasons = _formulaDbContext.Seasons.ToList();
             if (seasons != null)
             {
                 return (true, seasons, null);
@@ -49,7 +49,7 @@ namespace formula1_tournament_api.Services
 
         public async Task<(bool IsSuccess, Season Season, string ErrorMessage)> GetSeasonById(Guid id)
         {
-            var season = _formulaDbContext.Season.Where(e => e.Id == id).FirstOrDefault();
+            var season = _formulaDbContext.Seasons.Where(e => e.Id == id).FirstOrDefault();
             if (season != null)
             {
                 return (true, season, null);
@@ -59,11 +59,11 @@ namespace formula1_tournament_api.Services
 
         public async Task<(bool IsSuccess, string ErrorMessage)> UpdateSeason(Guid id, Season season)
         {
-            var seasonObj = _formulaDbContext.Season.Where(e => e.Id == id).FirstOrDefault();
+            var seasonObj = _formulaDbContext.Seasons.Where(e => e.Id == id).FirstOrDefault();
             if (seasonObj != null)
             {
                 seasonObj.Name = season.Name;
-                _formulaDbContext.Season.Update(seasonObj);
+                _formulaDbContext.Seasons.Update(seasonObj);
                 _formulaDbContext.SaveChanges();
                 return (true, null);
             }

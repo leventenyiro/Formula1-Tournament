@@ -40,7 +40,7 @@ namespace formula1_tournament_api.Tests
         [Test]
         public void GetAllSeason_ShouldBeEmpty()
         {
-            _mockDbContext.Setup(x => x.Season).Returns(AddMockSet(new List<Season>()).Object);
+            _mockDbContext.Setup(x => x.Seasons).Returns(AddMockSet(new List<Season>()).Object);
 
             var response = _seasonController.Get();
             Assert.IsTrue(response.IsCompleted);
@@ -55,7 +55,7 @@ namespace formula1_tournament_api.Tests
         public void GetAllSeason_ShouldContainElement()
         {
             var season = new Season { Id = new Guid(), Name = "test", UserId = new Guid() };
-            _mockDbContext.Setup(x => x.Season).Returns(AddMockSet(new List<Season> { season }).Object);
+            _mockDbContext.Setup(x => x.Seasons).Returns(AddMockSet(new List<Season> { season }).Object);
 
             var response = _seasonController.Get();
             var result = (OkObjectResult)response.Result;
@@ -68,7 +68,7 @@ namespace formula1_tournament_api.Tests
         [Test]
         public void PostSeason_ShouldBeOk()
         {
-            _mockDbContext.Setup(x => x.Season).Returns(AddMockSet(new List<Season>()).Object);
+            _mockDbContext.Setup(x => x.Seasons).Returns(AddMockSet(new List<Season>()).Object);
 
             var season = new Season { Name = "string", UserId = new Guid() };
             var response = _seasonController.Post(season);
@@ -83,7 +83,7 @@ namespace formula1_tournament_api.Tests
         {
             var id = new Guid();
             var season = new Season { Id = id, Name = "test", UserId = new Guid() };
-            _mockDbContext.Setup(x => x.Season).Returns(AddMockSet(new List<Season> { season }).Object);
+            _mockDbContext.Setup(x => x.Seasons).Returns(AddMockSet(new List<Season> { season }).Object);
 
             season = new Season { Name = "string", UserId = new Guid() };
             var response = _seasonController.Put(id, season);
@@ -96,7 +96,7 @@ namespace formula1_tournament_api.Tests
         [Test]
         public void GetSeason_ShouldBeNull()
         {
-            _mockDbContext.Setup(x => x.Season).Returns(AddMockSet(new List<Season>()).Object);
+            _mockDbContext.Setup(x => x.Seasons).Returns(AddMockSet(new List<Season>()).Object);
 
             var response = _seasonController.Get(new Guid());
             Assert.IsTrue(response.IsCompleted);
@@ -112,7 +112,7 @@ namespace formula1_tournament_api.Tests
         {
             var id = new Guid();
             var season = new Season { Id = id, Name = "test", UserId = new Guid() };
-            _mockDbContext.Setup(x => x.Season).Returns(AddMockSet(new List<Season> { season }).Object);
+            _mockDbContext.Setup(x => x.Seasons).Returns(AddMockSet(new List<Season> { season }).Object);
 
             var response = _seasonController.Get(id);
             var result = (OkObjectResult)response.Result;
@@ -127,7 +127,7 @@ namespace formula1_tournament_api.Tests
         {
             var id = new Guid();
             var season = new Season { Id = id, Name = "test", UserId = new Guid() };
-            _mockDbContext.Setup(x => x.Season).Returns(AddMockSet(new List<Season> { season }).Object);
+            _mockDbContext.Setup(x => x.Seasons).Returns(AddMockSet(new List<Season> { season }).Object);
 
             var response = _seasonController.Delete(id);
             Assert.IsTrue(response.IsCompleted);

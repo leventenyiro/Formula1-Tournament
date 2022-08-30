@@ -23,7 +23,7 @@ namespace formula1_tournament_api.Controllers
             var result = await _teamService.GetAllTeams();
             if (result.IsSuccess)
             {
-                return Ok(result.Team);
+                return Ok(result.Teams);
             }
             return NotFound(result.ErrorMessage);
         }
