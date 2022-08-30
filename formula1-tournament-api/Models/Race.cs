@@ -6,6 +6,8 @@
         public string Name { get; set; }
         public int Position { get; set; }
         public int Points { get; set; }
+        public Driver Driver { get; set; }
+        public Season Season { get; set; }
         public Guid DriverId { get; set; }
         public Guid SeasonId { get; set; }
     }
