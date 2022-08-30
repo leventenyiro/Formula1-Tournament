@@ -5,11 +5,11 @@ namespace formula1_tournament_api.Data
 {
     public class FormulaDbContext : DbContext
     {
-        public virtual DbSet<User> User { get; set; }
-        public virtual DbSet<Season> Season { get; set; }
-        public virtual DbSet<Team> Team { get; set; }
-        public virtual DbSet<Driver> Driver { get; set; }
-        public virtual DbSet<Race> Race { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Season> Seasons { get; set; }
+        public virtual DbSet<Team> Teams { get; set; }
+        public virtual DbSet<Driver> Drivers { get; set; }
+        public virtual DbSet<Race> Races { get; set; }
 
         public FormulaDbContext() { }
 
@@ -35,7 +35,9 @@ namespace formula1_tournament_api.Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name)
                     .IsRequired();
-                entity.Property(e => e.UserId)
+                entity.HasOne(e => e.User)
+                    .WithMany(e => e.Seasons)
+                    .HasForeignKey(e => e.UserId)
                     .IsRequired();
             });
 
@@ -46,7 +48,9 @@ namespace formula1_tournament_api.Data
                     .IsRequired();
                 entity.Property(e => e.Color)
                     .IsRequired();
-                entity.Property(e => e.SeasonId)
+                entity.HasOne(e => e.Season)
+                    .WithMany(e => e.Teams)
+                    .HasForeignKey(e => e.SeasonId)
                     .IsRequired();
             });
 
@@ -55,9 +59,13 @@ namespace formula1_tournament_api.Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name)
                     .IsRequired();
-                entity.Property(e => e.TeamId)
+                entity.HasOne(e => e.Team)
+                    .WithMany(e => e.Drivers)
+                    .HasForeignKey(e => e.TeamId)
                     .IsRequired();
-                entity.Property(e => e.SeasonId)
+                entity.HasOne(e => e.Season)
+                    .WithMany(e => e.Drivers)
+                    .HasForeignKey(e => e.SeasonId)
                     .IsRequired();
             });
 
@@ -68,9 +76,13 @@ namespace formula1_tournament_api.Data
                     .IsRequired();
                 entity.Property(e => e.Points)
                     .IsRequired();
-                entity.Property(e => e.DriverId)
+                entity.HasOne(e => e.Driver)
+                    .WithMany(e => e.Races)
+                    .HasForeignKey(e => e.DriverId)
                     .IsRequired();
-                entity.Property(e => e.SeasonId)
+                entity.HasOne(e => e.Season)
+                    .WithMany(e => e.Races)
+                    .HasForeignKey(e => e.SeasonId)
                     .IsRequired();
             });
         }

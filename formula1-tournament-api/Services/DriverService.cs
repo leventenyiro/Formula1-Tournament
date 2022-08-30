@@ -16,7 +16,7 @@ namespace formula1_tournament_api.Services
         public async Task<(bool IsSuccess, string ErrorMessage)> AddDriver(Driver driver, Guid adminId)
         {
             // is the adminId the real admin? driver.Season.UserId
-            bool isAdmin = _formulaDbContext.Season.Where(x => x.Id == driver.SeasonId).FirstOrDefault().UserId.Equals(adminId);
+            bool isAdmin = _formulaDbContext.Seasons.Where(x => x == driver.Season).First().UserId.Equals(adminId);
             if (driver != null || isAdmin)
             {
                 driver.Id = Guid.NewGuid();
@@ -29,19 +29,19 @@ namespace formula1_tournament_api.Services
 
         public async Task<(bool IsSuccess, string ErrorMessage)> DeleteDriver(Guid id)
         {
-            var driver = _formulaDbContext.Driver.Where(e => e.Id == id).FirstOrDefault();
+            var driver = _formulaDbContext.Drivers.Where(e => e.Id == id).FirstOrDefault();
             if (driver != null)
             {
-                _formulaDbContext.Driver.Remove(driver);
+                _formulaDbContext.Drivers.Remove(driver);
                 _formulaDbContext.SaveChanges();
                 return (true, null);
             }
             return (false, "Driver not found");
         }
 
-        public async Task<(bool IsSuccess, List<Driver> Driver, string ErrorMessage)> GetAllDrivers()
+        public async Task<(bool IsSuccess, List<Driver> Drivers, string ErrorMessage)> GetAllDrivers()
         {
-            var drivers = _formulaDbContext.Driver.ToList();
+            var drivers = _formulaDbContext.Drivers.ToList();
             if (drivers != null)
             {
                 return (true, drivers, null);
@@ -51,7 +51,7 @@ namespace formula1_tournament_api.Services
 
         public async Task<(bool IsSuccess, Driver Driver, string ErrorMessage)> GetDriverById(Guid id)
         {
-            var driver = _formulaDbContext.Driver.Where(e => e.Id == id).FirstOrDefault();
+            var driver = _formulaDbContext.Drivers.Where(e => e.Id == id).FirstOrDefault();
             if (driver != null)
             {
                 return (true, driver, null);
@@ -61,12 +61,12 @@ namespace formula1_tournament_api.Services
 
         public async Task<(bool IsSuccess, string ErrorMessage)> UpdateDriver(Guid id, Driver driver)
         {
-            var driverObj = _formulaDbContext.Driver.Where(e => e.Id == id).FirstOrDefault();
+            var driverObj = _formulaDbContext.Drivers.Where(e => e.Id == id).FirstOrDefault();
             if (driverObj != null)
             {
                 driverObj.Name = driver.Name;
                 //driverObj.TeamId = driver.TeamId; just when point is null, every race
-                _formulaDbContext.Driver.Update(driverObj);
+                _formulaDbContext.Drivers.Update(driverObj);
                 _formulaDbContext.SaveChanges();
                 return (true, null);
             }

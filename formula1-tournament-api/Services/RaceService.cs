@@ -27,19 +27,19 @@ namespace formula1_tournament_api.Services
 
         public async Task<(bool IsSuccess, string ErrorMessage)> DeleteRace(Guid id)
         {
-            var race = _formulaDbContext.Race.Where(e => e.Id == id).FirstOrDefault();
+            var race = _formulaDbContext.Races.Where(e => e.Id == id).FirstOrDefault();
             if (race != null)
             {
-                _formulaDbContext.Race.Remove(race);
+                _formulaDbContext.Races.Remove(race);
                 _formulaDbContext.SaveChanges();
                 return (true, null);
             }
             return (false, "Race not found");
         }
 
-        public async Task<(bool IsSuccess, List<Race> Race, string ErrorMessage)> GetAllRaces()
+        public async Task<(bool IsSuccess, List<Race> Races, string ErrorMessage)> GetAllRaces()
         {
-            var races = _formulaDbContext.Race.ToList();
+            var races = _formulaDbContext.Races.ToList();
             if (races != null)
             {
                 return (true, races, null);
@@ -49,7 +49,7 @@ namespace formula1_tournament_api.Services
 
         public async Task<(bool IsSuccess, Race Race, string ErrorMessage)> GetRaceById(Guid id)
         {
-            var race = _formulaDbContext.Race.Where(e => e.Id == id).FirstOrDefault();
+            var race = _formulaDbContext.Races.Where(e => e.Id == id).FirstOrDefault();
             if (race != null)
             {
                 return (true, race, null);
@@ -59,13 +59,13 @@ namespace formula1_tournament_api.Services
 
         public async Task<(bool IsSuccess, string ErrorMessage)> UpdateRace(Guid id, Race race)
         {
-            var raceObj = _formulaDbContext.Race.Where(e => e.Id == id).FirstOrDefault();
+            var raceObj = _formulaDbContext.Races.Where(e => e.Id == id).FirstOrDefault();
             if (raceObj != null)
             {
                 raceObj.Name = race.Name;
                 raceObj.Position = race.Position;
                 raceObj.Points = race.Points;
-                _formulaDbContext.Race.Update(raceObj);
+                _formulaDbContext.Races.Update(raceObj);
                 _formulaDbContext.SaveChanges();
                 return (true, null);
             }
