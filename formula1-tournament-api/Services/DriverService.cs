@@ -16,7 +16,8 @@ namespace formula1_tournament_api.Services
         public async Task<(bool IsSuccess, string ErrorMessage)> AddDriver(Driver driver, Guid adminId)
         {
             // is the adminId the real admin? driver.Season.UserId
-            bool isAdmin = _formulaDbContext.Seasons.Where(x => x == driver.Season).First().UserId.Equals(adminId);
+            //bool isAdmin = _formulaDbContext.Seasons.Where(x => x == driver.Season).First().UserId.Equals(adminId);
+            bool isAdmin = true; // temporary
             if (driver != null || isAdmin)
             {
                 driver.Id = Guid.NewGuid();
