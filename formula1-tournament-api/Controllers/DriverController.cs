@@ -11,10 +11,12 @@ namespace formula1_tournament_api.Controllers
     public class DriverController : Controller
     {
         private IDriver _driverService;
+        private IUserSeason _userSeasonService;
 
-        public DriverController(IDriver driverService)
+        public DriverController(IDriver driverService, IUserSeason userSeasonService)
         {
             _driverService = driverService;
+            _userSeasonService = userSeasonService;
         }
 
         [HttpGet]
@@ -44,7 +46,9 @@ namespace formula1_tournament_api.Controllers
         [Authorize]
         public async Task<IActionResult> Post([FromBody] Driver driver)
         {
-            var result = await _driverService.AddDriver(driver, new Guid(User.Identity.Name));
+            if (_userSeasonService.HasPermission(new Guid(User.Identity.Name), driver.Season))
+                return StatusCode(StatusCodes.Status403Forbidden);
+            var result = await _driverService.AddDriver(driver);
             if (result.IsSuccess)
             {
                 return StatusCode(StatusCodes.Status201Created);
@@ -55,6 +59,9 @@ namespace formula1_tournament_api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(Guid id, [FromBody] Driver driver)
         {
+            Driver driverObj = // what should I do here?
+            if (_userSeasonService.HasPermission(new Guid(User.Identity.Name), driver.Season))
+                return StatusCode(StatusCodes.Status403Forbidden);
             var result = await _driverService.UpdateDriver(id, driver);
             if (result.IsSuccess)
             {
@@ -66,6 +73,8 @@ namespace formula1_tournament_api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
+            if (_userSeasonService.HasPermission(new Guid(User.Identity.Name), driver.Season))
+                return StatusCode(StatusCodes.Status403Forbidden);
             var result = await _driverService.DeleteDriver(id);
             if (result.IsSuccess)
             {
