@@ -23,6 +23,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ISeason, SeasonService>();
 builder.Services.AddScoped<IUser, UserService>();
+builder.Services.AddScoped<IUserSeason, UserSeasonService>();
+builder.Services.AddScoped<IDriver, DriverService>();
+builder.Services.AddScoped<ITeam, TeamService>();
+builder.Services.AddScoped<IRace, RaceService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

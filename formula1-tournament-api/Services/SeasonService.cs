@@ -1,4 +1,5 @@
 ﻿using formula1_tournament_api.Data;
+using formula1_tournament_api.DTO;
 using formula1_tournament_api.Interfaces;
 using formula1_tournament_api.Models;
 
@@ -13,16 +14,17 @@ namespace formula1_tournament_api.Services
             _formulaDbContext = formulaDbContext;
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> AddSeason(Season season)
+        public async Task<(bool IsSuccess, Guid SeasonId, string ErrorMessage)> AddSeason(SeasonDto season)
         {
             if (season != null)
             {
                 season.Id = Guid.NewGuid();
-                _formulaDbContext.Add(season);
+                var seasonObj = new Season { Id = season.Id, Name = season.Name };
+                _formulaDbContext.Add(seasonObj);
                 _formulaDbContext.SaveChanges();
-                return (true, null);
+                return (true, season.Id, null);
             }
-            return (false, "Please provide the season data");
+            return (false, Guid.Empty, "Please provide the season data");
         }
 
         public async Task<(bool IsSuccess, string ErrorMessage)> DeleteSeason(Guid id)
@@ -57,7 +59,7 @@ namespace formula1_tournament_api.Services
             return (false, null, "Season not found");
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> UpdateSeason(Guid id, Season season)
+        public async Task<(bool IsSuccess, string ErrorMessage)> UpdateSeason(Guid id, SeasonDto season)
         {
             var seasonObj = _formulaDbContext.Seasons.Where(e => e.Id == id).FirstOrDefault();
             if (seasonObj != null)

@@ -1,4 +1,5 @@
-﻿using formula1_tournament_api.Interfaces;
+﻿using formula1_tournament_api.DTO;
+using formula1_tournament_api.Interfaces;
 using formula1_tournament_api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -47,7 +48,6 @@ namespace formula1_tournament_api.Controllers
                 userSeason => userSeason.SeasonId,
                 (season, userSeason) => new { Season = season, UserSeason = userSeason });
             return Ok(result);
-
         }
 
         [HttpGet("{id}")]
@@ -61,19 +61,27 @@ namespace formula1_tournament_api.Controllers
             return NotFound(result.ErrorMessage);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Season season)
+        [HttpPost, Authorize]
+        public async Task<IActionResult> Post([FromBody] SeasonDto season)
         {
-            var result = await _seasonService.AddSeason(season);
-            if (result.IsSuccess)
+
+            /*var result1 = await _seasonService.AddSeason(season);
+            if (!result1.IsSuccess)
+                return BadRequest(result1.ErrorMessage);
+            var result2 = await _userSeasonService.AddAdmin(new Guid(User.Identity.Name), season.Id);
+            if (!result2.IsSuccess)
             {
-                return StatusCode(StatusCodes.Status201Created);
+                var result3 = await _seasonService.DeleteSeason(season.Id);
+                if (!result3.IsSuccess)
+                    return BadRequest(result3.ErrorMessage);
+                return BadRequest(result2.ErrorMessage);
             }
-            return BadRequest(result.ErrorMessage);
+            return StatusCode(StatusCodes.Status201Created);*/
+            Season seasonObj = new Season { Name = season.Name, Users =  }; // how to do that?
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, [FromBody] Season season)
+        [HttpPut("{id}"), Authorize]
+        public async Task<IActionResult> Put(Guid id, [FromBody] SeasonDto season)
         {
             var result = await _seasonService.UpdateSeason(id, season);
             if (result.IsSuccess)
@@ -83,7 +91,7 @@ namespace formula1_tournament_api.Controllers
             return BadRequest(result.ErrorMessage);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
             var result = await _seasonService.DeleteSeason(id);

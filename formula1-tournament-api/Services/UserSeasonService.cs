@@ -19,32 +19,41 @@ namespace formula1_tournament_api.Services
             return permission == UserSeasonPermission.Moderator || permission == UserSeasonPermission.Admin;
         }
 
-        public bool IsAdmin(User user, Season season)
+        public bool IsAdmin(Guid userId, Guid seasonId)
         {
-            UserSeasonPermission permission = _formulaDbContext.UserSeasons.Where(x => x.User == user && x.Season == season).First().Permission;
+            UserSeasonPermission permission = _formulaDbContext.UserSeasons.Where(x => x.UserId == userId && x.SeasonId == seasonId).First().Permission;
             return permission == UserSeasonPermission.Admin;
         }
 
-        public bool IsModerator(User user, Season season)
+        public bool IsModerator(Guid userId, Guid seasonId)
         {
-            UserSeasonPermission permission = _formulaDbContext.UserSeasons.Where(x => x.User == user && x.Season == season).First().Permission;
+            UserSeasonPermission permission = _formulaDbContext.UserSeasons.Where(x => x.UserId == userId && x.SeasonId == seasonId).First().Permission;
             return permission == UserSeasonPermission.Moderator;
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> AddPermission(User admin, User moderator, Season season)
+        public async Task<(bool IsSuccess, string ErrorMessage)> AddAdmin(Guid userId, Guid seasonId)
         {
-            if (!IsAdmin(admin, season))
-                return (false, "You don't have permission for it");
-            _formulaDbContext.UserSeasons.Add(new UserSeason { Id = new Guid(), User = moderator, Season = season, Permission = UserSeasonPermission.Moderator });
+            _formulaDbContext.UserSeasons.Add(new UserSeason { Id = new Guid(), UserId = userId, SeasonId = seasonId, Permission = UserSeasonPermission.Admin });
             _formulaDbContext.SaveChanges();
             return (true, null);
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> RemovePermission(User admin, User moderator, Season season)
+        public async Task<(bool IsSuccess, string ErrorMessage)> AddModerator(Guid adminId, Guid moderatorId, Guid seasonId)
         {
-            if (!IsAdmin(admin, season))
+            if (!IsAdmin(adminId, seasonId))
                 return (false, "You don't have permission for it");
-            UserSeason moderatorObj = _formulaDbContext.UserSeasons.Where(x => x.User == moderator && x.Season == season).First();
+            _formulaDbContext.UserSeasons.Add(new UserSeason { Id = new Guid(), UserId = moderatorId, SeasonId = seasonId, Permission = UserSeasonPermission.Moderator });
+            _formulaDbContext.SaveChanges();
+            return (true, null);
+        }
+
+        public async Task<(bool IsSuccess, string ErrorMessage)> RemovePermission(Guid adminId, Guid moderatorId, Guid seasonId)
+        {
+            if (!IsAdmin(adminId, seasonId))
+                return (false, "You don't have permission for it");
+            if (IsAdmin(moderatorId, seasonId))
+                return (false, "You can't remove permission of an admin");
+            UserSeason moderatorObj = _formulaDbContext.UserSeasons.Where(x => x.UserId == moderatorId && x.SeasonId == seasonId).First();
             if (moderatorObj == null)
                 return (false, "This moderator doesn't exists");
             _formulaDbContext.UserSeasons.Remove(moderatorObj);

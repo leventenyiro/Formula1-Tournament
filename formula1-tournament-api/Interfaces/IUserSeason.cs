@@ -5,10 +5,11 @@ namespace formula1_tournament_api.Interfaces
     public interface IUserSeason
     {
         public bool HasPermission(Guid userId, Guid seasonId);
-        public bool IsAdmin(User user, Season season);
-        public bool IsModerator(User user, Season season);
-        public Task<(bool IsSuccess, string ErrorMessage)> AddPermission(User admin, User moderator, Season season);
-        public Task<(bool IsSuccess, string ErrorMessage)> RemovePermission(User admin, User moderator, Season season);
+        public bool IsAdmin(Guid userId, Guid seasonId);
+        public bool IsModerator(Guid userId, Guid seasonId);
+        public Task<(bool IsSuccess, string ErrorMessage)> AddAdmin(Guid userId, Guid seasonId);
+        public Task<(bool IsSuccess, string ErrorMessage)> AddModerator(Guid adminId, Guid moderatorId, Guid seasonId);
+        public Task<(bool IsSuccess, string ErrorMessage)> RemovePermission(Guid adminId, Guid moderatorId, Guid seasonId);
         public Task<(bool IsSuccess, List<UserSeason> UserSeasons, string ErrorMessage)> GetAllOwnedSeasonId(Guid userId);
     }
 }
