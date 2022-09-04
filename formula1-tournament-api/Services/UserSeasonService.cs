@@ -13,21 +13,21 @@ namespace formula1_tournament_api.Services
             _formulaDbContext = formulaDbContext;
         }
 
-        public bool HasPermission(Guid userId, Season season)
+        public bool HasPermission(Guid userId, Guid seasonId)
         {
-            UserSeasonPermission permission = _formulaDbContext.UserSeasons.Where(x => x.UserId == userId && x.Season == season).First().Permission;
+            UserSeasonPermission permission = _formulaDbContext.UserSeasons.Where(x => x.UserId == userId && x.SeasonId == seasonId).First().Permission;
             return permission == UserSeasonPermission.Moderator || permission == UserSeasonPermission.Admin;
         }
 
-        public bool IsAdmin(Guid userId, Season season)
+        public bool IsAdmin(User user, Season season)
         {
-            UserSeasonPermission permission = _formulaDbContext.UserSeasons.Where(x => x.UserId == userId && x.Season == season).First().Permission;
+            UserSeasonPermission permission = _formulaDbContext.UserSeasons.Where(x => x.User == user && x.Season == season).First().Permission;
             return permission == UserSeasonPermission.Admin;
         }
 
-        public bool IsModerator(Guid userId, Season season)
+        public bool IsModerator(User user, Season season)
         {
-            UserSeasonPermission permission = _formulaDbContext.UserSeasons.Where(x => x.UserId == userId && x.Season == season).First().Permission;
+            UserSeasonPermission permission = _formulaDbContext.UserSeasons.Where(x => x.User == user && x.Season == season).First().Permission;
             return permission == UserSeasonPermission.Moderator;
         }
 
@@ -50,6 +50,12 @@ namespace formula1_tournament_api.Services
             _formulaDbContext.UserSeasons.Remove(moderatorObj);
             _formulaDbContext.SaveChanges();
             return (true, null);
+        }
+
+        public async Task<(bool IsSuccess, List<UserSeason> UserSeasons, string ErrorMessage)> GetAllOwnedSeasonId(Guid userId)
+        {
+            List<UserSeason> userSeasons = _formulaDbContext.UserSeasons.Where(x => x.UserId == userId).ToList();
+            return (true, userSeasons, null);
         }
     }
 }

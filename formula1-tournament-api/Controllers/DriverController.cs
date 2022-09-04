@@ -19,11 +19,11 @@ namespace formula1_tournament_api.Controllers
             _userSeasonService = userSeasonService;
         }
 
-        [HttpGet]
+        [HttpGet("{seasonId}")]
         [EnableQuery]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(Guid seasonId)
         {
-            var result = await _driverService.GetAllDrivers();
+            var result = await _driverService.GetAllDriversBySeasonId(seasonId);
             if (result.IsSuccess)
             {
                 return Ok(result.Drivers);
@@ -31,8 +31,8 @@ namespace formula1_tournament_api.Controllers
             return NotFound(result.ErrorMessage);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(Guid id)
+        [HttpGet("{seasonId}/{id}")]
+        public async Task<IActionResult> Get(Guid seasonId, Guid id)
         {
             var result = await _driverService.GetDriverById(id);
             if (result.IsSuccess)
@@ -42,11 +42,11 @@ namespace formula1_tournament_api.Controllers
             return NotFound(result.ErrorMessage);
         }
 
-        [HttpPost]
+        [HttpPost("{seasonId}")]
         [Authorize]
-        public async Task<IActionResult> Post([FromBody] Driver driver)
+        public async Task<IActionResult> Post(Guid seasonId, [FromBody] Driver driver)
         {
-            if (_userSeasonService.HasPermission(new Guid(User.Identity.Name), driver.Season))
+            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
                 return StatusCode(StatusCodes.Status403Forbidden);
             var result = await _driverService.AddDriver(driver);
             if (result.IsSuccess)
@@ -56,11 +56,10 @@ namespace formula1_tournament_api.Controllers
             return BadRequest(result.ErrorMessage);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, [FromBody] Driver driver)
+        [HttpPut("{seasonId}/{id}")]
+        public async Task<IActionResult> Put(Guid seasonId, Guid id, [FromBody] Driver driver)
         {
-            Driver driverObj = // what should I do here?
-            if (_userSeasonService.HasPermission(new Guid(User.Identity.Name), driver.Season))
+            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
                 return StatusCode(StatusCodes.Status403Forbidden);
             var result = await _driverService.UpdateDriver(id, driver);
             if (result.IsSuccess)
@@ -70,10 +69,10 @@ namespace formula1_tournament_api.Controllers
             return BadRequest(result.ErrorMessage);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpDelete("{seasonId}/{id}")]
+        public async Task<IActionResult> Delete(Guid seasonId, Guid id)
         {
-            if (_userSeasonService.HasPermission(new Guid(User.Identity.Name), driver.Season))
+            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
                 return StatusCode(StatusCodes.Status403Forbidden);
             var result = await _driverService.DeleteDriver(id);
             if (result.IsSuccess)

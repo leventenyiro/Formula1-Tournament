@@ -37,9 +37,9 @@ namespace formula1_tournament_api.Services
             return (false, "Driver not found");
         }
 
-        public async Task<(bool IsSuccess, List<Driver> Drivers, string ErrorMessage)> GetAllDrivers()
+        public async Task<(bool IsSuccess, List<Driver> Drivers, string ErrorMessage)> GetAllDriversBySeasonId(Guid seasonId)
         {
-            var drivers = _formulaDbContext.Drivers.ToList();
+            var drivers = _formulaDbContext.Drivers.Where(x => x.SeasonId == seasonId).ToList();
             if (drivers != null)
             {
                 return (true, drivers, null);

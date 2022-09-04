@@ -37,9 +37,9 @@ namespace formula1_tournament_api.Services
             return (false, "Team not found");
         }
 
-        public async Task<(bool IsSuccess, List<Team> Teams, string ErrorMessage)> GetAllTeams()
+        public async Task<(bool IsSuccess, List<Team> Teams, string ErrorMessage)> GetAllTeamsBySeasonId(Guid seasonId)
         {
-            var teams = _formulaDbContext.Teams.ToList();
+            var teams = _formulaDbContext.Teams.Where(x => x.SeasonId == seasonId).ToList();
             if (teams != null)
             {
                 return (true, teams, null);
