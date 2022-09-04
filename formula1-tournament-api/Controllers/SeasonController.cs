@@ -31,18 +31,24 @@ namespace formula1_tournament_api.Controllers
             return NotFound(result.ErrorMessage);
         }
 
-        // not ready yet
-        /*[HttpGet("user"), Authorize]
+        // should be tested
+        [HttpGet("user"), Authorize]
         public async Task<IActionResult> GetByUserId(Guid userId)
         {
-            List<UserSeason>
-            var result = await _seasonService.GetAllSeasons();
-            if (result.IsSuccess)
-            {
-                return Ok(result.Seasons);
-            }
-            return NotFound(result.ErrorMessage);
-        }*/
+            var result1 = await _userSeasonService.GetAllOwnedSeasonId(userId);
+            if (!result1.IsSuccess)
+                return NotFound(result1.ErrorMessage);
+            var result2 = await _seasonService.GetAllSeasons();
+            if (!result2.IsSuccess)
+                return NotFound(result2.ErrorMessage);
+            var result = result2.Seasons.Join(
+                result1.UserSeasons,
+                season => season.Id,
+                userSeason => userSeason.SeasonId,
+                (season, userSeason) => new { Season = season, UserSeason = userSeason });
+            return Ok(result);
+
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)

@@ -9,6 +9,6 @@ namespace formula1_tournament_api.Interfaces
         public bool IsModerator(User user, Season season);
         public Task<(bool IsSuccess, string ErrorMessage)> AddPermission(User admin, User moderator, Season season);
         public Task<(bool IsSuccess, string ErrorMessage)> RemovePermission(User admin, User moderator, Season season);
-        public Task<(bool IsSuccess, List<UserSeason> UserSeasons, string ErrorMessage)> GetAllOwnedSeasonId(Guid userId)
+        public Task<(bool IsSuccess, List<UserSeason> UserSeasons, string ErrorMessage)> GetAllOwnedSeasonId(Guid userId);
     }
 }

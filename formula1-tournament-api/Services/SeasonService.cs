@@ -69,5 +69,15 @@ namespace formula1_tournament_api.Services
             }
             return (false, "Season not found");
         }
+
+        public async Task<(bool IsSuccess, List<Season> Seasons, string ErrorMessage)> GetAllSeasonsByList(List<UserSeason> userSeasons)
+        {
+            var seasons = _formulaDbContext.Seasons.Where(x => userSeasons.Any(y => y.SeasonId == x.Id)).ToList();
+            if (seasons != null)
+            {
+                return (true, seasons, null);
+            }
+            return (false, null, "No seasons found");
+        }
     }
 }
