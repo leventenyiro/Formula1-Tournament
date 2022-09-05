@@ -29,7 +29,7 @@ namespace formula1_tournament_api.Data
                     .IsRequired();
                 entity.Property(e => e.Password)
                     .IsRequired();
-                entity.HasMany(e => e.Seasons)
+                /*entity.HasMany(e => e.Seasons)
                     .WithMany(e => e.Users)
                     .UsingEntity<UserSeason>(
                         e => e.HasOne(us => us.Season)
@@ -40,7 +40,18 @@ namespace formula1_tournament_api.Data
                             .HasForeignKey(us => us.UserId),
                         e => e.Property(e => e.Permission)
                             .IsRequired()
-                    );
+                    );*/
+            });
+
+            modelBuilder.Entity<UserSeason>(entity =>
+            {
+                entity.HasOne(e => e.User)
+                    .WithMany(e => e.UserSeasons)
+                    .HasForeignKey(e => e.UserId);
+
+                entity.HasOne(e => e.Season)
+                    .WithMany(e => e.UserSeasons)
+                    .HasForeignKey(e => e.SeasonId);
             });
 
             modelBuilder.Entity<Season>(entity =>
