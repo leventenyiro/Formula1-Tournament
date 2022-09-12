@@ -64,34 +64,10 @@ namespace formula1_tournament_api.Controllers
         [HttpPost, Authorize]
         public async Task<IActionResult> Post([FromBody] SeasonDto season)
         {
-
-            var result1 = await _seasonService.AddSeason(season);
-            if (!result1.IsSuccess)
-                return BadRequest(result1.ErrorMessage);
-            var result2 = await _userSeasonService.AddAdmin(new Guid(User.Identity.Name), season.Id);
-            if (!result2.IsSuccess)
-            {
-                var result3 = await _seasonService.DeleteSeason(season.Id);
-                if (!result3.IsSuccess)
-                    return BadRequest(result3.ErrorMessage);
-                return BadRequest(result2.ErrorMessage);
-            }
-            return StatusCode(StatusCodes.Status201Created);
-            /*UserSeason userSeasonObj = new UserSeason
-            {
-                Id = new Guid(),
-                Permission = UserSeasonPermission.Admin
-            };
-            Season seasonObj = new Season
-            {
-                Id = new Guid(),
-                Name = season.Name,
-                UserSeasons = new List<UserSeason> { userSeasonObj }
-            };
-            var result = await _seasonService.AddSeason(seasonObj);
+            var result = await _seasonService.AddSeason(season, new Guid(User.Identity.Name));
             if (!result.IsSuccess)
                 return BadRequest(result.ErrorMessage);
-            return StatusCode(StatusCodes.Status201Created);*/
+            return StatusCode(StatusCodes.Status201Created);
         }
 
         [HttpPut("{id}"), Authorize]

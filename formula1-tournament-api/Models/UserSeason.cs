@@ -8,6 +8,11 @@
         public Guid UserId { get; set; }
         public Guid SeasonId { get; set; }
         public UserSeasonPermission Permission { get; set; }
+
+        public static implicit operator List<object>(UserSeason v)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public enum UserSeasonPermission

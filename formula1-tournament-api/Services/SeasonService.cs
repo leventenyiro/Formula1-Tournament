@@ -14,13 +14,15 @@ namespace formula1_tournament_api.Services
             _formulaDbContext = formulaDbContext;
         }
 
-        public async Task<(bool IsSuccess, Guid SeasonId, string ErrorMessage)> AddSeason(SeasonDto season)
+        public async Task<(bool IsSuccess, Guid SeasonId, string ErrorMessage)> AddSeason(SeasonDto season, Guid userId)
         {
             if (season != null)
             {
                 season.Id = Guid.NewGuid();
-                var seasonObj = new Season { Id = season.Id, Name = season.Name };
-                _formulaDbContext.Add(seasonObj);
+                UserSeason userSeason = new UserSeason { Id = new Guid(), Permission = UserSeasonPermission.Admin, UserId = userId };
+                List<UserSeason> userSeasons = new List<UserSeason> { userSeason }; 
+                var seasonObj = new Season { Id = season.Id, Name = season.Name, UserSeasons = userSeasons };
+                _formulaDbContext.Seasons.Add(seasonObj);
                 _formulaDbContext.SaveChanges();
                 return (true, season.Id, null);
             }
