@@ -2,6 +2,7 @@
 using formula1_tournament_api.DTO;
 using formula1_tournament_api.Interfaces;
 using formula1_tournament_api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace formula1_tournament_api.Services
 {
@@ -43,7 +44,8 @@ namespace formula1_tournament_api.Services
 
         public async Task<(bool IsSuccess, List<Season> Seasons, string ErrorMessage)> GetAllSeasons()
         {
-            var seasons = _formulaDbContext.Seasons.ToList();
+            //var seasons = _formulaDbContext.Seasons.ToList();
+            var seasons = _formulaDbContext.Seasons.Include(x => x.UserSeasons).Select(x => new { x.Id, x.Name, x.UserSeasons.Select(y => y.Permission)}).AsEnumerable().ToList();
             if (seasons != null)
             {
                 return (true, seasons, null);
@@ -54,6 +56,8 @@ namespace formula1_tournament_api.Services
         public async Task<(bool IsSuccess, Season Season, string ErrorMessage)> GetSeasonById(Guid id)
         {
             var season = _formulaDbContext.Seasons.Where(e => e.Id == id).FirstOrDefault();
+            //var season = _formulaDbContext.Seasons.Include(e => e.UserSeasons).FirstOrDefault();
+            Console.WriteLine(season.UserSeasons);
             if (season != null)
             {
                 return (true, season, null);
