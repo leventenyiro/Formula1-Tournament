@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using formula1_tournament_api.Data;
+using formula1_tournament_api.DTO;
 using formula1_tournament_api.Interfaces;
 using formula1_tournament_api.Models;
 using Microsoft.IdentityModel.Tokens;
@@ -20,10 +21,10 @@ namespace formula1_tournament_api.Services
             _configuration = configuration;
         }
 
-        public async Task<(bool IsSuccess, string Token, string ErrorMessage)> Login(string usernameEmail, string password)
+        public async Task<(bool IsSuccess, string Token, string ErrorMessage)> Login(LoginDto loginDto)
         {
-            var actualUser = _formulaDbContext.Users.Where(x => x.Username == usernameEmail || x.Email == usernameEmail).FirstOrDefault();
-            if (actualUser == null || !BCrypt.Net.BCrypt.Verify(password, actualUser.Password))
+            var actualUser = _formulaDbContext.Users.Where(x => x.Username == loginDto.UsernameEmail || x.Email == loginDto.UsernameEmail).FirstOrDefault();
+            if (actualUser == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, actualUser.Password))
             {
                 return (false, null, "Incorrect username or password!");
             }
@@ -33,14 +34,19 @@ namespace formula1_tournament_api.Services
             return (true, token, "Successful login");
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> Registration(string username, string email, string password, string passwordAgain)
+        public async Task<(bool IsSuccess, string ErrorMessage)> Registration(RegistrationDto registrationDto)
         {
-            if (password != passwordAgain)
+            if (registrationDto.Password != registrationDto.PasswordAgain)
             {
                 return (false, "Passwords aren't pass!");
             }
 
-            _formulaDbContext.Add(new User { Id = new Guid(), Username = username, Email = email, Password = HashPassword(password) });
+            _formulaDbContext.Add(new User { 
+                Id = new Guid(), 
+                Username = registrationDto.Username,
+                Email = registrationDto.Email,
+                Password = HashPassword(registrationDto.Password) 
+            });
             _formulaDbContext.SaveChanges();
             return (true, null);
         }

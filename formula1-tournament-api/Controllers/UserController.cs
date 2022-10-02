@@ -1,4 +1,5 @@
-﻿using formula1_tournament_api.Interfaces;
+﻿using formula1_tournament_api.DTO;
+using formula1_tournament_api.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,9 +17,9 @@ namespace formula1_tournament_api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromForm] string usernameEmail, [FromForm] string password)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
-            var result = await _userService.Login(usernameEmail, password);
+            var result = await _userService.Login(loginDto);
             if (result.IsSuccess)
             {
                 return StatusCode(StatusCodes.Status202Accepted, result.Token);
@@ -27,9 +28,9 @@ namespace formula1_tournament_api.Controllers
         }
 
         [HttpPost("registration")]
-        public async Task<IActionResult> Registration([FromForm] string username, [FromForm] string email, [FromForm] string password, [FromForm] string passwordAgain)
+        public async Task<IActionResult> Registration([FromBody] RegistrationDto registrationDto)
         {
-            var result = await _userService.Registration(username, email, password, passwordAgain);
+            var result = await _userService.Registration(registrationDto);
             if (result.IsSuccess)
             {
                 return StatusCode(StatusCodes.Status201Created);
