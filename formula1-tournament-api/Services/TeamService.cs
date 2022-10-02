@@ -1,6 +1,8 @@
 ﻿using formula1_tournament_api.Data;
+using formula1_tournament_api.DTO;
 using formula1_tournament_api.Interfaces;
 using formula1_tournament_api.Models;
+using System.Drawing;
 
 namespace formula1_tournament_api.Services
 {
@@ -13,11 +15,23 @@ namespace formula1_tournament_api.Services
             _formulaDbContext = formulaDbContext;
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> AddTeam(Team team)
+        public async Task<(bool IsSuccess, string ErrorMessage)> AddTeam(TeamDto team)
         {
             if (team != null)
             {
-                team.Id = Guid.NewGuid();
+                Team teamObj = new Team
+                {
+                    Id = Guid.NewGuid(),
+                    Name = team.Name
+                };
+                try
+                {
+                    teamObj.Color = ColorTranslator.FromHtml(team.Color);
+                }
+                catch (Exception)
+                {
+                    return (false, "Incorrect color code");
+                }
                 _formulaDbContext.Add(team);
                 _formulaDbContext.SaveChanges();
                 return (true, null);
@@ -57,13 +71,20 @@ namespace formula1_tournament_api.Services
             return (false, null, "Team not found");
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> UpdateTeam(Guid id, Team team)
+        public async Task<(bool IsSuccess, string ErrorMessage)> UpdateTeam(Guid id, TeamDto team)
         {
             var teamObj = _formulaDbContext.Teams.Where(e => e.Id == id).FirstOrDefault();
             if (teamObj != null)
             {
                 teamObj.Name = team.Name;
-                teamObj.Color = team.Color;
+                try
+                {
+                    teamObj.Color = ColorTranslator.FromHtml(team.Color);
+                }
+                catch (Exception)
+                {
+                    return (false, "Incorrect color code");
+                }
                 _formulaDbContext.Teams.Update(teamObj);
                 _formulaDbContext.SaveChanges();
                 return (true, null);

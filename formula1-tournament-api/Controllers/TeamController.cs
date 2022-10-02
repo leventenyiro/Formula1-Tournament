@@ -1,4 +1,5 @@
-﻿using formula1_tournament_api.Interfaces;
+﻿using formula1_tournament_api.DTO;
+using formula1_tournament_api.Interfaces;
 using formula1_tournament_api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
@@ -42,7 +43,7 @@ namespace formula1_tournament_api.Controllers
         }
 
         [HttpPost("{seasonId}")]
-        public async Task<IActionResult> Post(Guid seasonId, [FromBody] Team team)
+        public async Task<IActionResult> Post(Guid seasonId, [FromBody] TeamDto team)
         {
             if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
                 return StatusCode(StatusCodes.Status403Forbidden);
@@ -55,7 +56,7 @@ namespace formula1_tournament_api.Controllers
         }
 
         [HttpPut("{seasonId}/{id}")]
-        public async Task<IActionResult> Put(Guid seasonId, Guid id, [FromBody] Team team)
+        public async Task<IActionResult> Put(Guid seasonId, Guid id, [FromBody] TeamDto team)
         {
             if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
                 return StatusCode(StatusCodes.Status403Forbidden);

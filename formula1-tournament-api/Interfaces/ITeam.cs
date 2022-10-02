@@ -1,4 +1,5 @@
-﻿using formula1_tournament_api.Models;
+﻿using formula1_tournament_api.DTO;
+using formula1_tournament_api.Models;
 
 namespace formula1_tournament_api.Interfaces
 {
@@ -6,8 +7,8 @@ namespace formula1_tournament_api.Interfaces
     {
         Task<(bool IsSuccess, List<Team> Teams, string ErrorMessage)> GetAllTeamsBySeasonId(Guid seasonId);
         Task<(bool IsSuccess, Team Team, string ErrorMessage)> GetTeamById(Guid id);
-        Task<(bool IsSuccess, string ErrorMessage)> AddTeam(Team team);
-        Task<(bool IsSuccess, string ErrorMessage)> UpdateTeam(Guid id, Team team);
+        Task<(bool IsSuccess, string ErrorMessage)> AddTeam(TeamDto team);
+        Task<(bool IsSuccess, string ErrorMessage)> UpdateTeam(Guid id, TeamDto team);
         Task<(bool IsSuccess, string ErrorMessage)> DeleteTeam(Guid id);
     }
 }
