@@ -70,7 +70,7 @@ namespace formula1_tournament_api.Controllers
         }
 
         [HttpPost, Authorize]
-        public async Task<IActionResult> Post([FromBody] SeasonDto season)
+        public async Task<IActionResult> Post([FromForm] string name)
         {
             var result = await _seasonService.AddSeason(season, new Guid(User.Identity.Name));
             if (!result.IsSuccess)
@@ -79,7 +79,7 @@ namespace formula1_tournament_api.Controllers
         }
 
         [HttpPut("{id}"), Authorize]
-        public async Task<IActionResult> Put(Guid id, [FromBody] SeasonDto season)
+        public async Task<IActionResult> Put(Guid id, [FromForm] string name)
         {
             var result = await _seasonService.UpdateSeason(id, season);
             if (result.IsSuccess)
