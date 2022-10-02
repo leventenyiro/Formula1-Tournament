@@ -32,11 +32,12 @@ namespace formula1_tournament_api.Controllers
             return NotFound(result.ErrorMessage);
         }
 
-        // should be tested
+        // need to repaired
+        // megvannak a permissionök és az összes seasonid
         [HttpGet("user"), Authorize]
-        public async Task<IActionResult> GetByUserId(Guid userId)
+        public async Task<IActionResult> GetByUserId()
         {
-            var result1 = await _userSeasonService.GetAllOwnedSeasonId(userId);
+            /*var result1 = await _userSeasonService.GetAllOwnedSeasonId(userId);
             if (!result1.IsSuccess)
                 return NotFound(result1.ErrorMessage);
             var result2 = await _seasonService.GetAllSeasons();
@@ -47,7 +48,14 @@ namespace formula1_tournament_api.Controllers
                 season => season.Id,
                 userSeason => userSeason.SeasonId,
                 (season, userSeason) => new { Season = season, UserSeason = userSeason });
-            return Ok(result);
+            return Ok(result);*/
+            var result1 = await _userSeasonService.GetAllOwnedSeasonId(new Guid(User.Identity.Name));
+            if (!result1.IsSuccess)
+                return NotFound(result1.ErrorMessage);
+            var result2 = await _seasonService.GetAllSeasonsByUserSeasonList(result1.UserSeasons.Select(x => x.SeasonId).ToList());
+            if (!result2.IsSuccess)
+                return NotFound(result2.ErrorMessage);
+            return Ok(result2.Seasons);
         }
 
         [HttpGet("{id}")]

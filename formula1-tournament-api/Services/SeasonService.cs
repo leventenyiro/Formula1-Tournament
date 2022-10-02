@@ -64,16 +64,19 @@ namespace formula1_tournament_api.Services
 
         public async Task<(bool IsSuccess, SeasonInformationDto Season, string ErrorMessage)> GetSeasonById(Guid id)
         {
-            SeasonInformationDto season = _formulaDbContext.Seasons.Include(x => x.UserSeasons).Where(x => x.Id == id).Select(x => new SeasonInformationDto
-            {
-                Id = x.Id,
-                Name = x.Name,
-                UserSeasons = x.UserSeasons.Select(x => new UserSeasonDto
+            SeasonInformationDto season = _formulaDbContext.Seasons
+                .Include(x => x.UserSeasons)
+                .Where(x => x.Id == id)
+                .Select(x => new SeasonInformationDto
                 {
-                    Username = x.User.Username,
-                    Permission = x.Permission
-                }).ToList()
-            }).First();
+                    Id = x.Id,
+                    Name = x.Name,
+                    UserSeasons = x.UserSeasons.Select(x => new UserSeasonDto
+                    {
+                        Username = x.User.Username,
+                        Permission = x.Permission
+                    }).ToList()
+                }).First();
             if (season != null)
             {
                 return (true, season, null);
@@ -94,9 +97,21 @@ namespace formula1_tournament_api.Services
             return (false, "Season not found");
         }
 
-        public async Task<(bool IsSuccess, List<Season> Seasons, string ErrorMessage)> GetAllSeasonsByList(List<UserSeason> userSeasons)
+        public async Task<(bool IsSuccess, List<SeasonInformationDto> Seasons, string ErrorMessage)> GetAllSeasonsByUserSeasonList(List<Guid> userSeasons)
         {
-            var seasons = _formulaDbContext.Seasons.Where(x => userSeasons.Any(y => y.SeasonId == x.Id)).ToList();
+            List<SeasonInformationDto> seasons = _formulaDbContext.Seasons
+                .Include(x => x.UserSeasons)
+                .Where(x => userSeasons.Contains(x.Id))
+                .Select(x => new SeasonInformationDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UserSeasons = x.UserSeasons.Select(x => new UserSeasonDto
+                    {
+                        Username = x.User.Username,
+                        Permission = x.Permission
+                    }).ToList()
+                }).ToList();
             if (seasons != null)
             {
                 return (true, seasons, null);

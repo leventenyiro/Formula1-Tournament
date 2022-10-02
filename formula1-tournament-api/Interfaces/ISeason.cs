@@ -10,6 +10,6 @@ namespace formula1_tournament_api.Interfaces
         Task<(bool IsSuccess, Guid SeasonId, string ErrorMessage)> AddSeason(SeasonDto season, Guid userId);
         Task<(bool IsSuccess, string ErrorMessage)> UpdateSeason(Guid id, SeasonDto season);
         Task<(bool IsSuccess, string ErrorMessage)> DeleteSeason(Guid id);
-        Task<(bool IsSuccess, List<Season> Seasons, string ErrorMessage)> GetAllSeasonsByList(List<UserSeason> userSeasons);
+        Task<(bool IsSuccess, List<SeasonInformationDto> Seasons, string ErrorMessage)> GetAllSeasonsByUserSeasonList(List<Guid> userSeasons);
     }
 }
