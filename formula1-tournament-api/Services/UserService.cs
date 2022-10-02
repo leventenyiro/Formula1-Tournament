@@ -55,6 +55,14 @@ namespace formula1_tournament_api.Services
             return (false, null, "User not found");
         }
 
+        public async Task<(bool IsSuccess, User User, string ErrorMessage)> GetUserByUsernameEmail(string usernameEmail)
+        {
+            var actualUser = _formulaDbContext.Users.Where(x => x.Username == usernameEmail || x.Email == usernameEmail).FirstOrDefault();
+            if (actualUser != null)
+                return (true, actualUser, null);
+            return (false, null, "User not found");
+        }
+
         private string HashPassword(string password)
         {
             if (!Regex.IsMatch(password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"))
