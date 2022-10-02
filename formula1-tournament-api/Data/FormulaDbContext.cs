@@ -10,6 +10,7 @@ namespace formula1_tournament_api.Data
         public virtual DbSet<Team> Teams { get; set; }
         public virtual DbSet<Driver> Drivers { get; set; }
         public virtual DbSet<Race> Races { get; set; }
+        public virtual DbSet<UserSeason> UserSeasons { get; set; }
 
         public FormulaDbContext() { }
 
@@ -30,14 +31,24 @@ namespace formula1_tournament_api.Data
                     .IsRequired();
             });
 
+            modelBuilder.Entity<UserSeason>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Permission)
+                    .IsRequired();
+                entity.HasOne(e => e.User)
+                    .WithMany(e => e.UserSeasons)
+                    .HasForeignKey(e => e.UserId);
+
+                entity.HasOne(e => e.Season)
+                    .WithMany(e => e.UserSeasons)
+                    .HasForeignKey(e => e.SeasonId);
+            });
+
             modelBuilder.Entity<Season>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name)
-                    .IsRequired();
-                entity.HasOne(e => e.User)
-                    .WithMany(e => e.Seasons)
-                    .HasForeignKey(e => e.UserId)
                     .IsRequired();
             });
 

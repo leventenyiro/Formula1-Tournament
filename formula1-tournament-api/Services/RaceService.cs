@@ -37,9 +37,9 @@ namespace formula1_tournament_api.Services
             return (false, "Race not found");
         }
 
-        public async Task<(bool IsSuccess, List<Race> Races, string ErrorMessage)> GetAllRaces()
+        public async Task<(bool IsSuccess, List<Race> Races, string ErrorMessage)> GetAllRacesBySeasonId(Guid seasonId)
         {
-            var races = _formulaDbContext.Races.ToList();
+            var races = _formulaDbContext.Races.Where(x => x.SeasonId == seasonId).ToList();
             if (races != null)
             {
                 return (true, races, null);

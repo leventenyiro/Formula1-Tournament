@@ -10,17 +10,19 @@ namespace formula1_tournament_api.Controllers
     public class TeamController : Controller
     {
         private ITeam _teamService;
+        private IUserSeason _userSeasonService;
 
-        public TeamController(ITeam teamService)
+        public TeamController(ITeam teamService, IUserSeason userSeasonService)
         {
             _teamService = teamService;
+            _userSeasonService = userSeasonService;
         }
 
-        [HttpGet]
+        [HttpGet("{seasonId}")]
         [EnableQuery]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(Guid seasonId)
         {
-            var result = await _teamService.GetAllTeams();
+            var result = await _teamService.GetAllTeamsBySeasonId(seasonId);
             if (result.IsSuccess)
             {
                 return Ok(result.Teams);
@@ -28,8 +30,8 @@ namespace formula1_tournament_api.Controllers
             return NotFound(result.ErrorMessage);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(Guid id)
+        [HttpGet("{seasonId}/{id}")]
+        public async Task<IActionResult> Get(Guid seasonId, Guid id)
         {
             var result = await _teamService.GetTeamById(id);
             if (result.IsSuccess)
@@ -39,9 +41,11 @@ namespace formula1_tournament_api.Controllers
             return NotFound(result.ErrorMessage);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Team team)
+        [HttpPost("{seasonId}")]
+        public async Task<IActionResult> Post(Guid seasonId, [FromBody] Team team)
         {
+            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
+                return StatusCode(StatusCodes.Status403Forbidden);
             var result = await _teamService.AddTeam(team);
             if (result.IsSuccess)
             {
@@ -50,9 +54,11 @@ namespace formula1_tournament_api.Controllers
             return BadRequest(result.ErrorMessage);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, [FromBody] Team team)
+        [HttpPut("{seasonId}/{id}")]
+        public async Task<IActionResult> Put(Guid seasonId, Guid id, [FromBody] Team team)
         {
+            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
+                return StatusCode(StatusCodes.Status403Forbidden);
             var result = await _teamService.UpdateTeam(id, team);
             if (result.IsSuccess)
             {
@@ -61,9 +67,11 @@ namespace formula1_tournament_api.Controllers
             return BadRequest(result.ErrorMessage);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpDelete("{seasonId}/{id}")]
+        public async Task<IActionResult> Delete(Guid seasonId, Guid id)
         {
+            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
+                return StatusCode(StatusCodes.Status403Forbidden);
             var result = await _teamService.DeleteTeam(id);
             if (result.IsSuccess)
             {

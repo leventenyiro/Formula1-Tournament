@@ -12,7 +12,7 @@ namespace formula1_tournament_api.Tests
     [TestFixture]
     public class SeasonTests
     {
-        private SeasonController _seasonController;
+    /*    private SeasonController _seasonController;
         private SeasonService _seasonService;
         private Mock<FormulaDbContext> _mockDbContext;
 
@@ -134,6 +134,6 @@ namespace formula1_tournament_api.Tests
             var result = (StatusCodeResult)response.Result;
 
             Assert.AreEqual(result.StatusCode, 204);
-        }
+        }*/
     }
 }
