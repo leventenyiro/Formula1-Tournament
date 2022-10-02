@@ -1,4 +1,5 @@
 ﻿using formula1_tournament_api.Data;
+using formula1_tournament_api.DTO;
 using formula1_tournament_api.Interfaces;
 using formula1_tournament_api.Models;
 
@@ -13,12 +14,19 @@ namespace formula1_tournament_api.Services
             _formulaDbContext = formulaDbContext;
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> AddRace(Race race)
+        public async Task<(bool IsSuccess, string ErrorMessage)> AddRace(RaceDto raceDto)
         {
-            if (race != null)
+            if (raceDto != null)
             {
-                race.Id = Guid.NewGuid();
-                _formulaDbContext.Add(race);
+                _formulaDbContext.Add(new Race
+                {
+                    Id = Guid.NewGuid(),
+                    Name = raceDto.Name,
+                    Position = raceDto.Position,
+                    Points = raceDto.Points,
+                    DriverId = raceDto.DriverId,
+                    SeasonId = raceDto.SeasonId
+                });
                 _formulaDbContext.SaveChanges();
                 return (true, null);
             }
@@ -57,14 +65,14 @@ namespace formula1_tournament_api.Services
             return (false, null, "Race not found");
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> UpdateRace(Guid id, Race race)
+        public async Task<(bool IsSuccess, string ErrorMessage)> UpdateRace(Guid id, RaceDto raceDto)
         {
             var raceObj = _formulaDbContext.Races.Where(e => e.Id == id).FirstOrDefault();
             if (raceObj != null)
             {
-                raceObj.Name = race.Name;
-                raceObj.Position = race.Position;
-                raceObj.Points = race.Points;
+                raceObj.Name = raceDto.Name;
+                raceObj.Position = raceDto.Position;
+                raceObj.Points = raceDto.Points;
                 _formulaDbContext.Races.Update(raceObj);
                 _formulaDbContext.SaveChanges();
                 return (true, null);
