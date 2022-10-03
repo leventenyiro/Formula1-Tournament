@@ -12,5 +12,6 @@
         public Guid ActualTeamId { get; set; }
         public Guid SeasonId { get; set; }
         public List<Race> Races { get; set; }
+        public List<Result> Results { get; set; }
     }
 }

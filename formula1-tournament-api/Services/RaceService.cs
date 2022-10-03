@@ -22,9 +22,7 @@ namespace formula1_tournament_api.Services
                 {
                     Id = Guid.NewGuid(),
                     Name = raceDto.Name,
-                    Position = raceDto.Position,
-                    Points = raceDto.Points,
-                    DriverId = raceDto.DriverId,
+                    DateTime = raceDto.DateTime,
                     SeasonId = raceDto.SeasonId
                 });
                 _formulaDbContext.SaveChanges();
@@ -71,8 +69,7 @@ namespace formula1_tournament_api.Services
             if (raceObj != null)
             {
                 raceObj.Name = raceDto.Name;
-                raceObj.Position = raceDto.Position;
-                raceObj.Points = raceDto.Points;
+                raceObj.DateTime = raceDto.DateTime;
                 _formulaDbContext.Races.Update(raceObj);
                 _formulaDbContext.SaveChanges();
                 return (true, null);

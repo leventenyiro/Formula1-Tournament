@@ -33,6 +33,7 @@ builder.Services.AddScoped<IUserSeason, UserSeasonService>();
 builder.Services.AddScoped<IDriver, DriverService>();
 builder.Services.AddScoped<ITeam, TeamService>();
 builder.Services.AddScoped<IRace, RaceService>();
+builder.Services.AddScoped<formula1_tournament_api.Interfaces.IResult, ResultService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
