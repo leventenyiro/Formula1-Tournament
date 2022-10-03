@@ -10,5 +10,6 @@ namespace formula1_tournament_api.Models
         public Season Season { get; set; }
         public Guid SeasonId { get; set; }
         public List<Driver> Drivers { get; set; }
+        public List<Result> Results { get; set; }
     }
 }
