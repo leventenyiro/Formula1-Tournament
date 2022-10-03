@@ -22,7 +22,7 @@ namespace formula1_tournament_api.Services
                 {
                     Id = Guid.NewGuid(),
                     Name = driverDto.Name,
-                    TeamId = driverDto.TeamId
+                    ActualTeamId = driverDto.ActualTeamId
                 });
                 _formulaDbContext.SaveChanges();
                 return (true, null);

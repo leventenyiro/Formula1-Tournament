@@ -3,6 +3,8 @@
     public class DriverDto
     {
         public string Name { get; set; }
-        public Guid TeamId { get; set; }
+        public string RealName { get; set; }
+        public int Number { get; set; }
+        public Guid ActualTeamId { get; set; }
     }
 }

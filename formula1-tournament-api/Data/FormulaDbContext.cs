@@ -70,9 +70,12 @@ namespace formula1_tournament_api.Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name)
                     .IsRequired();
-                entity.HasOne(e => e.Team)
+                entity.Property(e => e.RealName);
+                entity.Property(e => e.Number)
+                    .IsRequired();
+                entity.HasOne(e => e.ActualTeam)
                     .WithMany(e => e.Drivers)
-                    .HasForeignKey(e => e.TeamId)
+                    .HasForeignKey(e => e.ActualTeamId)
                     .IsRequired();
                 entity.HasOne(e => e.Season)
                     .WithMany(e => e.Drivers)
