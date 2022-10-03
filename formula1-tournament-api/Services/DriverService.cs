@@ -70,7 +70,9 @@ namespace formula1_tournament_api.Services
             if (driverObj != null)
             {
                 driverObj.Name = driverDto.Name;
-                //driverObj.TeamId = driver.TeamId; just when point is null, every race
+                driverObj.RealName = driverDto.RealName;
+                driverObj.Number = driverDto.Number;
+                //driverObj.ActualTeamId = driverDto.ActualTeamId; just when point is null, every race
                 _formulaDbContext.Drivers.Update(driverObj);
                 _formulaDbContext.SaveChanges();
                 return (true, null);
