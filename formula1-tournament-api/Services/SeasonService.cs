@@ -15,17 +15,17 @@ namespace formula1_tournament_api.Services
             _formulaDbContext = formulaDbContext;
         }
 
-        public async Task<(bool IsSuccess, Guid SeasonId, string ErrorMessage)> AddSeason(SeasonDto season, Guid userId)
+        public async Task<(bool IsSuccess, Guid SeasonId, string ErrorMessage)> AddSeason(string name, Guid userId)
         {
-            if (season != null)
+            if (!string.IsNullOrEmpty(name))
             {
-                season.Id = Guid.NewGuid();
                 UserSeason userSeason = new UserSeason { Id = new Guid(), Permission = UserSeasonPermission.Admin, UserId = userId };
                 List<UserSeason> userSeasons = new List<UserSeason> { userSeason }; 
-                var seasonObj = new Season { Id = season.Id, Name = season.Name, UserSeasons = userSeasons };
+
+                var seasonObj = new Season { Id = Guid.NewGuid(), Name = name, UserSeasons = userSeasons };
                 _formulaDbContext.Seasons.Add(seasonObj);
                 _formulaDbContext.SaveChanges();
-                return (true, season.Id, null);
+                return (true, seasonObj.Id, null);
             }
             return (false, Guid.Empty, "Please provide the season data");
         }
@@ -42,9 +42,9 @@ namespace formula1_tournament_api.Services
             return (false, "Season not found");
         }
 
-        public async Task<(bool IsSuccess, List<SeasonInformationDto> Seasons, string ErrorMessage)> GetAllSeasons()
+        public async Task<(bool IsSuccess, List<SeasonDto> Seasons, string ErrorMessage)> GetAllSeasons()
         {
-            List<SeasonInformationDto> seasons = _formulaDbContext.Seasons.Include(x => x.UserSeasons).Select(x => new SeasonInformationDto
+            List<SeasonDto> seasons = _formulaDbContext.Seasons.Include(x => x.UserSeasons).Select(x => new SeasonDto
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -62,12 +62,12 @@ namespace formula1_tournament_api.Services
             return (false, null, "No seasons found");
         }
 
-        public async Task<(bool IsSuccess, SeasonInformationDto Season, string ErrorMessage)> GetSeasonById(Guid id)
+        public async Task<(bool IsSuccess, SeasonDto Season, string ErrorMessage)> GetSeasonById(Guid id)
         {
-            SeasonInformationDto season = _formulaDbContext.Seasons
+            SeasonDto season = _formulaDbContext.Seasons
                 .Include(x => x.UserSeasons)
                 .Where(x => x.Id == id)
-                .Select(x => new SeasonInformationDto
+                .Select(x => new SeasonDto
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -84,12 +84,12 @@ namespace formula1_tournament_api.Services
             return (false, null, "Season not found");
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> UpdateSeason(Guid id, SeasonDto season)
+        public async Task<(bool IsSuccess, string ErrorMessage)> UpdateSeason(Guid id, string name)
         {
             var seasonObj = _formulaDbContext.Seasons.Where(e => e.Id == id).FirstOrDefault();
             if (seasonObj != null)
             {
-                seasonObj.Name = season.Name;
+                seasonObj.Name = name;
                 _formulaDbContext.Seasons.Update(seasonObj);
                 _formulaDbContext.SaveChanges();
                 return (true, null);
@@ -97,12 +97,12 @@ namespace formula1_tournament_api.Services
             return (false, "Season not found");
         }
 
-        public async Task<(bool IsSuccess, List<SeasonInformationDto> Seasons, string ErrorMessage)> GetAllSeasonsByUserSeasonList(List<Guid> userSeasons)
+        public async Task<(bool IsSuccess, List<SeasonDto> Seasons, string ErrorMessage)> GetAllSeasonsByUserSeasonList(List<Guid> userSeasons)
         {
-            List<SeasonInformationDto> seasons = _formulaDbContext.Seasons
+            List<SeasonDto> seasons = _formulaDbContext.Seasons
                 .Include(x => x.UserSeasons)
                 .Where(x => userSeasons.Contains(x.Id))
-                .Select(x => new SeasonInformationDto
+                .Select(x => new SeasonDto
                 {
                     Id = x.Id,
                     Name = x.Name,

@@ -1,4 +1,5 @@
-﻿using formula1_tournament_api.Interfaces;
+﻿using formula1_tournament_api.DTO;
+using formula1_tournament_api.Interfaces;
 using formula1_tournament_api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,11 +45,11 @@ namespace formula1_tournament_api.Controllers
 
         [HttpPost("{seasonId}")]
         [Authorize]
-        public async Task<IActionResult> Post(Guid seasonId, [FromBody] Driver driver)
+        public async Task<IActionResult> Post(Guid seasonId, [FromBody] DriverDto driverDto)
         {
             if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
                 return StatusCode(StatusCodes.Status403Forbidden);
-            var result = await _driverService.AddDriver(driver);
+            var result = await _driverService.AddDriver(driverDto);
             if (result.IsSuccess)
             {
                 return StatusCode(StatusCodes.Status201Created);
@@ -57,11 +58,11 @@ namespace formula1_tournament_api.Controllers
         }
 
         [HttpPut("{seasonId}/{id}")]
-        public async Task<IActionResult> Put(Guid seasonId, Guid id, [FromBody] Driver driver)
+        public async Task<IActionResult> Put(Guid seasonId, Guid id, [FromBody] DriverDto driverDto)
         {
             if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
                 return StatusCode(StatusCodes.Status403Forbidden);
-            var result = await _driverService.UpdateDriver(id, driver);
+            var result = await _driverService.UpdateDriver(id, driverDto);
             if (result.IsSuccess)
             {
                 return NoContent();

@@ -32,23 +32,9 @@ namespace formula1_tournament_api.Controllers
             return NotFound(result.ErrorMessage);
         }
 
-        // need to repaired
-        // megvannak a permissionök és az összes seasonid
         [HttpGet("user"), Authorize]
         public async Task<IActionResult> GetByUserId()
         {
-            /*var result1 = await _userSeasonService.GetAllOwnedSeasonId(userId);
-            if (!result1.IsSuccess)
-                return NotFound(result1.ErrorMessage);
-            var result2 = await _seasonService.GetAllSeasons();
-            if (!result2.IsSuccess)
-                return NotFound(result2.ErrorMessage);
-            var result = result2.Seasons.Join(
-                result1.UserSeasons,
-                season => season.Id,
-                userSeason => userSeason.SeasonId,
-                (season, userSeason) => new { Season = season, UserSeason = userSeason });
-            return Ok(result);*/
             var result1 = await _userSeasonService.GetAllOwnedSeasonId(new Guid(User.Identity.Name));
             if (!result1.IsSuccess)
                 return NotFound(result1.ErrorMessage);
@@ -70,18 +56,18 @@ namespace formula1_tournament_api.Controllers
         }
 
         [HttpPost, Authorize]
-        public async Task<IActionResult> Post([FromBody] SeasonDto season)
+        public async Task<IActionResult> Post([FromBody] string name)
         {
-            var result = await _seasonService.AddSeason(season, new Guid(User.Identity.Name));
+            var result = await _seasonService.AddSeason(name, new Guid(User.Identity.Name));
             if (!result.IsSuccess)
                 return BadRequest(result.ErrorMessage);
             return StatusCode(StatusCodes.Status201Created);
         }
 
         [HttpPut("{id}"), Authorize]
-        public async Task<IActionResult> Put(Guid id, [FromBody] SeasonDto season)
+        public async Task<IActionResult> Put(Guid id, [FromForm] string name)
         {
-            var result = await _seasonService.UpdateSeason(id, season);
+            var result = await _seasonService.UpdateSeason(id, name);
             if (result.IsSuccess)
             {
                 return NoContent();

@@ -1,4 +1,5 @@
 ﻿using formula1_tournament_api.Data;
+using formula1_tournament_api.DTO;
 using formula1_tournament_api.Interfaces;
 using formula1_tournament_api.Models;
 
@@ -13,12 +14,16 @@ namespace formula1_tournament_api.Services
             _formulaDbContext = formulaDbContext;
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> AddDriver(Driver driver)
+        public async Task<(bool IsSuccess, string ErrorMessage)> AddDriver(DriverDto driverDto)
         {
-            if (driver != null)
+            if (driverDto != null)
             {
-                driver.Id = Guid.NewGuid();
-                _formulaDbContext.Add(driver);
+                _formulaDbContext.Add(new Driver
+                {
+                    Id = Guid.NewGuid(),
+                    Name = driverDto.Name,
+                    TeamId = driverDto.TeamId
+                });
                 _formulaDbContext.SaveChanges();
                 return (true, null);
             }
@@ -57,12 +62,12 @@ namespace formula1_tournament_api.Services
             return (false, null, "Driver not found");
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> UpdateDriver(Guid id, Driver driver)
+        public async Task<(bool IsSuccess, string ErrorMessage)> UpdateDriver(Guid id, DriverDto driverDto)
         {
             var driverObj = _formulaDbContext.Drivers.Where(e => e.Id == id).FirstOrDefault();
             if (driverObj != null)
             {
-                driverObj.Name = driver.Name;
+                driverObj.Name = driverDto.Name;
                 //driverObj.TeamId = driver.TeamId; just when point is null, every race
                 _formulaDbContext.Drivers.Update(driverObj);
                 _formulaDbContext.SaveChanges();
