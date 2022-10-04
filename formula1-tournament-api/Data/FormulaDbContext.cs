@@ -39,11 +39,15 @@ namespace formula1_tournament_api.Data
                     .IsRequired();
                 entity.HasOne(e => e.User)
                     .WithMany(e => e.UserSeasons)
-                    .HasForeignKey(e => e.UserId);
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.ClientCascade)
+                    .IsRequired();
 
                 entity.HasOne(e => e.Season)
                     .WithMany(e => e.UserSeasons)
-                    .HasForeignKey(e => e.SeasonId);
+                    .HasForeignKey(e => e.SeasonId)
+                    .OnDelete(DeleteBehavior.ClientCascade)
+                    .IsRequired();
             });
 
             modelBuilder.Entity<Season>(entity =>
@@ -63,6 +67,7 @@ namespace formula1_tournament_api.Data
                 entity.HasOne(e => e.Season)
                     .WithMany(e => e.Teams)
                     .HasForeignKey(e => e.SeasonId)
+                    .OnDelete(DeleteBehavior.ClientCascade)
                     .IsRequired();
             });
 
@@ -77,10 +82,12 @@ namespace formula1_tournament_api.Data
                 entity.HasOne(e => e.ActualTeam)
                     .WithMany(e => e.Drivers)
                     .HasForeignKey(e => e.ActualTeamId)
+                    .OnDelete(DeleteBehavior.ClientCascade)
                     .IsRequired();
                 entity.HasOne(e => e.Season)
                     .WithMany(e => e.Drivers)
                     .HasForeignKey(e => e.SeasonId)
+                    .OnDelete(DeleteBehavior.ClientCascade)
                     .IsRequired();
             });
 
@@ -94,6 +101,7 @@ namespace formula1_tournament_api.Data
                 entity.HasOne(e => e.Season)
                     .WithMany(e => e.Races)
                     .HasForeignKey(e => e.SeasonId)
+                    .OnDelete(DeleteBehavior.ClientCascade)
                     .IsRequired();
             });
 
@@ -107,14 +115,17 @@ namespace formula1_tournament_api.Data
                 entity.HasOne(e => e.Driver)
                     .WithMany(e => e.Results)
                     .HasForeignKey(e => e.DriverId)
+                    .OnDelete(DeleteBehavior.ClientCascade)
                     .IsRequired();
                 entity.HasOne(e => e.Team)
                     .WithMany(e => e.Results)
                     .HasForeignKey(e => e.TeamId)
+                    .OnDelete(DeleteBehavior.ClientCascade)
                     .IsRequired();
                 entity.HasOne(e => e.Race)
                     .WithMany(e => e.Results)
                     .HasForeignKey(e => e.RaceId)
+                    .OnDelete(DeleteBehavior.ClientCascade)
                     .IsRequired();
             });
         }
