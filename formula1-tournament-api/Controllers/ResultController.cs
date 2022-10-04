@@ -5,27 +5,27 @@ using Microsoft.AspNetCore.OData.Query;
 
 namespace formula1_tournament_api.Controllers
 {
-    [Route("api/race")]
+    [Route("api/result")]
     [ApiController]
-    public class RaceController : Controller
+    public class ResultController : Controller
     {
-        private IRace _raceService;
+        private Interfaces.IResult _resultService;
         private IUserSeason _userSeasonService;
 
-        public RaceController(IRace raceService, IUserSeason userSeasonService)
+        public ResultController(Interfaces.IResult resultService, IUserSeason userSeasonService)
         {
-            _raceService = raceService;
+            _resultService = resultService;
             _userSeasonService = userSeasonService;
         }
 
         [HttpGet("{seasonId}")]
         [EnableQuery]
-        public async Task<IActionResult> Get(Guid seasonId)
+        public async Task<IActionResult> Get(Guid raceId)
         {
-            var result = await _raceService.GetAllRacesBySeasonId(seasonId);
+            var result = await _resultService.GetAllResultsByRaceId(raceId);
             if (result.IsSuccess)
             {
-                return Ok(result.Races);
+                return Ok(result.Results);
             }
             return NotFound(result.ErrorMessage);
         }
@@ -33,20 +33,20 @@ namespace formula1_tournament_api.Controllers
         [HttpGet("{seasonId}/{id}")]
         public async Task<IActionResult> Get(Guid seasonId, Guid id)
         {
-            var result = await _raceService.GetRaceById(id);
+            var result = await _resultService.GetResultById(id);
             if (result.IsSuccess)
             {
-                return Ok(result.Race);
+                return Ok(result.Result);
             }
             return NotFound(result.ErrorMessage);
         }
 
         [HttpPost("{seasonId}")]
-        public async Task<IActionResult> Post(Guid seasonId, [FromBody] RaceDto raceDto)
+        public async Task<IActionResult> Post(Guid seasonId, [FromBody] ResultDto resultDto)
         {
             if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
                 return StatusCode(StatusCodes.Status403Forbidden);
-            var result = await _raceService.AddRace(raceDto);
+            var result = await _resultService.AddResult(resultDto);
             if (result.IsSuccess)
             {
                 return StatusCode(StatusCodes.Status201Created);
@@ -55,11 +55,11 @@ namespace formula1_tournament_api.Controllers
         }
 
         [HttpPut("{seasonId}/{id}")]
-        public async Task<IActionResult> Put(Guid seasonId, Guid id, [FromBody] RaceDto raceDto)
+        public async Task<IActionResult> Put(Guid seasonId, Guid id, [FromBody] ResultDto resultDto)
         {
             if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
                 return StatusCode(StatusCodes.Status403Forbidden);
-            var result = await _raceService.UpdateRace(id, raceDto);
+            var result = await _resultService.UpdateResult(id, resultDto);
             if (result.IsSuccess)
             {
                 return NoContent();
@@ -72,7 +72,7 @@ namespace formula1_tournament_api.Controllers
         {
             if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
                 return StatusCode(StatusCodes.Status403Forbidden);
-            var result = await _raceService.DeleteRace(id);
+            var result = await _resultService.DeleteResult(id);
             if (result.IsSuccess)
             {
                 return NoContent();
