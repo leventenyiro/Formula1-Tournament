@@ -9,6 +9,7 @@ namespace formula1_tournament_api.Interfaces
         Task<(bool IsSuccess, Driver Driver, string ErrorMessage)> GetDriverById(Guid id);
         Task<(bool IsSuccess, string ErrorMessage)> AddDriver(DriverDto driverDto);
         Task<(bool IsSuccess, string ErrorMessage)> UpdateDriver(Guid id, DriverDto driverDto);
+        Task<(bool IsSuccess, string ErrorMessage)> UpdateDriverTeam(Guid id, Guid teamId);
         Task<(bool IsSuccess, string ErrorMessage)> DeleteDriver(Guid id);
     }
 }
