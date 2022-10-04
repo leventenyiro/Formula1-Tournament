@@ -9,5 +9,7 @@ namespace formula1_tournament_api.Interfaces
         Task<(bool IsSuccess, string ErrorMessage)> Registration(RegistrationDto registrationDto);
         Task<(bool IsSuccess, User User, string ErrorMessage)> GetUser(string userId);
         Task<(bool IsSuccess, User User, string ErrorMessage)> GetUserByUsernameEmail(string usernameEmail);
+        Task<(bool IsSuccess, string ErrorMessage)> UpdateUser(Guid id, UpdateUserDto updateUserDto);
+        Task<(bool IsSuccess, string ErrorMessage)> UpdatePassword(Guid id, UpdatePasswordDto updatePasswordDto);
     }
 }

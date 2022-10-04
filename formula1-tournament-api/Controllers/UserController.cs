@@ -49,5 +49,27 @@ namespace formula1_tournament_api.Controllers
             }
             return NotFound(result.ErrorMessage);
         }
+
+        [HttpPut("update/user"), Authorize]
+        public async Task<IActionResult> Put([FromBody] UpdateUserDto updateUserDto)
+        {
+            var result = await _userService.UpdateUser(new Guid(User.Identity.Name), updateUserDto);
+            if (result.IsSuccess)
+            {
+                return NoContent();
+            }
+            return BadRequest(result.ErrorMessage);
+        }
+
+        [HttpPut("update/password"), Authorize]
+        public async Task<IActionResult> Put([FromBody] UpdatePasswordDto updatePasswordDto)
+        {
+            var result = await _userService.UpdatePassword(new Guid(User.Identity.Name), updatePasswordDto);
+            if (result.IsSuccess)
+            {
+                return NoContent();
+            }
+            return BadRequest(result.ErrorMessage);
+        }
     }
 }
