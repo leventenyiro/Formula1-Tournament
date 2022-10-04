@@ -109,7 +109,24 @@ namespace formula1_tournament_api.Services
                 _formulaDbContext.SaveChanges();
                 return (true, null);
             }
-            return (false, "Driver not found");
+            return (false, "User not found");
+        }
+
+        public async Task<(bool IsSuccess, string ErrorMessage)> UpdatePassword(Guid id, UpdatePasswordDto updatePasswordDto)
+        {
+            if (updatePasswordDto.Password != updatePasswordDto.PasswordAgain)
+            {
+                return (false, "Passwords aren't pass!");
+            }
+            var userObj = _formulaDbContext.Users.Where(e => e.Id == id).FirstOrDefault();
+            if (userObj != null)
+            {
+                userObj.Password = HashPassword(updatePasswordDto.Password);
+                _formulaDbContext.Users.Update(userObj);
+                _formulaDbContext.SaveChanges();
+                return (true, null);
+            }
+            return (false, "User not found");
         }
     }
 }
