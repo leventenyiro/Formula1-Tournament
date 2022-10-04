@@ -11,11 +11,13 @@ namespace formula1_tournament_api.Controllers
     {
         private Interfaces.IResult _resultService;
         private IUserSeason _userSeasonService;
+        private IDriver _driverService;
 
-        public ResultController(Interfaces.IResult resultService, IUserSeason userSeasonService)
+        public ResultController(Interfaces.IResult resultService, IUserSeason userSeasonService, IDriver driverService)
         {
             _resultService = resultService;
             _userSeasonService = userSeasonService;
+            _driverService = driverService;
         }
 
         [HttpGet("{seasonId}")]
@@ -47,11 +49,28 @@ namespace formula1_tournament_api.Controllers
             if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
                 return StatusCode(StatusCodes.Status403Forbidden);
             var result = await _resultService.AddResult(resultDto);
-            if (result.IsSuccess)
+            if (!result.IsSuccess)
             {
-                return StatusCode(StatusCodes.Status201Created);
+                return BadRequest(result.ErrorMessage);
             }
-            return BadRequest(result.ErrorMessage);
+            var result2 = await _driverService.GetDriverById(resultDto.DriverId);
+            if (!result2.IsSuccess)
+            {
+                return BadRequest(result2.ErrorMessage);
+            }
+            var driver = result2.Driver;
+            var result3 = await _driverService.UpdateDriver(seasonId, new DriverDto
+            {
+                Name = driver.Name,
+                RealName = driver.RealName,
+                Number = driver.Number,
+                ActualTeamId = resultDto.TeamId
+            });
+            if (!result3.IsSuccess)
+            {
+                return BadRequest(result3.ErrorMessage);
+            }
+            return StatusCode(StatusCodes.Status201Created);
         }
 
         [HttpPut("{seasonId}/{id}")]
@@ -60,11 +79,28 @@ namespace formula1_tournament_api.Controllers
             if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
                 return StatusCode(StatusCodes.Status403Forbidden);
             var result = await _resultService.UpdateResult(id, resultDto);
-            if (result.IsSuccess)
+            if (!result.IsSuccess)
             {
-                return NoContent();
+                return BadRequest(result.ErrorMessage);
             }
-            return BadRequest(result.ErrorMessage);
+            var result2 = await _driverService.GetDriverById(resultDto.DriverId);
+            if (!result2.IsSuccess)
+            {
+                return BadRequest(result2.ErrorMessage);
+            }
+            var driver = result2.Driver;
+            var result3 = await _driverService.UpdateDriver(seasonId, new DriverDto
+            {
+                Name = driver.Name,
+                RealName = driver.RealName,
+                Number = driver.Number,
+                ActualTeamId = resultDto.TeamId
+            });
+            if (!result3.IsSuccess)
+            {
+                return BadRequest(result3.ErrorMessage);
+            }
+            return NoContent();
         }
 
         [HttpDelete("{seasonId}/{id}")]
