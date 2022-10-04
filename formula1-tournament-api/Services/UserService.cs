@@ -97,5 +97,19 @@ namespace formula1_tournament_api.Services
 
             return jwt;
         }
+
+        public async Task<(bool IsSuccess, string ErrorMessage)> UpdateUser(Guid id, UpdateUserDto updateUserDto)
+        {
+            var userObj = _formulaDbContext.Users.Where(e => e.Id == id).FirstOrDefault();
+            if (userObj != null)
+            {
+                userObj.Username = updateUserDto.Username;
+                userObj.Email = updateUserDto.Email;
+                _formulaDbContext.Users.Update(userObj);
+                _formulaDbContext.SaveChanges();
+                return (true, null);
+            }
+            return (false, "Driver not found");
+        }
     }
 }
