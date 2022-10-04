@@ -26,7 +26,8 @@ namespace formula1_tournament_api.Services
                 };
                 try
                 {
-                    teamObj.Color = ColorTranslator.FromHtml(team.Color);
+                    ColorTranslator.FromHtml(team.Color);
+                    teamObj.Color = team.Color;
                 }
                 catch (Exception)
                 {
@@ -79,7 +80,8 @@ namespace formula1_tournament_api.Services
                 teamObj.Name = team.Name;
                 try
                 {
-                    teamObj.Color = ColorTranslator.FromHtml(team.Color);
+                    ColorTranslator.FromHtml(team.Color);
+                    teamObj.Color = team.Color;
                 }
                 catch (Exception)
                 {
