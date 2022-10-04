@@ -1,4 +1,5 @@
-﻿using formula1_tournament_api.Data;
+﻿using AutoMapper;
+using formula1_tournament_api.Data;
 using formula1_tournament_api.DTO;
 using formula1_tournament_api.Interfaces;
 using formula1_tournament_api.Models;
@@ -8,24 +9,21 @@ namespace formula1_tournament_api.Services
     public class DriverService : IDriver
     {
         private readonly FormulaDbContext _formulaDbContext;
+        private IMapper _mapper;
 
-        public DriverService(FormulaDbContext formulaDbContext)
+        public DriverService(FormulaDbContext formulaDbContext, IMapper mapper)
         {
             _formulaDbContext = formulaDbContext;
+            _mapper = mapper;
         }
 
         public async Task<(bool IsSuccess, string ErrorMessage)> AddDriver(DriverDto driverDto)
         {
             if (driverDto != null)
             {
-                _formulaDbContext.Add(new Driver
-                {
-                    Id = Guid.NewGuid(),
-                    Name = driverDto.Name,
-                    RealName = driverDto.RealName,
-                    Number = driverDto.Number,
-                    ActualTeamId = driverDto.ActualTeamId
-                });
+                var driver = _mapper.Map<Driver>(driverDto);
+                driver.Id = Guid.NewGuid();
+                _formulaDbContext.Add(driver);
                 _formulaDbContext.SaveChanges();
                 return (true, null);
             }
