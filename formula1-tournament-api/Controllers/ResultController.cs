@@ -53,22 +53,11 @@ namespace formula1_tournament_api.Controllers
             {
                 return BadRequest(result.ErrorMessage);
             }
-            var result2 = await _driverService.GetDriverById(resultDto.DriverId);
+
+            var result2 = await _driverService.UpdateDriverTeam(resultDto.DriverId, resultDto.TeamId);
             if (!result2.IsSuccess)
             {
                 return BadRequest(result2.ErrorMessage);
-            }
-            var driver = result2.Driver;
-            var result3 = await _driverService.UpdateDriver(seasonId, new DriverDto
-            {
-                Name = driver.Name,
-                RealName = driver.RealName,
-                Number = driver.Number,
-                ActualTeamId = resultDto.TeamId
-            });
-            if (!result3.IsSuccess)
-            {
-                return BadRequest(result3.ErrorMessage);
             }
             return StatusCode(StatusCodes.Status201Created);
         }
@@ -83,22 +72,11 @@ namespace formula1_tournament_api.Controllers
             {
                 return BadRequest(result.ErrorMessage);
             }
-            var result2 = await _driverService.GetDriverById(resultDto.DriverId);
+
+            var result2 = await _driverService.UpdateDriverTeam(resultDto.DriverId, resultDto.TeamId);
             if (!result2.IsSuccess)
             {
                 return BadRequest(result2.ErrorMessage);
-            }
-            var driver = result2.Driver;
-            var result3 = await _driverService.UpdateDriver(seasonId, new DriverDto
-            {
-                Name = driver.Name,
-                RealName = driver.RealName,
-                Number = driver.Number,
-                ActualTeamId = resultDto.TeamId
-            });
-            if (!result3.IsSuccess)
-            {
-                return BadRequest(result3.ErrorMessage);
             }
             return NoContent();
         }

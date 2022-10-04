@@ -70,7 +70,20 @@ namespace formula1_tournament_api.Services
                 driverObj.Name = driverDto.Name;
                 driverObj.RealName = driverDto.RealName;
                 driverObj.Number = driverDto.Number;
-                //driverObj.ActualTeamId = driverDto.ActualTeamId; just when point is null, every race
+                driverObj.ActualTeam = driverObj.ActualTeam;
+                _formulaDbContext.Drivers.Update(driverObj);
+                _formulaDbContext.SaveChanges();
+                return (true, null);
+            }
+            return (false, "Driver not found");
+        }
+
+        public async Task<(bool IsSuccess, string ErrorMessage)> UpdateDriverTeam(Guid id, Guid teamId)
+        {
+            var driverObj = _formulaDbContext.Drivers.Where(e => e.Id == id).FirstOrDefault();
+            if (driverObj != null)
+            {
+                driverObj.ActualTeamId = teamId;
                 _formulaDbContext.Drivers.Update(driverObj);
                 _formulaDbContext.SaveChanges();
                 return (true, null);
