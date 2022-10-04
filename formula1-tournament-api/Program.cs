@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using formula1_tournament_api.Data;
 using formula1_tournament_api.Interfaces;
 using formula1_tournament_api.Profiles;
@@ -64,6 +65,23 @@ builder.Services.AddSwaggerGen(options =>
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
+// RateLimiter
+builder.Services.AddMemoryCache();
+builder.Services.Configure<IpRateLimitOptions>((options) =>
+{
+    options.GeneralRules = new List<RateLimitRule>()
+    {
+        new RateLimitRule()
+        {
+            Endpoint = "*",
+            Limit = 100,
+            Period = "1s"
+        }
+    };
+});
+builder.Services.AddInMemoryRateLimiting();
+builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+
 builder.Services.AddCors();
 
 var app = builder.Build();
@@ -82,6 +100,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// RateLimiter
+app.UseIpRateLimiting();
 
 app.UseCors(x => x.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true).AllowCredentials());
 
