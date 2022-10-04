@@ -1,4 +1,5 @@
-﻿using formula1_tournament_api.Data;
+﻿using AutoMapper;
+using formula1_tournament_api.Data;
 using formula1_tournament_api.DTO;
 using formula1_tournament_api.Interfaces;
 using formula1_tournament_api.Models;
@@ -8,25 +9,21 @@ namespace formula1_tournament_api.Services
     public class ResultService : Interfaces.IResult
     {
         private readonly FormulaDbContext _formulaDbContext;
+        private IMapper _mapper;
 
-        public ResultService(FormulaDbContext formulaDbContext)
+        public ResultService(FormulaDbContext formulaDbContext, IMapper mapper)
         {
             _formulaDbContext = formulaDbContext;
+            _mapper = mapper;
         }
 
         public async Task<(bool IsSuccess, string ErrorMessage)> AddResult(ResultDto resultDto)
         {
             if (resultDto != null)
             {
-                _formulaDbContext.Add(new Result
-                {
-                    Id = Guid.NewGuid(),
-                    Position = resultDto.Position,
-                    Points = resultDto.Points,
-                    DriverId = resultDto.DriverId,
-                    TeamId = resultDto.TeamId,
-                    RaceId = resultDto.RaceId
-                });
+                var result = _mapper.Map<Result>(resultDto);
+                result.Id = Guid.NewGuid();
+                _formulaDbContext.Add(result);
                 _formulaDbContext.SaveChanges();
                 return (true, null);
             }

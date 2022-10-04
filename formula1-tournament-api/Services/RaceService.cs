@@ -1,4 +1,5 @@
-﻿using formula1_tournament_api.Data;
+﻿using AutoMapper;
+using formula1_tournament_api.Data;
 using formula1_tournament_api.DTO;
 using formula1_tournament_api.Interfaces;
 using formula1_tournament_api.Models;
@@ -8,23 +9,21 @@ namespace formula1_tournament_api.Services
     public class RaceService : IRace
     {
         private readonly FormulaDbContext _formulaDbContext;
+        private IMapper _mapper;
 
-        public RaceService(FormulaDbContext formulaDbContext)
+        public RaceService(FormulaDbContext formulaDbContext, IMapper mapper)
         {
             _formulaDbContext = formulaDbContext;
+            _mapper = mapper;
         }
 
         public async Task<(bool IsSuccess, string ErrorMessage)> AddRace(RaceDto raceDto)
         {
             if (raceDto != null)
             {
-                _formulaDbContext.Add(new Race
-                {
-                    Id = Guid.NewGuid(),
-                    Name = raceDto.Name,
-                    DateTime = raceDto.DateTime,
-                    SeasonId = raceDto.SeasonId
-                });
+                var race = _mapper.Map<Race>(raceDto);
+                race.Id = Guid.NewGuid();
+                _formulaDbContext.Add(race);
                 _formulaDbContext.SaveChanges();
                 return (true, null);
             }

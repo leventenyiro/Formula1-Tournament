@@ -1,5 +1,6 @@
 using formula1_tournament_api.Data;
 using formula1_tournament_api.Interfaces;
+using formula1_tournament_api.Profiles;
 using formula1_tournament_api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,8 @@ builder.Services.AddScoped<IDriver, DriverService>();
 builder.Services.AddScoped<ITeam, TeamService>();
 builder.Services.AddScoped<IRace, RaceService>();
 builder.Services.AddScoped<formula1_tournament_api.Interfaces.IResult, ResultService>();
+
+builder.Services.AddAutoMapper(typeof(AutoMapperConfig));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
