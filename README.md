@@ -1,4 +1,4 @@
-# formula1-tournament
+# car-racing-tournament
 
 ## Note
 Use db migration
