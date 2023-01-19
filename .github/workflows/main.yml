@@ -19,13 +19,13 @@ jobs:
         dotnet-version: 6.0.x
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: api
+      working-directory: car-racing-tournament-api
     - name: Build
       run: dotnet build --no-restore
-      working-directory: api
+      working-directory: car-racing-tournament-api
     - name: Test
       run: dotnet test --no-build --verbosity normal
-      working-directory: api
+      working-directory: car-racing-tournament-api
 
   webapp:
 
