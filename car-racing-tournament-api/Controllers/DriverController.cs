@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.OData.Query;
 
 namespace car_racing_tournament_api.Controllers
 {
-    [Route("api/driver")]
+    [Route("api/season/{seasonId}/driver")]
     [ApiController]
     public class DriverController : Controller
     {
@@ -20,7 +20,7 @@ namespace car_racing_tournament_api.Controllers
             _userSeasonService = userSeasonService;
         }
 
-        [HttpGet("{seasonId}")]
+        [HttpGet("")]
         [EnableQuery]
         public async Task<IActionResult> Get(Guid seasonId)
         {
@@ -32,10 +32,10 @@ namespace car_racing_tournament_api.Controllers
             return NotFound(result.ErrorMessage);
         }
 
-        [HttpGet("{seasonId}/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid seasonId, Guid id)
         {
-            var result = await _driverService.GetDriverById(id);
+            var result = await _driverService.GetDriverById(seasonId, id);
             if (result.IsSuccess)
             {
                 return Ok(result.Driver);
@@ -43,7 +43,7 @@ namespace car_racing_tournament_api.Controllers
             return NotFound(result.ErrorMessage);
         }
 
-        [HttpPost("{seasonId}")]
+        [HttpPost("")]
         [Authorize]
         public async Task<IActionResult> Post(Guid seasonId, [FromBody] DriverDto driverDto)
         {
@@ -57,7 +57,7 @@ namespace car_racing_tournament_api.Controllers
             return BadRequest(result.ErrorMessage);
         }
 
-        [HttpPut("{seasonId}/{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Put(Guid seasonId, Guid id, [FromBody] DriverDto driverDto)
         {
             if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
@@ -70,7 +70,7 @@ namespace car_racing_tournament_api.Controllers
             return BadRequest(result.ErrorMessage);
         }
 
-        [HttpDelete("{seasonId}/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid seasonId, Guid id)
         {
             if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))

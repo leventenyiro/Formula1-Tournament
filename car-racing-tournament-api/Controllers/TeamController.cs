@@ -1,6 +1,7 @@
 ﻿using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 
@@ -42,12 +43,12 @@ namespace car_racing_tournament_api.Controllers
             return NotFound(result.ErrorMessage);
         }
 
-        [HttpPost("{seasonId}")]
+        [HttpPost("{seasonId}"), Authorize]
         public async Task<IActionResult> Post(Guid seasonId, [FromBody] TeamDto team)
         {
             if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
                 return StatusCode(StatusCodes.Status403Forbidden);
-            var result = await _teamService.AddTeam(team);
+            var result = await _teamService.AddTeam(seasonId, team);
             if (result.IsSuccess)
             {
                 return StatusCode(StatusCodes.Status201Created);

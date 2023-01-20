@@ -15,14 +15,15 @@ namespace car_racing_tournament_api.Services
             _formulaDbContext = formulaDbContext;
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> AddTeam(TeamDto team)
+        public async Task<(bool IsSuccess, string ErrorMessage)> AddTeam(Guid seasonId, TeamDto team)
         {
             if (team != null)
             {
                 Team teamObj = new Team
                 {
                     Id = Guid.NewGuid(),
-                    Name = team.Name
+                    Name = team.Name,
+                    Season = _formulaDbContext.Seasons.Where(e => e.Id == seasonId).First(),
                 };
                 try
                 {
@@ -33,7 +34,7 @@ namespace car_racing_tournament_api.Services
                 {
                     return (false, "Incorrect color code");
                 }
-                _formulaDbContext.Add(team);
+                _formulaDbContext.Add(teamObj);
                 _formulaDbContext.SaveChanges();
                 return (true, null);
             }

@@ -52,9 +52,9 @@ namespace car_racing_tournament_api.Services
             return (false, null, "No drivers found");
         }
 
-        public async Task<(bool IsSuccess, Driver Driver, string ErrorMessage)> GetDriverById(Guid id)
+        public async Task<(bool IsSuccess, Driver Driver, string ErrorMessage)> GetDriverById(Guid seasonId, Guid id)
         {
-            var driver = _formulaDbContext.Drivers.Where(e => e.Id == id).FirstOrDefault();
+            var driver = _formulaDbContext.Drivers.Where(e => e.SeasonId == seasonId && e.Id == id).FirstOrDefault();
             if (driver != null)
             {
                 return (true, driver, null);
