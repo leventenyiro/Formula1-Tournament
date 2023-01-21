@@ -15,48 +15,47 @@ namespace car_racing_tournament_api.Services
             _formulaDbContext = formulaDbContext;
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> DeleteTeam(Guid id)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteTeam(Guid id)
         {
             var team = _formulaDbContext.Teams.Where(e => e.Id == id).FirstOrDefault();
-            if (team != null)
-            {
-                _formulaDbContext.Teams.Remove(team);
-                _formulaDbContext.SaveChanges();
-                return (true, null);
-            }
-            return (false, "Team not found");
+            if (team == null)
+                return (false, "Team not found");
+            
+            _formulaDbContext.Teams.Remove(team);
+            _formulaDbContext.SaveChanges();
+            
+            return (true, null);
         }
 
-        public async Task<(bool IsSuccess, Team Team, string ErrorMessage)> GetTeamById(Guid id)
+        public async Task<(bool IsSuccess, Team? Team, string? ErrorMessage)> GetTeamById(Guid id)
         {
             var team = _formulaDbContext.Teams.Where(e => e.Id == id).FirstOrDefault();
-            if (team != null)
-            {
-                return (true, team, null);
-            }
-            return (false, null, "Team not found");
+            if (team == null)
+                return (false, null, "Team not found");
+            
+            return (true, team, null);
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> UpdateTeam(Guid id, TeamDto team)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateTeam(Guid id, TeamDto team)
         {
             var teamObj = _formulaDbContext.Teams.Where(e => e.Id == id).FirstOrDefault();
-            if (teamObj != null)
+            if (teamObj == null)
+                return (false, "Team not found");
+            
+            teamObj.Name = team.Name;
+            try
             {
-                teamObj.Name = team.Name;
-                try
-                {
-                    ColorTranslator.FromHtml(team.Color);
-                    teamObj.Color = team.Color;
-                }
-                catch (Exception)
-                {
-                    return (false, "Incorrect color code");
-                }
-                _formulaDbContext.Teams.Update(teamObj);
-                _formulaDbContext.SaveChanges();
-                return (true, null);
+                ColorTranslator.FromHtml(team.Color);
+                teamObj.Color = team.Color;
             }
-            return (false, "Team not found");
+            catch (Exception)
+            {
+                return (false, "Incorrect color code");
+            }
+            _formulaDbContext.Teams.Update(teamObj);
+            _formulaDbContext.SaveChanges();
+            
+            return (true, null);
         }
     }
 }

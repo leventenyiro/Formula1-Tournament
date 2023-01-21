@@ -19,52 +19,51 @@ namespace car_racing_tournament_api.Services
         public async Task<(bool IsSuccess, Driver? Driver, string? ErrorMessage)> GetDriverById(Guid id)
         {
             var driver = _formulaDbContext.Drivers.Where(e => e.Id == id).FirstOrDefault();
-            if (driver != null)
-            {
-                return (true, driver, null);
-            }
-            return (false, null, DRIVER_NOT_FOUND);
+            if (driver == null)
+                return (false, null, DRIVER_NOT_FOUND);
+            
+            return (true, driver, null);
         }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateDriver(Guid id, DriverDto driverDto)
         {
             var driverObj = _formulaDbContext.Drivers.Where(e => e.Id == id).FirstOrDefault();
-            if (driverObj != null)
-            {
-                driverObj.Name = driverDto.Name;
-                driverObj.RealName = driverDto.RealName;
-                driverObj.Number = driverDto.Number;
-                driverObj.ActualTeam = driverObj.ActualTeam;
-                _formulaDbContext.Drivers.Update(driverObj);
-                _formulaDbContext.SaveChanges();
-                return (true, null);
-            }
-            return (false, DRIVER_NOT_FOUND);
+            if (driverObj == null)
+                return (false, DRIVER_NOT_FOUND);
+
+            driverObj.Name = driverDto.Name;
+            driverObj.RealName = driverDto.RealName;
+            driverObj.Number = driverDto.Number;
+            driverObj.ActualTeam = driverObj.ActualTeam;
+            _formulaDbContext.Drivers.Update(driverObj);
+            _formulaDbContext.SaveChanges();
+
+            return (true, null);
         }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateDriverTeam(Guid id, Guid teamId)
         {
             var driverObj = _formulaDbContext.Drivers.Where(e => e.Id == id).FirstOrDefault();
-            if (driverObj != null)
-            {
-                driverObj.ActualTeamId = teamId;
-                _formulaDbContext.Drivers.Update(driverObj);
-                _formulaDbContext.SaveChanges();
-                return (true, null);
-            }
-            return (false, DRIVER_NOT_FOUND);
+            if (driverObj == null)
+                return (false, DRIVER_NOT_FOUND);
+            
+            driverObj.ActualTeamId = teamId;
+            _formulaDbContext.Drivers.Update(driverObj);
+            _formulaDbContext.SaveChanges();
+
+            return (true, null);
         }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteDriver(Guid id)
         {
             var driver = _formulaDbContext.Drivers.Where(e => e.Id == id).First();
-            if (driver != null)
-            {
-                _formulaDbContext.Drivers.Remove(driver);
-                _formulaDbContext.SaveChanges();
-                return (true, null);
-            }
-            return (false, DRIVER_NOT_FOUND);
+            if (driver == null)
+                return (false, DRIVER_NOT_FOUND);
+            
+            _formulaDbContext.Drivers.Remove(driver);
+            _formulaDbContext.SaveChanges();
+
+            return (true, null);
         }
     }
 }
