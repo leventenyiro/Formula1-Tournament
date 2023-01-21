@@ -61,7 +61,7 @@ namespace car_racing_tournament_api.Services
             return (true, null);
         }
 
-        public async Task<(bool IsSuccess, List<UserSeason> UserSeasons, string ErrorMessage)> GetAllOwnedSeasonId(Guid userId)
+        public async Task<(bool IsSuccess, List<UserSeason> UserSeasons, string ErrorMessage)> GetSeasonsByUserId(Guid userId)
         {
             List<UserSeason> userSeasons = _formulaDbContext.UserSeasons.Where(x => x.UserId == userId).ToList();
             return (true, userSeasons, null);

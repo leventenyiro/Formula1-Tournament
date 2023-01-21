@@ -15,32 +15,6 @@ namespace car_racing_tournament_api.Services
             _formulaDbContext = formulaDbContext;
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> AddTeam(Guid seasonId, TeamDto team)
-        {
-            if (team != null)
-            {
-                Team teamObj = new Team
-                {
-                    Id = Guid.NewGuid(),
-                    Name = team.Name,
-                    Season = _formulaDbContext.Seasons.Where(e => e.Id == seasonId).First(),
-                };
-                try
-                {
-                    ColorTranslator.FromHtml(team.Color);
-                    teamObj.Color = team.Color;
-                }
-                catch (Exception)
-                {
-                    return (false, "Incorrect color code");
-                }
-                _formulaDbContext.Add(teamObj);
-                _formulaDbContext.SaveChanges();
-                return (true, null);
-            }
-            return (false, "Please provide the team data");
-        }
-
         public async Task<(bool IsSuccess, string ErrorMessage)> DeleteTeam(Guid id)
         {
             var team = _formulaDbContext.Teams.Where(e => e.Id == id).FirstOrDefault();
@@ -51,16 +25,6 @@ namespace car_racing_tournament_api.Services
                 return (true, null);
             }
             return (false, "Team not found");
-        }
-
-        public async Task<(bool IsSuccess, List<Team> Teams, string ErrorMessage)> GetAllTeamsBySeasonId(Guid seasonId)
-        {
-            var teams = _formulaDbContext.Teams.Where(x => x.SeasonId == seasonId).ToList();
-            if (teams != null)
-            {
-                return (true, teams, null);
-            }
-            return (false, null, "No teams found");
         }
 
         public async Task<(bool IsSuccess, Team Team, string ErrorMessage)> GetTeamById(Guid id)

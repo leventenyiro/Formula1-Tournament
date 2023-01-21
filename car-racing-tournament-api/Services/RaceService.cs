@@ -17,41 +17,6 @@ namespace car_racing_tournament_api.Services
             _mapper = mapper;
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> AddRace(RaceDto raceDto)
-        {
-            if (raceDto != null)
-            {
-                var race = _mapper.Map<Race>(raceDto);
-                race.Id = Guid.NewGuid();
-                _formulaDbContext.Add(race);
-                _formulaDbContext.SaveChanges();
-                return (true, null);
-            }
-            return (false, "Please provide the race data");
-        }
-
-        public async Task<(bool IsSuccess, string ErrorMessage)> DeleteRace(Guid id)
-        {
-            var race = _formulaDbContext.Races.Where(e => e.Id == id).FirstOrDefault();
-            if (race != null)
-            {
-                _formulaDbContext.Races.Remove(race);
-                _formulaDbContext.SaveChanges();
-                return (true, null);
-            }
-            return (false, "Race not found");
-        }
-
-        public async Task<(bool IsSuccess, List<Race> Races, string ErrorMessage)> GetAllRacesBySeasonId(Guid seasonId)
-        {
-            var races = _formulaDbContext.Races.Where(x => x.SeasonId == seasonId).ToList();
-            if (races != null)
-            {
-                return (true, races, null);
-            }
-            return (false, null, "No races found");
-        }
-
         public async Task<(bool IsSuccess, Race Race, string ErrorMessage)> GetRaceById(Guid id)
         {
             var race = _formulaDbContext.Races.Where(e => e.Id == id).FirstOrDefault();
@@ -74,6 +39,41 @@ namespace car_racing_tournament_api.Services
                 return (true, null);
             }
             return (false, "Race not found");
+        }
+
+        public async Task<(bool IsSuccess, string ErrorMessage)> DeleteRace(Guid id)
+        {
+            var race = _formulaDbContext.Races.Where(e => e.Id == id).FirstOrDefault();
+            if (race != null)
+            {
+                _formulaDbContext.Races.Remove(race);
+                _formulaDbContext.SaveChanges();
+                return (true, null);
+            }
+            return (false, "Race not found");
+        }
+
+        public async Task<(bool IsSuccess, List<Result> Results, string ErrorMessage)> GetResultsByRaceId(Guid raceId)
+        {
+            var results = _formulaDbContext.Results.Where(x => x.RaceId == raceId).ToList();
+            if (results != null)
+            {
+                return (true, results, null);
+            }
+            return (false, null, "No results found");
+        }
+
+        public async Task<(bool IsSuccess, string ErrorMessage)> AddResult(Guid raceId, ResultDto resultDto)
+        {
+            if (resultDto != null)
+            {
+                var result = _mapper.Map<Result>(resultDto);
+                result.Id = Guid.NewGuid();
+                _formulaDbContext.Add(result);
+                _formulaDbContext.SaveChanges();
+                return (true, null);
+            }
+            return (false, "Please provide the result data");
         }
     }
 }

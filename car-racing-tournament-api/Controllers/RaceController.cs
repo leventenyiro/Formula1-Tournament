@@ -1,7 +1,7 @@
 ﻿using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OData.Query;
 
 namespace car_racing_tournament_api.Controllers
 {
@@ -11,73 +11,97 @@ namespace car_racing_tournament_api.Controllers
     {
         private IRace _raceService;
         private IUserSeason _userSeasonService;
+        private IDriver _driverService;
 
-        public RaceController(IRace raceService, IUserSeason userSeasonService)
+        public RaceController(IRace raceService, IUserSeason userSeasonService, IDriver driverService)
         {
             _raceService = raceService;
             _userSeasonService = userSeasonService;
+            _driverService = driverService;
         }
 
-        [HttpGet("{seasonId}")]
-        [EnableQuery]
-        public async Task<IActionResult> Get(Guid seasonId)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(Guid id)
         {
-            var result = await _raceService.GetAllRacesBySeasonId(seasonId);
-            if (result.IsSuccess)
-            {
-                return Ok(result.Races);
-            }
-            return NotFound(result.ErrorMessage);
+            var resultGet = await _raceService.GetRaceById(id);
+            if (!resultGet.IsSuccess)
+                return NotFound(resultGet.ErrorMessage);
+            
+            return Ok(resultGet.Race);
         }
 
-        [HttpGet("{seasonId}/{id}")]
-        public async Task<IActionResult> Get(Guid seasonId, Guid id)
+        [HttpPut("{id}"), Authorize]
+        public async Task<IActionResult> Put(Guid id, [FromBody] RaceDto raceDto)
         {
-            var result = await _raceService.GetRaceById(id);
-            if (result.IsSuccess)
-            {
-                return Ok(result.Race);
-            }
-            return NotFound(result.ErrorMessage);
+            if (User.Identity?.Name == null)
+                return Unauthorized();
+
+            var resultGet = await _raceService.GetRaceById(id);
+            if (!resultGet.IsSuccess)
+                return NotFound(resultGet.ErrorMessage);
+
+            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), resultGet.Race.SeasonId))
+                return Forbid();
+            
+            var resultUpdate = await _raceService.UpdateRace(id, raceDto);
+            if (!resultUpdate.IsSuccess)
+                return BadRequest(resultUpdate.ErrorMessage);
+            
+            return NoContent();
         }
 
-        [HttpPost("{seasonId}")]
-        public async Task<IActionResult> Post(Guid seasonId, [FromBody] RaceDto raceDto)
+        [HttpDelete("{id}"), Authorize]
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
-                return StatusCode(StatusCodes.Status403Forbidden);
-            var result = await _raceService.AddRace(raceDto);
-            if (result.IsSuccess)
-            {
-                return StatusCode(StatusCodes.Status201Created);
-            }
-            return BadRequest(result.ErrorMessage);
-        }
+            if (User.Identity?.Name == null)
+                return Unauthorized();
 
-        [HttpPut("{seasonId}/{id}")]
-        public async Task<IActionResult> Put(Guid seasonId, Guid id, [FromBody] RaceDto raceDto)
-        {
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
-                return StatusCode(StatusCodes.Status403Forbidden);
-            var result = await _raceService.UpdateRace(id, raceDto);
-            if (result.IsSuccess)
-            {
-                return NoContent();
-            }
-            return BadRequest(result.ErrorMessage);
-        }
+            var resultGet = await _raceService.GetRaceById(id);
+            if (!resultGet.IsSuccess)
+                return NotFound(resultGet.ErrorMessage);
 
-        [HttpDelete("{seasonId}/{id}")]
-        public async Task<IActionResult> Delete(Guid seasonId, Guid id)
-        {
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
-                return StatusCode(StatusCodes.Status403Forbidden);
+            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), resultGet.Race.SeasonId))
+                return Forbid();
+
             var result = await _raceService.DeleteRace(id);
-            if (result.IsSuccess)
-            {
-                return NoContent();
-            }
-            return BadRequest(result.ErrorMessage);
+            if (!result.IsSuccess)
+                return BadRequest(result.ErrorMessage);
+            
+            return NoContent();
+        }
+
+        [HttpGet("{raceId}/result")]
+        public async Task<IActionResult> GetResultsByRaceId(Guid raceId)
+        {
+            var result = await _raceService.GetResultsByRaceId(raceId);
+            if (!result.IsSuccess)
+                return NotFound(result.ErrorMessage);
+            
+            return Ok(result.Results);
+        }
+
+        [HttpPost("{raceId}/result"), Authorize]
+        public async Task<IActionResult> PostResult(Guid raceId, [FromBody] ResultDto resultDto)
+        {
+            if (User.Identity?.Name == null)
+                return Unauthorized();
+
+            var resultGet = await _raceService.GetRaceById(raceId);
+            if (!resultGet.IsSuccess)
+                return NotFound(resultGet.ErrorMessage);
+
+            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), resultGet.Race.SeasonId))
+                return Forbid();
+
+            var resultAdd = await _raceService.AddResult(raceId, resultDto);
+            if (!resultAdd.IsSuccess)
+                return BadRequest(resultAdd.ErrorMessage);
+
+            var resultUpdate = await _driverService.UpdateDriverTeam(resultDto.DriverId, resultDto.TeamId);
+            if (!resultUpdate.IsSuccess)
+                return BadRequest(resultUpdate.ErrorMessage);
+            
+            return StatusCode(StatusCodes.Status201Created);
         }
     }
 }

@@ -10,6 +10,6 @@ namespace car_racing_tournament_api.Interfaces
         public Task<(bool IsSuccess, string ErrorMessage)> AddAdmin(Guid userId, Guid seasonId);
         public Task<(bool IsSuccess, string ErrorMessage)> AddModerator(Guid adminId, Guid moderatorId, Guid seasonId);
         public Task<(bool IsSuccess, string ErrorMessage)> RemovePermission(Guid adminId, Guid moderatorId, Guid seasonId);
-        public Task<(bool IsSuccess, List<UserSeason> UserSeasons, string ErrorMessage)> GetAllOwnedSeasonId(Guid userId);
+        public Task<(bool IsSuccess, List<UserSeason> UserSeasons, string ErrorMessage)> GetSeasonsByUserId(Guid userId);
     }
 }
