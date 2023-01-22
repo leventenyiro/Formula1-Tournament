@@ -5,10 +5,10 @@ import { LoginComponent } from './main/login/login.component';
 import { MainComponent } from './main/main.component';
 
 const routes: Routes = [
-  //{ path: '', redirectTo: '/main', pathMatch: 'full' },
-  { path: 'main', component: MainComponent },
+  { path: '', component: MainComponent },
   { path: 'login', component: LoginComponent},
-  { path: 'admin', component: AdminComponent }
+  { path: 'admin', component: AdminComponent },
+  { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];
 
 @NgModule({
