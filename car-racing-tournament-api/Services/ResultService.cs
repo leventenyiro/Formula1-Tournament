@@ -1,81 +1,56 @@
-﻿using AutoMapper;
-using car_racing_tournament_api.Data;
+﻿using car_racing_tournament_api.Data;
 using car_racing_tournament_api.DTO;
-using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace car_racing_tournament_api.Services
 {
     public class ResultService : Interfaces.IResult
     {
         private readonly FormulaDbContext _formulaDbContext;
-        private IMapper _mapper;
 
-        public ResultService(FormulaDbContext formulaDbContext, IMapper mapper)
+        private const string RESULT_NOT_FOUND = "Result not found";
+
+        public ResultService(FormulaDbContext formulaDbContext)
         {
             _formulaDbContext = formulaDbContext;
-            _mapper = mapper;
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> AddResult(ResultDto resultDto)
+        public async Task<(bool IsSuccess, Result? Result, string? ErrorMessage)> GetResultById(Guid id)
         {
-            if (resultDto != null)
-            {
-                var result = _mapper.Map<Result>(resultDto);
-                result.Id = Guid.NewGuid();
-                _formulaDbContext.Add(result);
-                _formulaDbContext.SaveChanges();
-                return (true, null);
-            }
-            return (false, "Please provide the result data");
+            var result = await _formulaDbContext.Results.Where(e => e.Id == id).FirstOrDefaultAsync();
+            if (result == null)
+                return (false, null, RESULT_NOT_FOUND);
+            
+            return (true, result, null);
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> DeleteResult(Guid id)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateResult(Guid id, ResultDto resultDto)
         {
-            var result = _formulaDbContext.Results.Where(e => e.Id == id).FirstOrDefault();
-            if (result != null)
-            {
-                _formulaDbContext.Results.Remove(result);
-                _formulaDbContext.SaveChanges();
-                return (true, null);
-            }
-            return (false, "Result not found");
+            var resultObj = await _formulaDbContext.Results.Where(e => e.Id == id).FirstOrDefaultAsync();
+            if (resultObj == null)
+                return (false, RESULT_NOT_FOUND);
+            
+            resultObj.Position = resultDto.Position;
+            resultObj.Points = resultDto.Points;
+            resultObj.DriverId = resultDto.DriverId;
+            resultObj.TeamId = resultDto.TeamId;
+            _formulaDbContext.Results.Update(resultObj);
+            _formulaDbContext.SaveChanges();
+
+            return (true, null);
         }
 
-        public async Task<(bool IsSuccess, List<Result> Results, string ErrorMessage)> GetAllResultsByRaceId(Guid raceId)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteResult(Guid id)
         {
-            var results = _formulaDbContext.Results.Where(x => x.RaceId == raceId).ToList();
-            if (results != null)
-            {
-                return (true, results, null);
-            }
-            return (false, null, "No results found");
-        }
+            var result = await _formulaDbContext.Results.Where(e => e.Id == id).FirstOrDefaultAsync();
+            if (result == null)
+                return (false, RESULT_NOT_FOUND);
+            
+            _formulaDbContext.Results.Remove(result);
+            _formulaDbContext.SaveChanges();
 
-        public async Task<(bool IsSuccess, Result Result, string ErrorMessage)> GetResultById(Guid id)
-        {
-            var result = _formulaDbContext.Results.Where(e => e.Id == id).FirstOrDefault();
-            if (result != null)
-            {
-                return (true, result, null);
-            }
-            return (false, null, "Result not found");
-        }
-
-        public async Task<(bool IsSuccess, string ErrorMessage)> UpdateResult(Guid id, ResultDto resultDto)
-        {
-            var resultObj = _formulaDbContext.Results.Where(e => e.Id == id).FirstOrDefault();
-            if (resultObj != null)
-            {
-                resultObj.Position = resultDto.Position;
-                resultObj.Points = resultDto.Points;
-                resultObj.DriverId = resultDto.DriverId;
-                resultObj.TeamId = resultDto.TeamId;
-                _formulaDbContext.Results.Update(resultObj);
-                _formulaDbContext.SaveChanges();
-                return (true, null);
-            }
-            return (false, "Result not found");
+            return (true, null);
         }
     }
 }

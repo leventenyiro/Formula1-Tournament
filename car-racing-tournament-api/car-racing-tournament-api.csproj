@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>car_racing_tournament_api</RootNamespace>
+	<StartupObject>Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>

@@ -3,6 +3,7 @@ using car_racing_tournament_api.Data;
 using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace car_racing_tournament_api.Services
 {
@@ -11,69 +12,69 @@ namespace car_racing_tournament_api.Services
         private readonly FormulaDbContext _formulaDbContext;
         private IMapper _mapper;
 
+        private const string RACE_NOT_FOUND = "Race not found";
+
         public RaceService(FormulaDbContext formulaDbContext, IMapper mapper)
         {
             _formulaDbContext = formulaDbContext;
             _mapper = mapper;
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> AddRace(RaceDto raceDto)
+        public async Task<(bool IsSuccess, Race? Race, string? ErrorMessage)> GetRaceById(Guid id)
         {
-            if (raceDto != null)
-            {
-                var race = _mapper.Map<Race>(raceDto);
-                race.Id = Guid.NewGuid();
-                _formulaDbContext.Add(race);
-                _formulaDbContext.SaveChanges();
-                return (true, null);
-            }
-            return (false, "Please provide the race data");
+            var race = await _formulaDbContext.Races.Where(e => e.Id == id).FirstOrDefaultAsync();
+            if (race == null)
+                return (false, null, RACE_NOT_FOUND);
+
+            return (true, race, null);
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> DeleteRace(Guid id)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateRace(Guid id, RaceDto raceDto)
         {
-            var race = _formulaDbContext.Races.Where(e => e.Id == id).FirstOrDefault();
-            if (race != null)
-            {
-                _formulaDbContext.Races.Remove(race);
-                _formulaDbContext.SaveChanges();
-                return (true, null);
-            }
-            return (false, "Race not found");
+            var raceObj = await _formulaDbContext.Races.Where(e => e.Id == id).FirstOrDefaultAsync();
+            if (raceObj == null)
+                return (false, RACE_NOT_FOUND);
+
+            raceObj.Name = raceDto.Name;
+            raceObj.DateTime = raceDto.DateTime;
+            _formulaDbContext.Races.Update(raceObj);
+            _formulaDbContext.SaveChanges();
+            
+            return (true, null);
         }
 
-        public async Task<(bool IsSuccess, List<Race> Races, string ErrorMessage)> GetAllRacesBySeasonId(Guid seasonId)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteRace(Guid id)
         {
-            var races = _formulaDbContext.Races.Where(x => x.SeasonId == seasonId).ToList();
-            if (races != null)
-            {
-                return (true, races, null);
-            }
-            return (false, null, "No races found");
+            var race = await _formulaDbContext.Races.Where(e => e.Id == id).FirstOrDefaultAsync();
+            if (race == null)
+                return (false, RACE_NOT_FOUND);
+
+            _formulaDbContext.Races.Remove(race);
+            _formulaDbContext.SaveChanges();
+            
+            return (true, null);
         }
 
-        public async Task<(bool IsSuccess, Race Race, string ErrorMessage)> GetRaceById(Guid id)
+        public async Task<(bool IsSuccess, List<Result>? Results, string? ErrorMessage)> GetResultsByRaceId(Guid raceId)
         {
-            var race = _formulaDbContext.Races.Where(e => e.Id == id).FirstOrDefault();
-            if (race != null)
-            {
-                return (true, race, null);
-            }
-            return (false, null, "Race not found");
+            var results = await _formulaDbContext.Results.Where(x => x.RaceId == raceId).ToListAsync();
+            if (results == null)
+                return (false, null, "No results found");
+
+            return (true, results, null);
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> UpdateRace(Guid id, RaceDto raceDto)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> AddResult(Guid raceId, ResultDto resultDto)
         {
-            var raceObj = _formulaDbContext.Races.Where(e => e.Id == id).FirstOrDefault();
-            if (raceObj != null)
-            {
-                raceObj.Name = raceDto.Name;
-                raceObj.DateTime = raceDto.DateTime;
-                _formulaDbContext.Races.Update(raceObj);
-                _formulaDbContext.SaveChanges();
-                return (true, null);
-            }
-            return (false, "Race not found");
+            if (resultDto == null)
+                return (false, "Please provide the result data");
+
+            var result = _mapper.Map<Result>(resultDto);
+            result.Id = Guid.NewGuid();
+            await _formulaDbContext.AddAsync(result);
+            _formulaDbContext.SaveChanges();
+            
+            return (true, null);
         }
     }
 }

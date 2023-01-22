@@ -1,9 +1,7 @@
 ﻿using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
-using car_racing_tournament_api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OData.Query;
 
 namespace car_racing_tournament_api.Controllers
 {
@@ -20,67 +18,49 @@ namespace car_racing_tournament_api.Controllers
             _userSeasonService = userSeasonService;
         }
 
-        [HttpGet("{seasonId}")]
-        [EnableQuery]
-        public async Task<IActionResult> Get(Guid seasonId)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(Guid id)
         {
-            var result = await _driverService.GetAllDriversBySeasonId(seasonId);
-            if (result.IsSuccess)
-            {
-                return Ok(result.Drivers);
-            }
-            return NotFound(result.ErrorMessage);
+            var resultGet = await _driverService.GetDriverById(id);
+            if (!resultGet.IsSuccess)
+                return NotFound(resultGet.ErrorMessage);
+            
+            return Ok(resultGet.Driver);
         }
 
-        [HttpGet("{seasonId}/{id}")]
-        public async Task<IActionResult> Get(Guid seasonId, Guid id)
+        [HttpPut("{id}"), Authorize]
+        public async Task<IActionResult> Put(Guid id, [FromBody] DriverDto driverDto)
         {
-            var result = await _driverService.GetDriverById(id);
-            if (result.IsSuccess)
-            {
-                return Ok(result.Driver);
-            }
-            return NotFound(result.ErrorMessage);
+            var resultGet = await _driverService.GetDriverById(id);
+            if (!resultGet.IsSuccess)
+                return NotFound(resultGet.ErrorMessage);
+
+            if (!_userSeasonService.HasPermission(new Guid(User.Identity!.Name!), resultGet.Driver!.SeasonId))
+                return Forbid();
+
+            var resultUpdate = await _driverService.UpdateDriver(id, driverDto);
+            if (!resultUpdate.IsSuccess)
+                return BadRequest(resultUpdate.ErrorMessage);
+
+            return NoContent();
         }
 
-        [HttpPost("{seasonId}")]
-        [Authorize]
-        public async Task<IActionResult> Post(Guid seasonId, [FromBody] DriverDto driverDto)
+        [HttpDelete("{id}"), Authorize]
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
-                return StatusCode(StatusCodes.Status403Forbidden);
-            var result = await _driverService.AddDriver(driverDto);
-            if (result.IsSuccess)
-            {
-                return StatusCode(StatusCodes.Status201Created);
-            }
-            return BadRequest(result.ErrorMessage);
-        }
 
-        [HttpPut("{seasonId}/{id}")]
-        public async Task<IActionResult> Put(Guid seasonId, Guid id, [FromBody] DriverDto driverDto)
-        {
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
-                return StatusCode(StatusCodes.Status403Forbidden);
-            var result = await _driverService.UpdateDriver(id, driverDto);
-            if (result.IsSuccess)
-            {
-                return NoContent();
-            }
-            return BadRequest(result.ErrorMessage);
-        }
+            var resultGet = await _driverService.GetDriverById(id);
+            if (!resultGet.IsSuccess)
+                return NotFound(resultGet.ErrorMessage);
 
-        [HttpDelete("{seasonId}/{id}")]
-        public async Task<IActionResult> Delete(Guid seasonId, Guid id)
-        {
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), seasonId))
-                return StatusCode(StatusCodes.Status403Forbidden);
-            var result = await _driverService.DeleteDriver(id);
-            if (result.IsSuccess)
-            {
-                return NoContent();
-            }
-            return BadRequest(result.ErrorMessage);
+            if (!_userSeasonService.HasPermission(new Guid(User.Identity!.Name!), resultGet.Driver!.SeasonId))
+                return Forbid();
+
+            var resultDelete = await _driverService.DeleteDriver(id);
+            if (!resultDelete.IsSuccess)
+                return BadRequest(resultDelete.ErrorMessage);
+
+            return NoContent();
         }
     }
 }

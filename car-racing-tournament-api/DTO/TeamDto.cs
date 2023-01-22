@@ -2,7 +2,7 @@
 {
     public class TeamDto
     {
-        public string Name { get; set; }
-        public string Color { get; set; }
+        public string Name { get; set; } = default!;
+        public string Color { get; set; } = default!;
     }
 }

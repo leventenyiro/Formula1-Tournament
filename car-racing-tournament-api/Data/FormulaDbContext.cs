@@ -5,13 +5,13 @@ namespace car_racing_tournament_api.Data
 {
     public class FormulaDbContext : DbContext
     {
-        public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Season> Seasons { get; set; }
-        public virtual DbSet<Team> Teams { get; set; }
-        public virtual DbSet<Driver> Drivers { get; set; }
-        public virtual DbSet<Race> Races { get; set; }
-        public virtual DbSet<Result> Results { get; set; }
-        public virtual DbSet<UserSeason> UserSeasons { get; set; }
+        public virtual DbSet<User> Users { get; set; } = default!;
+        public virtual DbSet<Season> Seasons { get; set; } = default!;
+        public virtual DbSet<Team> Teams { get; set; } = default!;
+        public virtual DbSet<Driver> Drivers { get; set; } = default!;
+        public virtual DbSet<Race> Races { get; set; } = default!;
+        public virtual DbSet<Result> Results { get; set; } = default!;
+        public virtual DbSet<UserSeason> UserSeasons { get; set; } = default!;
 
         public FormulaDbContext() { }
 
@@ -96,8 +96,7 @@ namespace car_racing_tournament_api.Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name)
                     .IsRequired();
-                entity.Property(e => e.DateTime)
-                    .IsRequired();
+                entity.Property(e => e.DateTime);
                 entity.HasOne(e => e.Season)
                     .WithMany(e => e.Races)
                     .HasForeignKey(e => e.SeasonId)
