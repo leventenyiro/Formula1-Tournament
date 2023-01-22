@@ -33,14 +33,11 @@ namespace car_racing_tournament_api.Controllers
         [HttpPut("{id}"), Authorize]
         public async Task<IActionResult> Put(Guid id, [FromBody] RaceDto raceDto)
         {
-            if (User.Identity?.Name == null)
-                return Unauthorized();
-
             var resultGet = await _raceService.GetRaceById(id);
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), resultGet.Race.SeasonId))
+            if (!_userSeasonService.HasPermission(new Guid(User.Identity!.Name!), resultGet.Race!.SeasonId))
                 return Forbid();
             
             var resultUpdate = await _raceService.UpdateRace(id, raceDto);
@@ -53,14 +50,11 @@ namespace car_racing_tournament_api.Controllers
         [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
-            if (User.Identity?.Name == null)
-                return Unauthorized();
-
             var resultGet = await _raceService.GetRaceById(id);
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), resultGet.Race.SeasonId))
+            if (!_userSeasonService.HasPermission(new Guid(User.Identity!.Name!), resultGet.Race!.SeasonId))
                 return Forbid();
 
             var result = await _raceService.DeleteRace(id);
@@ -83,14 +77,11 @@ namespace car_racing_tournament_api.Controllers
         [HttpPost("{raceId}/result"), Authorize]
         public async Task<IActionResult> PostResult(Guid raceId, [FromBody] ResultDto resultDto)
         {
-            if (User.Identity?.Name == null)
-                return Unauthorized();
-
             var resultGet = await _raceService.GetRaceById(raceId);
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), resultGet.Race.SeasonId))
+            if (!_userSeasonService.HasPermission(new Guid(User.Identity!.Name!), resultGet.Race!.SeasonId))
                 return Forbid();
 
             var resultAdd = await _raceService.AddResult(raceId, resultDto);

@@ -33,18 +33,15 @@ namespace car_racing_tournament_api.Controllers
         [HttpPut("{id}"), Authorize]
         public async Task<IActionResult> Put(Guid id, [FromBody] ResultDto resultDto)
         {
-            if (User.Identity?.Name == null)
-                return Unauthorized();
-
             var resultGetResult = await _resultService.GetResultById(id);
             if (!resultGetResult.IsSuccess)
                 return BadRequest(resultGetResult.ErrorMessage);
 
-            var resultGetDriver = await _driverService.GetDriverById(resultGetResult.Result.DriverId);
+            var resultGetDriver = await _driverService.GetDriverById(resultGetResult.Result!.DriverId);
             if (!resultGetResult.IsSuccess)
                 return BadRequest(resultGetResult.ErrorMessage);
 
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), resultGetDriver.Driver.SeasonId))
+            if (!_userSeasonService.HasPermission(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
 
             var resultUpdate = await _resultService.UpdateResult(id, resultDto);
@@ -64,18 +61,15 @@ namespace car_racing_tournament_api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            if (User.Identity?.Name == null)
-                return Unauthorized();
-
             var resultGetResult = await _resultService.GetResultById(id);
             if (!resultGetResult.IsSuccess)
                 return BadRequest(resultGetResult.ErrorMessage);
 
-            var resultGetDriver = await _driverService.GetDriverById(resultGetResult.Result.DriverId);
+            var resultGetDriver = await _driverService.GetDriverById(resultGetResult.Result!.DriverId);
             if (!resultGetResult.IsSuccess)
                 return BadRequest(resultGetResult.ErrorMessage);
 
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), resultGetDriver.Driver.SeasonId))
+            if (!_userSeasonService.HasPermission(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
 
             var resultDelete = await _resultService.DeleteResult(id);

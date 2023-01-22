@@ -2,7 +2,7 @@
 {
     public class UpdatePasswordDto
     {
-        public string Password { get; set; }
-        public string PasswordAgain { get; set; }
+        public string Password { get; set; } = default!;
+        public string PasswordAgain { get; set; } = default!;
     }
 }

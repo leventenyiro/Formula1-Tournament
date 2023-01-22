@@ -23,8 +23,7 @@ namespace car_racing_tournament_api.Controllers
             if (!result.IsSuccess)
                 return BadRequest(result.ErrorMessage);
 
-            //return StatusCode(StatusCodes.Status202Accepted, result.Token);
-            return Accepted(result.Token);
+            return StatusCode(StatusCodes.Status202Accepted, result.Token);
         }
 
         [HttpPost("registration")]
@@ -40,10 +39,7 @@ namespace car_racing_tournament_api.Controllers
         [HttpGet, Authorize]
         public async Task<IActionResult> Get()
         {
-            if (User.Identity?.Name == null)
-                return Unauthorized();
-
-            var result = await _userService.GetUser(User.Identity.Name);
+            var result = await _userService.GetUser(User.Identity!.Name!);
             if (!result.IsSuccess)
                 return NotFound(result.ErrorMessage);
             
@@ -53,10 +49,7 @@ namespace car_racing_tournament_api.Controllers
         [HttpPut("update/user"), Authorize]
         public async Task<IActionResult> Put([FromBody] UpdateUserDto updateUserDto)
         {
-            if (User.Identity?.Name == null)
-                return Unauthorized();
-
-            var result = await _userService.UpdateUser(new Guid(User.Identity.Name), updateUserDto);
+            var result = await _userService.UpdateUser(new Guid(User.Identity!.Name!), updateUserDto);
             if (!result.IsSuccess)
                 return BadRequest(result.ErrorMessage);
             
@@ -66,10 +59,7 @@ namespace car_racing_tournament_api.Controllers
         [HttpPut("update/password"), Authorize]
         public async Task<IActionResult> Put([FromBody] UpdatePasswordDto updatePasswordDto)
         {
-            if (User.Identity?.Name == null)
-                return Unauthorized();
-
-            var result = await _userService.UpdatePassword(new Guid(User.Identity.Name), updatePasswordDto);
+            var result = await _userService.UpdatePassword(new Guid(User.Identity!.Name!), updatePasswordDto);
             if (!result.IsSuccess)
                 return BadRequest(result.ErrorMessage);
             

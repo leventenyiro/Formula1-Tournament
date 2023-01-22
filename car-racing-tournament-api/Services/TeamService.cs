@@ -2,6 +2,7 @@
 using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 
 namespace car_racing_tournament_api.Services
@@ -17,7 +18,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteTeam(Guid id)
         {
-            var team = _formulaDbContext.Teams.Where(e => e.Id == id).FirstOrDefault();
+            var team = await _formulaDbContext.Teams.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (team == null)
                 return (false, "Team not found");
             
@@ -29,7 +30,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, Team? Team, string? ErrorMessage)> GetTeamById(Guid id)
         {
-            var team = _formulaDbContext.Teams.Where(e => e.Id == id).FirstOrDefault();
+            var team = await _formulaDbContext.Teams.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (team == null)
                 return (false, null, "Team not found");
             
@@ -38,7 +39,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateTeam(Guid id, TeamDto team)
         {
-            var teamObj = _formulaDbContext.Teams.Where(e => e.Id == id).FirstOrDefault();
+            var teamObj = await _formulaDbContext.Teams.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (teamObj == null)
                 return (false, "Team not found");
             

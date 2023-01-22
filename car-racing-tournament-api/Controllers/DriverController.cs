@@ -31,14 +31,11 @@ namespace car_racing_tournament_api.Controllers
         [HttpPut("{id}"), Authorize]
         public async Task<IActionResult> Put(Guid id, [FromBody] DriverDto driverDto)
         {
-            if (User.Identity?.Name == null)
-                return Unauthorized();
-
             var resultGet = await _driverService.GetDriverById(id);
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), resultGet.Driver.SeasonId))
+            if (!_userSeasonService.HasPermission(new Guid(User.Identity!.Name!), resultGet.Driver!.SeasonId))
                 return Forbid();
 
             var resultUpdate = await _driverService.UpdateDriver(id, driverDto);
@@ -51,14 +48,12 @@ namespace car_racing_tournament_api.Controllers
         [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
-            if (User.Identity?.Name == null)
-                return Unauthorized();
 
             var resultGet = await _driverService.GetDriverById(id);
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity.Name), resultGet.Driver.SeasonId))
+            if (!_userSeasonService.HasPermission(new Guid(User.Identity!.Name!), resultGet.Driver!.SeasonId))
                 return Forbid();
 
             var resultDelete = await _driverService.DeleteDriver(id);

@@ -23,7 +23,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, List<SeasonDto>? Seasons, string? ErrorMessage)> GetSeasons()
         {
-            List<SeasonDto> seasons = _formulaDbContext.Seasons.Include(x => x.UserSeasons).Select(x => new SeasonDto
+            List<SeasonDto> seasons = await _formulaDbContext.Seasons.Include(x => x.UserSeasons).Select(x => new SeasonDto
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -32,7 +32,7 @@ namespace car_racing_tournament_api.Services
                     Username = x.User.Username,
                     Permission = x.Permission
                 }).ToList()
-            }).ToList();
+            }).ToListAsync();
 
             if (seasons == null)
                 return (false, null, SEASON_NOT_FOUND);
@@ -42,7 +42,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, SeasonDto? Season, string? ErrorMessage)> GetSeasonById(Guid id)
         {
-            SeasonDto season = _formulaDbContext.Seasons
+            SeasonDto season = await _formulaDbContext.Seasons
                 .Include(x => x.UserSeasons)
                 .Where(x => x.Id == id)
                 .Select(x => new SeasonDto
@@ -54,7 +54,7 @@ namespace car_racing_tournament_api.Services
                         Username = x.User.Username,
                         Permission = x.Permission
                     }).ToList()
-                }).First();
+                }).FirstAsync();
 
             if (season == null)
                 return (false, null, SEASON_NOT_FOUND);
@@ -71,7 +71,7 @@ namespace car_racing_tournament_api.Services
             List<UserSeason> userSeasons = new List<UserSeason> { userSeason }; 
 
             var seasonObj = new Season { Id = Guid.NewGuid(), Name = name, UserSeasons = userSeasons };
-            _formulaDbContext.Seasons.Add(seasonObj);
+            await _formulaDbContext.Seasons.AddAsync(seasonObj);
             _formulaDbContext.SaveChanges();
             
             return (true, seasonObj.Id, null);
@@ -79,7 +79,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateSeason(Guid id, string name)
         {
-            var seasonObj = _formulaDbContext.Seasons.Where(e => e.Id == id).FirstOrDefault();
+            var seasonObj = await _formulaDbContext.Seasons.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (seasonObj == null)
                 return (false, SEASON_NOT_FOUND);
             
@@ -92,7 +92,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteSeason(Guid id)
         {
-            var season = _formulaDbContext.Seasons.Where(e => e.Id == id).FirstOrDefault();
+            var season = await _formulaDbContext.Seasons.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (season == null)
                 return (false, SEASON_NOT_FOUND);
             
@@ -104,7 +104,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, List<SeasonDto>? Seasons, string? ErrorMessage)> GetSeasonsByUserSeasonList(List<Guid> userSeasons)
         {
-            List<SeasonDto> seasons = _formulaDbContext.Seasons
+            List<SeasonDto> seasons = await _formulaDbContext.Seasons
                 .Include(x => x.UserSeasons)
                 .Where(x => userSeasons.Contains(x.Id))
                 .Select(x => new SeasonDto
@@ -116,7 +116,7 @@ namespace car_racing_tournament_api.Services
                         Username = x.User.Username,
                         Permission = x.Permission
                     }).ToList()
-                }).ToList();
+                }).ToListAsync();
 
             if (seasons == null)
                 return (false, null, SEASON_NOT_FOUND);
@@ -126,7 +126,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, List<Driver>? Drivers, string? ErrorMessage)> GetDriversBySeasonId(Guid seasonId)
         {
-            var drivers = _formulaDbContext.Drivers.Where(x => x.SeasonId == seasonId).ToList();
+            var drivers = await _formulaDbContext.Drivers.Where(x => x.SeasonId == seasonId).ToListAsync();
             if (drivers == null)
                 return (false, null, "Drivers not found");
             
@@ -140,7 +140,7 @@ namespace car_racing_tournament_api.Services
             
             var driver = _mapper.Map<Driver>(driverDto);
             driver.Id = Guid.NewGuid();
-            _formulaDbContext.Add(driver);
+            await _formulaDbContext.AddAsync(driver);
             _formulaDbContext.SaveChanges();
             
             return (true, null);
@@ -148,7 +148,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, List<Team>? Teams, string? ErrorMessage)> GetTeamsBySeasonId(Guid seasonId)
         {
-            var teams = _formulaDbContext.Teams.Where(x => x.SeasonId == seasonId).ToList();
+            var teams = await _formulaDbContext.Teams.Where(x => x.SeasonId == seasonId).ToListAsync();
             if (teams == null)
                 return (false, null, "Teams not found");
             
@@ -164,7 +164,7 @@ namespace car_racing_tournament_api.Services
             {
                 Id = Guid.NewGuid(),
                 Name = team.Name,
-                Season = _formulaDbContext.Seasons.Where(e => e.Id == seasonId).First(),
+                Season = await _formulaDbContext.Seasons.Where(e => e.Id == seasonId).FirstAsync(),
             };
             try
             {
@@ -175,7 +175,7 @@ namespace car_racing_tournament_api.Services
             {
                 return (false, "Incorrect color code");
             }
-            _formulaDbContext.Add(teamObj);
+            await _formulaDbContext.AddAsync(teamObj);
             _formulaDbContext.SaveChanges();
             
             return (true, null);
@@ -183,7 +183,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, List<Race>? Races, string? ErrorMessage)> GetRacesBySeasonId(Guid seasonId)
         {
-            var races = _formulaDbContext.Races.Where(x => x.SeasonId == seasonId).ToList();
+            var races = await _formulaDbContext.Races.Where(x => x.SeasonId == seasonId).ToListAsync();
             if (races == null)
                 return (false, null, "Races not found");
             
@@ -197,7 +197,7 @@ namespace car_racing_tournament_api.Services
             
             var race = _mapper.Map<Race>(raceDto);
             race.Id = Guid.NewGuid();
-            _formulaDbContext.Add(race);
+            await _formulaDbContext.AddAsync(race);
             _formulaDbContext.SaveChanges();
             
             return (true, null);

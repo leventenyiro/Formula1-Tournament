@@ -6,6 +6,7 @@ using car_racing_tournament_api.Data;
 using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace car_racing_tournament_api.Services
@@ -26,7 +27,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? Token, string? ErrorMessage)> Login(LoginDto loginDto)
         {
-            var actualUser = _formulaDbContext.Users.Where(x => x.Username == loginDto.UsernameEmail || x.Email == loginDto.UsernameEmail).FirstOrDefault();
+            var actualUser = await _formulaDbContext.Users.Where(x => x.Username == loginDto.UsernameEmail || x.Email == loginDto.UsernameEmail).FirstOrDefaultAsync();
             if (actualUser == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, actualUser.Password))
                 return (false, null, "Incorrect username or password!");
 
@@ -40,7 +41,7 @@ namespace car_racing_tournament_api.Services
             if (registrationDto.Password != registrationDto.PasswordAgain)
                 return (false, PASSWORD_NOT_PASS);
 
-            _formulaDbContext.Add(new User { 
+            await _formulaDbContext.AddAsync(new User { 
                 Id = new Guid(), 
                 Username = registrationDto.Username,
                 Email = registrationDto.Email,
@@ -53,7 +54,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, User? User, string? ErrorMessage)> GetUser(string userId)
         {
-            var result = _formulaDbContext.Users.Where(x => x.Id == Guid.Parse(userId)).FirstOrDefault();
+            var result = await _formulaDbContext.Users.Where(x => x.Id == Guid.Parse(userId)).FirstOrDefaultAsync();
             if (result == null)
                 return (false, null, USER_NOT_FOUND);
             
@@ -62,7 +63,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, User? User, string? ErrorMessage)> GetUserByUsernameEmail(string usernameEmail)
         {
-            var actualUser = _formulaDbContext.Users.Where(x => x.Username == usernameEmail || x.Email == usernameEmail).FirstOrDefault();
+            var actualUser = await _formulaDbContext.Users.Where(x => x.Username == usernameEmail || x.Email == usernameEmail).FirstOrDefaultAsync();
             if (actualUser == null)
                 return (false, null, USER_NOT_FOUND);
 
@@ -98,7 +99,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateUser(Guid id, UpdateUserDto updateUserDto)
         {
-            var userObj = _formulaDbContext.Users.Where(e => e.Id == id).FirstOrDefault();
+            var userObj = await _formulaDbContext.Users.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (userObj == null)
                 return (false, USER_NOT_FOUND);
             
@@ -112,7 +113,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdatePassword(Guid id, UpdatePasswordDto updatePasswordDto)
         {
-            var userObj = _formulaDbContext.Users.Where(e => e.Id == id).FirstOrDefault();
+            var userObj = await _formulaDbContext.Users.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (userObj == null)
                 return (false, USER_NOT_FOUND);
 

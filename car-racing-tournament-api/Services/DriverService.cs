@@ -2,6 +2,7 @@
 using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace car_racing_tournament_api.Services
 {
@@ -18,7 +19,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, Driver? Driver, string? ErrorMessage)> GetDriverById(Guid id)
         {
-            var driver = _formulaDbContext.Drivers.Where(e => e.Id == id).FirstOrDefault();
+            var driver = await _formulaDbContext.Drivers.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (driver == null)
                 return (false, null, DRIVER_NOT_FOUND);
             
@@ -27,7 +28,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateDriver(Guid id, DriverDto driverDto)
         {
-            var driverObj = _formulaDbContext.Drivers.Where(e => e.Id == id).FirstOrDefault();
+            var driverObj = await _formulaDbContext.Drivers.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (driverObj == null)
                 return (false, DRIVER_NOT_FOUND);
 
@@ -43,7 +44,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateDriverTeam(Guid id, Guid teamId)
         {
-            var driverObj = _formulaDbContext.Drivers.Where(e => e.Id == id).FirstOrDefault();
+            var driverObj = await _formulaDbContext.Drivers.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (driverObj == null)
                 return (false, DRIVER_NOT_FOUND);
             
@@ -56,7 +57,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteDriver(Guid id)
         {
-            var driver = _formulaDbContext.Drivers.Where(e => e.Id == id).First();
+            var driver = await _formulaDbContext.Drivers.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (driver == null)
                 return (false, DRIVER_NOT_FOUND);
             
