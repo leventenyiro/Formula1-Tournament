@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -12,14 +12,13 @@ export class LoginService {
   constructor(private http: HttpClient) { }
 
   login(login: Login) {
-    const body = new HttpParams()
-    .set('usernameEmail', login.usernameEmail)
-    .set('password', login.password);
-
     return this.http
     .post(
       `${environment.backendUrl}/authentication/login`,
-      body,
+      {
+        "usernameEmail": login.usernameEmail,
+        "password": login.password
+      },
       {
         responseType: 'text'
       }
