@@ -9,28 +9,28 @@ namespace car_racing_tournament_api.Services
 {
     public class TeamService : ITeam
     {
-        private readonly FormulaDbContext _formulaDbContext;
+        private readonly CarRacingDbContext _carRacingDbContext;
 
-        public TeamService(FormulaDbContext formulaDbContext)
+        public TeamService(CarRacingDbContext carRacingDbContext)
         {
-            _formulaDbContext = formulaDbContext;
+            _carRacingDbContext = carRacingDbContext;
         }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteTeam(Guid id)
         {
-            var team = await _formulaDbContext.Teams.Where(e => e.Id == id).FirstOrDefaultAsync();
+            var team = await _carRacingDbContext.Teams.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (team == null)
                 return (false, "Team not found");
             
-            _formulaDbContext.Teams.Remove(team);
-            _formulaDbContext.SaveChanges();
+            _carRacingDbContext.Teams.Remove(team);
+            _carRacingDbContext.SaveChanges();
             
             return (true, null);
         }
 
         public async Task<(bool IsSuccess, Team? Team, string? ErrorMessage)> GetTeamById(Guid id)
         {
-            var team = await _formulaDbContext.Teams.Where(e => e.Id == id).FirstOrDefaultAsync();
+            var team = await _carRacingDbContext.Teams.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (team == null)
                 return (false, null, "Team not found");
             
@@ -39,7 +39,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateTeam(Guid id, TeamDto team)
         {
-            var teamObj = await _formulaDbContext.Teams.Where(e => e.Id == id).FirstOrDefaultAsync();
+            var teamObj = await _carRacingDbContext.Teams.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (teamObj == null)
                 return (false, "Team not found");
             
@@ -53,8 +53,8 @@ namespace car_racing_tournament_api.Services
             {
                 return (false, "Incorrect color code");
             }
-            _formulaDbContext.Teams.Update(teamObj);
-            _formulaDbContext.SaveChanges();
+            _carRacingDbContext.Teams.Update(teamObj);
+            _carRacingDbContext.SaveChanges();
             
             return (true, null);
         }

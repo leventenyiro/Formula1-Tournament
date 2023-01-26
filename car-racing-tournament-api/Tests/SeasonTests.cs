@@ -14,7 +14,7 @@ namespace car_racing_tournament_api.Tests
     {
     /*    private SeasonController _seasonController;
         private SeasonService _seasonService;
-        private Mock<FormulaDbContext> _mockDbContext;
+        private Mock<CarRacingDbContext> _mockDbContext;
 
         private Mock<DbSet<Season>> AddMockSet(List<Season> seasons)
         {
@@ -32,7 +32,7 @@ namespace car_racing_tournament_api.Tests
         [SetUp]
         public void SetUp()
         {
-            _mockDbContext = new Mock<FormulaDbContext>();
+            _mockDbContext = new Mock<CarRacingDbContext>();
             _seasonService = new SeasonService(_mockDbContext.Object);
             _seasonController = new SeasonController(_seasonService);
         }

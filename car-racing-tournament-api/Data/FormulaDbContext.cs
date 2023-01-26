@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace car_racing_tournament_api.Data
 {
-    public class FormulaDbContext : DbContext
+    public class CarRacingDbContext : DbContext
     {
         public virtual DbSet<User> Users { get; set; } = default!;
         public virtual DbSet<Season> Seasons { get; set; } = default!;
@@ -13,9 +13,9 @@ namespace car_racing_tournament_api.Data
         public virtual DbSet<Result> Results { get; set; } = default!;
         public virtual DbSet<UserSeason> UserSeasons { get; set; } = default!;
 
-        public FormulaDbContext() { }
+        public CarRacingDbContext() { }
 
-        public FormulaDbContext(DbContextOptions<FormulaDbContext> options) : base(options)
+        public CarRacingDbContext(DbContextOptions<CarRacingDbContext> options) : base(options)
         {
         }
 
