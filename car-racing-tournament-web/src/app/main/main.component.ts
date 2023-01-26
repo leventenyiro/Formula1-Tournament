@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Season } from '../models/season';
+import { SeasonService } from '../services/season.service';
 
 @Component({
   selector: 'app-main',
