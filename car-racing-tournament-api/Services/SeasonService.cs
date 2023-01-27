@@ -21,13 +21,13 @@ namespace car_racing_tournament_api.Services
             _mapper = mapper;
         }
 
-        public async Task<(bool IsSuccess, List<SeasonDto>? Seasons, string? ErrorMessage)> GetSeasons()
+        public async Task<(bool IsSuccess, List<SeasonOutputDto>? Seasons, string? ErrorMessage)> GetSeasons()
         {
-            List<SeasonDto> seasons = await _carRacingDbContext.Seasons.Include(x => x.UserSeasons).Select(x => new SeasonDto
+            List<SeasonOutputDto> seasons = await _carRacingDbContext.Seasons.Include(x => x.UserSeasons).Select(x => new SeasonOutputDto
             {
                 Id = x.Id,
                 Name = x.Name,
-                UserSeasons = x.UserSeasons.Select(x => new UserSeasonDto
+                UserSeasons = x.UserSeasons.Select(x => new UserSeasonOutputDto
                 {
                     Username = x.User.Username,
                     Permission = x.Permission
@@ -40,16 +40,16 @@ namespace car_racing_tournament_api.Services
             return (true, seasons, null);
         }
 
-        public async Task<(bool IsSuccess, SeasonDto? Season, string? ErrorMessage)> GetSeasonById(Guid id)
+        public async Task<(bool IsSuccess, SeasonOutputDto? Season, string? ErrorMessage)> GetSeasonById(Guid id)
         {
-            SeasonDto season = await _carRacingDbContext.Seasons
+            SeasonOutputDto season = await _carRacingDbContext.Seasons
                 .Include(x => x.UserSeasons)
                 .Where(x => x.Id == id)
-                .Select(x => new SeasonDto
+                .Select(x => new SeasonOutputDto
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    UserSeasons = x.UserSeasons.Select(x => new UserSeasonDto
+                    UserSeasons = x.UserSeasons.Select(x => new UserSeasonOutputDto
                     {
                         Username = x.User.Username,
                         Permission = x.Permission
@@ -62,28 +62,31 @@ namespace car_racing_tournament_api.Services
             return (true, season, null);
         }
 
-        public async Task<(bool IsSuccess, Guid SeasonId, string? ErrorMessage)> AddSeason(string name, Guid userId)
+        public async Task<(bool IsSuccess, Guid SeasonId, string? ErrorMessage)> AddSeason(SeasonDto seasonDto, Guid userId)
         {
-            if (string.IsNullOrEmpty(name))
+            if (seasonDto == null)
                 return (false, Guid.Empty, "Please provide the season data");
-            
-            UserSeason userSeason = new UserSeason { Id = new Guid(), Permission = UserSeasonPermission.Admin, UserId = userId };
-            List<UserSeason> userSeasons = new List<UserSeason> { userSeason }; 
 
-            var seasonObj = new Season { Id = Guid.NewGuid(), Name = name, UserSeasons = userSeasons };
-            await _carRacingDbContext.Seasons.AddAsync(seasonObj);
+            var season = _mapper.Map<Season>(seasonDto);
+            season.Id = Guid.NewGuid();
+
+            UserSeason userSeason = new UserSeason { Id = new Guid(), Permission = UserSeasonPermission.Admin, UserId = userId };
+            season.UserSeasons = new List<UserSeason> { userSeason };
+
+            await _carRacingDbContext.Seasons.AddAsync(season);
             _carRacingDbContext.SaveChanges();
             
-            return (true, seasonObj.Id, null);
+            return (true, season.Id, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateSeason(Guid id, string name)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateSeason(Guid id, SeasonDto seasonDto)
         {
             var seasonObj = await _carRacingDbContext.Seasons.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (seasonObj == null)
                 return (false, SEASON_NOT_FOUND);
             
-            seasonObj.Name = name;
+            seasonObj.Name = seasonDto.Name;
+            seasonObj.Description = seasonDto.Description;
             _carRacingDbContext.Seasons.Update(seasonObj);
             _carRacingDbContext.SaveChanges();
             
@@ -102,16 +105,16 @@ namespace car_racing_tournament_api.Services
             return (true, null);
         }
 
-        public async Task<(bool IsSuccess, List<SeasonDto>? Seasons, string? ErrorMessage)> GetSeasonsByUserSeasonList(List<Guid> userSeasons)
+        public async Task<(bool IsSuccess, List<SeasonOutputDto>? Seasons, string? ErrorMessage)> GetSeasonsByUserSeasonList(List<Guid> userSeasons)
         {
-            List<SeasonDto> seasons = await _carRacingDbContext.Seasons
+            List<SeasonOutputDto> seasons = await _carRacingDbContext.Seasons
                 .Include(x => x.UserSeasons)
                 .Where(x => userSeasons.Contains(x.Id))
-                .Select(x => new SeasonDto
+                .Select(x => new SeasonOutputDto
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    UserSeasons = x.UserSeasons.Select(x => new UserSeasonDto
+                    UserSeasons = x.UserSeasons.Select(x => new UserSeasonOutputDto
                     {
                         Username = x.User.Username,
                         Permission = x.Permission
@@ -140,7 +143,7 @@ namespace car_racing_tournament_api.Services
             
             var driver = _mapper.Map<Driver>(driverDto);
             driver.Id = Guid.NewGuid();
-            await _carRacingDbContext.AddAsync(driver);
+            await _carRacingDbContext.Drivers.AddAsync(driver);
             _carRacingDbContext.SaveChanges();
             
             return (true, null);
@@ -175,7 +178,7 @@ namespace car_racing_tournament_api.Services
             {
                 return (false, "Incorrect color code");
             }
-            await _carRacingDbContext.AddAsync(teamObj);
+            await _carRacingDbContext.Teams.AddAsync(teamObj);
             _carRacingDbContext.SaveChanges();
             
             return (true, null);
@@ -197,7 +200,7 @@ namespace car_racing_tournament_api.Services
             
             var race = _mapper.Map<Race>(raceDto);
             race.Id = Guid.NewGuid();
-            await _carRacingDbContext.AddAsync(race);
+            await _carRacingDbContext.Races.AddAsync(race);
             _carRacingDbContext.SaveChanges();
             
             return (true, null);
