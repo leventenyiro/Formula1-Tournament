@@ -150,6 +150,7 @@ namespace car_racing_tournament_api.Services
             
             var driver = _mapper.Map<Driver>(driverDto);
             driver.Id = Guid.NewGuid();
+            driver.SeasonId = seasonId;
             await _carRacingTournamentDbContext.Drivers.AddAsync(driver);
             _carRacingTournamentDbContext.SaveChanges();
             
@@ -207,6 +208,7 @@ namespace car_racing_tournament_api.Services
             
             var race = _mapper.Map<Race>(raceDto);
             race.Id = Guid.NewGuid();
+            race.SeasonId = seasonId;
             await _carRacingTournamentDbContext.Races.AddAsync(race);
             _carRacingTournamentDbContext.SaveChanges();
             

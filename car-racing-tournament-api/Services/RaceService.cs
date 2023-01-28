@@ -71,6 +71,7 @@ namespace car_racing_tournament_api.Services
 
             var result = _mapper.Map<Result>(resultDto);
             result.Id = Guid.NewGuid();
+            result.RaceId = raceId;
             await _carRacingTournamentDbContext.AddAsync(result);
             _carRacingTournamentDbContext.SaveChanges();
             

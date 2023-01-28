@@ -36,7 +36,7 @@ namespace car_racing_tournament_api.Controllers
         public async Task<IActionResult> Get(Guid id)
         {
             var result = await _seasonService.GetSeasonById(id);
-            if (result.IsSuccess)
+            if (!result.IsSuccess)
                 return NotFound(result.ErrorMessage);
             
             return Ok(result.Season);
@@ -120,7 +120,7 @@ namespace car_racing_tournament_api.Controllers
         public async Task<IActionResult> GetDriversBySeasonId(Guid seasonId)
         {
             var resultGet = await _seasonService.GetDriversBySeasonId(seasonId);
-            if (resultGet.IsSuccess)
+            if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
             return Ok(resultGet.Drivers);
