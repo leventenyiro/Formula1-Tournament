@@ -5,6 +5,6 @@
         public string Name { get; set; } = default!;
         public string? RealName { get; set; }
         public int Number { get; set; }
-        public Guid ActualTeamId { get; set; }
+        public Guid? ActualTeamId { get; set; }
     }
 }

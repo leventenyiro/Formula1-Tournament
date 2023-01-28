@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace car_racing_tournament_api.Controllers
 {
-    [Route("api/authentication")]
+    [Route("api/user")]
     [ApiController]
     public class UserController : Controller
     {
@@ -46,7 +46,7 @@ namespace car_racing_tournament_api.Controllers
             return Ok(result.User);
         }
 
-        [HttpPut("update/user"), Authorize]
+        [HttpPut, Authorize]
         public async Task<IActionResult> Put([FromBody] UpdateUserDto updateUserDto)
         {
             var result = await _userService.UpdateUser(new Guid(User.Identity!.Name!), updateUserDto);
@@ -56,7 +56,7 @@ namespace car_racing_tournament_api.Controllers
             return NoContent();
         }
 
-        [HttpPut("update/password"), Authorize]
+        [HttpPut("password"), Authorize]
         public async Task<IActionResult> Put([FromBody] UpdatePasswordDto updatePasswordDto)
         {
             var result = await _userService.UpdatePassword(new Guid(User.Identity!.Name!), updatePasswordDto);
