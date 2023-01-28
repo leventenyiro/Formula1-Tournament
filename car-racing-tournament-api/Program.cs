@@ -20,7 +20,7 @@ internal class Program
         // Add services to the container.
 
         builder.Services.AddControllers();
-        builder.Services.AddDbContext<CarRacingDbContext>(options =>
+        builder.Services.AddDbContext<CarRacingTournamentDbContext>(options =>
         {
             options.UseMySql(builder.Configuration.GetConnectionString("Default"), new MySqlServerVersion(new Version(8, 0, 22)), options => options.EnableRetryOnFailure());
         });

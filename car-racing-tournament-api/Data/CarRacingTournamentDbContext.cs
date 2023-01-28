@@ -30,6 +30,9 @@ namespace car_racing_tournament_api.Data
                     .IsRequired();
                 entity.Property(e => e.Password)
                     .IsRequired();
+
+                entity.HasMany(e => e.UserSeasons)
+                    .WithOne(e => e.User);
             });
 
             modelBuilder.Entity<UserSeason>(entity =>
@@ -40,13 +43,11 @@ namespace car_racing_tournament_api.Data
                 entity.HasOne(e => e.User)
                     .WithMany(e => e.UserSeasons)
                     .HasForeignKey(e => e.UserId)
-                    .OnDelete(DeleteBehavior.ClientCascade)
                     .IsRequired();
 
                 entity.HasOne(e => e.Season)
                     .WithMany(e => e.UserSeasons)
                     .HasForeignKey(e => e.SeasonId)
-                    .OnDelete(DeleteBehavior.ClientCascade)
                     .IsRequired();
             });
 
@@ -56,6 +57,10 @@ namespace car_racing_tournament_api.Data
                 entity.Property(e => e.Name)
                     .IsRequired();
                 entity.Property(e => e.Description);
+
+                entity.HasMany(e => e.UserSeasons)
+                    .WithOne(e => e.Season)
+                    .IsRequired();
             });
 
             modelBuilder.Entity<Team>(entity =>

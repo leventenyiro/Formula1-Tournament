@@ -9,20 +9,20 @@ namespace car_racing_tournament_api.Services
 {
     public class RaceService : IRace
     {
-        private readonly CarRacingDbContext _carRacingDbContext;
+        private readonly CarRacingTournamentDbContext _carRacingTournamentDbContext;
         private IMapper _mapper;
 
         private const string RACE_NOT_FOUND = "Race not found";
 
-        public RaceService(CarRacingDbContext carRacingDbContext, IMapper mapper)
+        public RaceService(CarRacingTournamentDbContext carRacingTournamentDbContext, IMapper mapper)
         {
-            _carRacingDbContext = carRacingDbContext;
+            _carRacingTournamentDbContext = carRacingTournamentDbContext;
             _mapper = mapper;
         }
 
         public async Task<(bool IsSuccess, Race? Race, string? ErrorMessage)> GetRaceById(Guid id)
         {
-            var race = await _carRacingDbContext.Races.Where(e => e.Id == id).FirstOrDefaultAsync();
+            var race = await _carRacingTournamentDbContext.Races.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (race == null)
                 return (false, null, RACE_NOT_FOUND);
 
@@ -31,33 +31,33 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateRace(Guid id, RaceDto raceDto)
         {
-            var raceObj = await _carRacingDbContext.Races.Where(e => e.Id == id).FirstOrDefaultAsync();
+            var raceObj = await _carRacingTournamentDbContext.Races.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (raceObj == null)
                 return (false, RACE_NOT_FOUND);
 
             raceObj.Name = raceDto.Name;
             raceObj.DateTime = raceDto.DateTime;
-            _carRacingDbContext.Races.Update(raceObj);
-            _carRacingDbContext.SaveChanges();
+            _carRacingTournamentDbContext.Races.Update(raceObj);
+            _carRacingTournamentDbContext.SaveChanges();
             
             return (true, null);
         }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteRace(Guid id)
         {
-            var race = await _carRacingDbContext.Races.Where(e => e.Id == id).FirstOrDefaultAsync();
+            var race = await _carRacingTournamentDbContext.Races.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (race == null)
                 return (false, RACE_NOT_FOUND);
 
-            _carRacingDbContext.Races.Remove(race);
-            _carRacingDbContext.SaveChanges();
+            _carRacingTournamentDbContext.Races.Remove(race);
+            _carRacingTournamentDbContext.SaveChanges();
             
             return (true, null);
         }
 
         public async Task<(bool IsSuccess, List<Result>? Results, string? ErrorMessage)> GetResultsByRaceId(Guid raceId)
         {
-            var results = await _carRacingDbContext.Results.Where(x => x.RaceId == raceId).ToListAsync();
+            var results = await _carRacingTournamentDbContext.Results.Where(x => x.RaceId == raceId).ToListAsync();
             if (results == null)
                 return (false, null, "No results found");
 
@@ -71,8 +71,8 @@ namespace car_racing_tournament_api.Services
 
             var result = _mapper.Map<Result>(resultDto);
             result.Id = Guid.NewGuid();
-            await _carRacingDbContext.AddAsync(result);
-            _carRacingDbContext.SaveChanges();
+            await _carRacingTournamentDbContext.AddAsync(result);
+            _carRacingTournamentDbContext.SaveChanges();
             
             return (true, null);
         }
