@@ -86,11 +86,11 @@ namespace car_racing_tournament_api.Controllers
             return Ok(resultGetSeasons.Seasons);
         }
 
-        [HttpPost("{seasonId}/moderator"), Authorize]
+        [HttpPost("{seasonId}/user-season"), Authorize]
         public async Task<IActionResult> Post(Guid seasonId, [FromForm] string usernameEmail)
         {
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity!.Name!), seasonId))
-                return StatusCode(StatusCodes.Status403Forbidden);
+            if (!await _userSeasonService.HasPermissionAsync(new Guid(User.Identity!.Name!), seasonId))
+                return Forbid();
 
             var resultGet = await _userService.GetUserByUsernameEmail(usernameEmail);
             if (!resultGet.IsSuccess)
@@ -100,19 +100,6 @@ namespace car_racing_tournament_api.Controllers
             if (!resultAdd.IsSuccess)
                 return BadRequest(resultAdd.ErrorMessage);
 
-            return NoContent();
-        }
-
-        [HttpDelete("{seasonId}/moderator/{moderatorId}"), Authorize]
-        public async Task<IActionResult> Delete(Guid seasonId, Guid moderatorId)
-        {
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity!.Name!), seasonId))
-                return StatusCode(StatusCodes.Status403Forbidden);
-
-            var resultDelete = await _userSeasonService.RemovePermission(new Guid(User.Identity!.Name!), moderatorId, seasonId);
-            if (!resultDelete.IsSuccess)
-                return BadRequest(resultDelete.ErrorMessage);
-            
             return NoContent();
         }
 
@@ -129,7 +116,7 @@ namespace car_racing_tournament_api.Controllers
         [HttpPost("{seasonId}/driver"), Authorize]
         public async Task<IActionResult> PostDriver(Guid seasonId, [FromBody] DriverDto driverDto)
         {
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity!.Name!), seasonId))
+            if (!await _userSeasonService.HasPermissionAsync(new Guid(User.Identity!.Name!), seasonId))
                 return Forbid();
 
             var resultAdd = await _seasonService.AddDriver(seasonId, driverDto);
@@ -152,7 +139,7 @@ namespace car_racing_tournament_api.Controllers
         [HttpPost("{seasonId}/team"), Authorize]
         public async Task<IActionResult> PostTeam(Guid seasonId, [FromBody] TeamDto team)
         {
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity!.Name!), seasonId))
+            if (!await _userSeasonService.HasPermissionAsync(new Guid(User.Identity!.Name!), seasonId))
                 return Forbid();
 
             var resultAdd = await _seasonService.AddTeam(seasonId, team);
@@ -175,7 +162,7 @@ namespace car_racing_tournament_api.Controllers
         [HttpPost("{seasonId}/race"), Authorize]
         public async Task<IActionResult> PostRace(Guid seasonId, [FromBody] RaceDto raceDto)
         {
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity!.Name!), seasonId))
+            if (!await _userSeasonService.HasPermissionAsync(new Guid(User.Identity!.Name!), seasonId))
                 return Forbid();
             
             var resultAdd = await _seasonService.AddRace(seasonId, raceDto);

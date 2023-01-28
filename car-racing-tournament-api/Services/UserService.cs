@@ -16,6 +16,7 @@ namespace car_racing_tournament_api.Services
         private readonly CarRacingTournamentDbContext _carRacingTournamentDbContext;
         private readonly IConfiguration _configuration;
 
+        private const string INCORRECT_EMAIL_FORMAT = "It is not a valid email";
         private const string USER_NOT_FOUND = "User not found";
         private const string PASSWORD_NOT_PASS = "Passwords aren't pass!";
 
@@ -38,6 +39,9 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> Registration(RegistrationDto registrationDto)
         {
+            if (!IsEmail(registrationDto.Email))
+                return (false, INCORRECT_EMAIL_FORMAT);
+
             if (registrationDto.Password != registrationDto.PasswordAgain)
                 return (false, PASSWORD_NOT_PASS);
 
@@ -97,8 +101,16 @@ namespace car_racing_tournament_api.Services
             return jwt;
         }
 
+        private bool IsEmail(string email)
+        {
+            return Regex.IsMatch(email, @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
+        }
+
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateUser(Guid id, UpdateUserDto updateUserDto)
         {
+            if (!IsEmail(updateUserDto.Email))
+                return (false, INCORRECT_EMAIL_FORMAT);
+
             var userObj = await _carRacingTournamentDbContext.Users.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (userObj == null)
                 return (false, USER_NOT_FOUND);

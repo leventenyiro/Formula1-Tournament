@@ -25,11 +25,11 @@ namespace car_racing_tournament_api.Data
             {
                 entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.Username)
-                    .IsRequired();
+                entity.HasIndex(e => e.Username)
+                    .IsUnique();
 
-                entity.Property(e => e.Email)
-                    .IsRequired();
+                entity.HasIndex(e => e.Email)
+                    .IsUnique();
 
                 entity.Property(e => e.Password)
                     .IsRequired();
@@ -41,6 +41,9 @@ namespace car_racing_tournament_api.Data
 
                 entity.Property(e => e.Permission)
                     .IsRequired();
+
+                entity.HasIndex(e => new { e.SeasonId, e.UserId })
+                    .IsUnique();
 
                 entity.HasOne(e => e.User)
                     .WithMany(e => e.UserSeasons)
@@ -74,6 +77,9 @@ namespace car_racing_tournament_api.Data
                 entity.Property(e => e.Color)
                     .IsRequired();
 
+                entity.HasIndex(e => new { e.SeasonId, e.Name, e.Color })
+                    .IsUnique();
+
                 entity.HasOne(e => e.Season)
                     .WithMany(e => e.Teams)
                     .HasForeignKey(e => e.SeasonId)
@@ -92,6 +98,9 @@ namespace car_racing_tournament_api.Data
 
                 entity.Property(e => e.Number)
                     .IsRequired();
+
+                entity.HasIndex(e => new { e.SeasonId, e.Name, e.Number })
+                    .IsUnique();
 
                 entity.HasOne(e => e.ActualTeam)
                     .WithMany(e => e.Drivers)
@@ -114,6 +123,9 @@ namespace car_racing_tournament_api.Data
 
                 entity.Property(e => e.DateTime);
 
+                entity.HasIndex(e => new { e.SeasonId, e.Name })
+                    .IsUnique();
+
                 entity.HasOne(e => e.Season)
                     .WithMany(e => e.Races)
                     .HasForeignKey(e => e.SeasonId)
@@ -134,13 +146,13 @@ namespace car_racing_tournament_api.Data
                 entity.HasOne(e => e.Driver)
                     .WithMany(e => e.Results)
                     .HasForeignKey(e => e.DriverId)
-                    .OnDelete(DeleteBehavior.Cascade)
+                    .OnDelete(DeleteBehavior.Restrict)
                     .IsRequired();
 
                 entity.HasOne(e => e.Team)
                     .WithMany(e => e.Results)
                     .HasForeignKey(e => e.TeamId)
-                    .OnDelete(DeleteBehavior.SetNull)
+                    .OnDelete(DeleteBehavior.Restrict)
                     .IsRequired();
 
                 entity.HasOne(e => e.Race)

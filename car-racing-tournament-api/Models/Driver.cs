@@ -8,7 +8,7 @@
         public int Number { get; set; }
         public virtual Team? ActualTeam { get; set; }
         public virtual Season Season { get; set; } = default!;
-        public Guid ActualTeamId { get; set; }
+        public Guid? ActualTeamId { get; set; }
         public Guid SeasonId { get; set; }
         public List<Result>? Results { get; set; }
     }
