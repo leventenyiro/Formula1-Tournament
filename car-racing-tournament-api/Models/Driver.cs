@@ -6,8 +6,6 @@
         public string Name { get; set; } = default!;
         public string? RealName { get; set; }
         public int Number { get; set; }
-        public Team? ActualTeam { get; set; }
-        public Season Season { get; set; } = default!;
 
         public Guid ActualTeamId { get; set; }
         public Guid SeasonId { get; set; }

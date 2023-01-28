@@ -30,14 +30,23 @@ namespace car_racing_tournament_api.Data
                     .IsRequired();
                 entity.Property(e => e.Password)
                     .IsRequired();
-                entity.HasMany(e => e.UserSeasons)
-                    .WithOne(e => e.User);
             });
 
             modelBuilder.Entity<UserSeason>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Permission)
+                    .IsRequired();
+                entity.HasOne(e => e.User)
+                    .WithMany(e => e.UserSeasons)
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.ClientCascade)
+                    .IsRequired();
+
+                entity.HasOne(e => e.Season)
+                    .WithMany(e => e.UserSeasons)
+                    .HasForeignKey(e => e.SeasonId)
+                    .OnDelete(DeleteBehavior.ClientCascade)
                     .IsRequired();
             });
 
@@ -47,22 +56,6 @@ namespace car_racing_tournament_api.Data
                 entity.Property(e => e.Name)
                     .IsRequired();
                 entity.Property(e => e.Description);
-
-                entity.HasMany(e => e.UserSeasons)
-                    .WithOne(e => e.Season)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                entity.HasMany(e => e.Teams)
-                .WithOne(e => e.Season)
-                .OnDelete(DeleteBehavior.Cascade);
-
-                entity.HasMany(e => e.Drivers)
-                    .WithOne(e => e.Season)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                entity.HasMany(e => e.Races)
-                    .WithOne(e => e.Season)
-                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Team>(entity =>
@@ -72,14 +65,11 @@ namespace car_racing_tournament_api.Data
                     .IsRequired();
                 entity.Property(e => e.Color)
                     .IsRequired();
-
-                entity.HasMany(e => e.Drivers)
-                    .WithOne(e => e.ActualTeam)
-                    .OnDelete(DeleteBehavior.SetNull);
-
-                entity.HasMany(e => e.Results)
-                    .WithOne(e => e.Team)
-                    .OnDelete(DeleteBehavior.SetNull);
+                entity.HasOne(e => e.Season)
+                    .WithMany(e => e.Teams)
+                    .HasForeignKey(e => e.SeasonId)
+                    .OnDelete(DeleteBehavior.ClientCascade)
+                    .IsRequired();
             });
 
             modelBuilder.Entity<Driver>(entity =>
@@ -90,10 +80,16 @@ namespace car_racing_tournament_api.Data
                 entity.Property(e => e.RealName);
                 entity.Property(e => e.Number)
                     .IsRequired();
-
-                entity.HasMany(e => e.Results)
-                    .WithOne(e => e.Driver)
-                    .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(e => e.ActualTeam)
+                    .WithMany(e => e.Drivers)
+                    .HasForeignKey(e => e.ActualTeamId)
+                    .OnDelete(DeleteBehavior.ClientCascade)
+                    .IsRequired();
+                entity.HasOne(e => e.Season)
+                    .WithMany(e => e.Drivers)
+                    .HasForeignKey(e => e.SeasonId)
+                    .OnDelete(DeleteBehavior.ClientCascade)
+                    .IsRequired();
             });
 
             modelBuilder.Entity<Race>(entity =>
@@ -102,10 +98,11 @@ namespace car_racing_tournament_api.Data
                 entity.Property(e => e.Name)
                     .IsRequired();
                 entity.Property(e => e.DateTime);
-
-                entity.HasMany(e => e.Results)
-                    .WithOne(e => e.Race)
-                    .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(e => e.Season)
+                    .WithMany(e => e.Races)
+                    .HasForeignKey(e => e.SeasonId)
+                    .OnDelete(DeleteBehavior.ClientCascade)
+                    .IsRequired();
             });
 
             modelBuilder.Entity<Result>(entity =>
@@ -114,6 +111,21 @@ namespace car_racing_tournament_api.Data
                 entity.Property(e => e.Position)
                     .IsRequired();
                 entity.Property(e => e.Points)
+                    .IsRequired();
+                entity.HasOne(e => e.Driver)
+                    .WithMany(e => e.Results)
+                    .HasForeignKey(e => e.DriverId)
+                    .OnDelete(DeleteBehavior.ClientCascade)
+                    .IsRequired();
+                entity.HasOne(e => e.Team)
+                    .WithMany(e => e.Results)
+                    .HasForeignKey(e => e.TeamId)
+                    .OnDelete(DeleteBehavior.ClientCascade)
+                    .IsRequired();
+                entity.HasOne(e => e.Race)
+                    .WithMany(e => e.Results)
+                    .HasForeignKey(e => e.RaceId)
+                    .OnDelete(DeleteBehavior.ClientCascade)
                     .IsRequired();
             });
         }
