@@ -13,21 +13,21 @@ namespace car_racing_tournament_api.Services
 {
     public class UserService : IUser
     {
-        private readonly CarRacingDbContext _carRacingDbContext;
+        private readonly CarRacingTournamentDbContext _carRacingTournamentDbContext;
         private readonly IConfiguration _configuration;
 
         private const string USER_NOT_FOUND = "User not found";
         private const string PASSWORD_NOT_PASS = "Passwords aren't pass!";
 
-        public UserService(CarRacingDbContext carRacingDbContext, IConfiguration configuration)
+        public UserService(CarRacingTournamentDbContext carRacingTournamentDbContext, IConfiguration configuration)
         {
-            _carRacingDbContext = carRacingDbContext;
+            _carRacingTournamentDbContext = carRacingTournamentDbContext;
             _configuration = configuration;
         }
 
         public async Task<(bool IsSuccess, string? Token, string? ErrorMessage)> Login(LoginDto loginDto)
         {
-            var actualUser = await _carRacingDbContext.Users.Where(x => x.Username == loginDto.UsernameEmail || x.Email == loginDto.UsernameEmail).FirstOrDefaultAsync();
+            var actualUser = await _carRacingTournamentDbContext.Users.Where(x => x.Username == loginDto.UsernameEmail || x.Email == loginDto.UsernameEmail).FirstOrDefaultAsync();
             if (actualUser == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, actualUser.Password))
                 return (false, null, "Incorrect username or password!");
 
@@ -41,20 +41,20 @@ namespace car_racing_tournament_api.Services
             if (registrationDto.Password != registrationDto.PasswordAgain)
                 return (false, PASSWORD_NOT_PASS);
 
-            await _carRacingDbContext.AddAsync(new User { 
+            await _carRacingTournamentDbContext.AddAsync(new User { 
                 Id = new Guid(), 
                 Username = registrationDto.Username,
                 Email = registrationDto.Email,
                 Password = HashPassword(registrationDto.Password) 
             });
-            _carRacingDbContext.SaveChanges();
+            _carRacingTournamentDbContext.SaveChanges();
             
             return (true, null);
         }
 
         public async Task<(bool IsSuccess, User? User, string? ErrorMessage)> GetUser(string userId)
         {
-            var result = await _carRacingDbContext.Users.Where(x => x.Id == Guid.Parse(userId)).FirstOrDefaultAsync();
+            var result = await _carRacingTournamentDbContext.Users.Where(x => x.Id == Guid.Parse(userId)).FirstOrDefaultAsync();
             if (result == null)
                 return (false, null, USER_NOT_FOUND);
             
@@ -63,7 +63,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, User? User, string? ErrorMessage)> GetUserByUsernameEmail(string usernameEmail)
         {
-            var actualUser = await _carRacingDbContext.Users.Where(x => x.Username == usernameEmail || x.Email == usernameEmail).FirstOrDefaultAsync();
+            var actualUser = await _carRacingTournamentDbContext.Users.Where(x => x.Username == usernameEmail || x.Email == usernameEmail).FirstOrDefaultAsync();
             if (actualUser == null)
                 return (false, null, USER_NOT_FOUND);
 
@@ -99,21 +99,21 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateUser(Guid id, UpdateUserDto updateUserDto)
         {
-            var userObj = await _carRacingDbContext.Users.Where(e => e.Id == id).FirstOrDefaultAsync();
+            var userObj = await _carRacingTournamentDbContext.Users.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (userObj == null)
                 return (false, USER_NOT_FOUND);
             
             userObj.Username = updateUserDto.Username;
             userObj.Email = updateUserDto.Email;
-            _carRacingDbContext.Users.Update(userObj);
-            _carRacingDbContext.SaveChanges();
+            _carRacingTournamentDbContext.Users.Update(userObj);
+            _carRacingTournamentDbContext.SaveChanges();
             
             return (true, null);
         }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdatePassword(Guid id, UpdatePasswordDto updatePasswordDto)
         {
-            var userObj = await _carRacingDbContext.Users.Where(e => e.Id == id).FirstOrDefaultAsync();
+            var userObj = await _carRacingTournamentDbContext.Users.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (userObj == null)
                 return (false, USER_NOT_FOUND);
 
@@ -121,8 +121,8 @@ namespace car_racing_tournament_api.Services
                 return (false, PASSWORD_NOT_PASS);
             
             userObj.Password = HashPassword(updatePasswordDto.Password);
-            _carRacingDbContext.Users.Update(userObj);
-            _carRacingDbContext.SaveChanges();
+            _carRacingTournamentDbContext.Users.Update(userObj);
+            _carRacingTournamentDbContext.SaveChanges();
             return (true, null);
         }
     }

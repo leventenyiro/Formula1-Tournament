@@ -8,18 +8,18 @@ namespace car_racing_tournament_api.Services
 {
     public class DriverService : IDriver
     {
-        private readonly CarRacingDbContext _carRacingDbContext;
+        private readonly CarRacingTournamentDbContext _carRacingTournamentDbContext;
 
         private const string DRIVER_NOT_FOUND = "Driver not found";
 
-        public DriverService(CarRacingDbContext carRacingDbContext)
+        public DriverService(CarRacingTournamentDbContext carRacingTournamentDbContext)
         {
-            _carRacingDbContext = carRacingDbContext;
+            _carRacingTournamentDbContext = carRacingTournamentDbContext;
         }
 
         public async Task<(bool IsSuccess, Driver? Driver, string? ErrorMessage)> GetDriverById(Guid id)
         {
-            var driver = await _carRacingDbContext.Drivers.Where(e => e.Id == id).FirstOrDefaultAsync();
+            var driver = await _carRacingTournamentDbContext.Drivers.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (driver == null)
                 return (false, null, DRIVER_NOT_FOUND);
             
@@ -28,7 +28,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateDriver(Guid id, DriverDto driverDto)
         {
-            var driverObj = await _carRacingDbContext.Drivers.Where(e => e.Id == id).FirstOrDefaultAsync();
+            var driverObj = await _carRacingTournamentDbContext.Drivers.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (driverObj == null)
                 return (false, DRIVER_NOT_FOUND);
 
@@ -36,33 +36,33 @@ namespace car_racing_tournament_api.Services
             driverObj.RealName = driverDto.RealName;
             driverObj.Number = driverDto.Number;
             driverObj.ActualTeam = driverObj.ActualTeam;
-            _carRacingDbContext.Drivers.Update(driverObj);
-            _carRacingDbContext.SaveChanges();
+            _carRacingTournamentDbContext.Drivers.Update(driverObj);
+            _carRacingTournamentDbContext.SaveChanges();
 
             return (true, null);
         }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateDriverTeam(Guid id, Guid teamId)
         {
-            var driverObj = await _carRacingDbContext.Drivers.Where(e => e.Id == id).FirstOrDefaultAsync();
+            var driverObj = await _carRacingTournamentDbContext.Drivers.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (driverObj == null)
                 return (false, DRIVER_NOT_FOUND);
             
             driverObj.ActualTeamId = teamId;
-            _carRacingDbContext.Drivers.Update(driverObj);
-            _carRacingDbContext.SaveChanges();
+            _carRacingTournamentDbContext.Drivers.Update(driverObj);
+            _carRacingTournamentDbContext.SaveChanges();
 
             return (true, null);
         }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteDriver(Guid id)
         {
-            var driver = await _carRacingDbContext.Drivers.Where(e => e.Id == id).FirstOrDefaultAsync();
+            var driver = await _carRacingTournamentDbContext.Drivers.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (driver == null)
                 return (false, DRIVER_NOT_FOUND);
             
-            _carRacingDbContext.Drivers.Remove(driver);
-            _carRacingDbContext.SaveChanges();
+            _carRacingTournamentDbContext.Drivers.Remove(driver);
+            _carRacingTournamentDbContext.SaveChanges();
 
             return (true, null);
         }

@@ -43,9 +43,9 @@ namespace car_racing_tournament_api.Controllers
         }
 
         [HttpPost, Authorize]
-        public async Task<IActionResult> Post([FromBody] string name)
+        public async Task<IActionResult> Post([FromBody] SeasonDto seasonDto)
         {
-            var resultAdd = await _seasonService.AddSeason(name, new Guid(User.Identity!.Name!));
+            var resultAdd = await _seasonService.AddSeason(seasonDto, new Guid(User.Identity!.Name!));
             if (!resultAdd.IsSuccess)
                 return BadRequest(resultAdd.ErrorMessage);
 
@@ -53,9 +53,9 @@ namespace car_racing_tournament_api.Controllers
         }
 
         [HttpPut("{id}"), Authorize]
-        public async Task<IActionResult> Put(Guid id, [FromForm] string name)
+        public async Task<IActionResult> Put(Guid id, [FromBody] SeasonDto seasonDto)
         {
-            var resultUpdate = await _seasonService.UpdateSeason(id, name);
+            var resultUpdate = await _seasonService.UpdateSeason(id, seasonDto);
             if (!resultUpdate.IsSuccess)
                 return BadRequest(resultUpdate.ErrorMessage);
             

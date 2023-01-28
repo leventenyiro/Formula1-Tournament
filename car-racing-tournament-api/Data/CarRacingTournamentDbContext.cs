@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace car_racing_tournament_api.Data
 {
-    public class CarRacingDbContext : DbContext
+    public class CarRacingTournamentDbContext : DbContext
     {
         public virtual DbSet<User> Users { get; set; } = default!;
         public virtual DbSet<Season> Seasons { get; set; } = default!;
@@ -13,9 +13,9 @@ namespace car_racing_tournament_api.Data
         public virtual DbSet<Result> Results { get; set; } = default!;
         public virtual DbSet<UserSeason> UserSeasons { get; set; } = default!;
 
-        public CarRacingDbContext() { }
+        public CarRacingTournamentDbContext() { }
 
-        public CarRacingDbContext(DbContextOptions<CarRacingDbContext> options) : base(options)
+        public CarRacingTournamentDbContext(DbContextOptions<CarRacingTournamentDbContext> options) : base(options)
         {
         }
 
@@ -55,6 +55,7 @@ namespace car_racing_tournament_api.Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name)
                     .IsRequired();
+                entity.Property(e => e.Description);
             });
 
             modelBuilder.Entity<Team>(entity =>

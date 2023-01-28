@@ -7,35 +7,35 @@ namespace car_racing_tournament_api.Services
 {
     public class UserSeasonService : IUserSeason
     {
-        private readonly CarRacingDbContext _carRacingDbContext;
+        private readonly CarRacingTournamentDbContext _carRacingTournamentDbContext;
 
-        public UserSeasonService(CarRacingDbContext carRacingDbContext)
+        public UserSeasonService(CarRacingTournamentDbContext carRacingTournamentDbContext)
         {
-            _carRacingDbContext = carRacingDbContext;
+            _carRacingTournamentDbContext = carRacingTournamentDbContext;
         }
 
         public bool HasPermission(Guid userId, Guid seasonId)
         {
-            UserSeasonPermission permission = _carRacingDbContext.UserSeasons.Where(x => x.UserId == userId && x.SeasonId == seasonId).First().Permission;
+            UserSeasonPermission permission = _carRacingTournamentDbContext.UserSeasons.Where(x => x.UserId == userId && x.SeasonId == seasonId).First().Permission;
             return permission == UserSeasonPermission.Moderator || permission == UserSeasonPermission.Admin;
         }
 
         public bool IsAdmin(Guid userId, Guid seasonId)
         {
-            UserSeasonPermission permission = _carRacingDbContext.UserSeasons.Where(x => x.UserId == userId && x.SeasonId == seasonId).First().Permission;
+            UserSeasonPermission permission = _carRacingTournamentDbContext.UserSeasons.Where(x => x.UserId == userId && x.SeasonId == seasonId).First().Permission;
             return permission == UserSeasonPermission.Admin;
         }
 
         public bool IsModerator(Guid userId, Guid seasonId)
         {
-            UserSeasonPermission permission = _carRacingDbContext.UserSeasons.Where(x => x.UserId == userId && x.SeasonId == seasonId).First().Permission;
+            UserSeasonPermission permission = _carRacingTournamentDbContext.UserSeasons.Where(x => x.UserId == userId && x.SeasonId == seasonId).First().Permission;
             return permission == UserSeasonPermission.Moderator;
         }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> AddAdmin(Guid userId, Guid seasonId)
         {
-            await _carRacingDbContext.UserSeasons.AddAsync(new UserSeason { Id = new Guid(), UserId = userId, SeasonId = seasonId, Permission = UserSeasonPermission.Admin });
-            _carRacingDbContext.SaveChanges();
+            await _carRacingTournamentDbContext.UserSeasons.AddAsync(new UserSeason { Id = new Guid(), UserId = userId, SeasonId = seasonId, Permission = UserSeasonPermission.Admin });
+            _carRacingTournamentDbContext.SaveChanges();
 
             return (true, null);
         }
@@ -45,8 +45,8 @@ namespace car_racing_tournament_api.Services
             if (!IsAdmin(adminId, seasonId))
                 return (false, "You don't have permission for it");
             
-            await _carRacingDbContext.UserSeasons.AddAsync(new UserSeason { Id = new Guid(), UserId = moderatorId, SeasonId = seasonId, Permission = UserSeasonPermission.Moderator });
-            _carRacingDbContext.SaveChanges();
+            await _carRacingTournamentDbContext.UserSeasons.AddAsync(new UserSeason { Id = new Guid(), UserId = moderatorId, SeasonId = seasonId, Permission = UserSeasonPermission.Moderator });
+            _carRacingTournamentDbContext.SaveChanges();
 
             return (true, null);
         }
@@ -59,19 +59,19 @@ namespace car_racing_tournament_api.Services
             if (IsAdmin(moderatorId, seasonId))
                 return (false, "You can't remove permission of an admin");
 
-            UserSeason moderatorObj = await _carRacingDbContext.UserSeasons.Where(x => x.UserId == moderatorId && x.SeasonId == seasonId).FirstAsync();
+            UserSeason moderatorObj = await _carRacingTournamentDbContext.UserSeasons.Where(x => x.UserId == moderatorId && x.SeasonId == seasonId).FirstAsync();
             if (moderatorObj == null)
                 return (false, "This moderator doesn't exists");
 
-            _carRacingDbContext.UserSeasons.Remove(moderatorObj);
-            _carRacingDbContext.SaveChanges();
+            _carRacingTournamentDbContext.UserSeasons.Remove(moderatorObj);
+            _carRacingTournamentDbContext.SaveChanges();
             
             return (true, null);
         }
 
         public async Task<(bool IsSuccess, List<UserSeason>? UserSeasons, string? ErrorMessage)> GetSeasonsByUserId(Guid userId)
         {
-            List<UserSeason> userSeasons = await _carRacingDbContext.UserSeasons.Where(x => x.UserId == userId).ToListAsync();
+            List<UserSeason> userSeasons = await _carRacingTournamentDbContext.UserSeasons.Where(x => x.UserId == userId).ToListAsync();
 
             if (userSeasons == null)
                 return (false, null, "Seasons not found");
