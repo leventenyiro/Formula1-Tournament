@@ -37,7 +37,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity!.Name!), resultGet.Race!.SeasonId))
+            if (!await _userSeasonService.HasPermissionAsync(new Guid(User.Identity!.Name!), resultGet.Race!.SeasonId))
                 return Forbid();
             
             var resultUpdate = await _raceService.UpdateRace(id, raceDto);
@@ -54,7 +54,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity!.Name!), resultGet.Race!.SeasonId))
+            if (!await _userSeasonService.HasPermissionAsync(new Guid(User.Identity!.Name!), resultGet.Race!.SeasonId))
                 return Forbid();
 
             var result = await _raceService.DeleteRace(id);
@@ -81,7 +81,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
-            if (!_userSeasonService.HasPermission(new Guid(User.Identity!.Name!), resultGet.Race!.SeasonId))
+            if (!await _userSeasonService.HasPermissionAsync(new Guid(User.Identity!.Name!), resultGet.Race!.SeasonId))
                 return Forbid();
 
             var resultAdd = await _raceService.AddResult(raceId, resultDto);
