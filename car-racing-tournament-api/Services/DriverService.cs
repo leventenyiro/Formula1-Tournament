@@ -37,8 +37,7 @@ namespace car_racing_tournament_api.Services
                         Position = x.Position,
                         Team = x.Team
                     }).ToList()
-                })
-                .FirstOrDefaultAsync();
+                }).FirstOrDefaultAsync();
             if (driver == null)
                 return (false, null, DRIVER_NOT_FOUND);
             

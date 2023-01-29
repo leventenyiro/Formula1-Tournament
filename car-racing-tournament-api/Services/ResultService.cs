@@ -18,7 +18,29 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, Result? Result, string? ErrorMessage)> GetResultById(Guid id)
         {
-            var result = await _carRacingTournamentDbContext.Results.Where(e => e.Id == id).FirstOrDefaultAsync();
+            var result = await _carRacingTournamentDbContext.Results
+                .Where(e => e.Id == id)
+                .Include(x => x.Driver)
+                .Include(x => x.Team)
+                .Select(x => new Result
+                {
+                    Id = x.Id,
+                    Position = x.Position,
+                    Points = x.Points,
+                    Driver = new Driver
+                    {
+                        Id = x.Driver.Id,
+                        Name = x.Driver.Name,
+                        RealName = x.Driver.RealName,
+
+                    },
+                    Team = new Team
+                    {
+                        Id = x.Team.Id,
+                        Name = x.Team.Name,
+                        Color = x.Team.Color
+                    }
+                }).FirstOrDefaultAsync();
             if (result == null)
                 return (false, null, RESULT_NOT_FOUND);
             

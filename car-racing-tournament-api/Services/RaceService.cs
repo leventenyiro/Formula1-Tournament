@@ -22,7 +22,35 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, Race? Race, string? ErrorMessage)> GetRaceById(Guid id)
         {
-            var race = await _carRacingTournamentDbContext.Races.Where(e => e.Id == id).FirstOrDefaultAsync();
+            var race = await _carRacingTournamentDbContext.Races
+                .Where(e => e.Id == id)
+                .Include(x => x.Results!).ThenInclude(x => x.Driver)
+                .Include(x => x.Results!).ThenInclude(x => x.Team)
+                .Select(x => new Race
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    DateTime = x.DateTime,
+                    Results = x.Results!.Select(x => new Result
+                    {
+                        Id = x.Id,
+                        Position = x.Position,
+                        Points = x.Points,
+                        Driver = new Driver
+                        {
+                            Id = x.Driver.Id,
+                            Name = x.Driver.Name,
+                            RealName = x.Driver.RealName,
+
+                        },
+                        Team = new Team
+                        {
+                            Id = x.Team.Id,
+                            Name = x.Team.Name,
+                            Color = x.Team.Color
+                        }
+                    }).ToList()
+                }).FirstOrDefaultAsync();
             if (race == null)
                 return (false, null, RACE_NOT_FOUND);
 
@@ -57,7 +85,28 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, List<Result>? Results, string? ErrorMessage)> GetResultsByRaceId(Guid raceId)
         {
-            var results = await _carRacingTournamentDbContext.Results.Where(x => x.RaceId == raceId).ToListAsync();
+            var results = await _carRacingTournamentDbContext.Results
+                .Where(x => x.RaceId == raceId)
+                .Include(x => x.Driver)
+                .Include(x => x.Team)
+                .Select(x => new Result {
+                    Id = x.Id,
+                    Position = x.Position,
+                    Points = x.Points,
+                    Driver = new Driver
+                    {
+                        Id = x.Driver.Id,
+                        Name = x.Driver.Name,
+                        RealName = x.Driver.RealName,
+
+                    },
+                    Team = new Team
+                    {
+                        Id = x.Team.Id,
+                        Name = x.Team.Name,
+                        Color = x.Team.Color
+                    }
+                }).ToListAsync();
             if (results == null)
                 return (false, null, "No results found");
 

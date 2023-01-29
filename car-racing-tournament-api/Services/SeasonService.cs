@@ -202,6 +202,8 @@ namespace car_racing_tournament_api.Services
             var teams = await _carRacingTournamentDbContext.Teams
                 .Where(x => x.SeasonId == seasonId)
                 .Include(x => x.Drivers)
+                .Include(x => x.Results!).ThenInclude(x => x.Race)
+                .Include(x => x.Results!).ThenInclude(x => x.Driver)
                 .Select(x => new Team
                 {
                     Id = x.Id,
@@ -270,8 +272,8 @@ namespace car_racing_tournament_api.Services
         {
             var races = await _carRacingTournamentDbContext.Races
                 .Where(x => x.SeasonId == seasonId)
-                .Include(x => x.Results!).ThenInclude(x => x.Team)
                 .Include(x => x.Results!).ThenInclude(x => x.Driver)
+                .Include(x => x.Results!).ThenInclude(x => x.Team)
                 .Select(x => new Race
                 {
                     Id = x.Id,
