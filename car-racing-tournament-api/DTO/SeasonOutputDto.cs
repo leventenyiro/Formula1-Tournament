@@ -12,6 +12,7 @@ namespace car_racing_tournament_api.DTO
 
     public class UserSeasonOutputDto
     {
+        public Guid UserId { get; set; }
         public string Username { get; set; } = default!;
         public UserSeasonPermission Permission { get; set; }
     }

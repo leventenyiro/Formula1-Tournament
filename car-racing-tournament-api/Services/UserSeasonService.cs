@@ -14,7 +14,7 @@ namespace car_racing_tournament_api.Services
             _carRacingTournamentDbContext = carRacingTournamentDbContext;
         }
 
-        public async Task<bool> HasPermissionAsync(Guid userId, Guid seasonId)
+        public async Task<bool> HasPermission(Guid userId, Guid seasonId)
         {
             var userSeason = await _carRacingTournamentDbContext.UserSeasons.Where(x => x.UserId == userId && x.SeasonId == seasonId).FirstOrDefaultAsync();
             if (userSeason == null)
@@ -32,7 +32,7 @@ namespace car_racing_tournament_api.Services
             return userSeason.Permission == UserSeasonPermission.Admin;
         }
 
-        public async Task<bool> IsModeratorAsync(Guid userId, Guid seasonId)
+        public async Task<bool> IsModerator(Guid userId, Guid seasonId)
         {
             var userSeason = await _carRacingTournamentDbContext.UserSeasons.Where(x => x.UserId == userId && x.SeasonId == seasonId).FirstOrDefaultAsync();
             if (userSeason == null)

@@ -23,13 +23,16 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, List<SeasonOutputDto>? Seasons, string? ErrorMessage)> GetSeasons()
         {
-            List<SeasonOutputDto> seasons = await _carRacingTournamentDbContext.Seasons.Include(x => x.UserSeasons).Select(x => new SeasonOutputDto
+            List<SeasonOutputDto> seasons = await _carRacingTournamentDbContext.Seasons
+                .Include(x => x.UserSeasons)
+                .Select(x => new SeasonOutputDto
             {
                 Id = x.Id,
                 Name = x.Name,
                 Description = x.Description,
                 UserSeasons = x.UserSeasons.Select(x => new UserSeasonOutputDto
                 {
+                    UserId = x.UserId,
                     Username = x.User.Username,
                     Permission = x.Permission
                 }).ToList()
@@ -44,8 +47,8 @@ namespace car_racing_tournament_api.Services
         public async Task<(bool IsSuccess, SeasonOutputDto? Season, string? ErrorMessage)> GetSeasonById(Guid id)
         {
             SeasonOutputDto season = await _carRacingTournamentDbContext.Seasons
-                .Include(x => x.UserSeasons)
                 .Where(x => x.Id == id)
+                .Include(x => x.UserSeasons)
                 .Select(x => new SeasonOutputDto
                 {
                     Id = x.Id,
@@ -53,6 +56,7 @@ namespace car_racing_tournament_api.Services
                     Description = x.Description,
                     UserSeasons = x.UserSeasons.Select(x => new UserSeasonOutputDto
                     {
+                        UserId = x.UserId,
                         Username = x.User.Username,
                         Permission = x.Permission
                     }).ToList()
@@ -114,8 +118,8 @@ namespace car_racing_tournament_api.Services
         public async Task<(bool IsSuccess, List<SeasonOutputDto>? Seasons, string? ErrorMessage)> GetSeasonsByUserSeasonList(List<Guid> userSeasons)
         {
             List<SeasonOutputDto> seasons = await _carRacingTournamentDbContext.Seasons
-                .Include(x => x.UserSeasons)
                 .Where(x => userSeasons.Contains(x.Id))
+                .Include(x => x.UserSeasons)
                 .Select(x => new SeasonOutputDto
                 {
                     Id = x.Id,
@@ -123,6 +127,7 @@ namespace car_racing_tournament_api.Services
                     Description = x.Description,
                     UserSeasons = x.UserSeasons.Select(x => new UserSeasonOutputDto
                     {
+                        UserId = x.UserId,
                         Username = x.User.Username,
                         Permission = x.Permission
                     }).ToList()
@@ -136,7 +141,42 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, List<Driver>? Drivers, string? ErrorMessage)> GetDriversBySeasonId(Guid seasonId)
         {
-            var drivers = await _carRacingTournamentDbContext.Drivers.Where(x => x.SeasonId == seasonId).ToListAsync();
+            var drivers = await _carRacingTournamentDbContext.Drivers
+                .Where(x => x.SeasonId == seasonId)
+                .Include(x => x.ActualTeam)
+                .Include(x => x.Results!).ThenInclude(x => x.Race)
+                .Include(x => x.Results!).ThenInclude(x => x.Team)
+                .Select(x => new Driver
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    RealName = x.RealName,
+                    Number = x.Number,
+                    ActualTeam = x.ActualTeam != null ? new Team
+                    {
+                        Id = x.ActualTeam.Id,
+                        Name = x.ActualTeam.Name,
+                        Color = x.ActualTeam.Color
+                    } : null,
+                    Results = x.Results!.Select(x => new Result
+                    {
+                        Id = x.Id,
+                        Position = x.Position,
+                        Points = x.Points,
+                        Race = new Race
+                        {
+                            Id = x.Race.Id,
+                            Name = x.Race.Name,
+                            DateTime = x.Race.DateTime
+                        },
+                        Team = new Team
+                        {
+                            Id = x.Team.Id,
+                            Name = x.Team.Name,
+                            Color = x.Team.Color
+                        }
+                    }).ToList()
+                }).ToListAsync();
             if (drivers == null)
                 return (false, null, "Drivers not found");
             
@@ -159,7 +199,41 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, List<Team>? Teams, string? ErrorMessage)> GetTeamsBySeasonId(Guid seasonId)
         {
-            var teams = await _carRacingTournamentDbContext.Teams.Where(x => x.SeasonId == seasonId).ToListAsync();
+            var teams = await _carRacingTournamentDbContext.Teams
+                .Where(x => x.SeasonId == seasonId)
+                .Include(x => x.Drivers)
+                .Select(x => new Team
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Color = x.Color,
+                    Drivers = x.Drivers!.Select(x => new Driver
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        RealName = x.RealName,
+                        Number = x.Number
+                    }).ToList(),
+                    Results = x.Results!.Select(x => new Result
+                    {
+                        Id = x.Id,
+                        Position = x.Position,
+                        Points = x.Points,
+                        Race = new Race
+                        {
+                            Id = x.Race.Id,
+                            Name = x.Race.Name,
+                            DateTime = x.Race.DateTime
+                        },
+                        Driver = new Driver
+                        {
+                            Id = x.Driver.Id,
+                            Name = x.Driver.Name,
+                            RealName = x.Driver.RealName,
+                            Number = x.Driver.Number
+                        }
+                    }).ToList()
+                }).ToListAsync();
             if (teams == null)
                 return (false, null, "Teams not found");
             
@@ -194,7 +268,35 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, List<Race>? Races, string? ErrorMessage)> GetRacesBySeasonId(Guid seasonId)
         {
-            var races = await _carRacingTournamentDbContext.Races.Where(x => x.SeasonId == seasonId).ToListAsync();
+            var races = await _carRacingTournamentDbContext.Races
+                .Where(x => x.SeasonId == seasonId)
+                .Include(x => x.Results!).ThenInclude(x => x.Team)
+                .Include(x => x.Results!).ThenInclude(x => x.Driver)
+                .Select(x => new Race
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    DateTime = x.DateTime,
+                    Results = x.Results!.Select(x => new Result
+                    {
+                        Id = x.Id,
+                        Position = x.Position,
+                        Points = x.Points,
+                        Driver = new Driver
+                        {
+                            Id = x.Driver.Id,
+                            Name = x.Driver.Name,
+                            RealName = x.Driver.RealName,
+
+                        },
+                        Team = new Team
+                        {
+                            Id = x.Team.Id,
+                            Name = x.Team.Name,
+                            Color = x.Team.Color
+                        }
+                    }).ToList(),
+                }).ToListAsync();
             if (races == null)
                 return (false, null, "Races not found");
             

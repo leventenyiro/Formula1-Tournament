@@ -19,7 +19,26 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, Driver? Driver, string? ErrorMessage)> GetDriverById(Guid id)
         {
-            var driver = await _carRacingTournamentDbContext.Drivers.Where(e => e.Id == id).FirstOrDefaultAsync();
+            var driver = await _carRacingTournamentDbContext.Drivers.Where(e => e.Id == id)
+                .Include(e => e.Results!)
+                .ThenInclude(x => x.Team)
+                .Select(x => new Driver
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    RealName = x.RealName,
+                    Number = x.Number,
+                    ActualTeamId = x.ActualTeamId,
+                    SeasonId = x.SeasonId,
+                    Results = x.Results!.Select(x => new Result
+                    {
+                        Id = x.Id,
+                        Points = x.Points,
+                        Position = x.Position,
+                        Team = x.Team
+                    }).ToList()
+                })
+                .FirstOrDefaultAsync();
             if (driver == null)
                 return (false, null, DRIVER_NOT_FOUND);
             
@@ -35,7 +54,7 @@ namespace car_racing_tournament_api.Services
             driverObj.Name = driverDto.Name;
             driverObj.RealName = driverDto.RealName;
             driverObj.Number = driverDto.Number;
-            driverObj.ActualTeam = driverObj.ActualTeam;
+            driverObj.ActualTeamId = driverDto.ActualTeamId;
             _carRacingTournamentDbContext.Drivers.Update(driverObj);
             _carRacingTournamentDbContext.SaveChanges();
 

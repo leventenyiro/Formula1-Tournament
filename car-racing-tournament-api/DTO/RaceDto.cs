@@ -4,6 +4,5 @@
     {
         public string Name { get; set; } = default!;
         public DateTime DateTime { get; set; }
-        public Guid SeasonId { get; set; }
     }
 }
