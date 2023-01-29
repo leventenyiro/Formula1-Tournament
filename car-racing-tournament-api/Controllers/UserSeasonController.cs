@@ -19,7 +19,7 @@ namespace car_racing_tournament_api.Controllers
         [HttpDelete("{moderatorId}"), Authorize]
         public async Task<IActionResult> Delete(Guid seasonId, Guid moderatorId)
         {
-            if (!await _userSeasonService.HasPermissionAsync(new Guid(User.Identity!.Name!), seasonId))
+            if (!await _userSeasonService.HasPermission(new Guid(User.Identity!.Name!), seasonId))
                 return StatusCode(StatusCodes.Status403Forbidden);
 
             var resultDelete = await _userSeasonService.RemovePermission(new Guid(User.Identity!.Name!), moderatorId, seasonId);
