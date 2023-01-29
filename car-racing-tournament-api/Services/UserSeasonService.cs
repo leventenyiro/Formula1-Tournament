@@ -14,15 +14,6 @@ namespace car_racing_tournament_api.Services
             _carRacingTournamentDbContext = carRacingTournamentDbContext;
         }
 
-        public async Task<bool> HasPermission(Guid userId, Guid seasonId)
-        {
-            var userSeason = await _carRacingTournamentDbContext.UserSeasons.Where(x => x.UserId == userId && x.SeasonId == seasonId).FirstOrDefaultAsync();
-            if (userSeason == null)
-                return false;
-
-            return userSeason.Permission == UserSeasonPermission.Moderator || userSeason.Permission == UserSeasonPermission.Admin;
-        }
-
         public async Task<bool> IsAdmin(Guid userId, Guid seasonId)
         {
             var userSeason = await _carRacingTournamentDbContext.UserSeasons.Where(x => x.UserId == userId && x.SeasonId == seasonId).FirstOrDefaultAsync();
@@ -32,13 +23,13 @@ namespace car_racing_tournament_api.Services
             return userSeason.Permission == UserSeasonPermission.Admin;
         }
 
-        public async Task<bool> IsModerator(Guid userId, Guid seasonId)
+        public async Task<bool> IsAdminModerator(Guid userId, Guid seasonId)
         {
             var userSeason = await _carRacingTournamentDbContext.UserSeasons.Where(x => x.UserId == userId && x.SeasonId == seasonId).FirstOrDefaultAsync();
             if (userSeason == null)
                 return false;
 
-            return userSeason.Permission == UserSeasonPermission.Moderator;
+            return userSeason.Permission == UserSeasonPermission.Moderator || userSeason.Permission == UserSeasonPermission.Admin;
         }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> AddAdmin(Guid userId, Guid seasonId)
