@@ -43,7 +43,7 @@ namespace car_racing_tournament_api.Controllers
         }
 
         [HttpPost, Authorize]
-        public async Task<IActionResult> Post([FromBody] SeasonDto seasonDto)
+        public async Task<IActionResult> Post([FromBody] SeasonCreateDto seasonDto)
         {
             var resultAdd = await _seasonService.AddSeason(seasonDto, new Guid(User.Identity!.Name!));
             if (!resultAdd.IsSuccess)
@@ -53,7 +53,7 @@ namespace car_racing_tournament_api.Controllers
         }
 
         [HttpPut("{id}"), Authorize]
-        public async Task<IActionResult> Put(Guid id, [FromBody] SeasonDto seasonDto)
+        public async Task<IActionResult> Put(Guid id, [FromBody] SeasonUpdateDto seasonDto)
         {
             if (!await _userSeasonService.IsAdmin(new Guid(User.Identity!.Name!), id))
                 return Forbid();
@@ -62,6 +62,19 @@ namespace car_racing_tournament_api.Controllers
             if (!resultUpdate.IsSuccess)
                 return BadRequest(resultUpdate.ErrorMessage);
             
+            return NoContent();
+        }
+
+        [HttpPut("{id}/archive"), Authorize]
+        public async Task<IActionResult> Archive(Guid id)
+        {
+            if (!await _userSeasonService.IsAdmin(new Guid(User.Identity!.Name!), id))
+                return Forbid();
+
+            var resultArchive = await _seasonService.ArchiveSeason(id);
+            if (!resultArchive.IsSuccess)
+                return BadRequest(resultArchive.ErrorMessage);
+
             return NoContent();
         }
 

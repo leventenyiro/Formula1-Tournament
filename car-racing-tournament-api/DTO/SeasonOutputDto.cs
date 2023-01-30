@@ -7,6 +7,7 @@ namespace car_racing_tournament_api.DTO
         public Guid Id { get; set; }
         public string Name { get; set; } = default!;
         public string? Description { get; set; }
+        public bool IsArchived { get; set; }
         public List<UserSeasonOutputDto> UserSeasons { get; set; } = default!;
     }
 
