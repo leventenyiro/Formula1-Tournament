@@ -118,6 +118,15 @@ namespace car_racing_tournament_api.Services
             if (resultDto == null)
                 return (false, "Please provide the result data");
 
+            Race? raceObj = await _carRacingTournamentDbContext.Races.Where(e => e.Id == raceId).FirstOrDefaultAsync();
+            Team? teamObj = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == resultDto.TeamId).FirstOrDefaultAsync();
+            if (raceObj?.SeasonId != teamObj?.SeasonId)
+                return (false, "Race and team aren't in the same season");
+
+            Driver? driverObj = await _carRacingTournamentDbContext.Drivers.Where(e => e.Id == resultDto.DriverId).FirstOrDefaultAsync();
+            if (raceObj?.SeasonId == driverObj?.SeasonId)
+                return (false, "Race and driver aren't in the same season");
+
             var result = _mapper.Map<Result>(resultDto);
             result.Id = Guid.NewGuid();
             result.RaceId = raceId;
