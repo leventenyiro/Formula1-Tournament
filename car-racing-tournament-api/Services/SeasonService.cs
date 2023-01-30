@@ -30,6 +30,7 @@ namespace car_racing_tournament_api.Services
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
+                    IsArchived = x.IsArchived,
                     UserSeasons = x.UserSeasons.Select(x => new UserSeasonOutputDto
                     {
                         UserId = x.UserId,
@@ -54,6 +55,7 @@ namespace car_racing_tournament_api.Services
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
+                    IsArchived = x.IsArchived,
                     UserSeasons = x.UserSeasons.Select(x => new UserSeasonOutputDto
                     {
                         UserId = x.UserId,
@@ -68,13 +70,14 @@ namespace car_racing_tournament_api.Services
             return (true, season, null);
         }
 
-        public async Task<(bool IsSuccess, Guid SeasonId, string? ErrorMessage)> AddSeason(SeasonDto seasonDto, Guid userId)
+        public async Task<(bool IsSuccess, Guid SeasonId, string? ErrorMessage)> AddSeason(SeasonCreateDto seasonDto, Guid userId)
         {
             if (seasonDto == null)
                 return (false, Guid.Empty, "Please provide the season data");
 
             var season = _mapper.Map<Season>(seasonDto);
             season.Id = Guid.NewGuid();
+            season.IsArchived = false;
 
             UserSeason userSeason = new UserSeason { Id = new Guid(), Permission = UserSeasonPermission.Admin, UserId = userId };
             season.UserSeasons = new List<UserSeason> { userSeason };
@@ -85,7 +88,7 @@ namespace car_racing_tournament_api.Services
             return (true, season.Id, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateSeason(Guid id, SeasonDto seasonDto)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateSeason(Guid id, SeasonUpdateDto seasonDto)
         {
             var seasonObj = await _carRacingTournamentDbContext.Seasons.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (seasonObj == null)
@@ -97,6 +100,19 @@ namespace car_racing_tournament_api.Services
             _carRacingTournamentDbContext.Seasons.Update(seasonObj);
             _carRacingTournamentDbContext.SaveChanges();
             
+            return (true, null);
+        }
+
+        public async Task<(bool IsSuccess, string? ErrorMessage)> ArchiveSeason(Guid id)
+        {
+            var seasonObj = await _carRacingTournamentDbContext.Seasons.Where(e => e.Id == id).FirstOrDefaultAsync();
+            if (seasonObj == null)
+                return (false, SEASON_NOT_FOUND);
+
+            seasonObj.IsArchived = !seasonObj.IsArchived;
+            _carRacingTournamentDbContext.Seasons.Update(seasonObj);
+            _carRacingTournamentDbContext.SaveChanges();
+
             return (true, null);
         }
 
@@ -126,6 +142,7 @@ namespace car_racing_tournament_api.Services
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
+                    IsArchived = x.IsArchived,
                     UserSeasons = x.UserSeasons.Select(x => new UserSeasonOutputDto
                     {
                         UserId = x.UserId,
