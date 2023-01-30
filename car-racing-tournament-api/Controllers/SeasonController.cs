@@ -55,6 +55,9 @@ namespace car_racing_tournament_api.Controllers
         [HttpPut("{id}"), Authorize]
         public async Task<IActionResult> Put(Guid id, [FromBody] SeasonDto seasonDto)
         {
+            if (!await _userSeasonService.IsAdmin(new Guid(User.Identity!.Name!), id))
+                return Forbid();
+
             var resultUpdate = await _seasonService.UpdateSeason(id, seasonDto);
             if (!resultUpdate.IsSuccess)
                 return BadRequest(resultUpdate.ErrorMessage);
@@ -65,6 +68,9 @@ namespace car_racing_tournament_api.Controllers
         [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
+            if (!await _userSeasonService.IsAdmin(new Guid(User.Identity!.Name!), id))
+                return Forbid();
+
             var resultDelete = await _seasonService.DeleteSeason(id);
             if (!resultDelete.IsSuccess)
                 return BadRequest(resultDelete.ErrorMessage);
@@ -89,7 +95,7 @@ namespace car_racing_tournament_api.Controllers
         [HttpPost("{seasonId}/user-season"), Authorize]
         public async Task<IActionResult> Post(Guid seasonId, [FromForm] string usernameEmail)
         {
-            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), seasonId))
+            if (!await _userSeasonService.IsAdmin(new Guid(User.Identity!.Name!), seasonId))
                 return Forbid();
 
             var resultGet = await _userService.GetUserByUsernameEmail(usernameEmail);

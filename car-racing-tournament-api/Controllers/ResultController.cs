@@ -38,8 +38,8 @@ namespace car_racing_tournament_api.Controllers
                 return BadRequest(resultGetResult.ErrorMessage);
 
             var resultGetDriver = await _driverService.GetDriverById(resultGetResult.Result!.DriverId);
-            if (!resultGetResult.IsSuccess)
-                return BadRequest(resultGetResult.ErrorMessage);
+            if (!resultGetDriver.IsSuccess)
+                return BadRequest(resultGetDriver.ErrorMessage);
 
             if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
@@ -66,8 +66,8 @@ namespace car_racing_tournament_api.Controllers
                 return BadRequest(resultGetResult.ErrorMessage);
 
             var resultGetDriver = await _driverService.GetDriverById(resultGetResult.Result!.DriverId);
-            if (!resultGetResult.IsSuccess)
-                return BadRequest(resultGetResult.ErrorMessage);
+            if (!resultGetDriver.IsSuccess)
+                return BadRequest(resultGetDriver.ErrorMessage);
 
             if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
