@@ -41,10 +41,7 @@ namespace car_racing_tournament_api.Services
         }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> AddModerator(Guid adminId, Guid moderatorId, Guid seasonId)
-        {
-            if (!await IsAdmin(adminId, seasonId))
-                return (false, "You don't have permission for it");
-            
+        {            
             await _carRacingTournamentDbContext.UserSeasons.AddAsync(new UserSeason { Id = new Guid(), UserId = moderatorId, SeasonId = seasonId, Permission = UserSeasonPermission.Moderator });
             _carRacingTournamentDbContext.SaveChanges();
 
@@ -53,12 +50,6 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> RemovePermission(Guid adminId, Guid moderatorId, Guid seasonId)
         {
-            if (!await IsAdmin(adminId, seasonId))
-                return (false, "You don't have permission for it");
-
-            if (await IsAdmin(moderatorId, seasonId))
-                return (false, "You can't remove permission of an admin");
-
             UserSeason moderatorObj = await _carRacingTournamentDbContext.UserSeasons.Where(x => x.UserId == moderatorId && x.SeasonId == seasonId).FirstAsync();
             if (moderatorObj == null)
                 return (false, "This moderator doesn't exists");
