@@ -35,7 +35,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
-            if (!await _userSeasonService.HasPermission(new Guid(User.Identity!.Name!), resultGet.Driver!.SeasonId))
+            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Driver!.SeasonId))
                 return Forbid();
 
             var resultUpdate = await _driverService.UpdateDriver(id, driverDto);
@@ -53,7 +53,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
-            if (!await _userSeasonService.HasPermission(new Guid(User.Identity!.Name!), resultGet.Driver!.SeasonId))
+            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Driver!.SeasonId))
                 return Forbid();
 
             var resultDelete = await _driverService.DeleteDriver(id);
