@@ -26,17 +26,17 @@ namespace car_racing_tournament_api.Services
             List<SeasonOutputDto> seasons = await _carRacingTournamentDbContext.Seasons
                 .Include(x => x.UserSeasons)
                 .Select(x => new SeasonOutputDto
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Description = x.Description,
-                UserSeasons = x.UserSeasons.Select(x => new UserSeasonOutputDto
                 {
-                    UserId = x.UserId,
-                    Username = x.User.Username,
-                    Permission = x.Permission
-                }).ToList()
-            }).ToListAsync();
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    UserSeasons = x.UserSeasons.Select(x => new UserSeasonOutputDto
+                    {
+                        UserId = x.UserId,
+                        Username = x.User.Username,
+                        Permission = x.Permission
+                    }).ToList()
+                }).ToListAsync();
 
             if (seasons == null)
                 return (false, null, SEASON_NOT_FOUND);
@@ -187,7 +187,11 @@ namespace car_racing_tournament_api.Services
         {
             if (driverDto == null)
                 return (false, "Please provide the driver data");
-            
+
+            Team? teamObj = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == driverDto!.ActualTeamId).FirstOrDefaultAsync();
+            if (seasonId != teamObj!.SeasonId)
+                return (false, "Driver and team aren't in the same season");
+
             var driver = _mapper.Map<Driver>(driverDto);
             driver.Id = Guid.NewGuid();
             driver.SeasonId = seasonId;

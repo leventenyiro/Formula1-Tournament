@@ -52,7 +52,16 @@ namespace car_racing_tournament_api.Services
             var resultObj = await _carRacingTournamentDbContext.Results.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (resultObj == null)
                 return (false, RESULT_NOT_FOUND);
-            
+
+            Race? raceObj = await _carRacingTournamentDbContext.Races.Where(e => e.Id == resultObj.RaceId).FirstOrDefaultAsync();
+            Team? teamObj = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == resultDto.TeamId).FirstOrDefaultAsync();
+            if (raceObj?.SeasonId != teamObj?.SeasonId)
+                return (false, "Race and team aren't in the same season");
+
+            Driver? driverObj = await _carRacingTournamentDbContext.Drivers.Where(e => e.Id == resultDto.DriverId).FirstOrDefaultAsync();
+            if (raceObj?.SeasonId == driverObj?.SeasonId)
+                return (false, "Race and driver aren't in the same season");
+
             resultObj.Position = resultDto.Position;
             resultObj.Points = resultDto.Points;
             resultObj.DriverId = resultDto.DriverId;
