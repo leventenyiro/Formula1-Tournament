@@ -6,5 +6,6 @@ namespace car_racing_tournament_api.DTO
     {
         public string Name { get; set; } = default!;
         public string? Description { get; set; }
+        public bool IsArchived { get; set; }
     }
 }

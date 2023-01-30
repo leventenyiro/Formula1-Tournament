@@ -93,6 +93,7 @@ namespace car_racing_tournament_api.Services
             
             seasonObj.Name = seasonDto.Name;
             seasonObj.Description = seasonDto.Description;
+            seasonObj.IsArchived = seasonDto.IsArchived;
             _carRacingTournamentDbContext.Seasons.Update(seasonObj);
             _carRacingTournamentDbContext.SaveChanges();
             

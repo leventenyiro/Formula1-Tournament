@@ -7,6 +7,7 @@ namespace car_racing_tournament_api.Models
         public Guid Id { get; set; }
         public string Name { get; set; } = default!;
         public string? Description { get; set; }
+        public bool IsArchived { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<UserSeason> UserSeasons { get; set; } = default!;
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
