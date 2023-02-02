@@ -32,8 +32,23 @@ namespace car_racing_tournament_api.Tests.Unit.User
         [Test]
         public async Task Success()
         {
-            var result = await _userService!.Registration(new RegistrationDto { Username = "username", Email = "test@test.com", Password = "Password1", PasswordAgain = "Password1" });
+            Assert.AreEqual(_context!.Users.Count(), 0);
+
+            var registrationDto = new RegistrationDto { 
+                Username = "username", 
+                Email = "test@test.com", 
+                Password = "Password1", 
+                PasswordAgain = "Password1" 
+            };
+            var result = await _userService!.Registration(registrationDto);
+            
             Assert.IsTrue(result.IsSuccess);
+            Assert.AreEqual(_context!.Users.Count(), 1);
+            
+            var user = _context.Users.FirstOrDefaultAsync();
+            Assert.AreEqual(user.Result!.Username, registrationDto.Username);
+            Assert.AreEqual(user.Result!.Email, registrationDto.Email);
+            Assert.AreNotEqual(user.Result!.Username, registrationDto.Password);
         }
 
         /*[Test] IT WILL BE GOOD AFTER https://github.com/leventenyiro/car-racing-tournament/issues/85

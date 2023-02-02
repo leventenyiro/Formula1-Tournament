@@ -23,7 +23,12 @@ namespace car_racing_tournament_api.Tests.Unit.User
             _context = new CarRacingTournamentDbContext(options);
 
             _id = Guid.NewGuid();
-            _context.Users.Add(new Models.User { Id = _id, Username = "username", Email = "test@test.com", Password = "$2a$10$/Mw2QNUGYbV1AIyQ8QxXC.IhNRrmjwAW9SBgUv8Vh9xX2goWsQwG." });
+            _context.Users.Add(new Models.User { 
+                Id = _id, 
+                Username = "username", 
+                Email = "test@test.com", 
+                Password = "$2a$10$/Mw2QNUGYbV1AIyQ8QxXC.IhNRrmjwAW9SBgUv8Vh9xX2goWsQwG." 
+            });
             _context.SaveChanges();
 
             var configuration = new ConfigurationBuilder()
@@ -57,5 +62,97 @@ namespace car_racing_tournament_api.Tests.Unit.User
         }
 
         // UpdateUser, UpdatePassword
+        [Test]
+        public async Task UpdateUserSuccess()
+        {
+            var updateUserDto = new UpdateUserDto
+            {
+                Username = "username",
+                Email = "test@test.com"
+            };
+            var result = await _userService!.UpdateUser(_id, updateUserDto);
+
+            Assert.IsTrue(result.IsSuccess);
+            Assert.AreEqual(_context!.Users.Count(), 1);
+
+            var user = _context.Users.FirstOrDefaultAsync();
+            Assert.AreEqual(user.Result!.Username, updateUserDto.Username);
+            Assert.AreEqual(user.Result!.Email, updateUserDto.Email);
+        }
+
+        /*[Test] IT WILL BE GOOD AFTER https://github.com/leventenyiro/car-racing-tournament/issues/85
+        public async Task AlreadyExists()
+        {
+            _context!.Users.Add(new Models.User { Username = "username", Email = "test@test.com", Password = "$2a$10$/Mw2QNUGYbV1AIyQ8QxXC.IhNRrmjwAW9SBgUv8Vh9xX2goWsQwG." });
+            _context.SaveChanges();
+
+            var registrationDto = new RegistrationDto
+            {
+                Username = "username",
+                Email = "test@test.com",
+                Password = "Password1",
+                PasswordAgain = "Password1"
+            };
+            var result = await _userService!.Registration(registrationDto);
+            Assert.IsFalse(result.IsSuccess);
+
+            registrationDto.Email = "test1@test.com";
+            result = await _userService!.Registration(registrationDto);
+            Assert.IsFalse(result.IsSuccess);
+
+            registrationDto.Username = "username1";
+            registrationDto.Email = "test@test.com";
+            result = await _userService!.Registration(registrationDto);
+            Assert.IsFalse(result.IsSuccess);
+        }*/
+
+        [Test]
+        public async Task MissingUsername()
+        {
+            var result = await _userService!.UpdateUser(_id, new UpdateUserDto
+            {
+                Username = "",
+                Email = "test@test.com"
+            });
+            Assert.IsFalse(result.IsSuccess);
+        }
+
+        [Test]
+        public async Task IncorrectUsername()
+        {
+            var result = await _userService!.UpdateUser(_id, new UpdateUserDto
+            {
+                Username = "user",
+                Email = "test@test.com"
+            });
+            Assert.IsFalse(result.IsSuccess);
+        }
+
+        [Test]
+        public async Task MissingEmail()
+        {
+            var result = await _userService!.UpdateUser(_id, new UpdateUserDto
+            {
+                Username = "username",
+                Email = ""
+            });
+            Assert.IsFalse(result.IsSuccess);
+        }
+
+        [Test]
+        public async Task IncorrectEmail()
+        {
+            var registrationDto = new UpdateUserDto
+            {
+                Username = "username",
+                Email = "test.com"
+            };
+            var result = await _userService!.UpdateUser(_id, registrationDto);
+            Assert.IsFalse(result.IsSuccess);
+
+            registrationDto.Email = "test";
+            result = await _userService!.UpdateUser(_id, registrationDto);
+            Assert.IsFalse(result.IsSuccess);
+        }
     }
 }

@@ -47,7 +47,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, SeasonOutputDto? Season, string? ErrorMessage)> GetSeasonById(Guid id)
         {
-            SeasonOutputDto season = await _carRacingTournamentDbContext.Seasons
+            SeasonOutputDto? season = await _carRacingTournamentDbContext.Seasons
                 .Where(x => x.Id == id)
                 .Include(x => x.UserSeasons)
                 .Select(x => new SeasonOutputDto
@@ -62,7 +62,7 @@ namespace car_racing_tournament_api.Services
                         Username = x.User.Username,
                         Permission = x.Permission
                     }).ToList()
-                }).FirstAsync();
+                }).FirstOrDefaultAsync();
 
             if (season == null)
                 return (false, null, SEASON_NOT_FOUND);

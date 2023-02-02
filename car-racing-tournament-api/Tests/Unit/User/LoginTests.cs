@@ -21,7 +21,11 @@ namespace car_racing_tournament_api.Tests.Unit.User
 
             _context = new CarRacingTournamentDbContext(options);
 
-            _context.Users.Add(new Models.User { Username = "username", Email = "test@test.com", Password = "$2a$10$/Mw2QNUGYbV1AIyQ8QxXC.IhNRrmjwAW9SBgUv8Vh9xX2goWsQwG." });
+            _context.Users.Add(new Models.User { 
+                Username = "username", 
+                Email = "test@test.com", 
+                Password = "$2a$10$/Mw2QNUGYbV1AIyQ8QxXC.IhNRrmjwAW9SBgUv8Vh9xX2goWsQwG." 
+            });
             _context.SaveChanges();
 
             var configuration = new ConfigurationBuilder()
