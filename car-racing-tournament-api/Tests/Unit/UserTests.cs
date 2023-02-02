@@ -3,56 +3,39 @@ using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Models;
 using car_racing_tournament_api.Services;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using NUnit.Framework;
-using System.Data.Entity.Infrastructure;
 
 namespace car_racing_tournament_api.Tests.Unit
 {
     [TestFixture]
     public class UserTests
     {
+        [SetUp]
+        public void Init()
+        {
+
+        }
+
         [Test]
         public async Task Login()
         {
-            var data = new List<User>
+            var options = new DbContextOptionsBuilder<CarRacingTournamentDbContext>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .Options;
+
+            using (var context = new CarRacingTournamentDbContext(options))
             {
-                new User
-                {
-                    Username = "username",
-                    Password = "password"
-                }
-            }.AsQueryable();
+                context.Users.Add(new User { Username = "username", Email = "test@test.com", Password = "$2a$10$/Mw2QNUGYbV1AIyQ8QxXC.IhNRrmjwAW9SBgUv8Vh9xX2goWsQwG." });
+                context.SaveChanges();
 
-            var mockSet = new Mock<DbSet<User>>();
-            mockSet.As<IDbAsyncEnumerable<User>>()
-                .Setup(m => m.GetAsyncEnumerator())
-                .Returns(new TestDbAsyncEnumerator<User>(data.GetEnumerator()));
+                var configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json")
+                    .Build();
 
-
-            // ANDRIS
-            //Context = new PriceBookDbContext(new DbContextOptionsBuilder<PriceBookDbContext>().UseInMemoryDatabase("InMemoryDb").Options);
-
-            mockSet.As<IQueryable<User>>()
-                .Setup(m => m.Provider)
-                .Returns(new TestDbAsyncQueryProvider<User>(data.Provider));
-
-            mockSet.As<IQueryable<User>>().Setup(m => m.Expression).Returns(data.Expression);
-            mockSet.As<IQueryable<User>>().Setup(m => m.ElementType).Returns(data.ElementType);
-            mockSet.As<IQueryable<User>>().Setup(m => m.GetEnumerator()).Returns(() => data.GetEnumerator());
-
-            var mockContext = new Mock<CarRacingTournamentDbContext>();
-            mockContext.Setup(c => c.Users).Returns(mockSet.Object);
-
-            var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-            var userService = new UserService(mockContext.Object, configuration);
-            //var blogs = await service.GetAllBlogsAsync();
-            var loginDto = new LoginDto { UsernameEmail = "username", Password = "password" };
-            var result = await userService.Login(loginDto);
-            Assert.IsTrue(result.IsSuccess);
+                var userService = new UserService(context, configuration);
+                var result = await userService.Login(new LoginDto { UsernameEmail = "username", Password = "Password1" });
+                Assert.IsTrue(result.IsSuccess);
+            }
         }
     }
 }
