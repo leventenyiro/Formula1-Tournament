@@ -16,9 +16,12 @@ namespace car_racing_tournament_api.Services
         private readonly CarRacingTournamentDbContext _carRacingTournamentDbContext;
         private readonly IConfiguration _configuration;
 
-        private const string INCORRECT_EMAIL_FORMAT = "It is not a valid email";
-        private const string USER_NOT_FOUND = "User not found";
+        private const string INCORRECT_EMAIL_FORMAT = "It is not a valid email!";
+        private const string USER_NOT_FOUND = "User not found!";
         private const string PASSWORD_NOT_PASS = "Passwords aren't pass!";
+        private const int USERNAME_MIN_LENGTH = 5;
+        private const string INCORRECT_USERNAME = "Username must be at least 5 character!";
+        private const string INCORRECT_PASSWORD = "Password should be minimum eight characters, at least one uppercase letter and one number!";
 
         public UserService(CarRacingTournamentDbContext carRacingTournamentDbContext, IConfiguration configuration)
         {
@@ -39,8 +42,14 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> Registration(RegistrationDto registrationDto)
         {
+            if (registrationDto.Username.Length < USERNAME_MIN_LENGTH)
+                return (false, INCORRECT_USERNAME);
+
             if (!IsEmail(registrationDto.Email))
                 return (false, INCORRECT_EMAIL_FORMAT);
+
+            if (!IsPassword(registrationDto.Password))
+                return (false, INCORRECT_PASSWORD);
 
             if (registrationDto.Password != registrationDto.PasswordAgain)
                 return (false, PASSWORD_NOT_PASS);
@@ -74,11 +83,43 @@ namespace car_racing_tournament_api.Services
             return (true, actualUser, null);
         }
 
+        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateUser(Guid id, UpdateUserDto updateUserDto)
+        {
+            if (updateUserDto.Username.Length < USERNAME_MIN_LENGTH)
+                return (false, INCORRECT_USERNAME);
+
+            if (!IsEmail(updateUserDto.Email))
+                return (false, INCORRECT_EMAIL_FORMAT);
+
+            var userObj = await _carRacingTournamentDbContext.Users.Where(e => e.Id == id).FirstOrDefaultAsync();
+            if (userObj == null)
+                return (false, USER_NOT_FOUND);
+
+            userObj.Username = updateUserDto.Username;
+            userObj.Email = updateUserDto.Email;
+            _carRacingTournamentDbContext.Users.Update(userObj);
+            _carRacingTournamentDbContext.SaveChanges();
+
+            return (true, null);
+        }
+
+        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdatePassword(Guid id, UpdatePasswordDto updatePasswordDto)
+        {
+            var userObj = await _carRacingTournamentDbContext.Users.Where(e => e.Id == id).FirstOrDefaultAsync();
+            if (userObj == null)
+                return (false, USER_NOT_FOUND);
+
+            if (updatePasswordDto.Password != updatePasswordDto.PasswordAgain)
+                return (false, PASSWORD_NOT_PASS);
+
+            userObj.Password = HashPassword(updatePasswordDto.Password);
+            _carRacingTournamentDbContext.Users.Update(userObj);
+            _carRacingTournamentDbContext.SaveChanges();
+            return (true, null);
+        }
+
         private string HashPassword(string password)
         {
-            if (!Regex.IsMatch(password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"))
-                throw new Exception("Password should be minimum eight characters, at least one uppercase letter and one number!");
-
             return BCrypt.Net.BCrypt.HashPassword(password, 10);
         }
 
@@ -106,36 +147,9 @@ namespace car_racing_tournament_api.Services
             return Regex.IsMatch(email, @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateUser(Guid id, UpdateUserDto updateUserDto)
+        private bool IsPassword(string password)
         {
-            if (!IsEmail(updateUserDto.Email))
-                return (false, INCORRECT_EMAIL_FORMAT);
-
-            var userObj = await _carRacingTournamentDbContext.Users.Where(e => e.Id == id).FirstOrDefaultAsync();
-            if (userObj == null)
-                return (false, USER_NOT_FOUND);
-            
-            userObj.Username = updateUserDto.Username;
-            userObj.Email = updateUserDto.Email;
-            _carRacingTournamentDbContext.Users.Update(userObj);
-            _carRacingTournamentDbContext.SaveChanges();
-            
-            return (true, null);
-        }
-
-        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdatePassword(Guid id, UpdatePasswordDto updatePasswordDto)
-        {
-            var userObj = await _carRacingTournamentDbContext.Users.Where(e => e.Id == id).FirstOrDefaultAsync();
-            if (userObj == null)
-                return (false, USER_NOT_FOUND);
-
-            if (updatePasswordDto.Password != updatePasswordDto.PasswordAgain)
-                return (false, PASSWORD_NOT_PASS);
-            
-            userObj.Password = HashPassword(updatePasswordDto.Password);
-            _carRacingTournamentDbContext.Users.Update(userObj);
-            _carRacingTournamentDbContext.SaveChanges();
-            return (true, null);
+            return Regex.IsMatch(password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$");
         }
     }
 }
