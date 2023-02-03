@@ -59,15 +59,5 @@ namespace car_racing_tournament_api.Services
             
             return (true, null);
         }
-
-        public async Task<(bool IsSuccess, List<UserSeason>? UserSeasons, string? ErrorMessage)> GetSeasonsByUserId(Guid userId)
-        {
-            List<UserSeason> userSeasons = await _carRacingTournamentDbContext.UserSeasons.Where(x => x.UserId == userId).ToListAsync();
-
-            if (userSeasons == null)
-                return (false, null, "Seasons not found");
-
-            return (true, userSeasons, null);
-        }
     }
 }
