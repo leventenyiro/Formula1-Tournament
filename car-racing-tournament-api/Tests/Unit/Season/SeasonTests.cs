@@ -149,5 +149,107 @@ namespace car_racing_tournament_api.Tests.Unit.User
             Assert.AreEqual(findSeason.UserSeasons.First().UserId, _userId);
             Assert.AreEqual(findSeason.UserSeasons.First().Permission, UserSeasonPermission.Admin);
         }
+
+        // AddSeasonExists
+
+        [Test]
+        public async Task AddSeasonMissingName()
+        {
+            var season = new SeasonCreateDto
+            {
+                Name = "",
+                Description = "This is my second tournament"
+            };
+
+            var result = await _seasonService!.AddSeason(season, _userId);
+            Assert.IsFalse(result.IsSuccess);
+        }
+
+        [Test]
+        public async Task AddSeasonIncorrectName()
+        {
+            var season = new SeasonCreateDto
+            {
+                Name = "test",
+                Description = "This is my second tournament"
+            };
+
+            var result = await _seasonService!.AddSeason(season, _userId);
+            Assert.IsFalse(result.IsSuccess);
+        }
+
+        [Test]
+        public async Task UpdateSeasonSuccess()
+        {
+            var season = new SeasonUpdateDto
+            {
+                Name = "test tournament",
+                Description = "This is my modified tournament",
+                IsArchived = true
+            };
+
+            var result = await _seasonService!.UpdateSeason(_id, season);
+            Assert.IsTrue(result.IsSuccess);
+
+            var findSeason = _context!.Seasons.FirstAsync().Result;
+            Assert.AreEqual(findSeason.Name, season.Name);
+            Assert.AreEqual(findSeason.Description, season.Description);
+            Assert.IsTrue(findSeason.IsArchived);
+        }
+
+        [Test]
+        public async Task UpdateSeasonMissingName()
+        {
+            var season = new SeasonUpdateDto
+            {
+                Name = "",
+                Description = "This is my second tournament",
+                IsArchived = false
+            };
+
+            var result = await _seasonService!.UpdateSeason(_id, season);
+            Assert.IsFalse(result.IsSuccess);
+        }
+
+        [Test]
+        public async Task UpdateSeasonIncorrectName()
+        {
+            var season = new SeasonUpdateDto
+            {
+                Name = "",
+                Description = "This is my second tournament",
+                IsArchived = false
+            };
+
+            var result = await _seasonService!.UpdateSeason(_id, season);
+            Assert.IsFalse(result.IsSuccess);
+        }
+
+        // archive season
+        [Test]
+        public async Task ArchiveSeasonSuccess() {
+            Assert.IsFalse(_context!.Seasons.FirstAsync().Result.IsArchived);
+
+            var result = await _seasonService!.ArchiveSeason(_id);
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsTrue(_context.Seasons.FirstAsync().Result.IsArchived);
+
+            result = await _seasonService!.ArchiveSeason(_id);
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsFalse(_context.Seasons.FirstAsync().Result.IsArchived);
+        }
+
+        // archive season with wrong id
+        [Test]
+        public async Task ArchiveSeasonWrongId()
+        {
+            var result = await _seasonService!.ArchiveSeason(Guid.NewGuid());
+            Assert.IsFalse(result.IsSuccess);
+        }
+
+        // delete season
+
+        // get seasons by userId
+        // with wrong too
     }
 }

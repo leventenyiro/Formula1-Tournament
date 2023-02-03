@@ -14,6 +14,8 @@ namespace car_racing_tournament_api.Services
         private IMapper _mapper;
 
         private const string SEASON_NOT_FOUND = "Season not found";
+        private const int SEASON_NAME_MIN_LENGTH = 5;
+        private const string INCORRECT_SEASON_NAME = "Season name must be at least 5 characters";
 
         public SeasonService(CarRacingTournamentDbContext carRacingTournamentDbContext, IMapper mapper)
         {
@@ -75,6 +77,9 @@ namespace car_racing_tournament_api.Services
             if (seasonDto == null)
                 return (false, Guid.Empty, "Please provide the season data");
 
+            if (seasonDto.Name.Length < SEASON_NAME_MIN_LENGTH)
+                return (false, Guid.Empty, INCORRECT_SEASON_NAME);
+
             var season = _mapper.Map<Season>(seasonDto);
             season.Id = Guid.NewGuid();
             season.IsArchived = false;
@@ -93,7 +98,10 @@ namespace car_racing_tournament_api.Services
             var seasonObj = await _carRacingTournamentDbContext.Seasons.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (seasonObj == null)
                 return (false, SEASON_NOT_FOUND);
-            
+
+            if (seasonDto.Name.Length < SEASON_NAME_MIN_LENGTH)
+                return (false, INCORRECT_SEASON_NAME);
+
             seasonObj.Name = seasonDto.Name;
             seasonObj.Description = seasonDto.Description;
             seasonObj.IsArchived = seasonDto.IsArchived;

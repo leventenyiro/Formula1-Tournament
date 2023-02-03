@@ -20,7 +20,7 @@ namespace car_racing_tournament_api.Services
         private const string USER_NOT_FOUND = "User not found!";
         private const string PASSWORD_NOT_PASS = "Passwords aren't pass!";
         private const int USERNAME_MIN_LENGTH = 5;
-        private const string INCORRECT_USERNAME = "Username must be at least 5 character!";
+        private const string INCORRECT_USERNAME = "Username must be at least 5 characters!";
         private const string INCORRECT_PASSWORD = "Password should be minimum eight characters, at least one uppercase letter and one number!";
 
         public UserService(CarRacingTournamentDbContext carRacingTournamentDbContext, IConfiguration configuration)
