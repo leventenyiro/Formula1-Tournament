@@ -366,7 +366,10 @@ namespace car_racing_tournament_api.Services
         {
             if (raceDto == null)
                 return (false, "Please provide the race data");
-            
+
+            if (string.IsNullOrEmpty(raceDto.Name))
+                return (false, "Race name cannot be empty!");
+
             var race = _mapper.Map<Race>(raceDto);
             race.Id = Guid.NewGuid();
             race.SeasonId = seasonId;

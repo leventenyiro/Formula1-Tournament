@@ -83,6 +83,14 @@ namespace car_racing_tournament_api.Tests.Unit.User
                     driver
                 },
                 Races = new List<Race>()
+                {
+                    new Race
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "First Race",
+                        DateTime = new DateTime(2023, 1, 1)
+                    }
+                }
             });
             _context.SaveChanges();
 
@@ -483,19 +491,18 @@ namespace car_racing_tournament_api.Tests.Unit.User
         [Test]
         public async Task AddTeamSuccess()
         {
-            var season = _context!.Seasons.Where(x => x.Id == _seasonId).FirstOrDefault();
             var teamDto = new TeamDto
             {
                 Name = "AddTeam1",
                 Color = "123123"
             };
-            var result = await _seasonService!.AddTeam(season!.Id, teamDto);
+            var result = await _seasonService!.AddTeam(_seasonId, teamDto);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
-            Assert.AreEqual(_context.Seasons.FirstOrDefaultAsync().Result!.Teams!.Count, 2);
+            Assert.AreEqual(_context!.Seasons.FirstOrDefaultAsync().Result!.Teams!.Count, 2);
 
             teamDto.Color = "#123123";
-            result = await _seasonService!.AddTeam(season!.Id, teamDto);
+            result = await _seasonService!.AddTeam(_seasonId, teamDto);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
             Assert.AreEqual(_context.Seasons.FirstOrDefaultAsync().Result!.Teams!.Count, 3);
@@ -506,13 +513,12 @@ namespace car_racing_tournament_api.Tests.Unit.User
         [Test]
         public async Task AddTeamMissingName()
         {
-            var season = _context!.Seasons.Where(x => x.Id == _seasonId).FirstOrDefault();
             var teamDto = new TeamDto
             {
                 Name = "",
                 Color = "123123"
             };
-            var result = await _seasonService!.AddTeam(season!.Id, teamDto);
+            var result = await _seasonService!.AddTeam(_seasonId, teamDto);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
         }
@@ -520,23 +526,22 @@ namespace car_racing_tournament_api.Tests.Unit.User
         [Test]
         public async Task AddTeamIncorrectColorCode()
         {
-            var season = _context!.Seasons.Where(x => x.Id == _seasonId).FirstOrDefault();
             var teamDto = new TeamDto
             {
                 Name = "AddTeam1",
                 Color = "WRONGC"
             };
-            var result = await _seasonService!.AddTeam(season!.Id, teamDto);
+            var result = await _seasonService!.AddTeam(_seasonId, teamDto);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
 
             teamDto.Color = "#WRONGC";
-            result = await _seasonService!.AddTeam(season!.Id, teamDto);
+            result = await _seasonService!.AddTeam(_seasonId, teamDto);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
 
             teamDto.Color = "QWEQWEWRONGC";
-            result = await _seasonService!.AddTeam(season!.Id, teamDto);
+            result = await _seasonService!.AddTeam(_seasonId, teamDto);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
         }
@@ -548,7 +553,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
             Assert.IsNotNull(result.Races!);
-            Assert.AreEqual(result.Races!.Count, 0);
+            Assert.AreEqual(result.Races!.Count, 1);
         }
 
         [Test]
@@ -562,11 +567,9 @@ namespace car_racing_tournament_api.Tests.Unit.User
 
         // Races exists
 
-        // add races
         [Test]
         public async Task AddRaceSuccess()
         {
-            var season = _context!.Seasons.Where(x => x.Id == _seasonId).FirstOrDefault();
             var raceDto = new RaceDto
             {
                 Name = "Australian Grand Prix",
@@ -575,13 +578,26 @@ namespace car_racing_tournament_api.Tests.Unit.User
             var result = await _seasonService!.AddRace(_seasonId, raceDto);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
-            Assert.AreEqual(_context.Seasons.FirstOrDefaultAsync().Result!.Races!.Count, 1);
+            Assert.AreEqual(_context!.Seasons.FirstOrDefaultAsync().Result!.Races!.Count, 2);
 
             raceDto.DateTime = new DateTime();
             result = await _seasonService!.AddRace(_seasonId, raceDto);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
-            Assert.AreEqual(_context.Seasons.FirstOrDefaultAsync().Result!.Races!.Count, 2);
+            Assert.AreEqual(_context.Seasons.FirstOrDefaultAsync().Result!.Races!.Count, 3);
+        }
+
+        [Test]
+        public async Task AddRaceMissingName()
+        {
+            var raceDto = new RaceDto
+            {
+                Name = "",
+                DateTime = new DateTime(2023, 10, 10)
+            };
+            var result = await _seasonService!.AddRace(_seasonId, raceDto);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.IsNotEmpty(result.ErrorMessage);
         }
     }
 }
