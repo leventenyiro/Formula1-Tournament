@@ -1,16 +1,13 @@
 ﻿using AutoMapper;
 using car_racing_tournament_api.Data;
 using car_racing_tournament_api.DTO;
-using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
 using car_racing_tournament_api.Profiles;
 using car_racing_tournament_api.Services;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using NUnit.Framework;
-using System.Xml.Linq;
 
-namespace car_racing_tournament_api.Tests.Unit.User
+namespace car_racing_tournament_api.Tests.Unit
 {
     [TestFixture]
     public class SeasonTests
@@ -49,7 +46,8 @@ namespace car_racing_tournament_api.Tests.Unit.User
             };
 
             _seasonId = Guid.NewGuid();
-            _context.Seasons.Add(new Season { 
+            _context.Seasons.Add(new Season
+            {
                 Id = _seasonId,
                 Name = "Test Season",
                 Description = "This is our test season",
@@ -102,7 +100,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
 
             _seasonService = new SeasonService(_context, mapper);
         }
-        
+
         [Test]
         public async Task GetSeasonsSuccess()
         {
@@ -242,7 +240,8 @@ namespace car_racing_tournament_api.Tests.Unit.User
         }
 
         [Test]
-        public async Task ArchiveSeasonSuccess() {
+        public async Task ArchiveSeasonSuccess()
+        {
             Assert.IsFalse(_context!.Seasons.FirstAsync().Result.IsArchived);
 
             var result = await _seasonService!.ArchiveSeason(_seasonId);
@@ -422,7 +421,8 @@ namespace car_racing_tournament_api.Tests.Unit.User
         public async Task AddDriverWithAnotherSeasonTeam()
         {
             var anotherSeasonId = Guid.NewGuid();
-            _context!.Seasons.Add(new Season {
+            _context!.Seasons.Add(new Season
+            {
                 Id = anotherSeasonId,
                 Name = "Test Season",
                 Description = "This is our test season",
