@@ -1,5 +1,7 @@
-﻿using AutoMapper;
+﻿using System.Numerics;
+using AutoMapper;
 using car_racing_tournament_api.Data;
+using car_racing_tournament_api.Models;
 using car_racing_tournament_api.Profiles;
 using car_racing_tournament_api.Services;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +23,16 @@ namespace car_racing_tournament_api.Tests.Unit
                 .Options;
 
             _context = new CarRacingTournamentDbContext(options);
+
+            Race race = new Race
+            {
+                Id = Guid.NewGuid(),
+                Name = "My first race",
+                DateTime = new DateTime(2023, 1, 1, 18, 0, 0),
+                Results = new List‹Result›() {
+                    new Result 
+                }
+            };
 
             var mockMapper = new MapperConfiguration(cfg =>
             {
