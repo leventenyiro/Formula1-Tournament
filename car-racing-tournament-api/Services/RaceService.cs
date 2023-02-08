@@ -63,6 +63,9 @@ namespace car_racing_tournament_api.Services
             if (raceObj == null)
                 return (false, RACE_NOT_FOUND);
 
+            if (string.IsNullOrEmpty(raceDto.Name))
+                return (false, "Race name cannot be empty!");
+
             raceObj.Name = raceDto.Name;
             raceObj.DateTime = raceDto.DateTime;
             _carRacingTournamentDbContext.Races.Update(raceObj);

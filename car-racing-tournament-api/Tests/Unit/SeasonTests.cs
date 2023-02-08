@@ -177,6 +177,7 @@ namespace car_racing_tournament_api.Tests.Unit
 
             var result = await _seasonService!.AddSeason(season, _userId);
             Assert.IsFalse(result.IsSuccess);
+            Assert.IsNotEmpty(result.ErrorMessage);
         }
 
         [Test]
@@ -190,6 +191,7 @@ namespace car_racing_tournament_api.Tests.Unit
 
             var result = await _seasonService!.AddSeason(season, _userId);
             Assert.IsFalse(result.IsSuccess);
+            Assert.IsNotEmpty(result.ErrorMessage);
         }
 
         [Test]
@@ -223,6 +225,7 @@ namespace car_racing_tournament_api.Tests.Unit
 
             var result = await _seasonService!.UpdateSeason(_seasonId, season);
             Assert.IsFalse(result.IsSuccess);
+            Assert.IsNotEmpty(result.ErrorMessage);
         }
 
         [Test]
@@ -230,7 +233,7 @@ namespace car_racing_tournament_api.Tests.Unit
         {
             var season = new SeasonUpdateDto
             {
-                Name = "",
+                Name = "test",
                 Description = "This is my second tournament",
                 IsArchived = false
             };
@@ -303,7 +306,7 @@ namespace car_racing_tournament_api.Tests.Unit
         [Test]
         public async Task GetDriversBySeasonIdSuccess()
         {
-            var result = await _seasonService!.GetDriversBySeasonId(_context!.Seasons.FirstOrDefaultAsync().Result!.Id);
+            var result = await _seasonService!.GetDriversBySeasonId(_seasonId);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
             Assert.IsNotNull(result.Drivers!);
