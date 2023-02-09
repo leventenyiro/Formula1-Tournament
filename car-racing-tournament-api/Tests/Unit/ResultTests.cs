@@ -55,7 +55,8 @@ namespace car_racing_tournament_api.Tests.Unit
                     Id = Guid.NewGuid(),
                     Name = "FirstRace",
                     Season = season
-                }
+                },
+                Team = team
             });
             _context.SaveChanges();
 
@@ -65,13 +66,23 @@ namespace car_racing_tournament_api.Tests.Unit
         [Test]
         public async Task GetResultByIdSuccess()
         {
+            var result = await _resultService!.GetResultById(_resultId);
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNull(result.ErrorMessage);
 
+            Result resultOutput = result.Result!;
+            Assert.AreEqual(resultOutput.Id, _context!.Results.First().Id);
+            Assert.AreEqual(resultOutput.Points, _context!.Results.First().Points);
+            Assert.AreEqual(resultOutput.Position, _context!.Results.First().Position);
         }
 
         [Test]
         public async Task GetRaceByIdNotFound()
         {
-
+            var result = await _resultService!.GetResultById(Guid.NewGuid());
+            Assert.IsFalse(result.IsSuccess);
+            Assert.IsNotEmpty(result.ErrorMessage);
+            Assert.IsNull(result.Result);
         }
 
         // UpdateResult
@@ -226,7 +237,7 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
 
-            Assert.IsEmpty(_context.Races);
+            Assert.IsEmpty(_context.Results);
         }
 
         [Test]
