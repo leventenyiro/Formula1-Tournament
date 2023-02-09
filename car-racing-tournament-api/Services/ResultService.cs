@@ -59,8 +59,14 @@ namespace car_racing_tournament_api.Services
                 return (false, "Race and team aren't in the same season");
 
             Driver? driverObj = await _carRacingTournamentDbContext.Drivers.Where(e => e.Id == resultDto.DriverId).FirstOrDefaultAsync();
-            if (raceObj?.SeasonId == driverObj?.SeasonId)
+            if (raceObj?.SeasonId != driverObj?.SeasonId)
                 return (false, "Race and driver aren't in the same season");
+
+            if (resultDto.Position <= 0)
+                return (false, "Position must be at least 1!");
+
+            if (resultDto.Points < 0)
+                return (false, "Points must be at least 0!");
 
             resultObj.Position = resultDto.Position;
             resultObj.Points = resultDto.Points;
