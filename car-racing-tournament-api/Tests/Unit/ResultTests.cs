@@ -77,7 +77,7 @@ namespace car_racing_tournament_api.Tests.Unit
         }
 
         [Test]
-        public async Task GetRaceByIdNotFound()
+        public async Task GetResultByIdNotFound()
         {
             var result = await _resultService!.GetResultById(Guid.NewGuid());
             Assert.IsFalse(result.IsSuccess);

@@ -51,6 +51,15 @@ namespace car_racing_tournament_api.Services
             if (driverObj == null)
                 return (false, DRIVER_NOT_FOUND);
 
+            if (driverDto == null)
+                return (false, "Please provide the driver data!");
+
+            if (driverDto.Name.Length == 0)
+                return (false, "Driver name cannot be empty!");
+
+            if (driverDto.Number <= 0 || driverDto.Number >= 100)
+                return (false, "Driver number must be between 1 and 99!");
+
             if (driverDto.ActualTeamId != null)
             {
                 Team? teamObj = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == driverDto!.ActualTeamId).FirstOrDefaultAsync();
@@ -74,7 +83,7 @@ namespace car_racing_tournament_api.Services
             if (driverObj == null)
                 return (false, DRIVER_NOT_FOUND);
 
-            if (teamId == Guid.Empty)
+            if (teamId != Guid.Empty)
             {
                 Team? teamObj = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == teamId).FirstOrDefaultAsync();
                 if (driverObj.SeasonId != teamObj!.SeasonId)

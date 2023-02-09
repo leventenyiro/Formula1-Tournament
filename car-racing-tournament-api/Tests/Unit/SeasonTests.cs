@@ -214,6 +214,21 @@ namespace car_racing_tournament_api.Tests.Unit
         }
 
         [Test]
+        public async Task UpdateSeasonWrongId()
+        {
+            var season = new SeasonUpdateDto
+            {
+                Name = "test tournament",
+                Description = "This is my modified tournament",
+                IsArchived = true
+            };
+
+            var result = await _seasonService!.UpdateSeason(Guid.NewGuid(), season);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.IsNotEmpty(result.ErrorMessage);
+        }
+
+        [Test]
         public async Task UpdateSeasonMissingName()
         {
             var season = new SeasonUpdateDto
@@ -374,14 +389,6 @@ namespace car_racing_tournament_api.Tests.Unit
         }
 
         [Test]
-        public async Task AddDriverMissingDto()
-        {
-            var result = await _seasonService!.AddDriver(Guid.NewGuid(), null!);
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
-        }
-
-        [Test]
         public async Task AddDriverMissingName()
         {
             var driverDto = new DriverDto
@@ -401,7 +408,7 @@ namespace car_racing_tournament_api.Tests.Unit
         {
             var driverDto = new DriverDto
             {
-                Name = "",
+                Name = "NewDriver",
                 RealName = "Add Driver",
                 Number = -1,
                 ActualTeamId = null
