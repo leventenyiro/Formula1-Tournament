@@ -85,7 +85,6 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNull(result.Result);
         }
 
-        // UpdateResult
         [Test]
         public async Task UpdateResultSuccess()
         {
@@ -108,6 +107,8 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.AreEqual(findResult.DriverId, resultDto.DriverId);
             Assert.AreEqual(findResult.TeamId, resultDto.TeamId);
         }
+
+        // update - result already exists
 
         [Test]
         public async Task UpdateResultMissingIds()
@@ -176,57 +177,36 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
         }
 
-        /*[Test] ADD RESULT WITH ANOTHER SEASON ID
-        public async Task AddDriverWithAnotherSeasonTeam()
+        [Test]
+        public async Task UpdateDriverWithAnotherSeason()
         {
-            var anotherSeasonId = Guid.NewGuid();
-            _context!.Seasons.Add(new Season
+            var anotherRaceId = Guid.NewGuid();
+            _context!.Races.Add(new Race
             {
-                Id = anotherSeasonId,
-                Name = "Test Season",
-                Description = "This is our test season",
-                IsArchived = false,
-                UserSeasons = new List<UserSeason>()
-                {
-                    new UserSeason
-                    {
-                        Id = Guid.NewGuid(),
-                        UserId = _userId,
-                        Permission = UserSeasonPermission.Admin
-                    }
-                },
-                Teams = new List<Team>()
-                {
-                    new Team
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = "Test Team",
-                        Color = "FF0000",
-                        Drivers = new List<Driver>(),
-                        Results = new List<Result>(),
-                        SeasonId = anotherSeasonId
-                    }
-                },
-                Drivers = new List<Driver>(),
-                Races = new List<Race>()
+                Id = anotherRaceId,
+                Name = "Another race",
+                SeasonId = Guid.NewGuid()
             });
             _context.SaveChanges();
 
-            var driverDto = new DriverDto
+            var resultDto = new ResultDto
             {
-                Name = "AddDriver1",
-                RealName = "Add Driver",
-                Number = 2,
-                ActualTeamId = _context.Seasons
-                    .Where(x => x.Id == anotherSeasonId)
-                    .FirstOrDefaultAsync().Result!.Teams!
-                    .FirstOrDefault()!.Id
+                Points = 5,
+                Position = 5,
+                DriverId = Guid.NewGuid(),
+                TeamId = _context.Teams.FirstOrDefaultAsync().Result!.Id,
             };
 
-            var result = await _seasonService!.AddDriver(_seasonId, driverDto);
+            var result = await _resultService!.UpdateResult(_resultId, resultDto);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
-        }*/
+
+            resultDto.DriverId = _context.Drivers.FirstOrDefaultAsync().Result!.Id;
+            resultDto.TeamId = Guid.NewGuid();
+            result = await _resultService!.UpdateResult(_resultId, resultDto);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.IsNotEmpty(result.ErrorMessage);
+        }
 
         [Test]
         public async Task DeleteResultSuccess()
