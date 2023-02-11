@@ -9,6 +9,8 @@ namespace car_racing_tournament_api.Services
     {
         private readonly CarRacingTournamentDbContext _carRacingTournamentDbContext;
 
+        private const string SEASON_NOT_FOUND = "Season not found";
+
         public UserSeasonService(CarRacingTournamentDbContext carRacingTournamentDbContext)
         {
             _carRacingTournamentDbContext = carRacingTournamentDbContext;
@@ -34,6 +36,10 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> AddAdmin(Guid userId, Guid seasonId)
         {
+            var season = await _carRacingTournamentDbContext.Seasons.Where(e => e.Id == seasonId).FirstOrDefaultAsync();
+            if (season == null)
+                return (false, SEASON_NOT_FOUND);
+
             await _carRacingTournamentDbContext.UserSeasons.AddAsync(new UserSeason { Id = new Guid(), UserId = userId, SeasonId = seasonId, Permission = UserSeasonPermission.Admin });
             _carRacingTournamentDbContext.SaveChanges();
 
@@ -41,7 +47,11 @@ namespace car_racing_tournament_api.Services
         }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> AddModerator(Guid adminId, Guid moderatorId, Guid seasonId)
-        {            
+        {
+            var season = await _carRacingTournamentDbContext.Seasons.Where(e => e.Id == seasonId).FirstOrDefaultAsync();
+            if (season == null)
+                return (false, SEASON_NOT_FOUND);
+
             await _carRacingTournamentDbContext.UserSeasons.AddAsync(new UserSeason { Id = new Guid(), UserId = moderatorId, SeasonId = seasonId, Permission = UserSeasonPermission.Moderator });
             _carRacingTournamentDbContext.SaveChanges();
 
