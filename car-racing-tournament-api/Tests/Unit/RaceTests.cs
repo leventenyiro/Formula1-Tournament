@@ -83,7 +83,11 @@ namespace car_racing_tournament_api.Tests.Unit
             });
             var mapper = mockMapper.CreateMapper();
 
-            _raceService = new RaceService(_context, mapper);
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            _raceService = new RaceService(_context, mapper, configuration);
         }
 
         [Test]
