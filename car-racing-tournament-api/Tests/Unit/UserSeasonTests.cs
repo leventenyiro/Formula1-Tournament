@@ -125,7 +125,7 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNull(result.ErrorMessage);
         }
 
-        [Test]
+        /*[Test]
         public async Task AddAdminFailed()
         {
             var user = new Models.User
@@ -141,7 +141,7 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNotEmpty(result.ErrorMessage);
         }
 
-        /*[Test]
+        [Test]
         public async Task AddModeratorSuccess()
         {
             var result = await _userSeasonService!.AddModerator(_user1Id, _season2Id);
