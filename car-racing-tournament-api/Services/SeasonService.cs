@@ -3,7 +3,6 @@ using car_racing_tournament_api.Data;
 using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
-using Castle.Components.DictionaryAdapter.Xml;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 
@@ -13,15 +12,13 @@ namespace car_racing_tournament_api.Services
     {
         private readonly CarRacingTournamentDbContext _carRacingTournamentDbContext;
         private IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-        private const string SEASON_NOT_FOUND = "Season not found";
-        private const int SEASON_NAME_MIN_LENGTH = 5;
-        private const string INCORRECT_SEASON_NAME = "Season name must be at least 5 characters";
-
-        public SeasonService(CarRacingTournamentDbContext carRacingTournamentDbContext, IMapper mapper)
+        public SeasonService(CarRacingTournamentDbContext carRacingTournamentDbContext, IMapper mapper, IConfiguration configuration)
         {
             _carRacingTournamentDbContext = carRacingTournamentDbContext;
             _mapper = mapper;
+            _configuration = configuration;
         }
 
         public async Task<(bool IsSuccess, List<SeasonOutputDto>? Seasons, string? ErrorMessage)> GetSeasons()
@@ -43,7 +40,7 @@ namespace car_racing_tournament_api.Services
                 }).ToListAsync();
 
             if (seasons == null)
-                return (false, null, SEASON_NOT_FOUND);
+                return (false, null, _configuration["ErrorMessages:SeasonNotFound"]);
             
             return (true, seasons, null);
         }
@@ -68,7 +65,7 @@ namespace car_racing_tournament_api.Services
                 }).FirstOrDefaultAsync();
 
             if (season == null)
-                return (false, null, SEASON_NOT_FOUND);
+                return (false, null, _configuration["ErrorMessages:SeasonNotFound"]);
             
             return (true, season, null);
         }
@@ -76,10 +73,13 @@ namespace car_racing_tournament_api.Services
         public async Task<(bool IsSuccess, Guid SeasonId, string? ErrorMessage)> AddSeason(SeasonCreateDto seasonDto, Guid userId)
         {
             if (seasonDto == null)
-                return (false, Guid.Empty, "Please provide the season data");
+                return (false, Guid.Empty, _configuration["ErrorMessages:MissingSeason"]);
 
-            if (seasonDto.Name.Length < SEASON_NAME_MIN_LENGTH)
-                return (false, Guid.Empty, INCORRECT_SEASON_NAME);
+            if (seasonDto.Name.Length < int.Parse(_configuration["Validation:SeasonNameMinLength"]))
+                return (false, Guid.Empty, String.Format(
+                    _configuration["ErrorMessages:SeasonName"],
+                    _configuration["Validation:SeasonNameMinLength"]
+                ));
 
             var season = _mapper.Map<Season>(seasonDto);
             season.Id = Guid.NewGuid();
@@ -98,10 +98,13 @@ namespace car_racing_tournament_api.Services
         {
             var seasonObj = await _carRacingTournamentDbContext.Seasons.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (seasonObj == null)
-                return (false, SEASON_NOT_FOUND);
+                return (false, _configuration["ErrorMessages:SeasonNotFound"]);
 
-            if (seasonDto.Name.Length < SEASON_NAME_MIN_LENGTH)
-                return (false, INCORRECT_SEASON_NAME);
+            if (seasonDto.Name.Length < int.Parse(_configuration["Validation:SeasonNameMinLength"]))
+                return (false, String.Format(
+                    _configuration["ErrorMessages:SeasonName"],
+                    _configuration["Validation:SeasonNameMinLength"]
+                ));
 
             seasonObj.Name = seasonDto.Name;
             seasonObj.Description = seasonDto.Description;
@@ -116,7 +119,7 @@ namespace car_racing_tournament_api.Services
         {
             var seasonObj = await _carRacingTournamentDbContext.Seasons.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (seasonObj == null)
-                return (false, SEASON_NOT_FOUND);
+                return (false, _configuration["ErrorMessages:SeasonNotFound"]);
 
             seasonObj.IsArchived = !seasonObj.IsArchived;
             _carRacingTournamentDbContext.Seasons.Update(seasonObj);
@@ -129,7 +132,7 @@ namespace car_racing_tournament_api.Services
         {
             var season = await _carRacingTournamentDbContext.Seasons.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (season == null)
-                return (false, SEASON_NOT_FOUND);
+                return (false, _configuration["ErrorMessages:SeasonNotFound"]);
             
             _carRacingTournamentDbContext.Seasons.Remove(season);
 
@@ -144,7 +147,7 @@ namespace car_racing_tournament_api.Services
         public async Task<(bool IsSuccess, List<SeasonOutputDto>? Seasons, string? ErrorMessage)> GetSeasonsByUserId(Guid userId)
         {
             if (_carRacingTournamentDbContext.Users.Where(x => x.Id == userId).FirstOrDefaultAsync().Result == null)
-                return (false, null, "User not found!");
+                return (false, null, _configuration["ErrorMessages:UserNotFound"]);
 
             var userSeasons = await _carRacingTournamentDbContext.UserSeasons
                 .Where(x => x.UserId == userId)
@@ -174,7 +177,7 @@ namespace car_racing_tournament_api.Services
         public async Task<(bool IsSuccess, List<Driver>? Drivers, string? ErrorMessage)> GetDriversBySeasonId(Guid seasonId)
         {
             if (_carRacingTournamentDbContext.Seasons.Where(x => x.Id == seasonId).FirstOrDefaultAsync().Result == null)
-                return (false, null, SEASON_NOT_FOUND);
+                return (false, null, _configuration["ErrorMessages:SeasonNotFound"]);
 
             var drivers = await _carRacingTournamentDbContext.Drivers
                 .Where(x => x.SeasonId == seasonId)
@@ -219,22 +222,25 @@ namespace car_racing_tournament_api.Services
         public async Task<(bool IsSuccess, string? ErrorMessage)> AddDriver(Guid seasonId, DriverDto driverDto)
         {
             if (_carRacingTournamentDbContext.Seasons.Where(x => x.Id == seasonId).FirstOrDefaultAsync().Result == null)
-                return (false, SEASON_NOT_FOUND);
+                return (false, _configuration["ErrorMessages:SeasonNotFound"]);
 
             if (driverDto == null)
-                return (false, "Please provide the driver data!");
+                return (false, _configuration["ErrorMessages:MissingDriver"]);
 
             if (driverDto.Name.Length == 0)
-                return (false, "Driver name cannot be empty!");
+                return (false, String.Format(
+                    _configuration["ErrorMessages:DriverName"],
+                    _configuration["Validation:DriverNameMinLength"]
+                ));
 
             if (driverDto.Number <= 0 || driverDto.Number >= 100)
-                return (false, "Driver number must be between 1 and 99!");
+                return (false, _configuration["ErrorMessages:DriverNumber"]);
 
             if (driverDto.ActualTeamId != null)
             {
                 Team? teamObj = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == driverDto!.ActualTeamId).FirstOrDefaultAsync();
                 if (seasonId != teamObj!.SeasonId)
-                    return (false, "Driver and team aren't in the same season");
+                    return (false, _configuration["ErrorMessages:DriverTeamNotSameSeason"]);
             }
 
             var driver = _mapper.Map<Driver>(driverDto);
@@ -249,7 +255,7 @@ namespace car_racing_tournament_api.Services
         public async Task<(bool IsSuccess, List<Team>? Teams, string? ErrorMessage)> GetTeamsBySeasonId(Guid seasonId)
         {
             if (_carRacingTournamentDbContext.Seasons.Where(x => x.Id == seasonId).FirstOrDefaultAsync().Result == null)
-                return (false, null, SEASON_NOT_FOUND);
+                return (false, null, _configuration["ErrorMessages:SeasonNotFound"]);
 
             var teams = await _carRacingTournamentDbContext.Teams
                 .Where(x => x.SeasonId == seasonId)
@@ -295,10 +301,10 @@ namespace car_racing_tournament_api.Services
         public async Task<(bool IsSuccess, string? ErrorMessage)> AddTeam(Guid seasonId, TeamDto teamDto)
         {
             if (teamDto == null)
-                return (false, "Please provide the team data!");
+                return (false, _configuration["ErrorMessages:MissingTeam"]);
 
             if (string.IsNullOrEmpty(teamDto.Name))
-                return (false, "Team name cannot be empty!");
+                return (false, _configuration["ErrorMessages:TeamName"]);
 
             Team teamObj = new Team
             {
@@ -316,7 +322,7 @@ namespace car_racing_tournament_api.Services
             }
             catch (Exception)
             {
-                return (false, "Incorrect color code");
+                return (false, _configuration["ErrorMessages:TeamColor"]);
             }
             await _carRacingTournamentDbContext.Teams.AddAsync(teamObj);
             _carRacingTournamentDbContext.SaveChanges();
@@ -327,7 +333,7 @@ namespace car_racing_tournament_api.Services
         public async Task<(bool IsSuccess, List<Race>? Races, string? ErrorMessage)> GetRacesBySeasonId(Guid seasonId)
         {
             if (_carRacingTournamentDbContext.Seasons.Where(x => x.Id == seasonId).FirstOrDefaultAsync().Result == null)
-                return (false, null, SEASON_NOT_FOUND);
+                return (false, null, _configuration["ErrorMessages:SeasonNotFound"]);
 
             var races = await _carRacingTournamentDbContext.Races
                 .Where(x => x.SeasonId == seasonId)
@@ -365,10 +371,10 @@ namespace car_racing_tournament_api.Services
         public async Task<(bool IsSuccess, string? ErrorMessage)> AddRace(Guid seasonId, RaceDto raceDto)
         {
             if (raceDto == null)
-                return (false, "Please provide the race data");
+                return (false, _configuration["ErrorMessages:MissingRace"]);
 
             if (string.IsNullOrEmpty(raceDto.Name))
-                return (false, "Race name cannot be empty!");
+                return (false, _configuration["ErrorMessages:RaceName"]);
 
             var race = _mapper.Map<Race>(raceDto);
             race.Id = Guid.NewGuid();

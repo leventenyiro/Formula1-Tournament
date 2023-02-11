@@ -10,12 +10,12 @@ namespace car_racing_tournament_api.Services
     public class TeamService : ITeam
     {
         private readonly CarRacingTournamentDbContext _carRacingTournamentDbContext;
+        private readonly IConfiguration _configuration;
 
-        private const string TEAM_NOT_FOUND = "Team not found";
-
-        public TeamService(CarRacingTournamentDbContext carRacingTournamentDbContext)
+        public TeamService(CarRacingTournamentDbContext carRacingTournamentDbContext, IConfiguration configuration)
         {
             _carRacingTournamentDbContext = carRacingTournamentDbContext;
+            _configuration = configuration;
         }
 
         public async Task<(bool IsSuccess, Team? Team, string? ErrorMessage)> GetTeamById(Guid id)
@@ -58,7 +58,7 @@ namespace car_racing_tournament_api.Services
                     }).ToList()
                 }).FirstOrDefaultAsync();
             if (team == null)
-                return (false, null, TEAM_NOT_FOUND);
+                return (false, null, _configuration["ErrorMessages:TeamNotFound"]);
             
             return (true, team, null);
         }
@@ -67,10 +67,10 @@ namespace car_racing_tournament_api.Services
         {
             var teamObj = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (teamObj == null)
-                return (false, TEAM_NOT_FOUND);
+                return (false, _configuration["ErrorMessages:TeamNotFound"]);
 
             if (string.IsNullOrEmpty(teamDto.Name))
-                return (false, "Team name cannot be empty!");
+                return (false, _configuration["ErrorMessages:TeamName"]);
 
             teamObj.Name = teamDto.Name;
             try
@@ -80,7 +80,7 @@ namespace car_racing_tournament_api.Services
             }
             catch (Exception)
             {
-                return (false, "Incorrect color code");
+                return (false, _configuration["ErrorMessages:TeamColor"]);
             }
             _carRacingTournamentDbContext.Teams.Update(teamObj);
             _carRacingTournamentDbContext.SaveChanges();
@@ -92,7 +92,7 @@ namespace car_racing_tournament_api.Services
         {
             var team = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (team == null)
-                return (false, TEAM_NOT_FOUND);
+                return (false, _configuration["ErrorMessages:TeamNotFound"]);
 
             _carRacingTournamentDbContext.Teams.Remove(team);
             _carRacingTournamentDbContext.SaveChanges();

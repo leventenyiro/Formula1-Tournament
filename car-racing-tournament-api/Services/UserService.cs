@@ -16,13 +16,6 @@ namespace car_racing_tournament_api.Services
         private readonly CarRacingTournamentDbContext _carRacingTournamentDbContext;
         private readonly IConfiguration _configuration;
 
-        private const string INCORRECT_EMAIL_FORMAT = "It is not a valid email!";
-        private const string USER_NOT_FOUND = "User not found!";
-        private const string PASSWORD_NOT_PASS = "Passwords aren't pass!";
-        private const int USERNAME_MIN_LENGTH = 5;
-        private const string INCORRECT_USERNAME = "Username must be at least 5 characters!";
-        private const string INCORRECT_PASSWORD = "Password should be minimum eight characters, at least one uppercase letter and one number!";
-
         public UserService(CarRacingTournamentDbContext carRacingTournamentDbContext, IConfiguration configuration)
         {
             _carRacingTournamentDbContext = carRacingTournamentDbContext;
@@ -33,26 +26,29 @@ namespace car_racing_tournament_api.Services
         {
             var actualUser = await _carRacingTournamentDbContext.Users.Where(x => x.Username == loginDto.UsernameEmail || x.Email == loginDto.UsernameEmail).FirstOrDefaultAsync();
             if (actualUser == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, actualUser.Password))
-                return (false, null, "Incorrect username or password!");
+                return (false, null, _configuration["ErrorMessages:LoginDetails"]);
 
             string token = CreateToken(actualUser);
 
-            return (true, token, "Successful login");
+            return (true, token, _configuration["SuccessMessages:Login"]);
         }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> Registration(RegistrationDto registrationDto)
         {
-            if (registrationDto.Username.Length < USERNAME_MIN_LENGTH)
-                return (false, INCORRECT_USERNAME);
+            if (registrationDto.Username.Length < int.Parse(_configuration["Validation:UserNameMinLength"]))
+                return (false, String.Format(
+                    _configuration["ErrorMessages:UserName"],
+                    _configuration["Validation:UserNameMinLength"]
+                ));
 
             if (!IsEmail(registrationDto.Email))
-                return (false, INCORRECT_EMAIL_FORMAT);
+                return (false, _configuration["ErrorMessages:EmailFormat"]);
 
             if (!IsPassword(registrationDto.Password))
-                return (false, INCORRECT_PASSWORD);
+                return (false, _configuration["ErrorMessages:PasswordLength"]);
 
             if (registrationDto.Password != registrationDto.PasswordAgain)
-                return (false, PASSWORD_NOT_PASS);
+                return (false, _configuration["ErrorMessages:PasswordsPass"]);
 
             await _carRacingTournamentDbContext.AddAsync(new User { 
                 Id = new Guid(), 
@@ -69,7 +65,7 @@ namespace car_racing_tournament_api.Services
         {
             var result = await _carRacingTournamentDbContext.Users.Where(x => x.Id == Guid.Parse(userId)).FirstOrDefaultAsync();
             if (result == null)
-                return (false, null, USER_NOT_FOUND);
+                return (false, null, _configuration["ErrorMessages:UserNotFound"]);
             
             return (true, result, null);
         }
@@ -78,22 +74,25 @@ namespace car_racing_tournament_api.Services
         {
             var actualUser = await _carRacingTournamentDbContext.Users.Where(x => x.Username == usernameEmail || x.Email == usernameEmail).FirstOrDefaultAsync();
             if (actualUser == null)
-                return (false, null, USER_NOT_FOUND);
+                return (false, null, _configuration["ErrorMessages:UserNotFound"]);
 
             return (true, actualUser, null);
         }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateUser(Guid id, UpdateUserDto updateUserDto)
         {
-            if (updateUserDto.Username.Length < USERNAME_MIN_LENGTH)
-                return (false, INCORRECT_USERNAME);
+            if (updateUserDto.Username.Length < int.Parse(_configuration["Validation:UserNameMinLength"]))
+                return (false, String.Format(
+                    _configuration["ErrorMessages:UserName"],
+                    _configuration["Validation:UserNameMinLength"]
+                ));
 
             if (!IsEmail(updateUserDto.Email))
-                return (false, INCORRECT_EMAIL_FORMAT);
+                return (false, _configuration["ErrorMessages:EmailFormat"]);
 
             var userObj = await _carRacingTournamentDbContext.Users.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (userObj == null)
-                return (false, USER_NOT_FOUND);
+                return (false, _configuration["ErrorMessages:UserNotFound"]);
 
             userObj.Username = updateUserDto.Username;
             userObj.Email = updateUserDto.Email;
@@ -107,10 +106,12 @@ namespace car_racing_tournament_api.Services
         {
             var userObj = await _carRacingTournamentDbContext.Users.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (userObj == null)
-                return (false, USER_NOT_FOUND);
+                return (false, _configuration["ErrorMessages:UserNotFound"]);
 
             if (updatePasswordDto.Password != updatePasswordDto.PasswordAgain)
-                return (false, PASSWORD_NOT_PASS);
+                return (false, _configuration["ErrorMessages:PasswordsPass"]);
+
+            // password validation?
 
             userObj.Password = HashPassword(updatePasswordDto.Password);
             _carRacingTournamentDbContext.Users.Update(userObj);
