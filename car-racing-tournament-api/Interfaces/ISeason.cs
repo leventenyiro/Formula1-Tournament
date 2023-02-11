@@ -12,7 +12,7 @@ namespace car_racing_tournament_api.Interfaces
         Task<(bool IsSuccess, string? ErrorMessage)> ArchiveSeason(Guid id);
         Task<(bool IsSuccess, string? ErrorMessage)> DeleteSeason(Guid id);
 
-        Task<(bool IsSuccess, List<SeasonOutputDto>? Seasons, string? ErrorMessage)> GetSeasonsByUserSeasonList(List<Guid> userSeasons);
+        Task<(bool IsSuccess, List<SeasonOutputDto>? Seasons, string? ErrorMessage)> GetSeasonsByUserId(Guid userId);
 
         Task<(bool IsSuccess, List<Driver>? Drivers, string? ErrorMessage)> GetDriversBySeasonId(Guid seasonId);
         Task<(bool IsSuccess, string? ErrorMessage)> AddDriver(Guid seasonId, DriverDto driverDto);

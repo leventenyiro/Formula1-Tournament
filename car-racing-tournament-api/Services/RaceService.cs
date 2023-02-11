@@ -51,6 +51,7 @@ namespace car_racing_tournament_api.Services
                         }
                     }).ToList()
                 }).FirstOrDefaultAsync();
+
             if (race == null)
                 return (false, null, RACE_NOT_FOUND);
 
@@ -62,6 +63,9 @@ namespace car_racing_tournament_api.Services
             var raceObj = await _carRacingTournamentDbContext.Races.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (raceObj == null)
                 return (false, RACE_NOT_FOUND);
+
+            if (string.IsNullOrEmpty(raceDto.Name))
+                return (false, "Race name cannot be empty!");
 
             raceObj.Name = raceDto.Name;
             raceObj.DateTime = raceDto.DateTime;
@@ -85,28 +89,32 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, List<Result>? Results, string? ErrorMessage)> GetResultsByRaceId(Guid raceId)
         {
-            var results = await _carRacingTournamentDbContext.Results
-                .Where(x => x.RaceId == raceId)
-                .Include(x => x.Driver)
-                .Include(x => x.Team)
-                .Select(x => new Result {
-                    Id = x.Id,
-                    Position = x.Position,
-                    Points = x.Points,
-                    Driver = new Driver
-                    {
-                        Id = x.Driver.Id,
-                        Name = x.Driver.Name,
-                        RealName = x.Driver.RealName,
+            if (_carRacingTournamentDbContext.Races.Where(x => x.Id == raceId).FirstOrDefaultAsync().Result == null)
+                return (false, null, RACE_NOT_FOUND);
 
-                    },
-                    Team = new Team
-                    {
-                        Id = x.Team.Id,
-                        Name = x.Team.Name,
-                        Color = x.Team.Color
-                    }
-                }).ToListAsync();
+            var results = await _carRacingTournamentDbContext.Results
+            .Where(x => x.RaceId == raceId)
+            .Include(x => x.Driver)
+            .Include(x => x.Team)
+            .Select(x => new Result {
+                Id = x.Id,
+                Position = x.Position,
+                Points = x.Points,
+                Driver = new Driver
+                {
+                    Id = x.Driver.Id,
+                    Name = x.Driver.Name,
+                    RealName = x.Driver.RealName,
+
+                },
+                Team = new Team
+                {
+                    Id = x.Team.Id,
+                    Name = x.Team.Name,
+                    Color = x.Team.Color
+                }
+            }).ToListAsync();
+
             if (results == null)
                 return (false, null, "No results found");
 
@@ -124,8 +132,14 @@ namespace car_racing_tournament_api.Services
                 return (false, "Race and team aren't in the same season");
 
             Driver? driverObj = await _carRacingTournamentDbContext.Drivers.Where(e => e.Id == resultDto.DriverId).FirstOrDefaultAsync();
-            if (raceObj?.SeasonId == driverObj?.SeasonId)
+            if (raceObj?.SeasonId != driverObj?.SeasonId)
                 return (false, "Race and driver aren't in the same season");
+
+            if (resultDto.Position <= 0)
+                return (false, "Position must be at least 1!");
+
+            if (resultDto.Points < 0)
+                return (false, "Points must be at least 0!");
 
             var result = _mapper.Map<Result>(resultDto);
             result.Id = Guid.NewGuid();

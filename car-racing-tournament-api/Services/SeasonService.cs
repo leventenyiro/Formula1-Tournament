@@ -3,6 +3,7 @@ using car_racing_tournament_api.Data;
 using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
+using Castle.Components.DictionaryAdapter.Xml;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 
@@ -14,6 +15,8 @@ namespace car_racing_tournament_api.Services
         private IMapper _mapper;
 
         private const string SEASON_NOT_FOUND = "Season not found";
+        private const int SEASON_NAME_MIN_LENGTH = 5;
+        private const string INCORRECT_SEASON_NAME = "Season name must be at least 5 characters";
 
         public SeasonService(CarRacingTournamentDbContext carRacingTournamentDbContext, IMapper mapper)
         {
@@ -47,7 +50,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, SeasonOutputDto? Season, string? ErrorMessage)> GetSeasonById(Guid id)
         {
-            SeasonOutputDto season = await _carRacingTournamentDbContext.Seasons
+            SeasonOutputDto? season = await _carRacingTournamentDbContext.Seasons
                 .Where(x => x.Id == id)
                 .Include(x => x.UserSeasons)
                 .Select(x => new SeasonOutputDto
@@ -62,7 +65,7 @@ namespace car_racing_tournament_api.Services
                         Username = x.User.Username,
                         Permission = x.Permission
                     }).ToList()
-                }).FirstAsync();
+                }).FirstOrDefaultAsync();
 
             if (season == null)
                 return (false, null, SEASON_NOT_FOUND);
@@ -74,6 +77,9 @@ namespace car_racing_tournament_api.Services
         {
             if (seasonDto == null)
                 return (false, Guid.Empty, "Please provide the season data");
+
+            if (seasonDto.Name.Length < SEASON_NAME_MIN_LENGTH)
+                return (false, Guid.Empty, INCORRECT_SEASON_NAME);
 
             var season = _mapper.Map<Season>(seasonDto);
             season.Id = Guid.NewGuid();
@@ -93,7 +99,10 @@ namespace car_racing_tournament_api.Services
             var seasonObj = await _carRacingTournamentDbContext.Seasons.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (seasonObj == null)
                 return (false, SEASON_NOT_FOUND);
-            
+
+            if (seasonDto.Name.Length < SEASON_NAME_MIN_LENGTH)
+                return (false, INCORRECT_SEASON_NAME);
+
             seasonObj.Name = seasonDto.Name;
             seasonObj.Description = seasonDto.Description;
             seasonObj.IsArchived = seasonDto.IsArchived;
@@ -132,8 +141,16 @@ namespace car_racing_tournament_api.Services
             return (true, null);
         }
 
-        public async Task<(bool IsSuccess, List<SeasonOutputDto>? Seasons, string? ErrorMessage)> GetSeasonsByUserSeasonList(List<Guid> userSeasons)
+        public async Task<(bool IsSuccess, List<SeasonOutputDto>? Seasons, string? ErrorMessage)> GetSeasonsByUserId(Guid userId)
         {
+            if (_carRacingTournamentDbContext.Users.Where(x => x.Id == userId).FirstOrDefaultAsync().Result == null)
+                return (false, null, "User not found!");
+
+            var userSeasons = await _carRacingTournamentDbContext.UserSeasons
+                .Where(x => x.UserId == userId)
+                .Select(x => x.SeasonId)
+                .ToListAsync();
+
             List<SeasonOutputDto> seasons = await _carRacingTournamentDbContext.Seasons
                 .Where(x => userSeasons.Contains(x.Id))
                 .Include(x => x.UserSeasons)
@@ -151,14 +168,14 @@ namespace car_racing_tournament_api.Services
                     }).ToList()
                 }).ToListAsync();
 
-            if (seasons == null)
-                return (false, null, SEASON_NOT_FOUND);
-            
             return (true, seasons, null);
         }
 
         public async Task<(bool IsSuccess, List<Driver>? Drivers, string? ErrorMessage)> GetDriversBySeasonId(Guid seasonId)
         {
+            if (_carRacingTournamentDbContext.Seasons.Where(x => x.Id == seasonId).FirstOrDefaultAsync().Result == null)
+                return (false, null, SEASON_NOT_FOUND);
+
             var drivers = await _carRacingTournamentDbContext.Drivers
                 .Where(x => x.SeasonId == seasonId)
                 .Include(x => x.ActualTeam)
@@ -195,20 +212,30 @@ namespace car_racing_tournament_api.Services
                         }
                     }).ToList()
                 }).ToListAsync();
-            if (drivers == null)
-                return (false, null, "Drivers not found");
             
             return (true, drivers, null);
         }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> AddDriver(Guid seasonId, DriverDto driverDto)
         {
-            if (driverDto == null)
-                return (false, "Please provide the driver data");
+            if (_carRacingTournamentDbContext.Seasons.Where(x => x.Id == seasonId).FirstOrDefaultAsync().Result == null)
+                return (false, SEASON_NOT_FOUND);
 
-            Team? teamObj = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == driverDto!.ActualTeamId).FirstOrDefaultAsync();
-            if (seasonId != teamObj!.SeasonId)
-                return (false, "Driver and team aren't in the same season");
+            if (driverDto == null)
+                return (false, "Please provide the driver data!");
+
+            if (driverDto.Name.Length == 0)
+                return (false, "Driver name cannot be empty!");
+
+            if (driverDto.Number <= 0 || driverDto.Number >= 100)
+                return (false, "Driver number must be between 1 and 99!");
+
+            if (driverDto.ActualTeamId != null)
+            {
+                Team? teamObj = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == driverDto!.ActualTeamId).FirstOrDefaultAsync();
+                if (seasonId != teamObj!.SeasonId)
+                    return (false, "Driver and team aren't in the same season");
+            }
 
             var driver = _mapper.Map<Driver>(driverDto);
             driver.Id = Guid.NewGuid();
@@ -221,6 +248,9 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, List<Team>? Teams, string? ErrorMessage)> GetTeamsBySeasonId(Guid seasonId)
         {
+            if (_carRacingTournamentDbContext.Seasons.Where(x => x.Id == seasonId).FirstOrDefaultAsync().Result == null)
+                return (false, null, SEASON_NOT_FOUND);
+
             var teams = await _carRacingTournamentDbContext.Teams
                 .Where(x => x.SeasonId == seasonId)
                 .Include(x => x.Drivers)
@@ -258,27 +288,31 @@ namespace car_racing_tournament_api.Services
                         }
                     }).ToList()
                 }).ToListAsync();
-            if (teams == null)
-                return (false, null, "Teams not found");
             
             return (true, teams, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> AddTeam(Guid seasonId, TeamDto team)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> AddTeam(Guid seasonId, TeamDto teamDto)
         {
-            if (team == null)
-                return (false, "Please provide the team data");
-            
+            if (teamDto == null)
+                return (false, "Please provide the team data!");
+
+            if (string.IsNullOrEmpty(teamDto.Name))
+                return (false, "Team name cannot be empty!");
+
             Team teamObj = new Team
             {
                 Id = Guid.NewGuid(),
-                Name = team.Name,
+                Name = teamDto.Name,
                 Season = await _carRacingTournamentDbContext.Seasons.Where(e => e.Id == seasonId).FirstAsync(),
             };
             try
             {
-                ColorTranslator.FromHtml(team.Color);
-                teamObj.Color = team.Color;
+                if (teamDto.Color.Substring(0, 1) != "#") // it should be in ColorUtils
+                    teamDto.Color = "#" + teamDto.Color;
+                var color = ColorTranslator.FromHtml(teamDto.Color);
+
+                teamObj.Color = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
             }
             catch (Exception)
             {
@@ -292,6 +326,9 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, List<Race>? Races, string? ErrorMessage)> GetRacesBySeasonId(Guid seasonId)
         {
+            if (_carRacingTournamentDbContext.Seasons.Where(x => x.Id == seasonId).FirstOrDefaultAsync().Result == null)
+                return (false, null, SEASON_NOT_FOUND);
+
             var races = await _carRacingTournamentDbContext.Races
                 .Where(x => x.SeasonId == seasonId)
                 .Include(x => x.Results!).ThenInclude(x => x.Driver)
@@ -321,8 +358,6 @@ namespace car_racing_tournament_api.Services
                         }
                     }).ToList(),
                 }).ToListAsync();
-            if (races == null)
-                return (false, null, "Races not found");
             
             return (true, races, null);
         }
@@ -331,7 +366,10 @@ namespace car_racing_tournament_api.Services
         {
             if (raceDto == null)
                 return (false, "Please provide the race data");
-            
+
+            if (string.IsNullOrEmpty(raceDto.Name))
+                return (false, "Race name cannot be empty!");
+
             var race = _mapper.Map<Race>(raceDto);
             race.Id = Guid.NewGuid();
             race.SeasonId = seasonId;

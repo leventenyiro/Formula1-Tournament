@@ -94,14 +94,18 @@ namespace car_racing_tournament_api.Controllers
         [HttpGet("user"), Authorize]
         public async Task<IActionResult> GetByUserId()
         {
-            var resultGetUserSeasons = await _userSeasonService.GetSeasonsByUserId(new Guid(User.Identity!.Name!));
+            /*var resultGetUserSeasons = await _userSeasonService.GetSeasonsByUserId(new Guid(User.Identity!.Name!));
             if (!resultGetUserSeasons.IsSuccess)
                 return NotFound(resultGetUserSeasons.ErrorMessage);
             
             var resultGetSeasons = await _seasonService.GetSeasonsByUserSeasonList(resultGetUserSeasons.UserSeasons!.Select(x => x.SeasonId).ToList());
             if (!resultGetSeasons.IsSuccess)
+                return NotFound(resultGetSeasons.ErrorMessage);*/
+
+            var resultGetSeasons = await _seasonService.GetSeasonsByUserId(new Guid(User.Identity!.Name!));
+            if (!resultGetSeasons.IsSuccess)
                 return NotFound(resultGetSeasons.ErrorMessage);
-            
+
             return Ok(resultGetSeasons.Seasons);
         }
 

@@ -18,18 +18,6 @@ namespace car_racing_tournament_api.Services
             _carRacingTournamentDbContext = carRacingTournamentDbContext;
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteTeam(Guid id)
-        {
-            var team = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == id).FirstOrDefaultAsync();
-            if (team == null)
-                return (false, TEAM_NOT_FOUND);
-            
-            _carRacingTournamentDbContext.Teams.Remove(team);
-            _carRacingTournamentDbContext.SaveChanges();
-            
-            return (true, null);
-        }
-
         public async Task<(bool IsSuccess, Team? Team, string? ErrorMessage)> GetTeamById(Guid id)
         {
             var team = await _carRacingTournamentDbContext.Teams
@@ -75,17 +63,20 @@ namespace car_racing_tournament_api.Services
             return (true, team, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateTeam(Guid id, TeamDto team)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateTeam(Guid id, TeamDto teamDto)
         {
             var teamObj = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (teamObj == null)
                 return (false, TEAM_NOT_FOUND);
-            
-            teamObj.Name = team.Name;
+
+            if (string.IsNullOrEmpty(teamDto.Name))
+                return (false, "Team name cannot be empty!");
+
+            teamObj.Name = teamDto.Name;
             try
             {
-                ColorTranslator.FromHtml(team.Color);
-                teamObj.Color = team.Color;
+                ColorTranslator.FromHtml(teamDto.Color);
+                teamObj.Color = teamDto.Color;
             }
             catch (Exception)
             {
@@ -94,6 +85,18 @@ namespace car_racing_tournament_api.Services
             _carRacingTournamentDbContext.Teams.Update(teamObj);
             _carRacingTournamentDbContext.SaveChanges();
             
+            return (true, null);
+        }
+
+        public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteTeam(Guid id)
+        {
+            var team = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == id).FirstOrDefaultAsync();
+            if (team == null)
+                return (false, TEAM_NOT_FOUND);
+
+            _carRacingTournamentDbContext.Teams.Remove(team);
+            _carRacingTournamentDbContext.SaveChanges();
+
             return (true, null);
         }
     }
