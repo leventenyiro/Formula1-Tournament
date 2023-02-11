@@ -8,12 +8,12 @@ namespace car_racing_tournament_api.Services
     public class ResultService : Interfaces.IResult
     {
         private readonly CarRacingTournamentDbContext _carRacingTournamentDbContext;
+        private readonly IConfiguration _configuration;
 
-        private const string RESULT_NOT_FOUND = "Result not found";
-
-        public ResultService(CarRacingTournamentDbContext carRacingTournamentDbContext)
+        public ResultService(CarRacingTournamentDbContext carRacingTournamentDbContext, IConfiguration configuration)
         {
             _carRacingTournamentDbContext = carRacingTournamentDbContext;
+            _configuration = configuration;
         }
 
         public async Task<(bool IsSuccess, Result? Result, string? ErrorMessage)> GetResultById(Guid id)
@@ -42,7 +42,7 @@ namespace car_racing_tournament_api.Services
                     }
                 }).FirstOrDefaultAsync();
             if (result == null)
-                return (false, null, RESULT_NOT_FOUND);
+                return (false, null, _configuration["ErrorMessages:ResultNotFound"]);
             
             return (true, result, null);
         }
@@ -51,22 +51,22 @@ namespace car_racing_tournament_api.Services
         {
             var resultObj = await _carRacingTournamentDbContext.Results.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (resultObj == null)
-                return (false, RESULT_NOT_FOUND);
+                return (false, _configuration["ErrorMessages:ResultNotFound"]);
 
             Race? raceObj = await _carRacingTournamentDbContext.Races.Where(e => e.Id == resultObj.RaceId).FirstOrDefaultAsync();
             Team? teamObj = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == resultDto.TeamId).FirstOrDefaultAsync();
             if (raceObj?.SeasonId != teamObj?.SeasonId)
-                return (false, "Race and team aren't in the same season");
+                return (false, _configuration["ErrorMessages:RaceTeamNotSameSeason"]);
 
             Driver? driverObj = await _carRacingTournamentDbContext.Drivers.Where(e => e.Id == resultDto.DriverId).FirstOrDefaultAsync();
             if (raceObj?.SeasonId != driverObj?.SeasonId)
-                return (false, "Race and driver aren't in the same season");
+                return (false, _configuration["ErrorMessages:RaceDriverNotSameSeason"]);
 
             if (resultDto.Position <= 0)
-                return (false, "Position must be at least 1!");
+                return (false, _configuration["ErrorMessages:ResultPosition"]);
 
             if (resultDto.Points < 0)
-                return (false, "Points must be at least 0!");
+                return (false, _configuration["ErrorMessages:ResultPoints"]);
 
             resultObj.Position = resultDto.Position;
             resultObj.Points = resultDto.Points;
@@ -82,7 +82,7 @@ namespace car_racing_tournament_api.Services
         {
             var result = await _carRacingTournamentDbContext.Results.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (result == null)
-                return (false, RESULT_NOT_FOUND);
+                return (false, _configuration["ErrorMessages:ResultNotFound"]);
             
             _carRacingTournamentDbContext.Results.Remove(result);
             _carRacingTournamentDbContext.SaveChanges();

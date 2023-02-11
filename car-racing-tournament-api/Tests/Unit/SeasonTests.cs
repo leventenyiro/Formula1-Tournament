@@ -98,7 +98,11 @@ namespace car_racing_tournament_api.Tests.Unit
             });
             var mapper = mockMapper.CreateMapper();
 
-            _seasonService = new SeasonService(_context, mapper);
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            _seasonService = new SeasonService(_context, mapper, configuration);
         }
 
         [Test]

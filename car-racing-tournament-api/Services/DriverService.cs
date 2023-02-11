@@ -9,13 +9,12 @@ namespace car_racing_tournament_api.Services
     public class DriverService : IDriver
     {
         private readonly CarRacingTournamentDbContext _carRacingTournamentDbContext;
+        private readonly IConfiguration _configuration;
 
-        private const string DRIVER_NOT_FOUND = "Driver not found";
-        private const string NOT_IN_SAME_SEASON = "Driver and team aren't in the same season";
-
-        public DriverService(CarRacingTournamentDbContext carRacingTournamentDbContext)
+        public DriverService(CarRacingTournamentDbContext carRacingTournamentDbContext, IConfiguration configuration)
         {
             _carRacingTournamentDbContext = carRacingTournamentDbContext;
+            _configuration = configuration;
         }
 
         public async Task<(bool IsSuccess, Driver? Driver, string? ErrorMessage)> GetDriverById(Guid id)
@@ -40,7 +39,7 @@ namespace car_racing_tournament_api.Services
                     }).ToList()
                 }).FirstOrDefaultAsync();
             if (driver == null)
-                return (false, null, DRIVER_NOT_FOUND);
+                return (false, null, _configuration["ErrorMessages:DriverNotFound"]);
             
             return (true, driver, null);
         }
@@ -49,7 +48,7 @@ namespace car_racing_tournament_api.Services
         {
             var driverObj = await _carRacingTournamentDbContext.Drivers.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (driverObj == null)
-                return (false, DRIVER_NOT_FOUND);
+                return (false, _configuration["ErrorMessages:DriverNotFound"]);
 
             if (driverDto == null)
                 return (false, "Please provide the driver data!");
@@ -64,7 +63,7 @@ namespace car_racing_tournament_api.Services
             {
                 Team? teamObj = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == driverDto!.ActualTeamId).FirstOrDefaultAsync();
                 if (driverObj.SeasonId != teamObj!.SeasonId)
-                    return (false, NOT_IN_SAME_SEASON);
+                    return (false, _configuration["ErrorMessages:DriverTeamNotTheSameSeason"]);
             }
 
             driverObj.Name = driverDto.Name;
@@ -81,13 +80,13 @@ namespace car_racing_tournament_api.Services
         {
             var driverObj = await _carRacingTournamentDbContext.Drivers.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (driverObj == null)
-                return (false, DRIVER_NOT_FOUND);
+                return (false, _configuration["ErrorMessages:DriverNotFound"]);
 
             if (teamId != Guid.Empty)
             {
                 Team? teamObj = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == teamId).FirstOrDefaultAsync();
                 if (driverObj.SeasonId != teamObj!.SeasonId)
-                    return (false, NOT_IN_SAME_SEASON);
+                    return (false, _configuration["ErrorMessages:DriverTeamNotTheSameSeason"]);
             }
 
             driverObj.ActualTeamId = teamId;
@@ -101,7 +100,7 @@ namespace car_racing_tournament_api.Services
         {
             var driver = await _carRacingTournamentDbContext.Drivers.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (driver == null)
-                return (false, DRIVER_NOT_FOUND);
+                return (false, _configuration["ErrorMessages:DriverNotFound"]);
             
             _carRacingTournamentDbContext.Drivers.Remove(driver);
             _carRacingTournamentDbContext.SaveChanges();

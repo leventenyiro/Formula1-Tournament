@@ -11,13 +11,13 @@ namespace car_racing_tournament_api.Services
     {
         private readonly CarRacingTournamentDbContext _carRacingTournamentDbContext;
         private IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-        private const string RACE_NOT_FOUND = "Race not found";
-
-        public RaceService(CarRacingTournamentDbContext carRacingTournamentDbContext, IMapper mapper)
+        public RaceService(CarRacingTournamentDbContext carRacingTournamentDbContext, IMapper mapper, IConfiguration configuration)
         {
             _carRacingTournamentDbContext = carRacingTournamentDbContext;
             _mapper = mapper;
+            _configuration = configuration;
         }
 
         public async Task<(bool IsSuccess, Race? Race, string? ErrorMessage)> GetRaceById(Guid id)
@@ -53,7 +53,7 @@ namespace car_racing_tournament_api.Services
                 }).FirstOrDefaultAsync();
 
             if (race == null)
-                return (false, null, RACE_NOT_FOUND);
+                return (false, null, _configuration["ErrorMessages:RaceNotFound"]);
 
             return (true, race, null);
         }
@@ -62,10 +62,10 @@ namespace car_racing_tournament_api.Services
         {
             var raceObj = await _carRacingTournamentDbContext.Races.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (raceObj == null)
-                return (false, RACE_NOT_FOUND);
+                return (false, _configuration["ErrorMessages:DriverNotFound"]);
 
             if (string.IsNullOrEmpty(raceDto.Name))
-                return (false, "Race name cannot be empty!");
+                return (false, _configuration["ErrorMessages:RaceNameCannotBeEmpty"]);
 
             raceObj.Name = raceDto.Name;
             raceObj.DateTime = raceDto.DateTime;
@@ -79,7 +79,7 @@ namespace car_racing_tournament_api.Services
         {
             var race = await _carRacingTournamentDbContext.Races.Where(e => e.Id == id).FirstOrDefaultAsync();
             if (race == null)
-                return (false, RACE_NOT_FOUND);
+                return (false, _configuration["ErrorMessages:DriverNotFound"]);
 
             _carRacingTournamentDbContext.Races.Remove(race);
             _carRacingTournamentDbContext.SaveChanges();
@@ -90,7 +90,7 @@ namespace car_racing_tournament_api.Services
         public async Task<(bool IsSuccess, List<Result>? Results, string? ErrorMessage)> GetResultsByRaceId(Guid raceId)
         {
             if (_carRacingTournamentDbContext.Races.Where(x => x.Id == raceId).FirstOrDefaultAsync().Result == null)
-                return (false, null, RACE_NOT_FOUND);
+                return (false, null, _configuration["ErrorMessages:DriverNotFound"]);
 
             var results = await _carRacingTournamentDbContext.Results
             .Where(x => x.RaceId == raceId)
@@ -116,7 +116,7 @@ namespace car_racing_tournament_api.Services
             }).ToListAsync();
 
             if (results == null)
-                return (false, null, "No results found");
+                return (false, null, _configuration["ErrorMessages:ResultNotFound"]);
 
             return (true, results, null);
         }
@@ -124,22 +124,22 @@ namespace car_racing_tournament_api.Services
         public async Task<(bool IsSuccess, string? ErrorMessage)> AddResult(Guid raceId, ResultDto resultDto)
         {
             if (resultDto == null)
-                return (false, "Please provide the result data");
+                return (false, _configuration["ErrorMessages:MissingResult"]);
 
             Race? raceObj = await _carRacingTournamentDbContext.Races.Where(e => e.Id == raceId).FirstOrDefaultAsync();
             Team? teamObj = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == resultDto.TeamId).FirstOrDefaultAsync();
             if (raceObj?.SeasonId != teamObj?.SeasonId)
-                return (false, "Race and team aren't in the same season");
+                return (false, _configuration["ErrorMessages:RaceTeamNotSameSeason"]);
 
             Driver? driverObj = await _carRacingTournamentDbContext.Drivers.Where(e => e.Id == resultDto.DriverId).FirstOrDefaultAsync();
             if (raceObj?.SeasonId != driverObj?.SeasonId)
-                return (false, "Race and driver aren't in the same season");
+                return (false, _configuration["ErrorMessages:RaceDriverNotSameSeason"]);
 
             if (resultDto.Position <= 0)
-                return (false, "Position must be at least 1!");
+                return (false, _configuration["ErrorMessages:ResultPosition"]);
 
             if (resultDto.Points < 0)
-                return (false, "Points must be at least 0!");
+                return (false, _configuration["ErrorMessages:ResultPoints"]);
 
             var result = _mapper.Map<Result>(resultDto);
             result.Id = Guid.NewGuid();

@@ -80,7 +80,11 @@ namespace car_racing_tournament_api.Tests.Unit
 
             _context.SaveChanges();
 
-            _userSeasonService = new UserSeasonService(_context);
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            _userSeasonService = new UserSeasonService(_context, configuration);
         }
 
         [Test]

@@ -60,7 +60,11 @@ namespace car_racing_tournament_api.Tests.Unit
             });
             _context.SaveChanges();
 
-            _resultService = new ResultService(_context);
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            _resultService = new ResultService(_context, configuration);
         }
 
         [Test]

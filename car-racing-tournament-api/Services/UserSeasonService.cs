@@ -8,12 +8,12 @@ namespace car_racing_tournament_api.Services
     public class UserSeasonService : IUserSeason
     {
         private readonly CarRacingTournamentDbContext _carRacingTournamentDbContext;
+        private readonly IConfiguration _configuration;
 
-        private const string SEASON_NOT_FOUND = "Season not found";
-
-        public UserSeasonService(CarRacingTournamentDbContext carRacingTournamentDbContext)
+        public UserSeasonService(CarRacingTournamentDbContext carRacingTournamentDbContext, IConfiguration configuration)
         {
             _carRacingTournamentDbContext = carRacingTournamentDbContext;
+            _configuration = configuration;
         }
 
         public async Task<bool> IsAdmin(Guid userId, Guid seasonId)
@@ -38,7 +38,7 @@ namespace car_racing_tournament_api.Services
         {
             var season = await _carRacingTournamentDbContext.Seasons.Where(e => e.Id == seasonId).FirstOrDefaultAsync();
             if (season == null)
-                return (false, SEASON_NOT_FOUND);
+                return (false, _configuration["ErrorMessages:SeasonNotFound"]);
 
             await _carRacingTournamentDbContext.UserSeasons.AddAsync(new UserSeason { Id = new Guid(), UserId = userId, SeasonId = seasonId, Permission = UserSeasonPermission.Admin });
             _carRacingTournamentDbContext.SaveChanges();
@@ -50,7 +50,7 @@ namespace car_racing_tournament_api.Services
         {
             var season = await _carRacingTournamentDbContext.Seasons.Where(e => e.Id == seasonId).FirstOrDefaultAsync();
             if (season == null)
-                return (false, SEASON_NOT_FOUND);
+                return (false, _configuration["ErrorMessages:SeasonNotFound"]);
 
             await _carRacingTournamentDbContext.UserSeasons.AddAsync(new UserSeason { Id = new Guid(), UserId = moderatorId, SeasonId = seasonId, Permission = UserSeasonPermission.Moderator });
             _carRacingTournamentDbContext.SaveChanges();
@@ -62,7 +62,7 @@ namespace car_racing_tournament_api.Services
         {
             UserSeason moderatorObj = await _carRacingTournamentDbContext.UserSeasons.Where(x => x.UserId == moderatorId && x.SeasonId == seasonId).FirstAsync();
             if (moderatorObj == null)
-                return (false, "This moderator doesn't exists");
+                return (false, _configuration["ErrorMessages:ModeratorNotFound"]);
 
             _carRacingTournamentDbContext.UserSeasons.Remove(moderatorObj);
             _carRacingTournamentDbContext.SaveChanges();
