@@ -63,39 +63,31 @@ namespace car_racing_tournament_api.Services
             return (true, team, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateTeam(Guid id, TeamDto teamDto)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateTeam(Team team, TeamDto teamDto)
         {
-            var teamObj = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == id).FirstOrDefaultAsync();
-            if (teamObj == null)
-                return (false, _configuration["ErrorMessages:TeamNotFound"]);
-
             if (string.IsNullOrEmpty(teamDto.Name))
                 return (false, _configuration["ErrorMessages:TeamName"]);
 
-            teamObj.Name = teamDto.Name;
+            team.Name = teamDto.Name;
             try
             {
                 ColorTranslator.FromHtml(teamDto.Color);
-                teamObj.Color = teamDto.Color;
+                team.Color = teamDto.Color;
             }
             catch (Exception)
             {
                 return (false, _configuration["ErrorMessages:TeamColor"]);
             }
-            _carRacingTournamentDbContext.Teams.Update(teamObj);
-            _carRacingTournamentDbContext.SaveChanges();
+            _carRacingTournamentDbContext.Teams.Update(team);
+            await _carRacingTournamentDbContext.SaveChangesAsync();
             
             return (true, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteTeam(Guid id)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteTeam(Team team)
         {
-            var team = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == id).FirstOrDefaultAsync();
-            if (team == null)
-                return (false, _configuration["ErrorMessages:TeamNotFound"]);
-
             _carRacingTournamentDbContext.Teams.Remove(team);
-            _carRacingTournamentDbContext.SaveChanges();
+            await _carRacingTournamentDbContext.SaveChangesAsync();
 
             return (true, null);
         }

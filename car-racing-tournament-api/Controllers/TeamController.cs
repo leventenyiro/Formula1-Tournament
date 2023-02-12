@@ -38,7 +38,7 @@ namespace car_racing_tournament_api.Controllers
             if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Team!.SeasonId))
                 return Forbid();
 
-            var resultUpdate = await _teamService.UpdateTeam(id, teamDto);
+            var resultUpdate = await _teamService.UpdateTeam(resultGet.Team, teamDto);
             if (!resultUpdate.IsSuccess)
                 return BadRequest(resultUpdate.ErrorMessage);
 
@@ -55,7 +55,7 @@ namespace car_racing_tournament_api.Controllers
             if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Team!.SeasonId))
                 return Forbid();
 
-            var resultDelete = await _teamService.DeleteTeam(id);
+            var resultDelete = await _teamService.DeleteTeam(resultGet.Team);
             if (!resultDelete.IsSuccess)
                 return BadRequest(resultDelete.ErrorMessage);
 
