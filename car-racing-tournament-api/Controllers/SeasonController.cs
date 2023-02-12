@@ -1,5 +1,6 @@
 ﻿using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
+using car_racing_tournament_api.Models;
 using car_racing_tournament_api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,12 +15,14 @@ namespace car_racing_tournament_api.Controllers
         private ISeason _seasonService;
         private IUserSeason _userSeasonService;
         private IUser _userService;
+        private ITeam _teamService;
 
-        public SeasonController(ISeason seasonService, IUserSeason userSeasonService, IUser userService)
+        public SeasonController(ISeason seasonService, IUserSeason userSeasonService, IUser userService, ITeam teamService)
         {
             _seasonService = seasonService;
             _userSeasonService = userSeasonService;
             _userService = userService;
+            _teamService = teamService;
         }
 
         [HttpGet, EnableQuery]
@@ -55,10 +58,14 @@ namespace car_racing_tournament_api.Controllers
         [HttpPut("{id}"), Authorize]
         public async Task<IActionResult> Put(Guid id, [FromBody] SeasonUpdateDto seasonDto)
         {
+            var resultGetSeason = await _seasonService.GetSeasonById(id);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
+
             if (!await _userSeasonService.IsAdmin(new Guid(User.Identity!.Name!), id))
                 return Forbid();
 
-            var resultUpdate = await _seasonService.UpdateSeason(id, seasonDto);
+            var resultUpdate = await _seasonService.UpdateSeason(resultGetSeason.Season!, seasonDto);
             if (!resultUpdate.IsSuccess)
                 return BadRequest(resultUpdate.ErrorMessage);
             
@@ -68,10 +75,14 @@ namespace car_racing_tournament_api.Controllers
         [HttpPut("{id}/archive"), Authorize]
         public async Task<IActionResult> Archive(Guid id)
         {
+            var resultGetSeason = await _seasonService.GetSeasonById(id);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
+
             if (!await _userSeasonService.IsAdmin(new Guid(User.Identity!.Name!), id))
                 return Forbid();
 
-            var resultArchive = await _seasonService.ArchiveSeason(id);
+            var resultArchive = await _seasonService.ArchiveSeason(resultGetSeason.Season!);
             if (!resultArchive.IsSuccess)
                 return BadRequest(resultArchive.ErrorMessage);
 
@@ -81,10 +92,14 @@ namespace car_racing_tournament_api.Controllers
         [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
+            var resultGetSeason = await _seasonService.GetSeasonById(id);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
+
             if (!await _userSeasonService.IsAdmin(new Guid(User.Identity!.Name!), id))
                 return Forbid();
 
-            var resultDelete = await _seasonService.DeleteSeason(id);
+            var resultDelete = await _seasonService.DeleteSeason(resultGetSeason.Season!);
             if (!resultDelete.IsSuccess)
                 return BadRequest(resultDelete.ErrorMessage);
             
@@ -94,14 +109,6 @@ namespace car_racing_tournament_api.Controllers
         [HttpGet("user"), Authorize]
         public async Task<IActionResult> GetByUserId()
         {
-            /*var resultGetUserSeasons = await _userSeasonService.GetSeasonsByUserId(new Guid(User.Identity!.Name!));
-            if (!resultGetUserSeasons.IsSuccess)
-                return NotFound(resultGetUserSeasons.ErrorMessage);
-            
-            var resultGetSeasons = await _seasonService.GetSeasonsByUserSeasonList(resultGetUserSeasons.UserSeasons!.Select(x => x.SeasonId).ToList());
-            if (!resultGetSeasons.IsSuccess)
-                return NotFound(resultGetSeasons.ErrorMessage);*/
-
             var resultGetSeasons = await _seasonService.GetSeasonsByUserId(new Guid(User.Identity!.Name!));
             if (!resultGetSeasons.IsSuccess)
                 return NotFound(resultGetSeasons.ErrorMessage);
@@ -129,7 +136,11 @@ namespace car_racing_tournament_api.Controllers
         [HttpGet("{seasonId}/driver")]
         public async Task<IActionResult> GetDriversBySeasonId(Guid seasonId)
         {
-            var resultGet = await _seasonService.GetDriversBySeasonId(seasonId);
+            var resultGetSeason = await _seasonService.GetSeasonById(seasonId);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
+
+            var resultGet = await _seasonService.GetDriversBySeasonId(resultGetSeason.Season!);
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
@@ -139,10 +150,25 @@ namespace car_racing_tournament_api.Controllers
         [HttpPost("{seasonId}/driver"), Authorize]
         public async Task<IActionResult> PostDriver(Guid seasonId, [FromBody] DriverDto driverDto)
         {
+            var resultGetSeason = await _seasonService.GetSeasonById(seasonId);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
+
             if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), seasonId))
                 return Forbid();
 
-            var resultAdd = await _seasonService.AddDriver(seasonId, driverDto);
+            Team team = null!;
+
+            if (driverDto.ActualTeamId != null)
+            {
+                var resultGetTeam = await _teamService.GetTeamById(driverDto.ActualTeamId.GetValueOrDefault());
+                if (!resultGetTeam.IsSuccess)
+                    return NotFound(resultGetTeam.ErrorMessage);
+
+                team = resultGetTeam.Team!;
+            }
+
+            var resultAdd = await _seasonService.AddDriver(resultGetSeason.Season!, driverDto, team);
             if (!resultAdd.IsSuccess)
                 return BadRequest(resultAdd.ErrorMessage);
             
@@ -152,7 +178,11 @@ namespace car_racing_tournament_api.Controllers
         [HttpGet("{seasonId}/team")]
         public async Task<IActionResult> GetTeamsBySeasonId(Guid seasonId)
         {
-            var resultGet = await _seasonService.GetTeamsBySeasonId(seasonId);
+            var resultGetSeason = await _seasonService.GetSeasonById(seasonId);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
+
+            var resultGet = await _seasonService.GetTeamsBySeasonId(resultGetSeason.Season!);
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
@@ -162,10 +192,14 @@ namespace car_racing_tournament_api.Controllers
         [HttpPost("{seasonId}/team"), Authorize]
         public async Task<IActionResult> PostTeam(Guid seasonId, [FromBody] TeamDto team)
         {
+            var resultGetSeason = await _seasonService.GetSeasonById(seasonId);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
+
             if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), seasonId))
                 return Forbid();
 
-            var resultAdd = await _seasonService.AddTeam(seasonId, team);
+            var resultAdd = await _seasonService.AddTeam(resultGetSeason.Season!, team);
             if (!resultAdd.IsSuccess)
                 return BadRequest(resultAdd.ErrorMessage);
             
@@ -175,7 +209,11 @@ namespace car_racing_tournament_api.Controllers
         [HttpGet("{seasonId}/race")]
         public async Task<IActionResult> GetRacesBySeasonId(Guid seasonId)
         {
-            var resultGet = await _seasonService.GetRacesBySeasonId(seasonId);
+            var resultGetSeason = await _seasonService.GetSeasonById(seasonId);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
+
+            var resultGet = await _seasonService.GetRacesBySeasonId(resultGetSeason.Season!);
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
@@ -185,10 +223,14 @@ namespace car_racing_tournament_api.Controllers
         [HttpPost("{seasonId}/race"), Authorize]
         public async Task<IActionResult> PostRace(Guid seasonId, [FromBody] RaceDto raceDto)
         {
+            var resultGetSeason = await _seasonService.GetSeasonById(seasonId);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
+
             if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), seasonId))
                 return Forbid();
             
-            var resultAdd = await _seasonService.AddRace(seasonId, raceDto);
+            var resultAdd = await _seasonService.AddRace(resultGetSeason.Season!, raceDto);
             if (!resultAdd.IsSuccess)
                 return BadRequest(resultAdd.ErrorMessage);
 

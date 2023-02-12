@@ -1,5 +1,6 @@
 ﻿using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
+using car_racing_tournament_api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,11 +41,18 @@ namespace car_racing_tournament_api.Controllers
             if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
 
-            var resultGetTeam = await _teamService.GetTeamById(id);
-            if (!resultGetTeam.IsSuccess)
-                return NotFound(resultGetTeam.ErrorMessage);
+            Team team = null!;
 
-            var resultUpdate = await _driverService.UpdateDriver(resultGetDriver.Driver, driverDto, resultGetTeam.Team!);
+            if (driverDto.ActualTeamId != null)
+            {
+                var resultGetTeam = await _teamService.GetTeamById(driverDto.ActualTeamId.GetValueOrDefault());
+                if (!resultGetTeam.IsSuccess)
+                    return NotFound(resultGetTeam.ErrorMessage);
+
+                team = resultGetTeam.Team!;
+            }
+
+            var resultUpdate = await _driverService.UpdateDriver(resultGetDriver.Driver, driverDto, team!);
             if (!resultUpdate.IsSuccess)
                 return BadRequest(resultUpdate.ErrorMessage);
 
