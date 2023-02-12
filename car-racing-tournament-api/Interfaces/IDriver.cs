@@ -6,8 +6,8 @@ namespace car_racing_tournament_api.Interfaces
     public interface IDriver
     {
         Task<(bool IsSuccess, Driver? Driver, string? ErrorMessage)> GetDriverById(Guid id);
-        Task<(bool IsSuccess, string? ErrorMessage)> UpdateDriver(Guid id, DriverDto driverDto);
-        Task<(bool IsSuccess, string? ErrorMessage)> UpdateDriverTeam(Guid id, Guid teamId);
-        Task<(bool IsSuccess, string? ErrorMessage)> DeleteDriver(Guid id);
+        Task<(bool IsSuccess, string? ErrorMessage)> UpdateDriver(Driver driver, DriverDto driverDto, Team team);
+        Task<(bool IsSuccess, string? ErrorMessage)> UpdateDriverTeam(Driver driver, Team team);
+        Task<(bool IsSuccess, string? ErrorMessage)> DeleteDriver(Driver driver);
     }
 }

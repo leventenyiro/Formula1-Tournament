@@ -11,11 +11,13 @@ namespace car_racing_tournament_api.Controllers
     {
         private IDriver _driverService;
         private IUserSeason _userSeasonService;
+        private ITeam _teamService;
 
-        public DriverController(IDriver driverService, IUserSeason userSeasonService)
+        public DriverController(IDriver driverService, IUserSeason userSeasonService, ITeam teamService)
         {
             _driverService = driverService;
             _userSeasonService = userSeasonService;
+            _teamService = teamService;
         }
 
         [HttpGet("{id}")]
@@ -31,14 +33,18 @@ namespace car_racing_tournament_api.Controllers
         [HttpPut("{id}"), Authorize]
         public async Task<IActionResult> Put(Guid id, [FromBody] DriverDto driverDto)
         {
-            var resultGet = await _driverService.GetDriverById(id);
-            if (!resultGet.IsSuccess)
-                return NotFound(resultGet.ErrorMessage);
+            var resultGetDriver = await _driverService.GetDriverById(id);
+            if (!resultGetDriver.IsSuccess)
+                return NotFound(resultGetDriver.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Driver!.SeasonId))
+            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
 
-            var resultUpdate = await _driverService.UpdateDriver(id, driverDto);
+            var resultGetTeam = await _teamService.GetTeamById(id);
+            if (!resultGetTeam.IsSuccess)
+                return NotFound(resultGetTeam.ErrorMessage);
+
+            var resultUpdate = await _driverService.UpdateDriver(resultGetDriver.Driver, driverDto, resultGetTeam.Team!);
             if (!resultUpdate.IsSuccess)
                 return BadRequest(resultUpdate.ErrorMessage);
 
@@ -48,7 +54,6 @@ namespace car_racing_tournament_api.Controllers
         [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
-
             var resultGet = await _driverService.GetDriverById(id);
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
@@ -56,7 +61,7 @@ namespace car_racing_tournament_api.Controllers
             if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Driver!.SeasonId))
                 return Forbid();
 
-            var resultDelete = await _driverService.DeleteDriver(id);
+            var resultDelete = await _driverService.DeleteDriver(resultGet.Driver);
             if (!resultDelete.IsSuccess)
                 return BadRequest(resultDelete.ErrorMessage);
 

@@ -12,12 +12,14 @@ namespace car_racing_tournament_api.Controllers
         private IRace _raceService;
         private IUserSeason _userSeasonService;
         private IDriver _driverService;
+        private ITeam _teamService;
 
-        public RaceController(IRace raceService, IUserSeason userSeasonService, IDriver driverService)
+        public RaceController(IRace raceService, IUserSeason userSeasonService, IDriver driverService, ITeam teamService)
         {
             _raceService = raceService;
             _userSeasonService = userSeasonService;
             _driverService = driverService;
+            _teamService = teamService;
         }
 
         [HttpGet("{id}")]
@@ -77,18 +79,26 @@ namespace car_racing_tournament_api.Controllers
         [HttpPost("{raceId}/result"), Authorize]
         public async Task<IActionResult> PostResult(Guid raceId, [FromBody] ResultDto resultDto)
         {
-            var resultGet = await _raceService.GetRaceById(raceId);
-            if (!resultGet.IsSuccess)
-                return NotFound(resultGet.ErrorMessage);
+            var resultGetRace = await _raceService.GetRaceById(raceId);
+            if (!resultGetRace.IsSuccess)
+                return NotFound(resultGetRace.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Race!.SeasonId))
+            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetRace.Race!.SeasonId))
                 return Forbid();
+
+            var resultGetDriver = await _driverService.GetDriverById(resultDto.DriverId);
+            if (!resultGetDriver.IsSuccess)
+                return NotFound(resultGetDriver.ErrorMessage);
+
+            var resultGetTeam = await _teamService.GetTeamById(resultDto.TeamId);
+            if (!resultGetTeam.IsSuccess)
+                return NotFound(resultGetTeam.ErrorMessage);
 
             var resultAdd = await _raceService.AddResult(raceId, resultDto);
             if (!resultAdd.IsSuccess)
                 return BadRequest(resultAdd.ErrorMessage);
 
-            var resultUpdate = await _driverService.UpdateDriverTeam(resultDto.DriverId, resultDto.TeamId);
+            var resultUpdate = await _driverService.UpdateDriverTeam(resultGetDriver.Driver!, resultGetTeam.Team!);
             if (!resultUpdate.IsSuccess)
                 return BadRequest(resultUpdate.ErrorMessage);
             

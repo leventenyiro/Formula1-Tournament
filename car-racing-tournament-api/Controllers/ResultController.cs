@@ -12,12 +12,14 @@ namespace car_racing_tournament_api.Controllers
         private Interfaces.IResult _resultService;
         private IUserSeason _userSeasonService;
         private IDriver _driverService;
+        private ITeam _teamService;
 
-        public ResultController(Interfaces.IResult resultService, IUserSeason userSeasonService, IDriver driverService)
+        public ResultController(Interfaces.IResult resultService, IUserSeason userSeasonService, IDriver driverService, ITeam teamService)
         {
             _resultService = resultService;
             _userSeasonService = userSeasonService;
             _driverService = driverService;
+            _teamService = teamService;
         }
 
         [HttpGet("{id}")]
@@ -44,13 +46,17 @@ namespace car_racing_tournament_api.Controllers
             if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
 
+            var resultGetTeam = await _teamService.GetTeamById(resultGetResult.Result!.TeamId);
+            if (!resultGetDriver.IsSuccess)
+                return BadRequest(resultGetDriver.ErrorMessage);
+
             var resultUpdate = await _resultService.UpdateResult(id, resultDto);
             if (!resultUpdate.IsSuccess)
                 return BadRequest(resultUpdate.ErrorMessage);
 
             if (resultGetDriver.Driver.ActualTeamId != resultDto.TeamId)
             {
-                var resultUpdateTeam = await _driverService.UpdateDriverTeam(resultDto.DriverId, resultDto.TeamId);
+                var resultUpdateTeam = await _driverService.UpdateDriverTeam(resultGetDriver.Driver, resultGetTeam.Team!);
                 if (!resultUpdateTeam.IsSuccess)
                     return BadRequest(resultUpdateTeam.ErrorMessage);
             }

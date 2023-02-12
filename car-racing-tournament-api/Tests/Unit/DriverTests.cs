@@ -13,7 +13,7 @@ namespace car_racing_tournament_api.Tests.Unit
     {
         private CarRacingTournamentDbContext? _context;
         private DriverService? _driverService;
-        private Guid _driverId;
+        private Driver? _driver;
 
         [SetUp]
         public void Init()
@@ -23,8 +23,6 @@ namespace car_racing_tournament_api.Tests.Unit
                 .Options;
 
             _context = new CarRacingTournamentDbContext(options);
-
-            _driverId = Guid.NewGuid();
 
             Season season = new Season
             {
@@ -40,15 +38,17 @@ namespace car_racing_tournament_api.Tests.Unit
                 Season = season
             };
 
-            _context.Drivers.Add(new Driver
+            _driver = new Driver
             {
-                Id = _driverId,
+                Id = Guid.NewGuid(),
                 Name = "FirstDriver",
                 Number = 1,
                 RealName = "First driver",
                 ActualTeam = team,
                 Season = season
-            });
+            };
+
+            _context.Drivers.Add(_driver);
             _context.SaveChanges();
 
             var configuration = new ConfigurationBuilder()
@@ -61,7 +61,7 @@ namespace car_racing_tournament_api.Tests.Unit
         [Test]
         public async Task GetDriverByIdSuccess()
         {
-            var result = await _driverService!.GetDriverById(_driverId);
+            var result = await _driverService!.GetDriverById(_driver!.Id);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
 
@@ -103,7 +103,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 ActualTeamId = team.Id
             };
 
-            var result = await _driverService!.UpdateDriver(_driverId, driverDto);
+            var result = await _driverService!.UpdateDriver(_driver!, driverDto, team);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
 
@@ -115,7 +115,7 @@ namespace car_racing_tournament_api.Tests.Unit
 
             driverDto.RealName = "";
             driverDto.ActualTeamId = null;
-            result = await _driverService!.UpdateDriver(_driverId, driverDto);
+            result = await _driverService!.UpdateDriver(_driver!, driverDto, null!);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
 
@@ -124,21 +124,6 @@ namespace car_racing_tournament_api.Tests.Unit
         }
 
         // update - driver already exists
-
-        [Test]
-        public async Task UpdateDriverWrongId()
-        {
-            var driverDto = new DriverDto
-            {
-                Name = "AddDriver1",
-                RealName = "Add Driver",
-                Number = 2,
-                ActualTeamId = null
-            };
-            var result = await _driverService!.UpdateDriver(Guid.NewGuid(), driverDto);
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
-        }
 
         [Test]
         public async Task UpdateDriverMissingName()
@@ -152,7 +137,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 ActualTeamId = driver!.ActualTeamId
             };
 
-            var result = await _driverService!.UpdateDriver(Guid.Empty, driverDto);
+            var result = await _driverService!.UpdateDriver(driver, driverDto, driver.ActualTeam!);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
             Assert.AreEqual(_context!.Drivers.ToListAsync().Result.Count, 1);
@@ -168,17 +153,17 @@ namespace car_racing_tournament_api.Tests.Unit
                 Number = -1,
                 ActualTeamId = null
             };
-            var result = await _driverService!.UpdateDriver(_driverId, driverDto);
+            var result = await _driverService!.UpdateDriver(_driver!, driverDto, null!);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
 
             driverDto.Number = 0;
-            result = await _driverService!.UpdateDriver(_driverId, driverDto);
+            result = await _driverService!.UpdateDriver(_driver!, driverDto, null!);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
 
             driverDto.Number = 100;
-            result = await _driverService!.UpdateDriver(_driverId, driverDto);
+            result = await _driverService!.UpdateDriver(_driver!, driverDto, null!);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
         }
@@ -230,7 +215,10 @@ namespace car_racing_tournament_api.Tests.Unit
                     .FirstOrDefault()!.Id
             };
 
-            var result = await _driverService!.UpdateDriver(_driverId, driverDto);
+            var result = await _driverService!.UpdateDriver(_driver!, driverDto, _context.Seasons
+                    .Where(x => x.Id == anotherSeasonId)
+                    .FirstOrDefaultAsync().Result!.Teams!
+                    .FirstOrDefault()!);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
         }
@@ -249,32 +237,13 @@ namespace car_racing_tournament_api.Tests.Unit
             _context.Teams.Add(team);
             _context.SaveChanges();
 
-            var result = await _driverService!.UpdateDriverTeam(_driverId, team.Id);
+            var result = await _driverService!.UpdateDriverTeam(_driver!, team);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
 
-            result = await _driverService!.UpdateDriverTeam(_driverId, Guid.Empty);
+            result = await _driverService!.UpdateDriverTeam(_driver!, null!);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
-        }
-
-        [Test]
-        public async Task UpdateDriverTeamMissingDriverId()
-        {
-            Team team = new Team
-            {
-                Id = Guid.NewGuid(),
-                Name = "New Team",
-                Color = "456456",
-                Season = _context!.Seasons.FirstOrDefaultAsync().Result!
-            };
-
-            _context.Teams.Add(team);
-            _context.SaveChanges();
-
-            var result = await _driverService!.UpdateDriverTeam(Guid.Empty, team.Id);
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
         }
 
         [Test]
@@ -313,12 +282,12 @@ namespace car_racing_tournament_api.Tests.Unit
             });
             _context.SaveChanges();
 
-            var newTeamId = _context.Seasons
+            var result = await _driverService!.UpdateDriverTeam(
+                _driver!,
+                _context.Seasons
                     .Where(x => x.Id == anotherSeasonId)
                     .FirstOrDefaultAsync().Result!.Teams!
-                    .FirstOrDefault()!.Id;
-
-            var result = await _driverService!.UpdateDriverTeam(_driverId, newTeamId);
+                    .FirstOrDefault()!);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
         }
@@ -328,19 +297,11 @@ namespace car_racing_tournament_api.Tests.Unit
         {
             Assert.IsNotEmpty(_context!.Drivers);
 
-            var result = await _driverService!.DeleteDriver(_driverId);
+            var result = await _driverService!.DeleteDriver(_driver!);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
 
             Assert.IsEmpty(_context.Drivers);
-        }
-
-        [Test]
-        public async Task DeleteResultWrongId()
-        {
-            var result = await _driverService!.DeleteDriver(Guid.NewGuid());
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
         }
     }
 }

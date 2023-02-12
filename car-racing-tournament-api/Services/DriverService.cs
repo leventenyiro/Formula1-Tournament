@@ -44,66 +44,49 @@ namespace car_racing_tournament_api.Services
             return (true, driver, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateDriver(Guid id, DriverDto driverDto)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateDriver(Driver driver, DriverDto driverDto, Team team)
         {
-            var driverObj = await _carRacingTournamentDbContext.Drivers.Where(e => e.Id == id).FirstOrDefaultAsync();
-            if (driverObj == null)
-                return (false, _configuration["ErrorMessages:DriverNotFound"]);
-
             if (driverDto == null)
-                return (false, "Please provide the driver data!");
+                return (false, _configuration["ErrorMessages:MissingDriver"]);
 
             if (driverDto.Name.Length == 0)
-                return (false, "Driver name cannot be empty!");
+                return (false, String.Format(
+                    _configuration["ErrorMessages:DriverName"],
+                    _configuration["Validation:DriverNameMinLength"]
+                ));
 
             if (driverDto.Number <= 0 || driverDto.Number >= 100)
-                return (false, "Driver number must be between 1 and 99!");
+                return (false, _configuration["ErrorMessages:DriverNumber"]);
 
-            if (driverDto.ActualTeamId != null)
-            {
-                Team? teamObj = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == driverDto!.ActualTeamId).FirstOrDefaultAsync();
-                if (driverObj.SeasonId != teamObj!.SeasonId)
-                    return (false, _configuration["ErrorMessages:DriverTeamNotTheSameSeason"]);
-            }
+            if (team != null && driver.SeasonId != team.SeasonId)
+                return (false, _configuration["ErrorMessages:DriverTeamNotTheSameSeason"]);
 
-            driverObj.Name = driverDto.Name;
-            driverObj.RealName = driverDto.RealName;
-            driverObj.Number = driverDto.Number;
-            driverObj.ActualTeamId = driverDto.ActualTeamId;
-            _carRacingTournamentDbContext.Drivers.Update(driverObj);
-            _carRacingTournamentDbContext.SaveChanges();
+            driver.Name = driverDto.Name;
+            driver.RealName = driverDto.RealName;
+            driver.Number = driverDto.Number;
+            driver.ActualTeamId = driverDto.ActualTeamId;
+            _carRacingTournamentDbContext.Drivers.Update(driver);
+            await _carRacingTournamentDbContext.SaveChangesAsync();
 
             return (true, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateDriverTeam(Guid id, Guid teamId)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateDriverTeam(Driver driver, Team team)
         {
-            var driverObj = await _carRacingTournamentDbContext.Drivers.Where(e => e.Id == id).FirstOrDefaultAsync();
-            if (driverObj == null)
-                return (false, _configuration["ErrorMessages:DriverNotFound"]);
+            if (team != null && driver.SeasonId != team.SeasonId)
+                return (false, _configuration["ErrorMessages:DriverTeamNotTheSameSeason"]);
 
-            if (teamId != Guid.Empty)
-            {
-                Team? teamObj = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == teamId).FirstOrDefaultAsync();
-                if (driverObj.SeasonId != teamObj!.SeasonId)
-                    return (false, _configuration["ErrorMessages:DriverTeamNotTheSameSeason"]);
-            }
-
-            driverObj.ActualTeamId = teamId;
-            _carRacingTournamentDbContext.Drivers.Update(driverObj);
-            _carRacingTournamentDbContext.SaveChanges();
+            driver.ActualTeam = team != null ? team : null;
+            _carRacingTournamentDbContext.Drivers.Update(driver);
+            await _carRacingTournamentDbContext.SaveChangesAsync();
 
             return (true, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteDriver(Guid id)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteDriver(Driver driver)
         {
-            var driver = await _carRacingTournamentDbContext.Drivers.Where(e => e.Id == id).FirstOrDefaultAsync();
-            if (driver == null)
-                return (false, _configuration["ErrorMessages:DriverNotFound"]);
-            
             _carRacingTournamentDbContext.Drivers.Remove(driver);
-            _carRacingTournamentDbContext.SaveChanges();
+            await _carRacingTournamentDbContext.SaveChangesAsync();
 
             return (true, null);
         }
