@@ -42,7 +42,7 @@ namespace car_racing_tournament_api.Controllers
             if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Race!.SeasonId))
                 return Forbid();
             
-            var resultUpdate = await _raceService.UpdateRace(id, raceDto);
+            var resultUpdate = await _raceService.UpdateRace(resultGet.Race, raceDto);
             if (!resultUpdate.IsSuccess)
                 return BadRequest(resultUpdate.ErrorMessage);
             
@@ -59,7 +59,7 @@ namespace car_racing_tournament_api.Controllers
             if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Race!.SeasonId))
                 return Forbid();
 
-            var result = await _raceService.DeleteRace(id);
+            var result = await _raceService.DeleteRace(resultGet.Race);
             if (!result.IsSuccess)
                 return BadRequest(result.ErrorMessage);
             
@@ -69,7 +69,11 @@ namespace car_racing_tournament_api.Controllers
         [HttpGet("{raceId}/result")]
         public async Task<IActionResult> GetResultsByRaceId(Guid raceId)
         {
-            var result = await _raceService.GetResultsByRaceId(raceId);
+            var resultGet = await _raceService.GetRaceById(raceId);
+            if (!resultGet.IsSuccess)
+                return NotFound(resultGet.ErrorMessage);
+
+            var result = await _raceService.GetResultsByRaceId(resultGet.Race!);
             if (!result.IsSuccess)
                 return NotFound(result.ErrorMessage);
             
@@ -94,7 +98,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetTeam.IsSuccess)
                 return NotFound(resultGetTeam.ErrorMessage);
 
-            var resultAdd = await _raceService.AddResult(raceId, resultDto);
+            var resultAdd = await _raceService.AddResult(resultGetRace.Race, resultDto, resultGetDriver.Driver!, resultGetTeam.Team!);
             if (!resultAdd.IsSuccess)
                 return BadRequest(resultAdd.ErrorMessage);
 
