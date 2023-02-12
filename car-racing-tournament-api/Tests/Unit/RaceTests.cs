@@ -252,16 +252,13 @@ namespace car_racing_tournament_api.Tests.Unit
             {
                 Points = 5,
                 Position = 5,
-                DriverId = Guid.NewGuid(),
+                DriverId = driver.Id,
                 TeamId = _context.Teams.FirstOrDefaultAsync().Result!.Id,
             };
 
             var result = await _raceService!.AddResult(_race!, resultDto, driver, _context.Teams.FirstOrDefaultAsync().Result!);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
-
-            resultDto.DriverId = _context.Drivers.FirstOrDefaultAsync().Result!.Id;
-            resultDto.TeamId = Guid.NewGuid();
 
             Team team = new Team
             {
@@ -270,6 +267,9 @@ namespace car_racing_tournament_api.Tests.Unit
                 Color = "123123",
                 SeasonId = anotherSeasonId
             };
+
+            resultDto.DriverId = _context.Drivers.FirstOrDefaultAsync().Result!.Id;
+            resultDto.TeamId = team.Id;
 
             result = await _raceService!.AddResult(_race!, resultDto, _context.Drivers.FirstOrDefaultAsync().Result!, team);
             Assert.IsFalse(result.IsSuccess);

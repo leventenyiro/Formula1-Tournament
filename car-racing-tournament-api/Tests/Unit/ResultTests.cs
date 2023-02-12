@@ -12,7 +12,7 @@ namespace car_racing_tournament_api.Tests.Unit
     {
         private CarRacingTournamentDbContext? _context;
         private ResultService? _resultService;
-        private Guid _resultId;
+        private Result? _result;
 
         [SetUp]
         public void Init()
@@ -22,8 +22,6 @@ namespace car_racing_tournament_api.Tests.Unit
                 .Options;
 
             _context = new CarRacingTournamentDbContext(options);
-
-            _resultId = Guid.NewGuid();
 
             Season season = new Season
             {
@@ -39,9 +37,9 @@ namespace car_racing_tournament_api.Tests.Unit
                 Season = season
             };
 
-            _context.Results.Add(new Result
+            _result = new Result
             {
-                Id = _resultId,
+                Id = Guid.NewGuid(),
                 Driver = new Driver
                 {
                     Id = Guid.NewGuid(),
@@ -57,7 +55,9 @@ namespace car_racing_tournament_api.Tests.Unit
                     Season = season
                 },
                 Team = team
-            });
+            };
+
+            _context.Results.Add(_result);
             _context.SaveChanges();
 
             var configuration = new ConfigurationBuilder()
@@ -70,7 +70,7 @@ namespace car_racing_tournament_api.Tests.Unit
         [Test]
         public async Task GetResultByIdSuccess()
         {
-            var result = await _resultService!.GetResultById(_resultId);
+            var result = await _resultService!.GetResultById(_result!.Id);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
 
@@ -101,7 +101,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 TeamId = (Guid)driver.ActualTeamId!
             };
 
-            var result = await _resultService!.UpdateResult(_resultId, resultDto);
+            var result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.First(), driver, driver.ActualTeam!);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
 
@@ -115,31 +115,6 @@ namespace car_racing_tournament_api.Tests.Unit
         // update - result already exists
 
         [Test]
-        public async Task UpdateResultMissingIds()
-        {
-            var driver = _context!.Drivers.Where(x => x.Number == 1).FirstOrDefaultAsync().Result;
-            var resultDto = new ResultDto
-            {
-                Points = 18,
-                Position = 2,
-                DriverId = Guid.Empty,
-                TeamId = (Guid)driver!.ActualTeamId!
-            };
-
-            var result = await _resultService!.UpdateResult(_resultId, resultDto);
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
-            Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
-
-            resultDto.DriverId = driver!.Id;
-            resultDto.TeamId = Guid.Empty;
-            result = await _resultService!.UpdateResult(_resultId, resultDto);
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
-            Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
-        }
-
-        [Test]
         public async Task UpdateResultNotPositivePosition()
         {
             var driver = _context!.Drivers.Where(x => x.Number == 1).FirstOrDefaultAsync().Result;
@@ -151,13 +126,13 @@ namespace car_racing_tournament_api.Tests.Unit
                 TeamId = (Guid)driver.ActualTeamId!
             };
 
-            var result = await _resultService!.UpdateResult(_resultId, resultDto);
+            var result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.First(), driver, driver.ActualTeam!);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
             Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
 
             resultDto.Position = 0;
-            result = await _resultService!.UpdateResult(_resultId, resultDto);
+            result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.First(), driver, driver.ActualTeam!);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
             Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
@@ -175,7 +150,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 TeamId = (Guid)driver.ActualTeamId!
             };
 
-            var result = await _resultService!.UpdateResult(_resultId, resultDto);
+            var result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.First(), driver, driver.ActualTeam!);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
             Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
@@ -184,30 +159,46 @@ namespace car_racing_tournament_api.Tests.Unit
         [Test]
         public async Task UpdateDriverWithAnotherSeason()
         {
-            var anotherRaceId = Guid.NewGuid();
-            _context!.Races.Add(new Race
+            var anotherSeasonId = Guid.NewGuid();
+            Race race = new Race
             {
-                Id = anotherRaceId,
+                Id = Guid.NewGuid(),
                 Name = "Another race",
                 SeasonId = Guid.NewGuid()
-            });
-            _context.SaveChanges();
+            };
+
+            Driver driver = new Driver
+            {
+                Id = Guid.NewGuid(),
+                Name = "AnotherDriver",
+                Number = 3,
+                SeasonId = anotherSeasonId
+            };
 
             var resultDto = new ResultDto
             {
                 Points = 5,
                 Position = 5,
                 DriverId = Guid.NewGuid(),
-                TeamId = _context.Teams.FirstOrDefaultAsync().Result!.Id,
+                TeamId = _context!.Teams.FirstOrDefaultAsync().Result!.Id,
             };
 
-            var result = await _resultService!.UpdateResult(_resultId, resultDto);
+            var result = await _resultService!.UpdateResult(_result!, resultDto, race, driver, _context.Teams.FirstOrDefaultAsync().Result!);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
 
+            Team team = new Team
+            {
+                Id = Guid.NewGuid(),
+                Name = "AnotherTeam",
+                Color = "123123",
+                SeasonId = anotherSeasonId
+            };
+
             resultDto.DriverId = _context.Drivers.FirstOrDefaultAsync().Result!.Id;
-            resultDto.TeamId = Guid.NewGuid();
-            result = await _resultService!.UpdateResult(_resultId, resultDto);
+            resultDto.TeamId = team.Id;
+
+            result = await _resultService!.UpdateResult(_result!, resultDto, race, _context.Drivers.FirstOrDefaultAsync().Result!, team);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
         }
@@ -217,19 +208,11 @@ namespace car_racing_tournament_api.Tests.Unit
         {
             Assert.IsNotEmpty(_context!.Results);
 
-            var result = await _resultService!.DeleteResult(_resultId);
+            var result = await _resultService!.DeleteResult(_result!);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
 
             Assert.IsEmpty(_context.Results);
-        }
-
-        [Test]
-        public async Task DeleteResultWrongId()
-        {
-            var result = await _resultService!.DeleteResult(Guid.NewGuid());
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
         }
     }
 }
