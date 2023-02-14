@@ -11,7 +11,7 @@ namespace car_racing_tournament_api.Data
         public virtual DbSet<Driver> Drivers { get; set; } = default!;
         public virtual DbSet<Race> Races { get; set; } = default!;
         public virtual DbSet<Result> Results { get; set; } = default!;
-        public virtual DbSet<UserSeason> UserSeasons { get; set; } = default!;
+        public virtual DbSet<Permission> Permissions { get; set; } = default!;
 
         public CarRacingTournamentDbContext() { }
 
@@ -35,7 +35,7 @@ namespace car_racing_tournament_api.Data
                     .IsRequired();
             });
 
-            modelBuilder.Entity<UserSeason>(entity =>
+            modelBuilder.Entity<Permission>(entity =>
             {
                 entity.HasKey(e => e.Id);
 
@@ -46,12 +46,12 @@ namespace car_racing_tournament_api.Data
                     .IsUnique();
 
                 entity.HasOne(e => e.User)
-                    .WithMany(e => e.UserSeasons)
+                    .WithMany(e => e.Permissions)
                     .HasForeignKey(e => e.UserId)
                     .IsRequired();
 
                 entity.HasOne(e => e.Season)
-                    .WithMany(e => e.UserSeasons)
+                    .WithMany(e => e.Permissions)
                     .HasForeignKey(e => e.SeasonId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();

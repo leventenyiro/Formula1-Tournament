@@ -35,7 +35,7 @@ internal class Program
 
         builder.Services.AddScoped<ISeason, SeasonService>();
         builder.Services.AddScoped<IUser, UserService>();
-        builder.Services.AddScoped<IUserSeason, UserSeasonService>();
+        builder.Services.AddScoped<IPermission, PermissionService>();
         builder.Services.AddScoped<IDriver, DriverService>();
         builder.Services.AddScoped<ITeam, TeamService>();
         builder.Services.AddScoped<IRace, RaceService>();

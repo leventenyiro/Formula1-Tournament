@@ -178,13 +178,13 @@ namespace car_racing_tournament_api.Tests.Unit
                 Name = "Test Season",
                 Description = "This is our test season",
                 IsArchived = false,
-                UserSeasons = new List<UserSeason>()
+                Permissions = new List<Permission>()
                 {
-                    new UserSeason
+                    new Permission
                     {
                         Id = Guid.NewGuid(),
                         UserId = Guid.NewGuid(),
-                        Permission = UserSeasonPermission.Admin
+                        Permission = PermissionType.Admin
                     }
                 },
                 Teams = new List<Team>()
@@ -256,13 +256,13 @@ namespace car_racing_tournament_api.Tests.Unit
                 Name = "Test Season",
                 Description = "This is our test season",
                 IsArchived = false,
-                UserSeasons = new List<UserSeason>()
+                Permissions = new List<Permission>()
                 {
-                    new UserSeason
+                    new Permission
                     {
                         Id = Guid.NewGuid(),
                         UserId = Guid.NewGuid(),
-                        Permission = UserSeasonPermission.Admin
+                        Permission = PermissionType.Admin
                     }
                 },
                 Teams = new List<Team>()

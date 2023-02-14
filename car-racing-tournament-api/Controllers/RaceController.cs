@@ -10,14 +10,14 @@ namespace car_racing_tournament_api.Controllers
     public class RaceController : Controller
     {
         private IRace _raceService;
-        private IUserSeason _userSeasonService;
+        private IPermission _permissionService;
         private IDriver _driverService;
         private ITeam _teamService;
 
-        public RaceController(IRace raceService, IUserSeason userSeasonService, IDriver driverService, ITeam teamService)
+        public RaceController(IRace raceService, IPermission permissionService, IDriver driverService, ITeam teamService)
         {
             _raceService = raceService;
-            _userSeasonService = userSeasonService;
+            _permissionService = permissionService;
             _driverService = driverService;
             _teamService = teamService;
         }
@@ -39,7 +39,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Race!.SeasonId))
+            if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Race!.SeasonId))
                 return Forbid();
             
             var resultUpdate = await _raceService.UpdateRace(resultGet.Race, raceDto);
@@ -56,7 +56,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Race!.SeasonId))
+            if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Race!.SeasonId))
                 return Forbid();
 
             var result = await _raceService.DeleteRace(resultGet.Race);
@@ -87,7 +87,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetRace.IsSuccess)
                 return NotFound(resultGetRace.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetRace.Race!.SeasonId))
+            if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetRace.Race!.SeasonId))
                 return Forbid();
 
             var resultGetDriver = await _driverService.GetDriverById(resultDto.DriverId);

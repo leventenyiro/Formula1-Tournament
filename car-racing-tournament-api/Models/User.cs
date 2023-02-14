@@ -9,6 +9,6 @@ namespace car_racing_tournament_api.Models
         public string Email { get; set; } = default!;
         public string Password { get; set; } = default!;
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<UserSeason>? UserSeasons { get; set; }
+        public List<Permission>? Permissions { get; set; }
     }
 }

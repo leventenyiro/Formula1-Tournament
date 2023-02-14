@@ -24,18 +24,19 @@ namespace car_racing_tournament_api.Services
         public async Task<(bool IsSuccess, List<SeasonOutputDto>? Seasons, string? ErrorMessage)> GetSeasons()
         {
             List<SeasonOutputDto> seasons = await _carRacingTournamentDbContext.Seasons
-                .Include(x => x.UserSeasons)
+                .Include(x => x.Permissions)
                 .Select(x => new SeasonOutputDto
                 {
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
                     IsArchived = x.IsArchived,
-                    UserSeasons = x.UserSeasons.Select(x => new UserSeasonOutputDto
+                    Permissions = x.Permissions.Select(x => new PermissionOutputDto
                     {
+                        Id = x.Id,
                         UserId = x.UserId,
                         Username = x.User.Username,
-                        Permission = x.Permission
+                        Type = x.Type
                     }).ToList()
                 }).ToListAsync();
 
@@ -59,18 +60,19 @@ namespace car_racing_tournament_api.Services
         {
             SeasonOutputDto? season = await _carRacingTournamentDbContext.Seasons
                 .Where(x => x.Id == id)
-                .Include(x => x.UserSeasons)
+                .Include(x => x.Permissions)
                 .Select(x => new SeasonOutputDto
                 {
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
                     IsArchived = x.IsArchived,
-                    UserSeasons = x.UserSeasons.Select(x => new UserSeasonOutputDto
+                    Permissions = x.Permissions.Select(x => new PermissionOutputDto
                     {
+                        Id = x.Id,
                         UserId = x.UserId,
                         Username = x.User.Username,
-                        Permission = x.Permission
+                        Type = x.Type
                     }).ToList()
                 }).FirstOrDefaultAsync();
 
@@ -95,8 +97,8 @@ namespace car_racing_tournament_api.Services
             season.Id = Guid.NewGuid();
             season.IsArchived = false;
 
-            UserSeason userSeason = new UserSeason { Id = new Guid(), Permission = UserSeasonPermission.Admin, UserId = userId };
-            season.UserSeasons = new List<UserSeason> { userSeason };
+            Permission permission = new Permission { Id = new Guid(), Type = PermissionType.Admin, UserId = userId };
+            season.Permissions = new List<Permission> { permission };
 
             await _carRacingTournamentDbContext.Seasons.AddAsync(season);
             _carRacingTournamentDbContext.SaveChanges();
@@ -135,8 +137,8 @@ namespace car_racing_tournament_api.Services
             _carRacingTournamentDbContext.Seasons.Remove(season);
 
             // is it nessesary?
-            //var userSeasons = await _carRacingTournamentDbContext.UserSeasons.Where(e => e.SeasonId == season.Id).ToListAsync();
-            //_carRacingTournamentDbContext.UserSeasons.RemoveRange(userSeasons);
+            //var permissions = await _carRacingTournamentDbContext.Permissions.Where(e => e.SeasonId == season.Id).ToListAsync();
+            //_carRacingTournamentDbContext.Permissions.RemoveRange(permissions);
 
             await _carRacingTournamentDbContext.SaveChangesAsync();
             
@@ -148,25 +150,26 @@ namespace car_racing_tournament_api.Services
             if (_carRacingTournamentDbContext.Users.Where(x => x.Id == userId).FirstOrDefaultAsync().Result == null)
                 return (false, null, _configuration["ErrorMessages:UserNotFound"]);
 
-            var userSeasons = await _carRacingTournamentDbContext.UserSeasons
+            var permissions = await _carRacingTournamentDbContext.Permissions
                 .Where(x => x.UserId == userId)
                 .Select(x => x.SeasonId)
                 .ToListAsync();
 
             List<SeasonOutputDto> seasons = await _carRacingTournamentDbContext.Seasons
-                .Where(x => userSeasons.Contains(x.Id))
-                .Include(x => x.UserSeasons)
+                .Where(x => permissions.Contains(x.Id))
+                .Include(x => x.Permissions)
                 .Select(x => new SeasonOutputDto
                 {
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
                     IsArchived = x.IsArchived,
-                    UserSeasons = x.UserSeasons.Select(x => new UserSeasonOutputDto
+                    Permissions = x.Permissions.Select(x => new PermissionOutputDto
                     {
+                        Id = x.Id,
                         UserId = x.UserId,
                         Username = x.User.Username,
-                        Permission = x.Permission
+                        Type = x.Type
                     }).ToList()
                 }).ToListAsync();
 

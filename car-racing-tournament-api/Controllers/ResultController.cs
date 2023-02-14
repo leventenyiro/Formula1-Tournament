@@ -10,15 +10,15 @@ namespace car_racing_tournament_api.Controllers
     public class ResultController : Controller
     {
         private Interfaces.IResult _resultService;
-        private IUserSeason _userSeasonService;
+        private IPermission _permissionService;
         private IDriver _driverService;
         private ITeam _teamService;
         private IRace _raceService;
 
-        public ResultController(Interfaces.IResult resultService, IUserSeason userSeasonService, IDriver driverService, ITeam teamService, IRace raceService)
+        public ResultController(Interfaces.IResult resultService, IPermission permissionService, IDriver driverService, ITeam teamService, IRace raceService)
         {
             _resultService = resultService;
-            _userSeasonService = userSeasonService;
+            _permissionService = permissionService;
             _driverService = driverService;
             _teamService = teamService;
             _raceService = raceService;
@@ -45,7 +45,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetDriver.IsSuccess)
                 return NotFound(resultGetDriver.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
+            if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
 
             var resultGetTeam = await _teamService.GetTeamById(resultGetResult.Result!.TeamId);
@@ -81,7 +81,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetDriver.IsSuccess)
                 return BadRequest(resultGetDriver.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
+            if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
 
             var resultDelete = await _resultService.DeleteResult(resultGetResult.Result);

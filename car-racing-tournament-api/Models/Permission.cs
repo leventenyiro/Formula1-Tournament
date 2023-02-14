@@ -2,7 +2,7 @@
 
 namespace car_racing_tournament_api.Models
 {
-    public class UserSeason
+    public class Permission
     {
         public Guid Id { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -11,10 +11,10 @@ namespace car_racing_tournament_api.Models
         public virtual Season Season { get; set; } = default!;
         public Guid UserId { get; set; }
         public Guid SeasonId { get; set; }
-        public UserSeasonPermission Permission { get; set; }
+        public PermissionType Type { get; set; }
     }
 
-    public enum UserSeasonPermission
+    public enum PermissionType
     {
         Moderator,
         Admin

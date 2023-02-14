@@ -13,14 +13,14 @@ namespace car_racing_tournament_api.Controllers
     public class SeasonController : Controller
     {
         private ISeason _seasonService;
-        private IUserSeason _userSeasonService;
+        private IPermission _permissionService;
         private IUser _userService;
         private ITeam _teamService;
 
-        public SeasonController(ISeason seasonService, IUserSeason userSeasonService, IUser userService, ITeam teamService)
+        public SeasonController(ISeason seasonService, IPermission permissionService, IUser userService, ITeam teamService)
         {
             _seasonService = seasonService;
-            _userSeasonService = userSeasonService;
+            _permissionService = permissionService;
             _userService = userService;
             _teamService = teamService;
         }
@@ -62,7 +62,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetSeason.IsSuccess)
                 return NotFound(resultGetSeason.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdmin(new Guid(User.Identity!.Name!), id))
+            if (!await _permissionService.IsAdmin(new Guid(User.Identity!.Name!), id))
                 return Forbid();
 
             var resultUpdate = await _seasonService.UpdateSeason(resultGetSeason.Season!, seasonDto);
@@ -79,7 +79,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetSeason.IsSuccess)
                 return NotFound(resultGetSeason.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdmin(new Guid(User.Identity!.Name!), id))
+            if (!await _permissionService.IsAdmin(new Guid(User.Identity!.Name!), id))
                 return Forbid();
 
             var resultArchive = await _seasonService.ArchiveSeason(resultGetSeason.Season!);
@@ -96,7 +96,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetSeason.IsSuccess)
                 return NotFound(resultGetSeason.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdmin(new Guid(User.Identity!.Name!), id))
+            if (!await _permissionService.IsAdmin(new Guid(User.Identity!.Name!), id))
                 return Forbid();
 
             var resultDelete = await _seasonService.DeleteSeason(resultGetSeason.Season!);
@@ -116,17 +116,17 @@ namespace car_racing_tournament_api.Controllers
             return Ok(resultGetSeasons.Seasons);
         }
 
-        [HttpPost("{seasonId}/user-season"), Authorize]
+        [HttpPost("{seasonId}/permission"), Authorize]
         public async Task<IActionResult> Post(Guid seasonId, [FromForm] string usernameEmail)
         {
-            if (!await _userSeasonService.IsAdmin(new Guid(User.Identity!.Name!), seasonId))
+            if (!await _permissionService.IsAdmin(new Guid(User.Identity!.Name!), seasonId))
                 return Forbid();
 
             var resultGet = await _userService.GetUserByUsernameEmail(usernameEmail);
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
-            var resultAdd = await _userSeasonService.AddModerator(new Guid(User.Identity!.Name!), resultGet.User!.Id, seasonId);
+            var resultAdd = await _permissionService.AddPermission(resultGet.User!.Id, seasonId);
             if (!resultAdd.IsSuccess)
                 return BadRequest(resultAdd.ErrorMessage);
 
@@ -154,7 +154,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetSeason.IsSuccess)
                 return NotFound(resultGetSeason.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), seasonId))
+            if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), seasonId))
                 return Forbid();
 
             Team team = null!;
@@ -196,7 +196,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetSeason.IsSuccess)
                 return NotFound(resultGetSeason.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), seasonId))
+            if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), seasonId))
                 return Forbid();
 
             var resultAdd = await _seasonService.AddTeam(resultGetSeason.Season!, team);
@@ -227,7 +227,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetSeason.IsSuccess)
                 return NotFound(resultGetSeason.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), seasonId))
+            if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), seasonId))
                 return Forbid();
             
             var resultAdd = await _seasonService.AddRace(resultGetSeason.Season!, raceDto);

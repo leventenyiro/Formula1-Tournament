@@ -11,13 +11,13 @@ namespace car_racing_tournament_api.Controllers
     public class DriverController : Controller
     {
         private IDriver _driverService;
-        private IUserSeason _userSeasonService;
+        private IPermission _permissionService;
         private ITeam _teamService;
 
-        public DriverController(IDriver driverService, IUserSeason userSeasonService, ITeam teamService)
+        public DriverController(IDriver driverService, IPermission permissionService, ITeam teamService)
         {
             _driverService = driverService;
-            _userSeasonService = userSeasonService;
+            _permissionService = permissionService;
             _teamService = teamService;
         }
 
@@ -38,7 +38,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetDriver.IsSuccess)
                 return NotFound(resultGetDriver.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
+            if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
 
             Team team = null!;
@@ -66,7 +66,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Driver!.SeasonId))
+            if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Driver!.SeasonId))
                 return Forbid();
 
             var resultDelete = await _driverService.DeleteDriver(resultGet.Driver);

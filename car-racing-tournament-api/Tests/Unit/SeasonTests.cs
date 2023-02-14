@@ -51,14 +51,14 @@ namespace car_racing_tournament_api.Tests.Unit
                 Name = "Test Season",
                 Description = "This is our test season",
                 IsArchived = false,
-                UserSeasons = new List<UserSeason>()
+                Permissions = new List<Permission>()
                 {
-                    new UserSeason
+                    new Permission
                     {
                         Id = Guid.NewGuid(),
                         User = user,
                         UserId = _userId,
-                        Permission = UserSeasonPermission.Admin
+                        Type = PermissionType.Admin
                     }
                 },
                 Teams = new List<Team>()
@@ -169,9 +169,9 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNull(findSeason.Teams);
             Assert.IsNull(findSeason.Drivers);
             Assert.IsNull(findSeason.Races);
-            Assert.AreEqual(findSeason.UserSeasons.Count, 1);
-            Assert.AreEqual(findSeason.UserSeasons.First().UserId, _userId);
-            Assert.AreEqual(findSeason.UserSeasons.First().Permission, UserSeasonPermission.Admin);
+            Assert.AreEqual(findSeason.Permissions.Count, 1);
+            Assert.AreEqual(findSeason.Permissions.First().UserId, _userId);
+            Assert.AreEqual(findSeason.Permissions.First().Type, PermissionType.Admin);
         }
 
         // AddSeasonExists - NEED TO BE IMPLEMENTED
@@ -272,14 +272,14 @@ namespace car_racing_tournament_api.Tests.Unit
         public async Task DeleteSeasonSuccess()
         {
             Assert.IsNotEmpty(_context!.Seasons);
-            Assert.IsNotEmpty(_context.UserSeasons);
+            Assert.IsNotEmpty(_context.Permissions);
 
             var result = await _seasonService!.DeleteSeason(_season!);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
 
             Assert.IsEmpty(_context.Seasons);
-            Assert.IsEmpty(_context.UserSeasons);
+            Assert.IsEmpty(_context.Permissions);
         }
 
         [Test]
@@ -396,13 +396,13 @@ namespace car_racing_tournament_api.Tests.Unit
                 Name = "Test Season",
                 Description = "This is our test season",
                 IsArchived = false,
-                UserSeasons = new List<UserSeason>()
+                Permissions = new List<Permission>()
                 {
-                    new UserSeason
+                    new Permission
                     {
                         Id = Guid.NewGuid(),
                         UserId = _userId,
-                        Permission = UserSeasonPermission.Admin
+                        Type = PermissionType.Admin
                     }
                 },
                 Teams = new List<Team>()

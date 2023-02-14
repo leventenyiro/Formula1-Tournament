@@ -6,10 +6,10 @@ using NUnit.Framework;
 
 namespace car_racing_tournament_api.Tests.Unit
 {
-    public class UserSeasonTests
+    public class PermissionTests
     {
         private CarRacingTournamentDbContext? _context;
-        private UserSeasonService? _userSeasonService;
+        private PermissionService? _permissionService;
         private Guid _user1Id;
         private Guid _user2Id;
         private Guid _season1Id;
@@ -62,20 +62,20 @@ namespace car_racing_tournament_api.Tests.Unit
             };
             _context.Users.Add(user2);
 
-            _context.UserSeasons.Add(new UserSeason
+            _context.Permissions.Add(new Permission
             {
                 Id = Guid.NewGuid(),
                 Season = season1,
                 User = user1,
-                Permission = UserSeasonPermission.Admin
+                Permission = PermissionType.Admin
             });
 
-            _context.UserSeasons.Add(new UserSeason
+            _context.Permissions.Add(new Permission
             {
                 Id = Guid.NewGuid(),
                 Season = season1,
                 User = user2,
-                Permission = UserSeasonPermission.Moderator
+                Permission = PermissionType.Moderator
             });
 
             _context.SaveChanges();
@@ -84,47 +84,47 @@ namespace car_racing_tournament_api.Tests.Unit
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            _userSeasonService = new UserSeasonService(_context, configuration);
+            _permissionService = new PermissionService(_context, configuration);
         }
 
         [Test]
         public async Task IsAdminSuccess()
         {
-            var result = await _userSeasonService!.IsAdmin(_user1Id, _season1Id);
+            var result = await _permissionService!.IsAdmin(_user1Id, _season1Id);
             Assert.IsTrue(result);
         }
 
         [Test]
         public async Task IsAdminFailed()
         {
-            var result = await _userSeasonService!.IsAdmin(_user2Id, _season1Id);
+            var result = await _permissionService!.IsAdmin(_user2Id, _season1Id);
             Assert.IsFalse(result);
         }
 
         [Test]
         public async Task IsAdminModeratorSuccess()
         {
-            var result = await _userSeasonService!.IsAdminModerator(_user1Id, _season1Id);
+            var result = await _permissionService!.IsAdminModerator(_user1Id, _season1Id);
             Assert.IsTrue(result);
 
-            result = await _userSeasonService!.IsAdminModerator(_user2Id, _season1Id);
+            result = await _permissionService!.IsAdminModerator(_user2Id, _season1Id);
             Assert.IsTrue(result);
         }
 
         [Test]
         public async Task IsAdminModeratorFailed()
         {
-            var result = await _userSeasonService!.IsAdmin(_user1Id, _season2Id);
+            var result = await _permissionService!.IsAdmin(_user1Id, _season2Id);
             Assert.IsFalse(result);
 
-            result = await _userSeasonService!.IsAdmin(_user2Id, _season2Id);
+            result = await _permissionService!.IsAdmin(_user2Id, _season2Id);
             Assert.IsFalse(result);
         }
 
         [Test]
         public async Task AddAdminSuccess()
         {
-            var result = await _userSeasonService!.AddAdmin(_user1Id, _season2Id);
+            var result = await _permissionService!.AddAdmin(_user1Id, _season2Id);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
         }
@@ -140,7 +140,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 Password = "test"
             };
 
-            var result = await _userSeasonService!.AddAdmin(user.Id, _season1Id);
+            var result = await _permissionService!.AddAdmin(user.Id, _season1Id);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
         }
@@ -148,7 +148,7 @@ namespace car_racing_tournament_api.Tests.Unit
         [Test]
         public async Task AddModeratorSuccess()
         {
-            var result = await _userSeasonService!.AddModerator(_user1Id, _season2Id);
+            var result = await _permissionService!.AddModerator(_user1Id, _season2Id);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
         }
@@ -164,7 +164,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 Password = "test"
             };
 
-            var result = await _userSeasonService!.AddModerator(user.Id, _season1Id);
+            var result = await _permissionService!.AddModerator(user.Id, _season1Id);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
         }*/
