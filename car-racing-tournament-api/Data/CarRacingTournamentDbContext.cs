@@ -39,7 +39,7 @@ namespace car_racing_tournament_api.Data
             {
                 entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.Permission)
+                entity.Property(e => e.Type)
                     .IsRequired();
 
                 entity.HasIndex(e => new { e.SeasonId, e.UserId })

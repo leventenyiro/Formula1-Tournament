@@ -48,11 +48,19 @@ namespace car_racing_tournament_api.Controllers
         [HttpPost, Authorize]
         public async Task<IActionResult> Post([FromBody] SeasonCreateDto seasonDto)
         {
-            var resultAdd = await _seasonService.AddSeason(seasonDto, new Guid(User.Identity!.Name!));
-            if (!resultAdd.IsSuccess)
-                return BadRequest(resultAdd.ErrorMessage);
+            var resultAddSeason = await _seasonService.AddSeason(seasonDto, new Guid(User.Identity!.Name!));
+            if (!resultAddSeason.IsSuccess)
+                return BadRequest(resultAddSeason.ErrorMessage);
 
-            return StatusCode(StatusCodes.Status201Created, resultAdd.SeasonId);
+            var resultGet = _userService.GetUserById(new Guid(User.Identity!.Name!)).Result;
+            if (!resultGet.IsSuccess)
+                return BadRequest(resultGet.ErrorMessage);
+
+            var resultAddPermission = await _permissionService.AddPermission(resultGet.User!, resultAddSeason.Season!, PermissionType.Moderator);
+            if (!resultAddPermission.IsSuccess)
+                return BadRequest(resultAddPermission.ErrorMessage);
+
+            return StatusCode(StatusCodes.Status201Created, resultAddSeason.Season!.Id);
         }
 
         [HttpPut("{id}"), Authorize]
@@ -122,11 +130,15 @@ namespace car_racing_tournament_api.Controllers
             if (!await _permissionService.IsAdmin(new Guid(User.Identity!.Name!), seasonId))
                 return Forbid();
 
-            var resultGet = await _userService.GetUserByUsernameEmail(usernameEmail);
-            if (!resultGet.IsSuccess)
-                return NotFound(resultGet.ErrorMessage);
+            var resultGetUser = await _userService.GetUserByUsernameEmail(usernameEmail);
+            if (!resultGetUser.IsSuccess)
+                return NotFound(resultGetUser.ErrorMessage);
 
-            var resultAdd = await _permissionService.AddPermission(resultGet.User!.Id, seasonId);
+            var resultGetSeason = await _seasonService.GetSeasonById(seasonId);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
+
+            var resultAdd = await _permissionService.AddPermission(resultGetUser.User!, resultGetSeason.Season!, PermissionType.Moderator);
             if (!resultAdd.IsSuccess)
                 return BadRequest(resultAdd.ErrorMessage);
 

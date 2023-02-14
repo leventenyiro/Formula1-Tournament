@@ -26,7 +26,7 @@ namespace car_racing_tournament_api.Controllers
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Permission!.SeasonId))
                 return Forbid();
 
-            var resultDelete = await _permissionService.RemovePermission(new Guid(User.Identity!.Name!), moderatorId, seasonId);
+            var resultDelete = await _permissionService.RemovePermission(resultGet.Permission);
             if (!resultDelete.IsSuccess)
                 return BadRequest(resultDelete.ErrorMessage);
 

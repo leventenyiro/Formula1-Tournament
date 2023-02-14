@@ -184,7 +184,7 @@ namespace car_racing_tournament_api.Tests.Unit
                     {
                         Id = Guid.NewGuid(),
                         UserId = Guid.NewGuid(),
-                        Permission = PermissionType.Admin
+                        Type = PermissionType.Admin
                     }
                 },
                 Teams = new List<Team>()
@@ -262,7 +262,7 @@ namespace car_racing_tournament_api.Tests.Unit
                     {
                         Id = Guid.NewGuid(),
                         UserId = Guid.NewGuid(),
-                        Permission = PermissionType.Admin
+                        Type = PermissionType.Admin
                     }
                 },
                 Teams = new List<Team>()

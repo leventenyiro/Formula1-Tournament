@@ -169,9 +169,6 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNull(findSeason.Teams);
             Assert.IsNull(findSeason.Drivers);
             Assert.IsNull(findSeason.Races);
-            Assert.AreEqual(findSeason.Permissions.Count, 1);
-            Assert.AreEqual(findSeason.Permissions.First().UserId, _userId);
-            Assert.AreEqual(findSeason.Permissions.First().Type, PermissionType.Admin);
         }
 
         // AddSeasonExists - NEED TO BE IMPLEMENTED

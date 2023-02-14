@@ -1,6 +1,7 @@
 ﻿using car_racing_tournament_api.Data;
 using car_racing_tournament_api.Models;
 using car_racing_tournament_api.Services;
+using car_racing_tournament_api.DTO;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
@@ -10,10 +11,12 @@ namespace car_racing_tournament_api.Tests.Unit
     {
         private CarRacingTournamentDbContext? _context;
         private PermissionService? _permissionService;
-        private Guid _user1Id;
-        private Guid _user2Id;
-        private Guid _season1Id;
-        private Guid _season2Id;
+        private Models.User? _user1;
+        private Models.User? _user2;
+        private Season? _season1;
+        private Season? _season2;
+        private Permission? _permissionAdmin;
+        private Permission? _permissionModerator;
 
         [SetUp]
         public void Init()
@@ -24,59 +27,57 @@ namespace car_racing_tournament_api.Tests.Unit
 
             _context = new CarRacingTournamentDbContext(options);
 
-            _season1Id = Guid.NewGuid();
-            var season1 = new Season
+            _season1 = new Season
             {
-                Id = _season1Id,
+                Id = Guid.NewGuid(),
                 Name = "Test Season",
                 IsArchived = false
             };
-            _context.Seasons.Add(season1);
+            _context.Seasons.Add(_season1);
 
-            _user1Id = Guid.NewGuid();
-            var user1 = new Models.User
+            _user1 = new Models.User
             {
-                Id = _user1Id,
+                Id = Guid.NewGuid(),
                 Username = "FirstUser",
                 Email = "first@user.com",
                 Password = "test"
             };
-            _context.Users.Add(user1);
+            _context.Users.Add(_user1);
 
-            _season2Id = Guid.NewGuid();
-            var season2 = new Season
+            _season2 = new Season
             {
-                Id = _season2Id,
+                Id = Guid.NewGuid(),
                 Name = "Test Season 2",
                 IsArchived = false
             };
-            _context.Seasons.Add(season2);
+            _context.Seasons.Add(_season2);
 
-            _user2Id = Guid.NewGuid();
-            var user2 = new Models.User
+            _user2 = new Models.User
             {
-                Id = _user2Id,
+                Id = Guid.NewGuid(),
                 Username = "SecondUser",
                 Email = "second@user.com",
                 Password = "test"
             };
-            _context.Users.Add(user2);
+            _context.Users.Add(_user2);
 
-            _context.Permissions.Add(new Permission
+            _permissionAdmin = new Permission
             {
                 Id = Guid.NewGuid(),
-                Season = season1,
-                User = user1,
-                Permission = PermissionType.Admin
-            });
+                Season = _season1,
+                User = _user1,
+                Type = PermissionType.Admin
+            };
+            _context.Permissions.Add(_permissionAdmin);
 
-            _context.Permissions.Add(new Permission
+            _permissionModerator = new Permission
             {
                 Id = Guid.NewGuid(),
-                Season = season1,
-                User = user2,
-                Permission = PermissionType.Moderator
-            });
+                Season = _season1,
+                User = _user2,
+                Type = PermissionType.Moderator
+            };
+            _context.Permissions.Add(_permissionModerator);
 
             _context.SaveChanges();
 
@@ -90,83 +91,60 @@ namespace car_racing_tournament_api.Tests.Unit
         [Test]
         public async Task IsAdminSuccess()
         {
-            var result = await _permissionService!.IsAdmin(_user1Id, _season1Id);
+            var result = await _permissionService!.IsAdmin(_user1!.Id, _season1!.Id);
             Assert.IsTrue(result);
         }
 
         [Test]
         public async Task IsAdminFailed()
         {
-            var result = await _permissionService!.IsAdmin(_user2Id, _season1Id);
+            var result = await _permissionService!.IsAdmin(_user2!.Id, _season1!.Id);
             Assert.IsFalse(result);
         }
 
         [Test]
         public async Task IsAdminModeratorSuccess()
         {
-            var result = await _permissionService!.IsAdminModerator(_user1Id, _season1Id);
+            var result = await _permissionService!.IsAdminModerator(_user1!.Id, _season1!.Id);
             Assert.IsTrue(result);
 
-            result = await _permissionService!.IsAdminModerator(_user2Id, _season1Id);
+            result = await _permissionService!.IsAdminModerator(_user2!.Id, _season1!.Id);
             Assert.IsTrue(result);
         }
 
         [Test]
         public async Task IsAdminModeratorFailed()
         {
-            var result = await _permissionService!.IsAdmin(_user1Id, _season2Id);
+            var result = await _permissionService!.IsAdmin(_user1!.Id, _season2!.Id);
             Assert.IsFalse(result);
 
-            result = await _permissionService!.IsAdmin(_user2Id, _season2Id);
+            result = await _permissionService!.IsAdmin(_user2!.Id, _season2!.Id);
             Assert.IsFalse(result);
         }
 
         [Test]
         public async Task AddAdminSuccess()
         {
-            var result = await _permissionService!.AddAdmin(_user1Id, _season2Id);
+            var result = await _permissionService!.AddPermission(_user1!, _season2!, PermissionType.Admin);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
-        }
+            Assert.AreEqual(_context!.Permissions.Count(), 3);
 
-        /*[Test]
-        public async Task AddAdminFailed()
-        {
-            var user = new Models.User
-            {
-                Id = Guid.NewGuid(),
-                Username = "ThirdUser",
-                Email = "third@user.com",
-                Password = "test"
-            };
-
-            var result = await _permissionService!.AddAdmin(user.Id, _season1Id);
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
-        }
-
-        [Test]
-        public async Task AddModeratorSuccess()
-        {
-            var result = await _permissionService!.AddModerator(_user1Id, _season2Id);
+            result = await _permissionService!.AddPermission(_user1!, _season2!, PermissionType.Moderator);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
+            Assert.AreEqual(_context!.Permissions.Count(), 3);
         }
 
-        [Test]
-        public async Task AddModeratorFailed()
-        {
-            var user = new Models.User
-            {
-                Id = Guid.NewGuid(),
-                Username = "ThirdUser",
-                Email = "third@user.com",
-                Password = "test"
-            };
+        // PERMISSION ALREADZ EXISTS
 
-            var result = await _permissionService!.AddModerator(user.Id, _season1Id);
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
-        }*/
+        [Test]
+        public async Task UpdatePermissionTypeSuccess()
+        {
+
+            //var result =
+        }
+
+        // failed because of there is an admin
     }
 }

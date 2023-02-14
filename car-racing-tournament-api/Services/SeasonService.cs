@@ -82,13 +82,13 @@ namespace car_racing_tournament_api.Services
             return (true, season, null);
         }
 
-        public async Task<(bool IsSuccess, Guid SeasonId, string? ErrorMessage)> AddSeason(SeasonCreateDto seasonDto, Guid userId)
+        public async Task<(bool IsSuccess, Season? Season, string? ErrorMessage)> AddSeason(SeasonCreateDto seasonDto, Guid userId)
         {
             if (seasonDto == null)
-                return (false, Guid.Empty, _configuration["ErrorMessages:MissingSeason"]);
+                return (false, null, _configuration["ErrorMessages:MissingSeason"]);
 
             if (seasonDto.Name.Length < int.Parse(_configuration["Validation:SeasonNameMinLength"]))
-                return (false, Guid.Empty, String.Format(
+                return (false, null, String.Format(
                     _configuration["ErrorMessages:SeasonName"],
                     _configuration["Validation:SeasonNameMinLength"]
                 ));
@@ -96,14 +96,15 @@ namespace car_racing_tournament_api.Services
             var season = _mapper.Map<Season>(seasonDto);
             season.Id = Guid.NewGuid();
             season.IsArchived = false;
+            //season.Permissions = new List<Permission>();
 
-            Permission permission = new Permission { Id = new Guid(), Type = PermissionType.Admin, UserId = userId };
-            season.Permissions = new List<Permission> { permission };
+            //Permission permission = new Permission { Id = new Guid(), Type = PermissionType.Admin, UserId = userId };
+            //season.Permissions = new List<Permission> { permission };
 
             await _carRacingTournamentDbContext.Seasons.AddAsync(season);
-            _carRacingTournamentDbContext.SaveChanges();
+            await _carRacingTournamentDbContext.SaveChangesAsync();
             
-            return (true, season.Id, null);
+            return (true, season, null);
         }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateSeason(Season season, SeasonUpdateDto seasonDto)

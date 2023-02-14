@@ -39,7 +39,7 @@ namespace car_racing_tournament_api.Controllers
         [HttpGet, Authorize]
         public async Task<IActionResult> Get()
         {
-            var result = await _userService.GetUser(User.Identity!.Name!);
+            var result = await _userService.GetUserById(new Guid(User.Identity!.Name!));
             if (!result.IsSuccess)
                 return NotFound(result.ErrorMessage);
             

@@ -44,14 +44,14 @@ namespace car_racing_tournament_api.Services
             return (true, permission, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> AddPermission(PermissionDto permissionDto)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> AddPermission(User user, Season season, PermissionType permissionType)
         {
             await _carRacingTournamentDbContext.Permissions.AddAsync(new Permission
             {
                 Id = Guid.NewGuid(),
-                UserId = permissionDto.UserId,
-                SeasonId = permissionDto.SeasonId,
-                Type = permissionDto.Type
+                UserId = user.Id,
+                SeasonId = season.Id,
+                Type = permissionType
             });
             await _carRacingTournamentDbContext.SaveChangesAsync();
 
