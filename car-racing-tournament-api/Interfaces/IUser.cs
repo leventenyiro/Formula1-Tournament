@@ -9,7 +9,7 @@ namespace car_racing_tournament_api.Interfaces
         Task<(bool IsSuccess, string? ErrorMessage)> Registration(RegistrationDto registrationDto);
         Task<(bool IsSuccess, User? User, string? ErrorMessage)> GetUserById(Guid id);
         Task<(bool IsSuccess, User? User, string? ErrorMessage)> GetUserByUsernameEmail(string usernameEmail);
-        Task<(bool IsSuccess, string? ErrorMessage)> UpdateUser(Guid id, UpdateUserDto updateUserDto);
-        Task<(bool IsSuccess, string? ErrorMessage)> UpdatePassword(Guid id, UpdatePasswordDto updatePasswordDto);
+        Task<(bool IsSuccess, string? ErrorMessage)> UpdateUser(User user, UpdateUserDto updateUserDto);
+        Task<(bool IsSuccess, string? ErrorMessage)> UpdatePassword(User user, UpdatePasswordDto updatePasswordDto);
     }
 }

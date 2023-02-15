@@ -49,9 +49,13 @@ namespace car_racing_tournament_api.Controllers
         [HttpPut, Authorize]
         public async Task<IActionResult> Put([FromBody] UpdateUserDto updateUserDto)
         {
-            var result = await _userService.UpdateUser(new Guid(User.Identity!.Name!), updateUserDto);
-            if (!result.IsSuccess)
-                return BadRequest(result.ErrorMessage);
+            var resultGetUser = await _userService.GetUserById(new Guid(User.Identity!.Name!));
+            if (!resultGetUser.IsSuccess)
+                return NotFound(resultGetUser.ErrorMessage);
+
+            var resultUpdate = await _userService.UpdateUser(resultGetUser.User!, updateUserDto);
+            if (!resultUpdate.IsSuccess)
+                return BadRequest(resultUpdate.ErrorMessage);
             
             return NoContent();
         }
@@ -59,7 +63,11 @@ namespace car_racing_tournament_api.Controllers
         [HttpPut("password"), Authorize]
         public async Task<IActionResult> Put([FromBody] UpdatePasswordDto updatePasswordDto)
         {
-            var result = await _userService.UpdatePassword(new Guid(User.Identity!.Name!), updatePasswordDto);
+            var resultGetUser = await _userService.GetUserById(new Guid(User.Identity!.Name!));
+            if (!resultGetUser.IsSuccess)
+                return NotFound(resultGetUser.ErrorMessage);
+
+            var result = await _userService.UpdatePassword(resultGetUser.User!, updatePasswordDto);
             if (!result.IsSuccess)
                 return BadRequest(result.ErrorMessage);
             

@@ -203,7 +203,5 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.AreEqual(season.Permissions.Count(), 2);
             Assert.AreEqual(permission.Type, PermissionType.Moderator);
         }
-
-        // failed because of there is an admin
     }
 }

@@ -45,7 +45,7 @@ namespace car_racing_tournament_api.Services
                 return (false, _configuration["ErrorMessages:EmailFormat"]);
 
             if (!IsPassword(registrationDto.Password))
-                return (false, _configuration["ErrorMessages:PasswordLength"]);
+                return (false, _configuration["ErrorMessages:PasswordFormat"]);
 
             if (registrationDto.Password != registrationDto.PasswordAgain)
                 return (false, _configuration["ErrorMessages:PasswordsPass"]);
@@ -79,7 +79,7 @@ namespace car_racing_tournament_api.Services
             return (true, actualUser, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateUser(Guid id, UpdateUserDto updateUserDto)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateUser(User user, UpdateUserDto updateUserDto)
         {
             if (updateUserDto.Username.Length < int.Parse(_configuration["Validation:UserNameMinLength"]))
                 return (false, String.Format(
@@ -90,32 +90,26 @@ namespace car_racing_tournament_api.Services
             if (!IsEmail(updateUserDto.Email))
                 return (false, _configuration["ErrorMessages:EmailFormat"]);
 
-            var userObj = await _carRacingTournamentDbContext.Users.Where(e => e.Id == id).FirstOrDefaultAsync();
-            if (userObj == null)
-                return (false, _configuration["ErrorMessages:UserNotFound"]);
-
-            userObj.Username = updateUserDto.Username;
-            userObj.Email = updateUserDto.Email;
-            _carRacingTournamentDbContext.Users.Update(userObj);
-            _carRacingTournamentDbContext.SaveChanges();
+            user.Username = updateUserDto.Username;
+            user.Email = updateUserDto.Email;
+            _carRacingTournamentDbContext.Users.Update(user);
+            await _carRacingTournamentDbContext.SaveChangesAsync();
 
             return (true, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdatePassword(Guid id, UpdatePasswordDto updatePasswordDto)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdatePassword(User user, UpdatePasswordDto updatePasswordDto)
         {
-            var userObj = await _carRacingTournamentDbContext.Users.Where(e => e.Id == id).FirstOrDefaultAsync();
-            if (userObj == null)
-                return (false, _configuration["ErrorMessages:UserNotFound"]);
-
             if (updatePasswordDto.Password != updatePasswordDto.PasswordAgain)
                 return (false, _configuration["ErrorMessages:PasswordsPass"]);
 
-            // password validation?
+            if (!IsPassword(updatePasswordDto.Password))
+                return (false, _configuration["ErrorMessages:PasswordFormat"]);
 
-            userObj.Password = HashPassword(updatePasswordDto.Password);
-            _carRacingTournamentDbContext.Users.Update(userObj);
-            _carRacingTournamentDbContext.SaveChanges();
+            user.Password = HashPassword(updatePasswordDto.Password);
+            _carRacingTournamentDbContext.Users.Update(user);
+            await _carRacingTournamentDbContext.SaveChangesAsync();
+
             return (true, null);
         }
 
