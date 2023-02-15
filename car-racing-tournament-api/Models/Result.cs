@@ -6,7 +6,7 @@ namespace car_racing_tournament_api.Models
     {
         public Guid Id { get; set; }
         public int Position { get; set; }
-        public int Points { get; set; }
+        public int Point { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public virtual Driver Driver { get; set; } = default!;
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

@@ -17,6 +17,7 @@ namespace car_racing_tournament_api.Tests.Unit
         private Season? _season2;
         private Permission? _permissionAdmin;
         private Permission? _permissionModerator;
+        private IConfiguration? _configuration;
 
         [SetUp]
         public void Init()
@@ -81,12 +82,14 @@ namespace car_racing_tournament_api.Tests.Unit
 
             _context.SaveChanges();
 
-            var configuration = new ConfigurationBuilder()
+            _configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            _permissionService = new PermissionService(_context, configuration);
+            _permissionService = new PermissionService(_context, _configuration);
         }
+
+        // permission not found - need to be implemented
 
         [Test]
         public async Task IsAdminSuccess()
@@ -199,7 +202,7 @@ namespace car_racing_tournament_api.Tests.Unit
 
             var result = await _permissionService!.UpdatePermissionType(permission, PermissionType.Admin);
             Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotNull(result.ErrorMessage);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:SeasonHasAdmin"]);
             Assert.AreEqual(season.Permissions.Count(), 2);
             Assert.AreEqual(permission.Type, PermissionType.Moderator);
         }

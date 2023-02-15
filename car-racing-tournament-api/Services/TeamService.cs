@@ -41,7 +41,7 @@ namespace car_racing_tournament_api.Services
                     {
                         Id = x.Id,
                         Position = x.Position,
-                        Points = x.Points,
+                        Point = x.Point,
                         Race = new Race
                         {
                             Id = x.Race.Id,
@@ -84,7 +84,7 @@ namespace car_racing_tournament_api.Services
                     {
                         Id = x.Id,
                         Position = x.Position,
-                        Points = x.Points,
+                        Point = x.Point,
                         Race = new Race
                         {
                             Id = x.Race.Id,

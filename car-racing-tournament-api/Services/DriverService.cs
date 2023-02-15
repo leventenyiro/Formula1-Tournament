@@ -43,7 +43,7 @@ namespace car_racing_tournament_api.Services
                     {
                         Id = x.Id,
                         Position = x.Position,
-                        Points = x.Points,
+                        Point = x.Point,
                         Race = new Race
                         {
                             Id = x.Race.Id,
@@ -78,7 +78,7 @@ namespace car_racing_tournament_api.Services
                     Results = x.Results!.Select(x => new Result
                     {
                         Id = x.Id,
-                        Points = x.Points,
+                        Point = x.Point,
                         Position = x.Position,
                         Team = x.Team
                     }).ToList()
@@ -126,7 +126,7 @@ namespace car_racing_tournament_api.Services
                 return (false, _configuration["ErrorMessages:DriverNumber"]);
 
             if (team != null && driver.SeasonId != team.SeasonId)
-                return (false, _configuration["ErrorMessages:DriverTeamNotTheSameSeason"]);
+                return (false, _configuration["ErrorMessages:DriverTeamNotSameSeason"]);
 
             driver.Name = driverDto.Name;
             driver.RealName = driverDto.RealName?.Trim();
@@ -141,7 +141,7 @@ namespace car_racing_tournament_api.Services
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateDriverTeam(Driver driver, Team team)
         {
             if (team != null && driver.SeasonId != team.SeasonId)
-                return (false, _configuration["ErrorMessages:DriverTeamNotTheSameSeason"]);
+                return (false, _configuration["ErrorMessages:DriverTeamNotSameSeason"]);
 
             driver.ActualTeam = team != null ? team : null;
             _carRacingTournamentDbContext.Drivers.Update(driver);

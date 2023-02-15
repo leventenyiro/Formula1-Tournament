@@ -13,6 +13,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
         private CarRacingTournamentDbContext? _context;
         private UserService? _userService;
         private Models.User? _user;
+        private IConfiguration? _configuration;
 
         [SetUp]
         public void Init()
@@ -33,11 +34,11 @@ namespace car_racing_tournament_api.Tests.Unit.User
             _context.Users.Add(_user);
             _context.SaveChanges();
 
-            var configuration = new ConfigurationBuilder()
+            _configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            _userService = new UserService(_context, configuration);
+            _userService = new UserService(_context, _configuration);
         }
         
         [Test]
@@ -117,6 +118,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
                 Email = "test@test.com"
             });
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:UserName"]);
         }
 
         [Test]
@@ -128,6 +130,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
                 Email = "test@test.com"
             });
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:UserName"]);
         }
 
         [Test]
@@ -139,6 +142,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
                 Email = ""
             });
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:EmailFormat"]);
         }
 
         [Test]
@@ -151,10 +155,12 @@ namespace car_racing_tournament_api.Tests.Unit.User
             };
             var result = await _userService!.UpdateUser(_user!, registrationDto);
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:EmailFormat"]);
 
             registrationDto.Email = "test";
             result = await _userService!.UpdateUser(_user!, registrationDto);
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:EmailFormat"]);
         }
     }
 }

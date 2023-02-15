@@ -29,7 +29,7 @@ namespace car_racing_tournament_api.Services
             {
                 Id = x.Id,
                 Position = x.Position,
-                Points = x.Points,
+                Point = x.Point,
                 Driver = new Driver
                 {
                     Id = x.Driver.Id,
@@ -61,7 +61,7 @@ namespace car_racing_tournament_api.Services
                 {
                     Id = x.Id,
                     Position = x.Position,
-                    Points = x.Points,
+                    Point = x.Point,
                     Driver = new Driver
                     {
                         Id = x.Driver.Id,
@@ -96,8 +96,8 @@ namespace car_racing_tournament_api.Services
             if (resultDto.Position <= 0)
                 return (false, _configuration["ErrorMessages:ResultPosition"]);
 
-            if (resultDto.Points < 0)
-                return (false, _configuration["ErrorMessages:ResultPoints"]);
+            if (resultDto.Point < 0)
+                return (false, _configuration["ErrorMessages:ResultPoint"]);
 
             var result = _mapper.Map<Result>(resultDto);
             result.Id = Guid.NewGuid();
@@ -122,11 +122,11 @@ namespace car_racing_tournament_api.Services
             if (resultDto.Position <= 0)
                 return (false, _configuration["ErrorMessages:ResultPosition"]);
 
-            if (resultDto.Points < 0)
-                return (false, _configuration["ErrorMessages:ResultPoints"]);
+            if (resultDto.Point < 0)
+                return (false, _configuration["ErrorMessages:ResultPoint"]);
 
             result.Position = resultDto.Position;
-            result.Points = resultDto.Points;
+            result.Point = resultDto.Point;
             result.DriverId = resultDto.DriverId;
             result.TeamId = resultDto.TeamId;
             _carRacingTournamentDbContext.Results.Update(result);
