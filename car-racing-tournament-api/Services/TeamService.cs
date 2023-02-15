@@ -65,14 +65,18 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateTeam(Team team, TeamDto teamDto)
         {
+            if (teamDto == null)
+                return (false, _configuration["ErrorMessages:MissingTeam"]);
+
+            team.Name = teamDto.Name.Trim();
             if (string.IsNullOrEmpty(teamDto.Name))
                 return (false, _configuration["ErrorMessages:TeamName"]);
 
-            team.Name = teamDto.Name;
             try
             {
-                ColorTranslator.FromHtml(teamDto.Color);
-                team.Color = teamDto.Color;
+                team.Color = teamDto.Color.Trim();
+                ColorTranslator.FromHtml(teamDto.Color.Trim());
+                team.Color = teamDto.Color.Trim();
             }
             catch (Exception)
             {

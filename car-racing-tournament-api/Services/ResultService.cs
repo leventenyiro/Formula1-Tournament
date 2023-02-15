@@ -49,6 +49,9 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateResult(Result result, ResultDto resultDto, Race race, Driver driver, Team team)
         {
+            if (resultDto == null)
+                return (false, _configuration["ErrorMessages:MissingResult"]);
+
             if (race.SeasonId != team.SeasonId)
                 return (false, _configuration["ErrorMessages:RaceTeamNotSameSeason"]);
 

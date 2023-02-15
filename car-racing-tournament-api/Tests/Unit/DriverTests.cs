@@ -107,7 +107,7 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
 
-            var findDriver = _context!.Drivers.FirstOrDefaultAsync().Result!;
+            var findDriver = _context!.Drivers.Where(x => x.Name == "NewName").FirstOrDefaultAsync().Result!;
             Assert.AreEqual(findDriver.Name, driverDto.Name);
             Assert.AreEqual(findDriver.Number, driverDto.Number);
             Assert.AreEqual(findDriver.RealName, driverDto.RealName);

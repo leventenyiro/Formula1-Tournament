@@ -49,6 +49,15 @@ namespace car_racing_tournament_api.Tests.Unit.User
             Assert.AreEqual(user.Result!.Username, registrationDto.Username);
             Assert.AreEqual(user.Result!.Email, registrationDto.Email);
             Assert.AreNotEqual(user.Result!.Username, registrationDto.Password);
+
+            registrationDto.Username = "   username2";
+            registrationDto.Email = "   test2@test.com";
+            result = await _userService!.Registration(registrationDto);
+
+            Assert.IsTrue(result.IsSuccess);
+            Assert.AreEqual(_context!.Users.Count(), 2);
+
+            Assert.IsNotNull(_context.Users.Where(x => x.Username == "username2" && x.Email == "test2@test.com").FirstOrDefault());
         }
 
         /*[Test] IT WILL BE GOOD AFTER https://github.com/leventenyiro/car-racing-tournament/issues/85

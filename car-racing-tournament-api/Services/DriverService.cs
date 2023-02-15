@@ -49,11 +49,9 @@ namespace car_racing_tournament_api.Services
             if (driverDto == null)
                 return (false, _configuration["ErrorMessages:MissingDriver"]);
 
-            if (driverDto.Name.Length == 0)
-                return (false, String.Format(
-                    _configuration["ErrorMessages:DriverName"],
-                    _configuration["Validation:DriverNameMinLength"]
-                ));
+            driverDto.Name = driverDto.Name.Trim();
+            if (string.IsNullOrEmpty(driverDto.Name))
+                return (false, _configuration["ErrorMessages:DriverName"]);
 
             if (driverDto.Number <= 0 || driverDto.Number >= 100)
                 return (false, _configuration["ErrorMessages:DriverNumber"]);
@@ -62,7 +60,7 @@ namespace car_racing_tournament_api.Services
                 return (false, _configuration["ErrorMessages:DriverTeamNotTheSameSeason"]);
 
             driver.Name = driverDto.Name;
-            driver.RealName = driverDto.RealName;
+            driver.RealName = driverDto.RealName?.Trim();
             driver.Number = driverDto.Number;
             driver.ActualTeamId = driverDto.ActualTeamId;
             _carRacingTournamentDbContext.Drivers.Update(driver);

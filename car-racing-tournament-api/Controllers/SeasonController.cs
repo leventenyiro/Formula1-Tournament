@@ -56,7 +56,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGet.IsSuccess)
                 return BadRequest(resultGet.ErrorMessage);
 
-            var resultAddPermission = await _permissionService.AddPermission(resultGet.User!, resultAddSeason.Season!, PermissionType.Moderator);
+            var resultAddPermission = await _permissionService.AddPermission(resultGet.User!, resultAddSeason.Season!, PermissionType.Admin);
             if (!resultAddPermission.IsSuccess)
                 return BadRequest(resultAddPermission.ErrorMessage);
 

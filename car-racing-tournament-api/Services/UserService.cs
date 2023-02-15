@@ -24,6 +24,9 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? Token, string? ErrorMessage)> Login(LoginDto loginDto)
         {
+            if (loginDto == null)
+                return (false, null, _configuration["ErrorMessages:MissingLogin"]);
+
             var actualUser = await _carRacingTournamentDbContext.Users.Where(x => x.Username == loginDto.UsernameEmail || x.Email == loginDto.UsernameEmail).FirstOrDefaultAsync();
             if (actualUser == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, actualUser.Password))
                 return (false, null, _configuration["ErrorMessages:LoginDetails"]);
@@ -35,12 +38,14 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> Registration(RegistrationDto registrationDto)
         {
-            if (registrationDto.Username.Length < int.Parse(_configuration["Validation:UserNameMinLength"]))
-                return (false, String.Format(
-                    _configuration["ErrorMessages:UserName"],
-                    _configuration["Validation:UserNameMinLength"]
-                ));
+            if (registrationDto == null)
+                return (false, _configuration["ErrorMessages:MissingRegistration"]);
 
+            registrationDto.Username = registrationDto.Username.Trim();
+            if (!Regex.IsMatch(registrationDto.Username, _configuration["Validation:NameRegexWithoutWhiteSpace"]))
+                return (false, _configuration["ErrorMessages:UserName"]);
+
+            registrationDto.Email = registrationDto.Email.Trim().ToLower();
             if (!Regex.IsMatch(registrationDto.Email, _configuration["Validation:EmailRegex"]))
                 return (false, _configuration["ErrorMessages:EmailFormat"]);
 
@@ -81,12 +86,14 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateUser(User user, UpdateUserDto updateUserDto)
         {
-            if (updateUserDto.Username.Length < int.Parse(_configuration["Validation:UserNameMinLength"]))
-                return (false, String.Format(
-                    _configuration["ErrorMessages:UserName"],
-                    _configuration["Validation:UserNameMinLength"]
-                ));
+            if (updateUserDto == null)
+                return (false, _configuration["ErrorMessages:MissingUpdateUser"]);
 
+            updateUserDto.Username = updateUserDto.Username.Trim();
+            if (!Regex.IsMatch(updateUserDto.Username, _configuration["Validation:NameRegexWithoutWhiteSpace"]))
+                return (false, _configuration["ErrorMessages:UserName"]);
+
+            updateUserDto.Email = updateUserDto.Email.Trim().ToLower();
             if (!Regex.IsMatch(updateUserDto.Email, _configuration["Validation:EmailRegex"]))
                 return (false, _configuration["ErrorMessages:EmailFormat"]);
 
@@ -100,6 +107,9 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdatePassword(User user, UpdatePasswordDto updatePasswordDto)
         {
+            if (updatePasswordDto == null)
+                return (false, _configuration["ErrorMessages:MissingUpdatePassword"]);
+
             if (updatePasswordDto.Password != updatePasswordDto.PasswordAgain)
                 return (false, _configuration["ErrorMessages:PasswordsPass"]);
 

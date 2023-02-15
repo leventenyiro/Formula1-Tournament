@@ -188,20 +188,6 @@ namespace car_racing_tournament_api.Tests.Unit
         }
 
         [Test]
-        public async Task AddSeasonIncorrectName()
-        {
-            var season = new SeasonCreateDto
-            {
-                Name = "test",
-                Description = "This is my second tournament"
-            };
-
-            var result = await _seasonService!.AddSeason(season, _userId);
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
-        }
-
-        [Test]
         public async Task UpdateSeasonSuccess()
         {
             var season = new SeasonUpdateDto
@@ -233,20 +219,6 @@ namespace car_racing_tournament_api.Tests.Unit
             var result = await _seasonService!.UpdateSeason(_season!, season);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
-        }
-
-        [Test]
-        public async Task UpdateSeasonIncorrectName()
-        {
-            var season = new SeasonUpdateDto
-            {
-                Name = "test",
-                Description = "This is my second tournament",
-                IsArchived = false
-            };
-
-            var result = await _seasonService!.UpdateSeason(_season!, season);
-            Assert.IsFalse(result.IsSuccess);
         }
 
         [Test]
