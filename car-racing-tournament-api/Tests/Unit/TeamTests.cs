@@ -1,6 +1,5 @@
 ﻿using car_racing_tournament_api.Data;
 using car_racing_tournament_api.DTO;
-using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
 using car_racing_tournament_api.Services;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +13,7 @@ namespace car_racing_tournament_api.Tests.Unit
         private CarRacingTournamentDbContext? _context;
         private TeamService? _teamService;
         private Team? _team;
-        private IConfiguration _configuration;
+        private IConfiguration? _configuration;
 
         [SetUp]
         public void Init()
