@@ -133,7 +133,7 @@ namespace car_racing_tournament_api.Tests.Unit
             result = await _permissionService!.AddPermission(_user1!, _season2!, PermissionType.Moderator);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
-            Assert.AreEqual(_context!.Permissions.Count(), 3);
+            Assert.AreEqual(_context!.Permissions.Count(), 4);
         }
 
         // PERMISSION ALREADZ EXISTS
@@ -141,8 +141,29 @@ namespace car_racing_tournament_api.Tests.Unit
         [Test]
         public async Task UpdatePermissionTypeSuccess()
         {
+            var season = new Season
+            {
+                Id = Guid.NewGuid(),
+                Name = "New Season",
+                IsArchived = false
+            };
+            _context!.Seasons.Add(season);
 
-            //var result =
+            var permission = new Permission
+            {
+                Id = Guid.NewGuid(),
+                User = _user1!,
+                Season = season,
+                Type = PermissionType.Moderator
+            };
+            _context.Permissions.Add(permission);
+            _context.SaveChanges();
+
+            var result = await _permissionService!.UpdatePermissionType(permission, PermissionType.Admin);
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNull(result.ErrorMessage);
+            Assert.AreEqual(season.Permissions.Count(), 1);
+            Assert.AreEqual(permission.Type, PermissionType.Admin);
         }
 
         // failed because of there is an admin
