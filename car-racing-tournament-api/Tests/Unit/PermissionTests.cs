@@ -166,6 +166,44 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.AreEqual(permission.Type, PermissionType.Admin);
         }
 
+        [Test]
+        public async Task UpdatePermissionTypeAdminExists()
+        {
+            var season = new Season
+            {
+                Id = Guid.NewGuid(),
+                Name = "New Season",
+                IsArchived = false,
+                Permissions = new List<Permission>()
+                {
+                    new Permission
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = Guid.NewGuid(),
+                        SeasonId = Guid.NewGuid(),
+                        Type = PermissionType.Admin
+                    }
+                }
+            };
+            _context!.Seasons.Add(season);
+
+            var permission = new Permission
+            {
+                Id = Guid.NewGuid(),
+                User = _user1!,
+                Season = season,
+                Type = PermissionType.Moderator
+            };
+            _context.Permissions.Add(permission);
+            _context.SaveChanges();
+
+            var result = await _permissionService!.UpdatePermissionType(permission, PermissionType.Admin);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.IsNotNull(result.ErrorMessage);
+            Assert.AreEqual(season.Permissions.Count(), 2);
+            Assert.AreEqual(permission.Type, PermissionType.Moderator);
+        }
+
         // failed because of there is an admin
     }
 }

@@ -1,5 +1,4 @@
 ﻿using car_racing_tournament_api.Data;
-using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -60,6 +59,9 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdatePermissionType(Permission permission, PermissionType permissionType)
         {
+            if (permissionType == PermissionType.Admin && _carRacingTournamentDbContext.Permissions.Where(x => x.SeasonId == permission.SeasonId && x.Type == PermissionType.Admin).Count() > 0)
+                return (false, _configuration["ErrorMessages:SeasonHasAdmin"]);
+
             permission.Type = permissionType;
             _carRacingTournamentDbContext.Permissions.Update(permission);
             await _carRacingTournamentDbContext.SaveChangesAsync();
