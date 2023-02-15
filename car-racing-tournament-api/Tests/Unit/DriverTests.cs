@@ -1,7 +1,9 @@
-﻿using car_racing_tournament_api.Data;
+﻿using AutoMapper;
+using car_racing_tournament_api.Data;
 using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
+using car_racing_tournament_api.Profiles;
 using car_racing_tournament_api.Services;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
@@ -51,11 +53,17 @@ namespace car_racing_tournament_api.Tests.Unit
             _context.Drivers.Add(_driver);
             _context.SaveChanges();
 
+            var mockMapper = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperConfig());
+            });
+            var mapper = mockMapper.CreateMapper();
+
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            _driverService = new DriverService(_context, configuration);
+            _driverService = new DriverService(_context, mapper, configuration);
         }
 
         [Test]

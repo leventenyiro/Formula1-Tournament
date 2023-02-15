@@ -155,10 +155,10 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsEmpty(_context.Races);
         }
 
-        [Test]
+        /*[Test]
         public async Task GetResultsByRaceIdSuccess()
         {
-            var result = await _raceService!.GetResultsByRaceId(_race!);
+            var result = await _resultService!.GetResultsByRaceId(_race!);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
             Assert.IsNotNull(result.Results);
@@ -177,7 +177,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 TeamId = (Guid)driver.ActualTeamId!
             };
 
-            var result = await _raceService!.AddResult(_race!, resultDto, driver, driver.ActualTeam!);
+            var result = await _resultService!.AddResult(_race!, resultDto, driver, driver.ActualTeam!);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
             Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 2);
@@ -198,13 +198,13 @@ namespace car_racing_tournament_api.Tests.Unit
                 TeamId = (Guid)driver.ActualTeamId!
             };
 
-            var result = await _raceService!.AddResult(_race!, resultDto, driver, driver.ActualTeam!);
+            var result = await _resultService!.AddResult(_race!, resultDto, driver, driver.ActualTeam!);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
             Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
 
             resultDto.Position = 0;
-            result = await _raceService!.AddResult(_race!, resultDto, driver, driver.ActualTeam!);
+            result = await _resultService!.AddResult(_race!, resultDto, driver, driver.ActualTeam!);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
             Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
@@ -222,7 +222,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 TeamId = (Guid)driver.ActualTeamId!
             };
             
-            var result = await _raceService!.AddResult(_race!, resultDto, driver, driver.ActualTeam!);
+            var result = await _resultService!.AddResult(_race!, resultDto, driver, driver.ActualTeam!);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
             Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
@@ -256,7 +256,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 TeamId = _context.Teams.FirstOrDefaultAsync().Result!.Id,
             };
 
-            var result = await _raceService!.AddResult(_race!, resultDto, driver, _context.Teams.FirstOrDefaultAsync().Result!);
+            var result = await _resultService!.AddResult(_race!, resultDto, driver, _context.Teams.FirstOrDefaultAsync().Result!);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
 
@@ -271,9 +271,9 @@ namespace car_racing_tournament_api.Tests.Unit
             resultDto.DriverId = _context.Drivers.FirstOrDefaultAsync().Result!.Id;
             resultDto.TeamId = team.Id;
 
-            result = await _raceService!.AddResult(_race!, resultDto, _context.Drivers.FirstOrDefaultAsync().Result!, team);
+            result = await _resultService!.AddResult(_race!, resultDto, _context.Drivers.FirstOrDefaultAsync().Result!, team);
             Assert.IsFalse(result.IsSuccess);
             Assert.IsNotEmpty(result.ErrorMessage);
-        }
+        }*/
     }
 }

@@ -15,14 +15,19 @@ namespace car_racing_tournament_api.Controllers
         private ISeason _seasonService;
         private IPermission _permissionService;
         private IUser _userService;
+        private IDriver _driverService;
         private ITeam _teamService;
+        private IRace _raceService;
 
-        public SeasonController(ISeason seasonService, IPermission permissionService, IUser userService, ITeam teamService)
+
+        public SeasonController(ISeason seasonService, IPermission permissionService, IUser userService, IDriver driverService, ITeam teamService, IRace raceService)
         {
             _seasonService = seasonService;
             _permissionService = permissionService;
             _userService = userService;
+            _driverService = driverService;
             _teamService = teamService;
+            _raceService = raceService;
         }
 
         [HttpGet, EnableQuery]
@@ -152,7 +157,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetSeason.IsSuccess)
                 return NotFound(resultGetSeason.ErrorMessage);
 
-            var resultGet = await _seasonService.GetDriversBySeasonId(resultGetSeason.Season!);
+            var resultGet = await _driverService.GetDriversBySeason(resultGetSeason.Season!);
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
@@ -180,7 +185,7 @@ namespace car_racing_tournament_api.Controllers
                 team = resultGetTeam.Team!;
             }
 
-            var resultAdd = await _seasonService.AddDriver(resultGetSeason.Season!, driverDto, team);
+            var resultAdd = await _driverService.AddDriver(resultGetSeason.Season!, driverDto, team);
             if (!resultAdd.IsSuccess)
                 return BadRequest(resultAdd.ErrorMessage);
             
@@ -194,7 +199,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetSeason.IsSuccess)
                 return NotFound(resultGetSeason.ErrorMessage);
 
-            var resultGet = await _seasonService.GetTeamsBySeasonId(resultGetSeason.Season!);
+            var resultGet = await _teamService.GetTeamsBySeason(resultGetSeason.Season!);
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
@@ -211,7 +216,7 @@ namespace car_racing_tournament_api.Controllers
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), seasonId))
                 return Forbid();
 
-            var resultAdd = await _seasonService.AddTeam(resultGetSeason.Season!, team);
+            var resultAdd = await _teamService.AddTeam(resultGetSeason.Season!, team);
             if (!resultAdd.IsSuccess)
                 return BadRequest(resultAdd.ErrorMessage);
             
@@ -225,7 +230,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetSeason.IsSuccess)
                 return NotFound(resultGetSeason.ErrorMessage);
 
-            var resultGet = await _seasonService.GetRacesBySeasonId(resultGetSeason.Season!);
+            var resultGet = await _raceService.GetRacesBySeason(resultGetSeason.Season!);
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
@@ -242,7 +247,7 @@ namespace car_racing_tournament_api.Controllers
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), seasonId))
                 return Forbid();
             
-            var resultAdd = await _seasonService.AddRace(resultGetSeason.Season!, raceDto);
+            var resultAdd = await _raceService.AddRace(resultGetSeason.Season!, raceDto);
             if (!resultAdd.IsSuccess)
                 return BadRequest(resultAdd.ErrorMessage);
 

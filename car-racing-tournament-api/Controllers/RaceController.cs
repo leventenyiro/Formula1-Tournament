@@ -13,13 +13,15 @@ namespace car_racing_tournament_api.Controllers
         private IPermission _permissionService;
         private IDriver _driverService;
         private ITeam _teamService;
+        private Interfaces.IResult _resultService;
 
-        public RaceController(IRace raceService, IPermission permissionService, IDriver driverService, ITeam teamService)
+        public RaceController(IRace raceService, IPermission permissionService, IDriver driverService, ITeam teamService, Interfaces.IResult resultService)
         {
             _raceService = raceService;
             _permissionService = permissionService;
             _driverService = driverService;
             _teamService = teamService;
+            _resultService = resultService;
         }
 
         [HttpGet("{id}")]
@@ -73,7 +75,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
-            var result = await _raceService.GetResultsByRaceId(resultGet.Race!);
+            var result = await _resultService.GetResultsByRace(resultGet.Race!);
             if (!result.IsSuccess)
                 return NotFound(result.ErrorMessage);
             
@@ -98,7 +100,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetTeam.IsSuccess)
                 return NotFound(resultGetTeam.ErrorMessage);
 
-            var resultAdd = await _raceService.AddResult(resultGetRace.Race, resultDto, resultGetDriver.Driver!, resultGetTeam.Team!);
+            var resultAdd = await _resultService.AddResult(resultGetRace.Race, resultDto, resultGetDriver.Driver!, resultGetTeam.Team!);
             if (!resultAdd.IsSuccess)
                 return BadRequest(resultAdd.ErrorMessage);
 
