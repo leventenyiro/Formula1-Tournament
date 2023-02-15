@@ -24,6 +24,9 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? Token, string? ErrorMessage)> Login(LoginDto loginDto)
         {
+            if (loginDto == null)
+                return (false, null, _configuration["ErrorMessages:MissingLogin"]);
+
             var actualUser = await _carRacingTournamentDbContext.Users.Where(x => x.Username == loginDto.UsernameEmail || x.Email == loginDto.UsernameEmail).FirstOrDefaultAsync();
             if (actualUser == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, actualUser.Password))
                 return (false, null, _configuration["ErrorMessages:LoginDetails"]);
@@ -35,17 +38,19 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> Registration(RegistrationDto registrationDto)
         {
-            if (registrationDto.Username.Length < int.Parse(_configuration["Validation:UserNameMinLength"]))
-                return (false, String.Format(
-                    _configuration["ErrorMessages:UserName"],
-                    _configuration["Validation:UserNameMinLength"]
-                ));
+            if (registrationDto == null)
+                return (false, _configuration["ErrorMessages:MissingRegistration"]);
 
-            if (!IsEmail(registrationDto.Email))
+            registrationDto.Username = registrationDto.Username.Trim();
+            if (!Regex.IsMatch(registrationDto.Username, _configuration["Validation:NameRegexWithoutWhiteSpace"]))
+                return (false, _configuration["ErrorMessages:UserName"]);
+
+            registrationDto.Email = registrationDto.Email.Trim().ToLower();
+            if (!Regex.IsMatch(registrationDto.Email, _configuration["Validation:EmailRegex"]))
                 return (false, _configuration["ErrorMessages:EmailFormat"]);
 
-            if (!IsPassword(registrationDto.Password))
-                return (false, _configuration["ErrorMessages:PasswordLength"]);
+            if (!Regex.IsMatch(registrationDto.Password, _configuration["Validation:PasswordRegex"]))
+                return (false, _configuration["ErrorMessages:PasswordFormat"]);
 
             if (registrationDto.Password != registrationDto.PasswordAgain)
                 return (false, _configuration["ErrorMessages:PasswordsPass"]);
@@ -61,9 +66,9 @@ namespace car_racing_tournament_api.Services
             return (true, null);
         }
 
-        public async Task<(bool IsSuccess, User? User, string? ErrorMessage)> GetUser(string userId)
+        public async Task<(bool IsSuccess, User? User, string? ErrorMessage)> GetUserById(Guid id)
         {
-            var result = await _carRacingTournamentDbContext.Users.Where(x => x.Id == Guid.Parse(userId)).FirstOrDefaultAsync();
+            var result = await _carRacingTournamentDbContext.Users.Where(x => x.Id == id).FirstOrDefaultAsync();
             if (result == null)
                 return (false, null, _configuration["ErrorMessages:UserNotFound"]);
             
@@ -79,43 +84,42 @@ namespace car_racing_tournament_api.Services
             return (true, actualUser, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateUser(Guid id, UpdateUserDto updateUserDto)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateUser(User user, UpdateUserDto updateUserDto)
         {
-            if (updateUserDto.Username.Length < int.Parse(_configuration["Validation:UserNameMinLength"]))
-                return (false, String.Format(
-                    _configuration["ErrorMessages:UserName"],
-                    _configuration["Validation:UserNameMinLength"]
-                ));
+            if (updateUserDto == null)
+                return (false, _configuration["ErrorMessages:MissingUpdateUser"]);
 
-            if (!IsEmail(updateUserDto.Email))
+            updateUserDto.Username = updateUserDto.Username.Trim();
+            if (!Regex.IsMatch(updateUserDto.Username, _configuration["Validation:NameRegexWithoutWhiteSpace"]))
+                return (false, _configuration["ErrorMessages:UserName"]);
+
+            updateUserDto.Email = updateUserDto.Email.Trim().ToLower();
+            if (!Regex.IsMatch(updateUserDto.Email, _configuration["Validation:EmailRegex"]))
                 return (false, _configuration["ErrorMessages:EmailFormat"]);
 
-            var userObj = await _carRacingTournamentDbContext.Users.Where(e => e.Id == id).FirstOrDefaultAsync();
-            if (userObj == null)
-                return (false, _configuration["ErrorMessages:UserNotFound"]);
-
-            userObj.Username = updateUserDto.Username;
-            userObj.Email = updateUserDto.Email;
-            _carRacingTournamentDbContext.Users.Update(userObj);
-            _carRacingTournamentDbContext.SaveChanges();
+            user.Username = updateUserDto.Username;
+            user.Email = updateUserDto.Email;
+            _carRacingTournamentDbContext.Users.Update(user);
+            await _carRacingTournamentDbContext.SaveChangesAsync();
 
             return (true, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdatePassword(Guid id, UpdatePasswordDto updatePasswordDto)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdatePassword(User user, UpdatePasswordDto updatePasswordDto)
         {
-            var userObj = await _carRacingTournamentDbContext.Users.Where(e => e.Id == id).FirstOrDefaultAsync();
-            if (userObj == null)
-                return (false, _configuration["ErrorMessages:UserNotFound"]);
+            if (updatePasswordDto == null)
+                return (false, _configuration["ErrorMessages:MissingUpdatePassword"]);
 
             if (updatePasswordDto.Password != updatePasswordDto.PasswordAgain)
                 return (false, _configuration["ErrorMessages:PasswordsPass"]);
 
-            // password validation?
+            if (!Regex.IsMatch(updatePasswordDto.Password, _configuration["Validation:PasswordRegex"]))
+                return (false, _configuration["ErrorMessages:PasswordFormat"]);
 
-            userObj.Password = HashPassword(updatePasswordDto.Password);
-            _carRacingTournamentDbContext.Users.Update(userObj);
-            _carRacingTournamentDbContext.SaveChanges();
+            user.Password = HashPassword(updatePasswordDto.Password);
+            _carRacingTournamentDbContext.Users.Update(user);
+            await _carRacingTournamentDbContext.SaveChangesAsync();
+
             return (true, null);
         }
 
@@ -141,16 +145,6 @@ namespace car_racing_tournament_api.Services
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
             return jwt;
-        }
-
-        private bool IsEmail(string email)
-        {
-            return Regex.IsMatch(email, @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
-        }
-
-        private bool IsPassword(string password)
-        {
-            return Regex.IsMatch(password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$");
         }
     }
 }

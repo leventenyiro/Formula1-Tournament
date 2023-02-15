@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using car_racing_tournament_api.Data;
 using car_racing_tournament_api.DTO;
+using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
 using car_racing_tournament_api.Profiles;
 using car_racing_tournament_api.Services;
@@ -14,7 +15,8 @@ namespace car_racing_tournament_api.Tests.Unit
     {
         private CarRacingTournamentDbContext? _context;
         private RaceService? _raceService;
-        private Guid _raceId;
+        private Race? _race;
+        private IConfiguration? _configuration;
         
         [SetUp]
         public void Init()
@@ -25,8 +27,6 @@ namespace car_racing_tournament_api.Tests.Unit
 
             _context = new CarRacingTournamentDbContext(options);
 
-            _raceId = Guid.NewGuid();
-
             Team team = new Team
             {
                 Id = Guid.NewGuid(),
@@ -34,9 +34,9 @@ namespace car_racing_tournament_api.Tests.Unit
                 Color = "123123"
             };
 
-            _context.Races.Add(new Race
+            _race = new Race
             {
-                Id = _raceId,
+                Id = Guid.NewGuid(),
                 Name = "My first race",
                 DateTime = new DateTime(2023, 1, 1, 18, 0, 0),
                 Results = new List<Result>
@@ -52,7 +52,7 @@ namespace car_racing_tournament_api.Tests.Unit
                             Number = 1,
                             ActualTeam = team
                         },
-                        Points = 25,
+                        Point = 25,
                         Position = 1,
                         Team = team
                     }
@@ -74,7 +74,9 @@ namespace car_racing_tournament_api.Tests.Unit
                     },
                     Teams = new List<Team> { team }
                 }
-            });
+            };
+
+            _context.Races.Add(_race);
             _context.SaveChanges();
 
             var mockMapper = new MapperConfiguration(cfg =>
@@ -83,17 +85,27 @@ namespace car_racing_tournament_api.Tests.Unit
             });
             var mapper = mockMapper.CreateMapper();
 
-            var configuration = new ConfigurationBuilder()
+            _configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            _raceService = new RaceService(_context, mapper, configuration);
+            _raceService = new RaceService(_context, mapper, _configuration);
+        }
+
+        [Test]
+        public async Task GetRacesBySeasonSuccess()
+        {
+            var result = await _raceService!.GetRacesBySeason(_context!.Seasons.First());
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNull(result.ErrorMessage);
+            Assert.IsNotNull(result.Races);
+            Assert.AreEqual(result.Races!.Count, 1);
         }
 
         [Test]
         public async Task GetRaceByIdSuccess()
         {
-            var result = await _raceService!.GetRaceById(_raceId);
+            var result = await _raceService!.GetRaceById(_race!.Id);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
 
@@ -108,8 +120,46 @@ namespace car_racing_tournament_api.Tests.Unit
         {
             var result = await _raceService!.GetRaceById(Guid.NewGuid());
             Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:RaceNotFound"]);
             Assert.IsNull(result.Race);
+        }
+
+        // Races exists
+
+        [Test]
+        public async Task AddRaceSuccess()
+        {
+            var raceDto = new RaceDto
+            {
+                Name = "Australian Grand Prix",
+                DateTime = new DateTime(2023, 10, 10)
+            };
+
+            var season = _context!.Seasons.First();
+
+            var result = await _raceService!.AddRace(season, raceDto);
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNull(result.ErrorMessage);
+            Assert.AreEqual(_context!.Seasons.FirstOrDefaultAsync().Result!.Races!.Count, 2);
+
+            raceDto.DateTime = new DateTime();
+            result = await _raceService!.AddRace(season, raceDto);
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNull(result.ErrorMessage);
+            Assert.AreEqual(_context.Seasons.FirstOrDefaultAsync().Result!.Races!.Count, 3);
+        }
+
+        [Test]
+        public async Task AddRaceMissingName()
+        {
+            var raceDto = new RaceDto
+            {
+                Name = "",
+                DateTime = new DateTime(2023, 10, 10)
+            };
+            var result = await _raceService!.AddRace(_context!.Seasons.First(), raceDto);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:RaceName"]);
         }
 
         [Test]
@@ -121,7 +171,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 DateTime = new DateTime(2022, 12, 12, 12, 0, 0)
             };
 
-            var result = await _raceService!.UpdateRace(_raceId, race);
+            var result = await _raceService!.UpdateRace(_race!, race);
             Assert.IsTrue(result.IsSuccess);
 
             var findRace = _context!.Races.FirstAsync().Result;
@@ -138,9 +188,9 @@ namespace car_racing_tournament_api.Tests.Unit
                 DateTime = new DateTime(2022, 12, 12, 12, 0, 0)
             };
 
-            var result = await _raceService!.UpdateRace(_raceId, race);
+            var result = await _raceService!.UpdateRace(_race!, race);
             Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:RaceName"]);
         }
 
         [Test]
@@ -148,157 +198,11 @@ namespace car_racing_tournament_api.Tests.Unit
         {
             Assert.IsNotEmpty(_context!.Races);
 
-            var result = await _raceService!.DeleteRace(_raceId);
+            var result = await _raceService!.DeleteRace(_race!);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
 
             Assert.IsEmpty(_context.Races);
-        }
-
-        [Test]
-        public async Task DeleteRaceWrongId()
-        {
-            var result = await _raceService!.DeleteRace(Guid.NewGuid());
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
-        }
-
-        [Test]
-        public async Task GetResultsByRaceIdSuccess()
-        {
-            var result = await _raceService!.GetResultsByRaceId(_raceId);
-            Assert.IsTrue(result.IsSuccess);
-            Assert.IsNull(result.ErrorMessage);
-            Assert.IsNotNull(result.Results);
-            Assert.AreEqual(result.Results!.Count, 1);
-        }
-
-        [Test]
-        public async Task GetResultsByRaceIdWrongId()
-        {
-            var result = await _raceService!.GetResultsByRaceId(Guid.NewGuid());
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
-            Assert.IsNull(result.Results);
-        }
-
-        [Test]
-        public async Task AddResultSuccess()
-        {
-            var driver = _context!.Drivers.Where(x => x.Number == 2).FirstOrDefaultAsync().Result;
-            var resultDto = new ResultDto
-            {
-                Points = 18,
-                Position = 2,
-                DriverId = driver!.Id,
-                TeamId = (Guid)driver.ActualTeamId!
-            };
-
-            var result = await _raceService!.AddResult(_raceId, resultDto);
-            Assert.IsTrue(result.IsSuccess);
-            Assert.IsNull(result.ErrorMessage);
-            Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 2);
-        }
-
-        //[Test]
-        //public async Task AddResultResultExists() // a driver cannot reach more result on a race
-
-        [Test]
-        public async Task AddResultMissingIds()
-        {
-            var driver = _context!.Drivers.Where(x => x.Number == 2).FirstOrDefaultAsync().Result;
-            var resultDto = new ResultDto
-            {
-                Points = 18,
-                Position = 2,
-                DriverId = Guid.Empty,
-                TeamId = (Guid)driver!.ActualTeamId!
-            };
-
-            var result = await _raceService!.AddResult(_raceId, resultDto);
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
-            Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
-
-            resultDto.DriverId = driver!.Id;
-            resultDto.TeamId = Guid.Empty;
-            result = await _raceService!.AddResult(_raceId, resultDto);
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
-            Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
-        }
-
-        [Test]
-        public async Task AddResultNotPositivePosition()
-        {
-            var driver = _context!.Drivers.Where(x => x.Number == 2).FirstOrDefaultAsync().Result;
-            var resultDto = new ResultDto
-            {
-                Points = 18,
-                Position = -1,
-                DriverId = driver!.Id,
-                TeamId = (Guid)driver.ActualTeamId!
-            };
-
-            var result = await _raceService!.AddResult(_raceId, resultDto);
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
-            Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
-
-            resultDto.Position = 0;
-            result = await _raceService!.AddResult(_raceId, resultDto);
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
-            Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
-        }
-
-        [Test]
-        public async Task AddResultMinusPoints()
-        {
-            var driver = _context!.Drivers.Where(x => x.Number == 2).FirstOrDefaultAsync().Result;
-            var resultDto = new ResultDto
-            {
-                Points = -2,
-                Position = 2,
-                DriverId = driver!.Id,
-                TeamId = (Guid)driver.ActualTeamId!
-            };
-            
-            var result = await _raceService!.AddResult(_raceId, resultDto);
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
-            Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
-        }
-
-        [Test]
-        public async Task AddResultWithAnotherSeason()
-        {
-            var anotherRaceId = Guid.NewGuid();
-            _context!.Races.Add(new Race
-            {
-                Id = anotherRaceId,
-                Name = "Another race",
-                SeasonId = Guid.NewGuid()
-            });
-            _context.SaveChanges();
-
-            var resultDto = new ResultDto
-            {
-                Points = 5,
-                Position = 5,
-                DriverId = Guid.NewGuid(),
-                TeamId = _context.Teams.FirstOrDefaultAsync().Result!.Id,
-            };
-
-            var result = await _raceService!.AddResult(_raceId, resultDto);
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
-
-            resultDto.DriverId = _context.Drivers.FirstOrDefaultAsync().Result!.Id;
-            resultDto.TeamId = Guid.NewGuid();
-            result = await _raceService!.AddResult(_raceId, resultDto);
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
         }
     }
 }

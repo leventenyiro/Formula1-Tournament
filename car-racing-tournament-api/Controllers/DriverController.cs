@@ -1,5 +1,6 @@
 ﻿using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
+using car_racing_tournament_api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,12 +11,14 @@ namespace car_racing_tournament_api.Controllers
     public class DriverController : Controller
     {
         private IDriver _driverService;
-        private IUserSeason _userSeasonService;
+        private IPermission _permissionService;
+        private ITeam _teamService;
 
-        public DriverController(IDriver driverService, IUserSeason userSeasonService)
+        public DriverController(IDriver driverService, IPermission permissionService, ITeam teamService)
         {
             _driverService = driverService;
-            _userSeasonService = userSeasonService;
+            _permissionService = permissionService;
+            _teamService = teamService;
         }
 
         [HttpGet("{id}")]
@@ -31,14 +34,25 @@ namespace car_racing_tournament_api.Controllers
         [HttpPut("{id}"), Authorize]
         public async Task<IActionResult> Put(Guid id, [FromBody] DriverDto driverDto)
         {
-            var resultGet = await _driverService.GetDriverById(id);
-            if (!resultGet.IsSuccess)
-                return NotFound(resultGet.ErrorMessage);
+            var resultGetDriver = await _driverService.GetDriverById(id);
+            if (!resultGetDriver.IsSuccess)
+                return NotFound(resultGetDriver.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Driver!.SeasonId))
+            if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
 
-            var resultUpdate = await _driverService.UpdateDriver(id, driverDto);
+            Team team = null!;
+
+            if (driverDto.ActualTeamId != null)
+            {
+                var resultGetTeam = await _teamService.GetTeamById(driverDto.ActualTeamId.GetValueOrDefault());
+                if (!resultGetTeam.IsSuccess)
+                    return NotFound(resultGetTeam.ErrorMessage);
+
+                team = resultGetTeam.Team!;
+            }
+
+            var resultUpdate = await _driverService.UpdateDriver(resultGetDriver.Driver, driverDto, team!);
             if (!resultUpdate.IsSuccess)
                 return BadRequest(resultUpdate.ErrorMessage);
 
@@ -48,15 +62,14 @@ namespace car_racing_tournament_api.Controllers
         [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
-
             var resultGet = await _driverService.GetDriverById(id);
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Driver!.SeasonId))
+            if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Driver!.SeasonId))
                 return Forbid();
 
-            var resultDelete = await _driverService.DeleteDriver(id);
+            var resultDelete = await _driverService.DeleteDriver(resultGet.Driver);
             if (!resultDelete.IsSuccess)
                 return BadRequest(resultDelete.ErrorMessage);
 

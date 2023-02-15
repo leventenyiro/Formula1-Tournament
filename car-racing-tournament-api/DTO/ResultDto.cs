@@ -3,7 +3,7 @@
     public class ResultDto
     {
         public int Position { get; set; }
-        public int Points { get; set; }
+        public int Point { get; set; }
         public Guid DriverId { get; set; }
         public Guid TeamId { get; set; }
     }

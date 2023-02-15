@@ -1,4 +1,5 @@
-﻿using car_racing_tournament_api.Data;
+﻿using AutoMapper;
+using car_racing_tournament_api.Data;
 using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -8,12 +9,46 @@ namespace car_racing_tournament_api.Services
     public class ResultService : Interfaces.IResult
     {
         private readonly CarRacingTournamentDbContext _carRacingTournamentDbContext;
+        private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
 
-        public ResultService(CarRacingTournamentDbContext carRacingTournamentDbContext, IConfiguration configuration)
+        public ResultService(CarRacingTournamentDbContext carRacingTournamentDbContext, IMapper mapper, IConfiguration configuration)
         {
             _carRacingTournamentDbContext = carRacingTournamentDbContext;
+            _mapper = mapper;
             _configuration = configuration;
+        }
+
+        public async Task<(bool IsSuccess, List<Result>? Results, string? ErrorMessage)> GetResultsByRace(Race race)
+        {
+            var results = await _carRacingTournamentDbContext.Results
+            .Where(x => x.RaceId == race.Id)
+            .Include(x => x.Driver)
+            .Include(x => x.Team)
+            .Select(x => new Result
+            {
+                Id = x.Id,
+                Position = x.Position,
+                Point = x.Point,
+                Driver = new Driver
+                {
+                    Id = x.Driver.Id,
+                    Name = x.Driver.Name,
+                    RealName = x.Driver.RealName,
+
+                },
+                Team = new Team
+                {
+                    Id = x.Team.Id,
+                    Name = x.Team.Name,
+                    Color = x.Team.Color
+                }
+            }).ToListAsync();
+
+            if (results == null)
+                return (false, null, _configuration["ErrorMessages:ResultNotFound"]);
+
+            return (true, results, null);
         }
 
         public async Task<(bool IsSuccess, Result? Result, string? ErrorMessage)> GetResultById(Guid id)
@@ -26,7 +61,7 @@ namespace car_racing_tournament_api.Services
                 {
                     Id = x.Id,
                     Position = x.Position,
-                    Points = x.Points,
+                    Point = x.Point,
                     Driver = new Driver
                     {
                         Id = x.Driver.Id,
@@ -47,45 +82,63 @@ namespace car_racing_tournament_api.Services
             return (true, result, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateResult(Guid id, ResultDto resultDto)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> AddResult(Race race, ResultDto resultDto, Driver driver, Team team)
         {
-            var resultObj = await _carRacingTournamentDbContext.Results.Where(e => e.Id == id).FirstOrDefaultAsync();
-            if (resultObj == null)
-                return (false, _configuration["ErrorMessages:ResultNotFound"]);
+            if (resultDto == null)
+                return (false, _configuration["ErrorMessages:MissingResult"]);
 
-            Race? raceObj = await _carRacingTournamentDbContext.Races.Where(e => e.Id == resultObj.RaceId).FirstOrDefaultAsync();
-            Team? teamObj = await _carRacingTournamentDbContext.Teams.Where(e => e.Id == resultDto.TeamId).FirstOrDefaultAsync();
-            if (raceObj?.SeasonId != teamObj?.SeasonId)
+            if (race.SeasonId != team.SeasonId)
                 return (false, _configuration["ErrorMessages:RaceTeamNotSameSeason"]);
 
-            Driver? driverObj = await _carRacingTournamentDbContext.Drivers.Where(e => e.Id == resultDto.DriverId).FirstOrDefaultAsync();
-            if (raceObj?.SeasonId != driverObj?.SeasonId)
+            if (race.SeasonId != driver.SeasonId)
                 return (false, _configuration["ErrorMessages:RaceDriverNotSameSeason"]);
 
             if (resultDto.Position <= 0)
                 return (false, _configuration["ErrorMessages:ResultPosition"]);
 
-            if (resultDto.Points < 0)
-                return (false, _configuration["ErrorMessages:ResultPoints"]);
+            if (resultDto.Point < 0)
+                return (false, _configuration["ErrorMessages:ResultPoint"]);
 
-            resultObj.Position = resultDto.Position;
-            resultObj.Points = resultDto.Points;
-            resultObj.DriverId = resultDto.DriverId;
-            resultObj.TeamId = resultDto.TeamId;
-            _carRacingTournamentDbContext.Results.Update(resultObj);
-            _carRacingTournamentDbContext.SaveChanges();
+            var result = _mapper.Map<Result>(resultDto);
+            result.Id = Guid.NewGuid();
+            result.Race = race;
+            await _carRacingTournamentDbContext.AddAsync(result);
+            await _carRacingTournamentDbContext.SaveChangesAsync();
 
             return (true, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteResult(Guid id)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateResult(Result result, ResultDto resultDto, Race race, Driver driver, Team team)
         {
-            var result = await _carRacingTournamentDbContext.Results.Where(e => e.Id == id).FirstOrDefaultAsync();
-            if (result == null)
-                return (false, _configuration["ErrorMessages:ResultNotFound"]);
-            
+            if (resultDto == null)
+                return (false, _configuration["ErrorMessages:MissingResult"]);
+
+            if (race.SeasonId != team.SeasonId)
+                return (false, _configuration["ErrorMessages:RaceTeamNotSameSeason"]);
+
+            if (race.SeasonId != driver.SeasonId)
+                return (false, _configuration["ErrorMessages:RaceDriverNotSameSeason"]);
+
+            if (resultDto.Position <= 0)
+                return (false, _configuration["ErrorMessages:ResultPosition"]);
+
+            if (resultDto.Point < 0)
+                return (false, _configuration["ErrorMessages:ResultPoint"]);
+
+            result.Position = resultDto.Position;
+            result.Point = resultDto.Point;
+            result.DriverId = resultDto.DriverId;
+            result.TeamId = resultDto.TeamId;
+            _carRacingTournamentDbContext.Results.Update(result);
+            await _carRacingTournamentDbContext.SaveChangesAsync();
+
+            return (true, null);
+        }
+
+        public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteResult(Result result)
+        {
             _carRacingTournamentDbContext.Results.Remove(result);
-            _carRacingTournamentDbContext.SaveChanges();
+            await _carRacingTournamentDbContext.SaveChangesAsync();
 
             return (true, null);
         }

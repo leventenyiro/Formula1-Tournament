@@ -3,6 +3,7 @@ using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Services;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using System.Security.Cryptography;
 
 namespace car_racing_tournament_api.Tests.Unit.User
 {
@@ -11,7 +12,8 @@ namespace car_racing_tournament_api.Tests.Unit.User
     {
         private CarRacingTournamentDbContext? _context;
         private UserService? _userService;
-        private Guid _id;
+        private Models.User? _user;
+        private IConfiguration? _configuration;
 
         [SetUp]
         public void Init()
@@ -22,26 +24,27 @@ namespace car_racing_tournament_api.Tests.Unit.User
 
             _context = new CarRacingTournamentDbContext(options);
 
-            _id = Guid.NewGuid();
-            _context.Users.Add(new Models.User { 
-                Id = _id, 
-                Username = "username", 
-                Email = "test@test.com", 
-                Password = "$2a$10$/Mw2QNUGYbV1AIyQ8QxXC.IhNRrmjwAW9SBgUv8Vh9xX2goWsQwG." 
-            });
+            _user = new Models.User
+            {
+                Id = Guid.NewGuid(),
+                Username = "username",
+                Email = "test@test.com",
+                Password = "$2a$10$/Mw2QNUGYbV1AIyQ8QxXC.IhNRrmjwAW9SBgUv8Vh9xX2goWsQwG."
+            };
+            _context.Users.Add(_user);
             _context.SaveChanges();
 
-            var configuration = new ConfigurationBuilder()
+            _configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            _userService = new UserService(_context, configuration);
+            _userService = new UserService(_context, _configuration);
         }
         
         [Test]
         public async Task GetUserSuccess()
         {
-            var result = await _userService!.GetUser(_id.ToString());
+            var result = await _userService!.GetUserById(_user!.Id);
             Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual(result.User!.Username, "username");
             Assert.AreEqual(result.User!.Email, "test@test.com");
@@ -70,7 +73,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
                 Username = "username",
                 Email = "test@test.com"
             };
-            var result = await _userService!.UpdateUser(_id, updateUserDto);
+            var result = await _userService!.UpdateUser(_user!, updateUserDto);
 
             Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual(_context!.Users.Count(), 1);
@@ -109,34 +112,37 @@ namespace car_racing_tournament_api.Tests.Unit.User
         [Test]
         public async Task MissingUsername()
         {
-            var result = await _userService!.UpdateUser(_id, new UpdateUserDto
+            var result = await _userService!.UpdateUser(_user!, new UpdateUserDto
             {
                 Username = "",
                 Email = "test@test.com"
             });
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:UserName"]);
         }
 
         [Test]
         public async Task IncorrectUsername()
         {
-            var result = await _userService!.UpdateUser(_id, new UpdateUserDto
+            var result = await _userService!.UpdateUser(_user!, new UpdateUserDto
             {
                 Username = "user",
                 Email = "test@test.com"
             });
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:UserName"]);
         }
 
         [Test]
         public async Task MissingEmail()
         {
-            var result = await _userService!.UpdateUser(_id, new UpdateUserDto
+            var result = await _userService!.UpdateUser(_user!, new UpdateUserDto
             {
                 Username = "username",
                 Email = ""
             });
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:EmailFormat"]);
         }
 
         [Test]
@@ -147,12 +153,14 @@ namespace car_racing_tournament_api.Tests.Unit.User
                 Username = "username",
                 Email = "test.com"
             };
-            var result = await _userService!.UpdateUser(_id, registrationDto);
+            var result = await _userService!.UpdateUser(_user!, registrationDto);
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:EmailFormat"]);
 
             registrationDto.Email = "test";
-            result = await _userService!.UpdateUser(_id, registrationDto);
+            result = await _userService!.UpdateUser(_user!, registrationDto);
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:EmailFormat"]);
         }
     }
 }

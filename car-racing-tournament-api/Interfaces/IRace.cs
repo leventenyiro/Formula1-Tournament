@@ -5,11 +5,10 @@ namespace car_racing_tournament_api.Interfaces
 {
     public interface IRace
     {
+        Task<(bool IsSuccess, List<Race>? Races, string? ErrorMessage)> GetRacesBySeason(Season season);
         Task<(bool IsSuccess, Race? Race, string? ErrorMessage)> GetRaceById(Guid id);
-        Task<(bool IsSuccess, string? ErrorMessage)> UpdateRace(Guid id, RaceDto raceDto);
-        Task<(bool IsSuccess, string? ErrorMessage)> DeleteRace(Guid id);
-
-        Task<(bool IsSuccess, List<Result>? Results, string? ErrorMessage)> GetResultsByRaceId(Guid raceId);
-        Task<(bool IsSuccess, string? ErrorMessage)> AddResult(Guid raceId, ResultDto resultDto);
+        Task<(bool IsSuccess, string? ErrorMessage)> AddRace(Season season, RaceDto raceDto);
+        Task<(bool IsSuccess, string? ErrorMessage)> UpdateRace(Race race, RaceDto raceDto);
+        Task<(bool IsSuccess, string? ErrorMessage)> DeleteRace(Race race);
     }
 }

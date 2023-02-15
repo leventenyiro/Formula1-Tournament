@@ -10,12 +10,12 @@ namespace car_racing_tournament_api.Controllers
     public class TeamController : Controller
     {
         private ITeam _teamService;
-        private IUserSeason _userSeasonService;
+        private IPermission _permissionService;
 
-        public TeamController(ITeam teamService, IUserSeason userSeasonService)
+        public TeamController(ITeam teamService, IPermission permissionService)
         {
             _teamService = teamService;
-            _userSeasonService = userSeasonService;
+            _permissionService = permissionService;
         }
 
         [HttpGet("{id}")]
@@ -35,10 +35,10 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Team!.SeasonId))
+            if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Team!.SeasonId))
                 return Forbid();
 
-            var resultUpdate = await _teamService.UpdateTeam(id, teamDto);
+            var resultUpdate = await _teamService.UpdateTeam(resultGet.Team, teamDto);
             if (!resultUpdate.IsSuccess)
                 return BadRequest(resultUpdate.ErrorMessage);
 
@@ -52,10 +52,10 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Team!.SeasonId))
+            if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Team!.SeasonId))
                 return Forbid();
 
-            var resultDelete = await _teamService.DeleteTeam(id);
+            var resultDelete = await _teamService.DeleteTeam(resultGet.Team);
             if (!resultDelete.IsSuccess)
                 return BadRequest(resultDelete.ErrorMessage);
 

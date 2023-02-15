@@ -10,14 +10,18 @@ namespace car_racing_tournament_api.Controllers
     public class ResultController : Controller
     {
         private Interfaces.IResult _resultService;
-        private IUserSeason _userSeasonService;
+        private IPermission _permissionService;
         private IDriver _driverService;
+        private ITeam _teamService;
+        private IRace _raceService;
 
-        public ResultController(Interfaces.IResult resultService, IUserSeason userSeasonService, IDriver driverService)
+        public ResultController(Interfaces.IResult resultService, IPermission permissionService, IDriver driverService, ITeam teamService, IRace raceService)
         {
             _resultService = resultService;
-            _userSeasonService = userSeasonService;
+            _permissionService = permissionService;
             _driverService = driverService;
+            _teamService = teamService;
+            _raceService = raceService;
         }
 
         [HttpGet("{id}")]
@@ -35,22 +39,30 @@ namespace car_racing_tournament_api.Controllers
         {
             var resultGetResult = await _resultService.GetResultById(id);
             if (!resultGetResult.IsSuccess)
-                return BadRequest(resultGetResult.ErrorMessage);
+                return NotFound(resultGetResult.ErrorMessage);
 
             var resultGetDriver = await _driverService.GetDriverById(resultGetResult.Result!.DriverId);
             if (!resultGetDriver.IsSuccess)
-                return BadRequest(resultGetDriver.ErrorMessage);
+                return NotFound(resultGetDriver.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
+            if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
 
-            var resultUpdate = await _resultService.UpdateResult(id, resultDto);
+            var resultGetTeam = await _teamService.GetTeamById(resultGetResult.Result!.TeamId);
+            if (!resultGetTeam.IsSuccess)
+                return NotFound(resultGetTeam.ErrorMessage);
+
+            var resultGetRace = await _raceService.GetRaceById(resultGetResult.Result!.RaceId);
+            if (!resultGetRace.IsSuccess)
+                return NotFound(resultGetRace.ErrorMessage);
+
+            var resultUpdate = await _resultService.UpdateResult(resultGetResult.Result, resultDto, resultGetRace.Race!, resultGetDriver.Driver, resultGetTeam.Team!);
             if (!resultUpdate.IsSuccess)
                 return BadRequest(resultUpdate.ErrorMessage);
 
             if (resultGetDriver.Driver.ActualTeamId != resultDto.TeamId)
             {
-                var resultUpdateTeam = await _driverService.UpdateDriverTeam(resultDto.DriverId, resultDto.TeamId);
+                var resultUpdateTeam = await _driverService.UpdateDriverTeam(resultGetDriver.Driver, resultGetTeam.Team!);
                 if (!resultUpdateTeam.IsSuccess)
                     return BadRequest(resultUpdateTeam.ErrorMessage);
             }
@@ -69,10 +81,10 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetDriver.IsSuccess)
                 return BadRequest(resultGetDriver.ErrorMessage);
 
-            if (!await _userSeasonService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
+            if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
 
-            var resultDelete = await _resultService.DeleteResult(id);
+            var resultDelete = await _resultService.DeleteResult(resultGetResult.Result);
             if (!resultDelete.IsSuccess)
                 return BadRequest(resultDelete.ErrorMessage);
 

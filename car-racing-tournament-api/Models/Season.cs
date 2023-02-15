@@ -9,7 +9,7 @@ namespace car_racing_tournament_api.Models
         public string? Description { get; set; }
         public bool IsArchived { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<UserSeason> UserSeasons { get; set; } = default!;
+        public List<Permission> Permissions { get; set; } = default!;
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<Team>? Teams { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

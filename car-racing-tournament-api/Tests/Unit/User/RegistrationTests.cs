@@ -12,6 +12,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
     {
         private CarRacingTournamentDbContext? _context;
         private UserService? _userService;
+        private IConfiguration? _configuration;
 
         [SetUp]
         public void Init()
@@ -22,11 +23,11 @@ namespace car_racing_tournament_api.Tests.Unit.User
 
             _context = new CarRacingTournamentDbContext(options);
 
-            var configuration = new ConfigurationBuilder()
+            _configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            _userService = new UserService(_context, configuration);
+            _userService = new UserService(_context, _configuration);
         }
 
         [Test]
@@ -49,6 +50,15 @@ namespace car_racing_tournament_api.Tests.Unit.User
             Assert.AreEqual(user.Result!.Username, registrationDto.Username);
             Assert.AreEqual(user.Result!.Email, registrationDto.Email);
             Assert.AreNotEqual(user.Result!.Username, registrationDto.Password);
+
+            registrationDto.Username = "   username2";
+            registrationDto.Email = "   test2@test.com";
+            result = await _userService!.Registration(registrationDto);
+
+            Assert.IsTrue(result.IsSuccess);
+            Assert.AreEqual(_context!.Users.Count(), 2);
+
+            Assert.IsNotNull(_context.Users.Where(x => x.Username == "username2" && x.Email == "test2@test.com").FirstOrDefault());
         }
 
         /*[Test] IT WILL BE GOOD AFTER https://github.com/leventenyiro/car-racing-tournament/issues/85
@@ -87,6 +97,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
                 PasswordAgain = "Password1" 
             });
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:UserName"]);
         }
 
         [Test]
@@ -99,6 +110,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
                 PasswordAgain = "Password1" 
             });
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:UserName"]);
         }
 
         [Test]
@@ -111,6 +123,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
                 PasswordAgain = "Password1" 
             });
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:EmailFormat"]);
         }
 
         [Test]
@@ -125,10 +138,12 @@ namespace car_racing_tournament_api.Tests.Unit.User
             };
             var result = await _userService!.Registration(registrationDto);
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:EmailFormat"]);
 
             registrationDto.Email = "test";
             result = await _userService!.Registration(registrationDto);
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:EmailFormat"]);
         }
 
         [Test]
@@ -141,6 +156,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
                 PasswordAgain = "Password1" 
             });
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:PasswordFormat"]);
         }
 
         [Test]
@@ -156,16 +172,19 @@ namespace car_racing_tournament_api.Tests.Unit.User
             var result = await _userService!.Registration(registrationDto);
             var valami = result;
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:PasswordFormat"]);
 
             registrationDto.Password = "Password";
             registrationDto.PasswordAgain = "Password";
             result = await _userService!.Registration(registrationDto);
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:PasswordFormat"]);
 
             registrationDto.Password = "password1";
             registrationDto.PasswordAgain = "password1";
             result = await _userService!.Registration(registrationDto);
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:PasswordFormat"]);
         }
 
         [Test]
@@ -175,10 +194,11 @@ namespace car_racing_tournament_api.Tests.Unit.User
             {
                 Username = "username",
                 Email = "test@test.com",
-                Password = "Password",
-                PasswordAgain = "Password1"
+                Password = "Password1",
+                PasswordAgain = "Password12"
             });
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:PasswordsPass"]);
         }
 
         [Test]
@@ -188,10 +208,11 @@ namespace car_racing_tournament_api.Tests.Unit.User
             {
                 Username = "username",
                 Email = "test@test.com",
-                Password = "Password",
+                Password = "Password1",
                 PasswordAgain = ""
             });
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:PasswordsPass"]);
         }
     }
 }

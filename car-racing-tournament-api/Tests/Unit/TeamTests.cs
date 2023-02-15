@@ -12,7 +12,8 @@ namespace car_racing_tournament_api.Tests.Unit
     {
         private CarRacingTournamentDbContext? _context;
         private TeamService? _teamService;
-        private Guid _teamId;
+        private Team? _team;
+        private IConfiguration? _configuration;
 
         [SetUp]
         public void Init()
@@ -23,34 +24,44 @@ namespace car_racing_tournament_api.Tests.Unit
 
             _context = new CarRacingTournamentDbContext(options);
 
-            _teamId = Guid.NewGuid();
-
             Season season = new Season
             {
                 Id = Guid.NewGuid(),
                 Name = "First Season"
             };
 
-            _context.Teams.Add(new Team
+            _team = new Team
             {
-                Id = _teamId,
+                Id = Guid.NewGuid(),
                 Name = "First Team",
                 Color = "123123",
                 Season = season
-            });
+            };
+
+            _context.Teams.Add(_team);
             _context.SaveChanges();
 
-            var configuration = new ConfigurationBuilder()
+            _configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            _teamService = new TeamService(_context, configuration);
+            _teamService = new TeamService(_context, _configuration);
+        }
+
+        [Test]
+        public async Task GetTeamsBySeasonSuccess()
+        {
+            var result = await _teamService!.GetTeamsBySeason(_context!.Seasons.First());
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNull(result.ErrorMessage);
+            Assert.IsNotNull(result.Teams);
+            Assert.AreEqual(result.Teams!.Count, 1);
         }
 
         [Test]
         public async Task GetTeamByIdSuccess()
         {
-            var result = await _teamService!.GetTeamById(_teamId);
+            var result = await _teamService!.GetTeamById(_team!.Id);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
 
@@ -65,8 +76,72 @@ namespace car_racing_tournament_api.Tests.Unit
         {
             var result = await _teamService!.GetTeamById(Guid.NewGuid());
             Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:TeamNotFound"]);
             Assert.IsNull(result.Team);
+        }
+
+        [Test]
+        public async Task AddTeamSuccess()
+        {
+            var teamDto = new TeamDto
+            {
+                Name = "AddTeam1",
+                Color = "123123"
+            };
+
+            var season = _context!.Seasons.First();
+
+            var result = await _teamService!.AddTeam(season, teamDto);
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNull(result.ErrorMessage);
+            Assert.AreEqual(_context!.Seasons.FirstOrDefaultAsync().Result!.Teams!.Count, 2);
+
+            teamDto.Color = "#123123";
+            result = await _teamService!.AddTeam(season, teamDto);
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNull(result.ErrorMessage);
+            Assert.AreEqual(_context.Seasons.FirstOrDefaultAsync().Result!.Teams!.Count, 3);
+        }
+
+        // teamAlreadyExists
+
+        [Test]
+        public async Task AddTeamMissingName()
+        {
+            var teamDto = new TeamDto
+            {
+                Name = "",
+                Color = "123123"
+            };
+            var result = await _teamService!.AddTeam(_context!.Seasons.First(), teamDto);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:TeamName"]);
+        }
+
+        [Test]
+        public async Task AddTeamIncorrectColorCode()
+        {
+            var teamDto = new TeamDto
+            {
+                Name = "AddTeam1",
+                Color = "WRONGC"
+            };
+
+            var season = _context!.Seasons.First();
+
+            var result = await _teamService!.AddTeam(season, teamDto);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:TeamColor"]);
+
+            teamDto.Color = "#WRONGC";
+            result = await _teamService!.AddTeam(season, teamDto);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:TeamColor"]);
+
+            teamDto.Color = "QWEQWEWRONGC";
+            result = await _teamService!.AddTeam(season, teamDto);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:TeamColor"]);
         }
 
         [Test]
@@ -78,7 +153,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 Color = "123123"
             };
 
-            var result = await _teamService!.UpdateTeam(_teamId, teamDto);
+            var result = await _teamService!.UpdateTeam(_team!, teamDto);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
 
@@ -97,9 +172,9 @@ namespace car_racing_tournament_api.Tests.Unit
                 Name = "",
                 Color = "123123"
             };
-            var result = await _teamService!.UpdateTeam(_teamId, teamDto);
+            var result = await _teamService!.UpdateTeam(_team!, teamDto);
             Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:TeamName"]);
         }
 
         [Test]
@@ -110,19 +185,19 @@ namespace car_racing_tournament_api.Tests.Unit
                 Name = "AddTeam1",
                 Color = "WRONGC"
             };
-            var result = await _teamService!.UpdateTeam(_teamId, teamDto);
+            var result = await _teamService!.UpdateTeam(_team!, teamDto);
             Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:TeamColor"]);
 
             teamDto.Color = "#WRONGC";
-            result = await _teamService!.UpdateTeam(_teamId, teamDto);
+            result = await _teamService!.UpdateTeam(_team!, teamDto);
             Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:TeamColor"]);
 
             teamDto.Color = "QWEQWEWRONGC";
-            result = await _teamService!.UpdateTeam(_teamId, teamDto);
+            result = await _teamService!.UpdateTeam(_team!, teamDto);
             Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:TeamColor"]);
         }
 
         [Test]
@@ -130,19 +205,11 @@ namespace car_racing_tournament_api.Tests.Unit
         {
             Assert.IsNotEmpty(_context!.Teams);
 
-            var result = await _teamService!.DeleteTeam(_teamId);
+            var result = await _teamService!.DeleteTeam(_team!);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
 
             Assert.IsEmpty(_context.Teams);
-        }
-
-        [Test]
-        public async Task DeleteTeamWrongId()
-        {
-            var result = await _teamService!.DeleteTeam(Guid.NewGuid());
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
         }
     }
 }

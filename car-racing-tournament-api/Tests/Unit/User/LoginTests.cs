@@ -11,6 +11,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
     {
         private CarRacingTournamentDbContext? _context;
         private UserService? _userService;
+        private IConfiguration? _configuration;
 
         [SetUp]
         public void Init()
@@ -28,11 +29,11 @@ namespace car_racing_tournament_api.Tests.Unit.User
             });
             _context.SaveChanges();
 
-            var configuration = new ConfigurationBuilder()
+            _configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            _userService = new UserService(_context, configuration);
+            _userService = new UserService(_context, _configuration);
         }
         
         [Test]
@@ -47,6 +48,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
         {
             var result = await _userService!.Login(new LoginDto { UsernameEmail = "", Password = "Password1" });
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:LoginDetails"]);
         }
 
         [Test]
@@ -55,10 +57,12 @@ namespace car_racing_tournament_api.Tests.Unit.User
             var loginDto = new LoginDto { UsernameEmail = "user", Password = "Password1" };
             var result = await _userService!.Login(loginDto);
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:LoginDetails"]);
 
             loginDto.UsernameEmail = "username";
             loginDto.Password = "password";
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:LoginDetails"]);
         }
 
         [Test]
@@ -66,6 +70,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
         {
             var result = await _userService!.Login(new LoginDto { UsernameEmail = "username", Password = "" });
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:LoginDetails"]);
         }
     }
 }
