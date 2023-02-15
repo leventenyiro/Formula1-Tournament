@@ -41,10 +41,10 @@ namespace car_racing_tournament_api.Services
                     _configuration["Validation:UserNameMinLength"]
                 ));
 
-            if (!IsEmail(registrationDto.Email))
+            if (!Regex.IsMatch(registrationDto.Email, _configuration["Validation:EmailRegex"]))
                 return (false, _configuration["ErrorMessages:EmailFormat"]);
 
-            if (!IsPassword(registrationDto.Password))
+            if (!Regex.IsMatch(registrationDto.Password, _configuration["Validation:PasswordRegex"]))
                 return (false, _configuration["ErrorMessages:PasswordFormat"]);
 
             if (registrationDto.Password != registrationDto.PasswordAgain)
@@ -87,7 +87,7 @@ namespace car_racing_tournament_api.Services
                     _configuration["Validation:UserNameMinLength"]
                 ));
 
-            if (!IsEmail(updateUserDto.Email))
+            if (!Regex.IsMatch(updateUserDto.Email, _configuration["Validation:EmailRegex"]))
                 return (false, _configuration["ErrorMessages:EmailFormat"]);
 
             user.Username = updateUserDto.Username;
@@ -103,7 +103,7 @@ namespace car_racing_tournament_api.Services
             if (updatePasswordDto.Password != updatePasswordDto.PasswordAgain)
                 return (false, _configuration["ErrorMessages:PasswordsPass"]);
 
-            if (!IsPassword(updatePasswordDto.Password))
+            if (!Regex.IsMatch(updatePasswordDto.Password, _configuration["Validation:PasswordRegex"]))
                 return (false, _configuration["ErrorMessages:PasswordFormat"]);
 
             user.Password = HashPassword(updatePasswordDto.Password);
@@ -135,16 +135,6 @@ namespace car_racing_tournament_api.Services
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
             return jwt;
-        }
-
-        private bool IsEmail(string email)
-        {
-            return Regex.IsMatch(email, @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
-        }
-
-        private bool IsPassword(string password)
-        {
-            return Regex.IsMatch(password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$");
         }
     }
 }
