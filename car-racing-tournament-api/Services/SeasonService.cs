@@ -4,6 +4,7 @@ using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
 using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
 using System.Drawing;
 
 namespace car_racing_tournament_api.Services
@@ -115,13 +116,13 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, Season? Season, string? ErrorMessage)> AddSeason(SeasonCreateDto seasonDto, Guid userId)
         {
-            if (seasonDto == null)
-                return (false, null, _configuration["ErrorMessages:MissingSeason"]);
-
             seasonDto.Name = seasonDto.Name.Trim();
 
             if (string.IsNullOrEmpty(seasonDto.Name))
                 return (false, null, _configuration["ErrorMessages:SeasonName"]);
+
+            if (await HasAdminAlreadySeasonName(userId, seasonDto.Name))
+                return (false, null, _configuration["ErrorMessages:SeasonExists"]);
 
             seasonDto.Name = seasonDto.Name;
             var season = _mapper.Map<Season>(seasonDto);
@@ -136,12 +137,12 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateSeason(Season season, SeasonUpdateDto seasonDto)
         {
-            if (seasonDto == null)
-                return (false, _configuration["ErrorMessages:MissingSeason"]);
-
             seasonDto.Name = seasonDto.Name.Trim();
             if (string.IsNullOrEmpty(seasonDto.Name))
                 return (false, _configuration["ErrorMessages:SeasonName"]);
+
+            if (await HasAdminAlreadySeasonName(season.Permissions.Where(x => x.Type == PermissionType.Admin).First().UserId, seasonDto.Name))
+                return (false, _configuration["ErrorMessages:SeasonExists"]);
 
             season.Name = seasonDto.Name;
             season.Description = seasonDto.Description;
@@ -168,6 +169,16 @@ namespace car_racing_tournament_api.Services
             await _carRacingTournamentDbContext.SaveChangesAsync();
 
             return (true, null);
+        }
+
+        private async Task<bool> HasAdminAlreadySeasonName(Guid userId, string name)
+        {
+            var permissions = await _carRacingTournamentDbContext.Permissions
+                .Where(x => x.UserId == userId && x.Type == PermissionType.Admin)
+                .Select(x => x.SeasonId)
+                .ToListAsync();
+
+            return await _carRacingTournamentDbContext.Seasons.Where(x => permissions.Contains(x.Id) && x.Name == name).CountAsync() > 0;
         }
     }
 }

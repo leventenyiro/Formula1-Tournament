@@ -90,9 +90,6 @@ namespace car_racing_tournament_api.Services
         }
         public async Task<(bool IsSuccess, string? ErrorMessage)> AddDriver(Season season, DriverDto driverDto, Team team)
         {
-            if (driverDto == null)
-                return (false, _configuration["ErrorMessages:MissingDriver"]);
-
             driverDto.Name = driverDto.Name.Trim();
             if (string.IsNullOrEmpty(driverDto.Name))
                 return (false, _configuration["ErrorMessages:DriverName"]);
@@ -115,9 +112,6 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateDriver(Driver driver, DriverDto driverDto, Team team)
         {
-            if (driverDto == null)
-                return (false, _configuration["ErrorMessages:MissingDriver"]);
-
             driverDto.Name = driverDto.Name.Trim();
             if (string.IsNullOrEmpty(driverDto.Name))
                 return (false, _configuration["ErrorMessages:DriverName"]);

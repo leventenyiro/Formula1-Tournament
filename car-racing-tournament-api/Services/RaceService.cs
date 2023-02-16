@@ -95,9 +95,6 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> AddRace(Season season, RaceDto raceDto)
         {
-            if (raceDto == null)
-                return (false, _configuration["ErrorMessages:MissingRace"]);
-
             raceDto.Name = raceDto.Name.Trim();
             if (string.IsNullOrEmpty(raceDto.Name))
                 return (false, _configuration["ErrorMessages:RaceNameCannotBeEmpty"]);
@@ -114,9 +111,6 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateRace(Race race, RaceDto raceDto)
         {
-            if (raceDto == null)
-                return (false, _configuration["ErrorMessages:MissingRace"]);
-
             raceDto.Name = raceDto.Name.Trim();
             if (string.IsNullOrEmpty(raceDto.Name))
                 return (false, _configuration["ErrorMessages:RaceNameCannotBeEmpty"]);

@@ -4,8 +4,10 @@ using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Models;
 using car_racing_tournament_api.Profiles;
 using car_racing_tournament_api.Services;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using System.Xml.Linq;
 
 namespace car_racing_tournament_api.Tests.Unit
 {
@@ -16,15 +18,20 @@ namespace car_racing_tournament_api.Tests.Unit
         private SeasonService? _seasonService;
         private Season? _season;
         private Guid _userId;
+        private IConfiguration? _configuration;
 
         [SetUp]
         public void Init()
         {
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+
             var options = new DbContextOptionsBuilder<CarRacingTournamentDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .UseSqlite(connection)
                 .Options;
 
             _context = new CarRacingTournamentDbContext(options);
+            _context.Database.EnsureCreated();
 
             _userId = Guid.NewGuid();
 
@@ -91,7 +98,7 @@ namespace car_racing_tournament_api.Tests.Unit
             };
 
             _context.Seasons.Add(_season);
-            _context.SaveChanges();
+            _context.SaveChangesAsync();
 
             var mockMapper = new MapperConfiguration(cfg =>
             {
@@ -99,11 +106,11 @@ namespace car_racing_tournament_api.Tests.Unit
             });
             var mapper = mockMapper.CreateMapper();
 
-            var configuration = new ConfigurationBuilder()
+            _configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            _seasonService = new SeasonService(_context, mapper, configuration);
+            _seasonService = new SeasonService(_context, mapper, _configuration);
         }
 
         [Test]
@@ -114,7 +121,7 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNull(result.ErrorMessage);
             Assert.AreEqual(result.Seasons!.Count, 1);
 
-            //Assert.AreEqual(result.Seasons?.First().Teams.Count, 1); IT WILL BE IMPLEMENTED
+            //Assert.AreEqual(result.Seasons?.First().Teams.Count, 1); IT WILL BE IMPLEMENTED - but we need to edit outputDto
 
             SeasonOutputDto season = result.Seasons![0];
             Assert.AreEqual(season.Id, _context!.Seasons.First().Id);
@@ -171,7 +178,19 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNull(findSeason.Races);
         }
 
-        // AddSeasonExists - NEED TO BE IMPLEMENTED
+        [Test]
+        public async Task AddSeasonExists()
+        {
+            var season = new SeasonCreateDto
+            {
+                Name = "Test Season",
+                Description = "This is our test season"
+            };
+
+            var result = await _seasonService!.AddSeason(season, _userId);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration?["ErrorMessage:SeasonExists"]);
+        }
 
         [Test]
         public async Task AddSeasonMissingName()
@@ -204,6 +223,21 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.AreEqual(findSeason.Name, season.Name);
             Assert.AreEqual(findSeason.Description, season.Description);
             Assert.IsTrue(findSeason.IsArchived);
+        }
+
+        [Test]
+        public async Task UpdateSeasonExists()
+        {
+            var season = new SeasonUpdateDto
+            {
+                Name = "Test Season",
+                Description = "This is our test season",
+                IsArchived = false
+            };
+
+            var result = await _seasonService!.UpdateSeason(_context!.Seasons.First(), season);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration?["ErrorMessage:SeasonExists"]);
         }
 
         [Test]
