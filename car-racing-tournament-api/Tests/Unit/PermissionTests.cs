@@ -1,7 +1,7 @@
 ﻿using car_racing_tournament_api.Data;
 using car_racing_tournament_api.Models;
 using car_racing_tournament_api.Services;
-using car_racing_tournament_api.DTO;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
@@ -22,11 +22,15 @@ namespace car_racing_tournament_api.Tests.Unit
         [SetUp]
         public void Init()
         {
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+
             var options = new DbContextOptionsBuilder<CarRacingTournamentDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .UseSqlite(connection)
                 .Options;
 
             _context = new CarRacingTournamentDbContext(options);
+            _context.Database.EnsureCreatedAsync();
 
             _season1 = new Season
             {
@@ -34,7 +38,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 Name = "Test Season",
                 IsArchived = false
             };
-            _context.Seasons.Add(_season1);
+            _context.Seasons.AddAsync(_season1);
 
             _user1 = new Models.User
             {
@@ -43,7 +47,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 Email = "first@user.com",
                 Password = "test"
             };
-            _context.Users.Add(_user1);
+            _context.Users.AddAsync(_user1);
 
             _season2 = new Season
             {
@@ -51,7 +55,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 Name = "Test Season 2",
                 IsArchived = false
             };
-            _context.Seasons.Add(_season2);
+            _context.Seasons.AddAsync(_season2);
 
             _user2 = new Models.User
             {
@@ -60,7 +64,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 Email = "second@user.com",
                 Password = "test"
             };
-            _context.Users.Add(_user2);
+            _context.Users.AddAsync(_user2);
 
             _permissionAdmin = new Permission
             {
@@ -69,7 +73,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 User = _user1,
                 Type = PermissionType.Admin
             };
-            _context.Permissions.Add(_permissionAdmin);
+            _context.Permissions.AddAsync(_permissionAdmin);
 
             _permissionModerator = new Permission
             {
@@ -78,7 +82,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 User = _user2,
                 Type = PermissionType.Moderator
             };
-            _context.Permissions.Add(_permissionModerator);
+            _context.Permissions.AddAsync(_permissionModerator);
 
             _context.SaveChanges();
 
@@ -131,12 +135,12 @@ namespace car_racing_tournament_api.Tests.Unit
             var result = await _permissionService!.AddPermission(_user1!, _season2!, PermissionType.Admin);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
-            Assert.AreEqual(_context!.Permissions.Count(), 3);
+            Assert.AreEqual(_context!.Permissions.CountAsync().Result, 3);
 
-            result = await _permissionService!.AddPermission(_user1!, _season2!, PermissionType.Moderator);
+            result = await _permissionService!.AddPermission(_user2!, _season2!, PermissionType.Moderator);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
-            Assert.AreEqual(_context!.Permissions.Count(), 4);
+            Assert.AreEqual(_context!.Permissions.CountAsync().Result, 4);
         }
 
         // PERMISSION ALREADZ EXISTS
@@ -150,7 +154,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 Name = "New Season",
                 IsArchived = false
             };
-            _context!.Seasons.Add(season);
+            await _context!.Seasons.AddAsync(season);
 
             var permission = new Permission
             {
@@ -159,8 +163,8 @@ namespace car_racing_tournament_api.Tests.Unit
                 Season = season,
                 Type = PermissionType.Moderator
             };
-            _context.Permissions.Add(permission);
-            _context.SaveChanges();
+            await _context.Permissions.AddAsync(permission);
+            await _context.SaveChangesAsync();
 
             var result = await _permissionService!.UpdatePermissionType(permission, PermissionType.Admin);
             Assert.IsTrue(result.IsSuccess);
@@ -188,7 +192,7 @@ namespace car_racing_tournament_api.Tests.Unit
                     }
                 }
             };
-            _context!.Seasons.Add(season);
+            await _context!.Seasons.AddAsync(season);
 
             var permission = new Permission
             {
@@ -197,8 +201,8 @@ namespace car_racing_tournament_api.Tests.Unit
                 Season = season,
                 Type = PermissionType.Moderator
             };
-            _context.Permissions.Add(permission);
-            _context.SaveChanges();
+            await _context.Permissions.AddAsync(permission);
+            await _context.SaveChangesAsync();
 
             var result = await _permissionService!.UpdatePermissionType(permission, PermissionType.Admin);
             Assert.IsFalse(result.IsSuccess);

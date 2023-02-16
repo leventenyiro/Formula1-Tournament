@@ -5,6 +5,7 @@ using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
 using car_racing_tournament_api.Profiles;
 using car_racing_tournament_api.Services;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
@@ -21,11 +22,15 @@ namespace car_racing_tournament_api.Tests.Unit
         [SetUp]
         public void Init()
         {
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+
             var options = new DbContextOptionsBuilder<CarRacingTournamentDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .UseSqlite(connection)
                 .Options;
 
             _context = new CarRacingTournamentDbContext(options);
+            _context.Database.EnsureCreatedAsync();
 
             Season season = new Season
             {
@@ -51,8 +56,8 @@ namespace car_racing_tournament_api.Tests.Unit
                 Season = season
             };
 
-            _context.Drivers.Add(_driver);
-            _context.SaveChanges();
+            _context.Drivers.AddAsync(_driver);
+            _context.SaveChangesAsync();
 
             var mockMapper = new MapperConfiguration(cfg =>
             {
@@ -70,7 +75,7 @@ namespace car_racing_tournament_api.Tests.Unit
         [Test]
         public async Task GetDriversBySeasonSuccess()
         {
-            var result = await _driverService!.GetDriversBySeason(_context!.Seasons.First());
+            var result = await _driverService!.GetDriversBySeason(await _context!.Seasons.FirstAsync());
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
             Assert.IsNotNull(result.Drivers);
@@ -85,10 +90,11 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNull(result.ErrorMessage);
 
             Driver driver = result.Driver!;
-            Assert.AreEqual(driver.Id, _context!.Drivers.First().Id);
-            Assert.AreEqual(driver.Name, _context!.Drivers.First().Name);
-            Assert.AreEqual(driver.Number, _context!.Drivers.First().Number);
-            Assert.AreEqual(driver.RealName, _context!.Drivers.First().RealName);
+            Driver driverDb = _context!.Drivers.FirstAsync().Result;
+            Assert.AreEqual(driver.Id, driverDb.Id);
+            Assert.AreEqual(driver.Name, driverDb.Name);
+            Assert.AreEqual(driver.Number, driverDb.Number);
+            Assert.AreEqual(driver.RealName, driverDb.RealName);
         }
 
         [Test]
@@ -103,8 +109,8 @@ namespace car_racing_tournament_api.Tests.Unit
         [Test]
         public async Task AddDriverSuccess()
         {
-            var season = _context!.Seasons.First();
-            var team = _context.Teams.First();
+            var season = _context!.Seasons.FirstAsync().Result;
+            var team = _context.Teams.FirstAsync().Result;
 
             var driverDto = new DriverDto
             {
@@ -132,8 +138,8 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
 
-            Assert.AreEqual(_context!.Seasons.First().Drivers!.Count, 4);
-            Assert.AreEqual(_context.Seasons.First().Teams!.First().Drivers!.Count, 3);
+            Assert.AreEqual(_context!.Seasons.FirstAsync().Result.Drivers!.Count, 4);
+            Assert.AreEqual(_context.Seasons.FirstAsync().Result.Teams!.First().Drivers!.Count, 3);
         }
 
         // AddDriverExists - NEED TO BE IMPLEMENTED
@@ -148,7 +154,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 Number = 2,
                 ActualTeamId = null
             };
-            var result = await _driverService!.AddDriver(_context!.Seasons.First(), driverDto, null!);
+            var result = await _driverService!.AddDriver(_context!.Seasons.FirstAsync().Result, driverDto, null!);
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:DriverName"]);
         }
@@ -164,7 +170,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 ActualTeamId = null
             };
 
-            var season = _context!.Seasons.First();
+            var season = _context!.Seasons.FirstAsync().Result;
 
             var result = await _driverService!.AddDriver(season, driverDto, null!);
             Assert.IsFalse(result.IsSuccess);
@@ -197,21 +203,12 @@ namespace car_racing_tournament_api.Tests.Unit
                 SeasonId = anotherSeasonId
             };
 
-            _context!.Seasons.Add(new Season
+            await _context!.Seasons.AddAsync(new Season
             {
                 Id = anotherSeasonId,
                 Name = "Test Season",
                 Description = "This is our test season",
                 IsArchived = false,
-                Permissions = new List<Permission>()
-                {
-                    new Permission
-                    {
-                        Id = Guid.NewGuid(),
-                        UserId = Guid.NewGuid(),
-                        Type = PermissionType.Admin
-                    }
-                },
                 Teams = new List<Team>()
                 {
                     anotherTeam
@@ -219,7 +216,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 Drivers = new List<Driver>(),
                 Races = new List<Race>()
             });
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             var driverDto = new DriverDto
             {
@@ -232,7 +229,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 .FirstOrDefault()!.Id
             };
 
-            var result = await _driverService!.AddDriver(_context.Seasons.First(), driverDto, anotherTeam);
+            var result = await _driverService!.AddDriver(_context.Seasons.FirstAsync().Result, driverDto, anotherTeam);
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:DriverTeamNotSameSeason"]);
         }
@@ -248,8 +245,8 @@ namespace car_racing_tournament_api.Tests.Unit
                 Season = _context!.Seasons.FirstOrDefaultAsync().Result!
             };
 
-            _context.Teams.Add(team);
-            _context.SaveChanges();
+            await _context.Teams.AddAsync(team);
+            await _context.SaveChangesAsync();
 
             var driverDto = new DriverDto
             {
@@ -327,21 +324,12 @@ namespace car_racing_tournament_api.Tests.Unit
         public async Task UpdateDriverWithAnotherSeasonTeam()
         {
             var anotherSeasonId = Guid.NewGuid();
-            _context!.Seasons.Add(new Season
+            await _context!.Seasons.AddAsync(new Season
             {
                 Id = anotherSeasonId,
                 Name = "Test Season",
                 Description = "This is our test season",
                 IsArchived = false,
-                Permissions = new List<Permission>()
-                {
-                    new Permission
-                    {
-                        Id = Guid.NewGuid(),
-                        UserId = Guid.NewGuid(),
-                        Type = PermissionType.Admin
-                    }
-                },
                 Teams = new List<Team>()
                 {
                     new Team
@@ -357,7 +345,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 Drivers = new List<Driver>(),
                 Races = new List<Race>()
             });
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             var driverDto = new DriverDto
             {
@@ -389,8 +377,8 @@ namespace car_racing_tournament_api.Tests.Unit
                 Season = _context!.Seasons.FirstOrDefaultAsync().Result!
             };
 
-            _context.Teams.Add(team);
-            _context.SaveChanges();
+            await _context.Teams.AddAsync(team);
+            await _context.SaveChangesAsync();
 
             var result = await _driverService!.UpdateDriverTeam(_driver!, team);
             Assert.IsTrue(result.IsSuccess);
@@ -405,21 +393,12 @@ namespace car_racing_tournament_api.Tests.Unit
         public async Task UpdateDriverTeamWithAnotherSeasonTeam()
         {
             var anotherSeasonId = Guid.NewGuid();
-            _context!.Seasons.Add(new Season
+            await _context!.Seasons.AddAsync(new Season
             {
                 Id = anotherSeasonId,
                 Name = "Test Season",
                 Description = "This is our test season",
                 IsArchived = false,
-                Permissions = new List<Permission>()
-                {
-                    new Permission
-                    {
-                        Id = Guid.NewGuid(),
-                        UserId = Guid.NewGuid(),
-                        Type = PermissionType.Admin
-                    }
-                },
                 Teams = new List<Team>()
                 {
                     new Team
@@ -435,7 +414,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 Drivers = new List<Driver>(),
                 Races = new List<Race>()
             });
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             var result = await _driverService!.UpdateDriverTeam(
                 _driver!,

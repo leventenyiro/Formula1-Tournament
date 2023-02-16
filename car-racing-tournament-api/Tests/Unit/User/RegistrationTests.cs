@@ -2,6 +2,7 @@
 using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Models;
 using car_racing_tournament_api.Services;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
@@ -17,11 +18,15 @@ namespace car_racing_tournament_api.Tests.Unit.User
         [SetUp]
         public void Init()
         {
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+
             var options = new DbContextOptionsBuilder<CarRacingTournamentDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .UseSqlite(connection)
                 .Options;
 
             _context = new CarRacingTournamentDbContext(options);
+            _context.Database.EnsureCreatedAsync();
 
             _configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
@@ -33,7 +38,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
         [Test]
         public async Task Success()
         {
-            Assert.AreEqual(_context!.Users.Count(), 0);
+            Assert.AreEqual(_context!.Users.CountAsync(), 0);
 
             var registrationDto = new RegistrationDto { 
                 Username = "username", 
@@ -44,7 +49,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
             var result = await _userService!.Registration(registrationDto);
             
             Assert.IsTrue(result.IsSuccess);
-            Assert.AreEqual(_context!.Users.Count(), 1);
+            Assert.AreEqual(_context!.Users.CountAsync(), 1);
             
             var user = _context.Users.FirstOrDefaultAsync();
             Assert.AreEqual(user.Result!.Username, registrationDto.Username);
@@ -56,9 +61,9 @@ namespace car_racing_tournament_api.Tests.Unit.User
             result = await _userService!.Registration(registrationDto);
 
             Assert.IsTrue(result.IsSuccess);
-            Assert.AreEqual(_context!.Users.Count(), 2);
+            Assert.AreEqual(_context!.Users.CountAsync(), 2);
 
-            Assert.IsNotNull(_context.Users.Where(x => x.Username == "username2" && x.Email == "test2@test.com").FirstOrDefault());
+            Assert.IsNotNull(_context.Users.Where(x => x.Username == "username2" && x.Email == "test2@test.com").FirstOrDefaultAsync());
         }
 
         /*[Test] IT WILL BE GOOD AFTER https://github.com/leventenyiro/car-racing-tournament/issues/85

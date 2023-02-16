@@ -4,6 +4,7 @@ using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Models;
 using car_racing_tournament_api.Profiles;
 using car_racing_tournament_api.Services;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
@@ -20,11 +21,15 @@ namespace car_racing_tournament_api.Tests.Unit
         [SetUp]
         public void Init()
         {
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+
             var options = new DbContextOptionsBuilder<CarRacingTournamentDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .UseSqlite(connection)
                 .Options;
 
             _context = new CarRacingTournamentDbContext(options);
+            _context.Database.EnsureCreatedAsync();
 
             var seasonId = Guid.NewGuid();
 
@@ -72,8 +77,8 @@ namespace car_racing_tournament_api.Tests.Unit
                 Team = team
             };
 
-            _context.Results.Add(_result);
-            _context.SaveChanges();
+            _context.Results.AddAsync(_result);
+            _context.SaveChangesAsync();
 
             var mockMapper = new MapperConfiguration(cfg =>
             {
@@ -91,7 +96,7 @@ namespace car_racing_tournament_api.Tests.Unit
         [Test]
         public async Task GetResultsByRaceSuccess()
         {
-            var result = await _resultService!.GetResultsByRace(_context!.Races.First());
+            var result = await _resultService!.GetResultsByRace(_context!.Races.FirstAsync().Result);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
             Assert.IsNotNull(result.Results);
@@ -106,9 +111,10 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNull(result.ErrorMessage);
 
             Result resultOutput = result.Result!;
-            Assert.AreEqual(resultOutput.Id, _context!.Results.First().Id);
-            Assert.AreEqual(resultOutput.Point, _context!.Results.First().Point);
-            Assert.AreEqual(resultOutput.Position, _context!.Results.First().Position);
+            Result resultDb = _context!.Results.FirstAsync().Result;
+            Assert.AreEqual(resultOutput.Id, resultDb.Id);
+            Assert.AreEqual(resultOutput.Point, resultDb.Point);
+            Assert.AreEqual(resultOutput.Position, resultDb.Position);
         }
 
         [Test]
@@ -153,7 +159,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 TeamId = (Guid)driver.ActualTeamId!
             };
 
-            var race = _context.Races.First();
+            var race = _context.Races.FirstAsync().Result;
 
             var result = await _resultService!.AddResult(race, resultDto, driver, driver.ActualTeam!);
             Assert.IsFalse(result.IsSuccess);
@@ -179,7 +185,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 TeamId = (Guid)driver.ActualTeamId!
             };
             
-            var result = await _resultService!.AddResult(_context.Races.First(), resultDto, driver, driver.ActualTeam!);
+            var result = await _resultService!.AddResult(_context.Races.FirstAsync().Result, resultDto, driver, driver.ActualTeam!);
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:ResultPoint"]);
             Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
@@ -206,7 +212,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 TeamId = _context!.Teams.FirstOrDefaultAsync().Result!.Id,
             };
 
-            var race = _context.Races.First();
+            var race = _context.Races.FirstAsync().Result;
 
             var result = await _resultService!.AddResult(race, resultDto, driver, _context.Teams.FirstOrDefaultAsync().Result!);
             Assert.IsFalse(result.IsSuccess);
@@ -240,7 +246,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 TeamId = (Guid)driver.ActualTeamId!
             };
 
-            var result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.First(), driver, driver.ActualTeam!);
+            var result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.FirstAsync().Result, driver, driver.ActualTeam!);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
 
@@ -265,13 +271,13 @@ namespace car_racing_tournament_api.Tests.Unit
                 TeamId = (Guid)driver.ActualTeamId!
             };
 
-            var result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.First(), driver, driver.ActualTeam!);
+            var result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.FirstAsync().Result, driver, driver.ActualTeam!);
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:ResultPosition"]);
             Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
 
             resultDto.Position = 0;
-            result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.First(), driver, driver.ActualTeam!);
+            result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.FirstAsync().Result, driver, driver.ActualTeam!);
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:ResultPosition"]);
             Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
@@ -289,7 +295,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 TeamId = (Guid)driver.ActualTeamId!
             };
 
-            var result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.First(), driver, driver.ActualTeam!);
+            var result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.FirstAsync().Result, driver, driver.ActualTeam!);
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:ResultPoint"]);
             Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
@@ -313,10 +319,10 @@ namespace car_racing_tournament_api.Tests.Unit
                 Point = 5,
                 Position = 5,
                 DriverId = driver.Id,
-                TeamId = _context!.Teams.Where(x => x.SeasonId == _context.Seasons.First().Id).First().Id,
+                TeamId = _context!.Teams.Where(x => x.SeasonId == _context.Seasons.First().Id).FirstAsync().Result.Id,
             };
 
-            var result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.First(), driver, _context.Teams.FirstOrDefaultAsync().Result!);
+            var result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.FirstAsync().Result, driver, _context.Teams.FirstOrDefaultAsync().Result!);
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:RaceDriverNotSameSeason"]);
 
@@ -328,10 +334,10 @@ namespace car_racing_tournament_api.Tests.Unit
                 SeasonId = anotherSeasonId
             };
 
-            resultDto.DriverId = _context!.Drivers.Where(x => x.SeasonId == _context.Seasons.First().Id).First().Id;
+            resultDto.DriverId = _context!.Drivers.Where(x => x.SeasonId == _context.Seasons.First().Id).FirstAsync().Result.Id;
             resultDto.TeamId = team.Id;
 
-            result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.First(), _context.Drivers.FirstOrDefaultAsync().Result!, team);
+            result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.FirstAsync().Result, _context.Drivers.FirstOrDefaultAsync().Result!, team);
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:RaceTeamNotSameSeason"]);
         }

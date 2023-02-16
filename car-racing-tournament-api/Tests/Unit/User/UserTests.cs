@@ -1,6 +1,7 @@
 ﻿using car_racing_tournament_api.Data;
 using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Services;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System.Security.Cryptography;
@@ -18,11 +19,15 @@ namespace car_racing_tournament_api.Tests.Unit.User
         [SetUp]
         public void Init()
         {
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+
             var options = new DbContextOptionsBuilder<CarRacingTournamentDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .UseSqlite(connection)
                 .Options;
 
             _context = new CarRacingTournamentDbContext(options);
+            _context.Database.EnsureCreatedAsync();
 
             _user = new Models.User
             {
@@ -31,8 +36,8 @@ namespace car_racing_tournament_api.Tests.Unit.User
                 Email = "test@test.com",
                 Password = "$2a$10$/Mw2QNUGYbV1AIyQ8QxXC.IhNRrmjwAW9SBgUv8Vh9xX2goWsQwG."
             };
-            _context.Users.Add(_user);
-            _context.SaveChanges();
+            _context.Users.AddAsync(_user);
+            _context.SaveChangesAsync();
 
             _configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
@@ -76,7 +81,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
             var result = await _userService!.UpdateUser(_user!, updateUserDto);
 
             Assert.IsTrue(result.IsSuccess);
-            Assert.AreEqual(_context!.Users.Count(), 1);
+            Assert.AreEqual(_context!.Users.CountAsync(), 1);
 
             var user = _context.Users.FirstOrDefaultAsync();
             Assert.AreEqual(user.Result!.Username, updateUserDto.Username);

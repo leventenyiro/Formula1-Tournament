@@ -5,6 +5,7 @@ using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
 using car_racing_tournament_api.Profiles;
 using car_racing_tournament_api.Services;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
@@ -21,11 +22,15 @@ namespace car_racing_tournament_api.Tests.Unit
         [SetUp]
         public void Init()
         {
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+
             var options = new DbContextOptionsBuilder<CarRacingTournamentDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .UseSqlite(connection)
                 .Options;
 
             _context = new CarRacingTournamentDbContext(options);
+            _context.Database.EnsureCreatedAsync();
 
             Team team = new Team
             {
@@ -76,8 +81,8 @@ namespace car_racing_tournament_api.Tests.Unit
                 }
             };
 
-            _context.Races.Add(_race);
-            _context.SaveChanges();
+            _context.Races.AddAsync(_race);
+            _context.SaveChangesAsync();
 
             var mockMapper = new MapperConfiguration(cfg =>
             {
@@ -110,9 +115,10 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNull(result.ErrorMessage);
 
             Race race = result.Race!;
-            Assert.AreEqual(race.Id, _context!.Races.First().Id);
-            Assert.AreEqual(race.Name, _context!.Races.First().Name);
-            Assert.AreEqual(race.DateTime, _context!.Races.First().DateTime);
+            Race raceDb = _context!.Races.FirstAsync().Result;
+            Assert.AreEqual(race.Id, raceDb.Id);
+            Assert.AreEqual(race.Name, raceDb.Name);
+            Assert.AreEqual(race.DateTime, raceDb.DateTime);
         }
 
         [Test]
@@ -135,7 +141,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 DateTime = new DateTime(2023, 10, 10)
             };
 
-            var season = _context!.Seasons.First();
+            var season = _context!.Seasons.FirstAsync().Result;
 
             var result = await _raceService!.AddRace(season, raceDto);
             Assert.IsTrue(result.IsSuccess);
@@ -157,7 +163,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 Name = "",
                 DateTime = new DateTime(2023, 10, 10)
             };
-            var result = await _raceService!.AddRace(_context!.Seasons.First(), raceDto);
+            var result = await _raceService!.AddRace(_context!.Seasons.FirstAsync().Result, raceDto);
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:RaceName"]);
         }

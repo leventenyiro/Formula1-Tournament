@@ -2,6 +2,7 @@
 using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Models;
 using car_racing_tournament_api.Services;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
@@ -18,11 +19,15 @@ namespace car_racing_tournament_api.Tests.Unit
         [SetUp]
         public void Init()
         {
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+
             var options = new DbContextOptionsBuilder<CarRacingTournamentDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .UseSqlite(connection)
                 .Options;
 
             _context = new CarRacingTournamentDbContext(options);
+            _context.Database.EnsureCreatedAsync();
 
             Season season = new Season
             {
@@ -38,8 +43,8 @@ namespace car_racing_tournament_api.Tests.Unit
                 Season = season
             };
 
-            _context.Teams.Add(_team);
-            _context.SaveChanges();
+            _context.Teams.AddAsync(_team);
+            _context.SaveChangesAsync();
 
             _configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
@@ -51,7 +56,7 @@ namespace car_racing_tournament_api.Tests.Unit
         [Test]
         public async Task GetTeamsBySeasonSuccess()
         {
-            var result = await _teamService!.GetTeamsBySeason(_context!.Seasons.First());
+            var result = await _teamService!.GetTeamsBySeason(_context!.Seasons.FirstAsync().Result);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
             Assert.IsNotNull(result.Teams);
@@ -66,9 +71,10 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNull(result.ErrorMessage);
 
             Team team = result.Team!;
-            Assert.AreEqual(team.Id, _context!.Teams.First().Id);
-            Assert.AreEqual(team.Name, _context!.Teams.First().Name);
-            Assert.AreEqual(team.Color, _context!.Teams.First().Color);
+            Team teamDb = _context!.Teams.FirstAsync().Result;
+            Assert.AreEqual(team.Id, teamDb.Id);
+            Assert.AreEqual(team.Name, teamDb.Name);
+            Assert.AreEqual(team.Color, teamDb.Color);
         }
 
         [Test]
@@ -89,13 +95,14 @@ namespace car_racing_tournament_api.Tests.Unit
                 Color = "123123"
             };
 
-            var season = _context!.Seasons.First();
+            var season = _context!.Seasons.FirstAsync().Result;
 
             var result = await _teamService!.AddTeam(season, teamDto);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
             Assert.AreEqual(_context!.Seasons.FirstOrDefaultAsync().Result!.Teams!.Count, 2);
 
+            teamDto.Name = "AddTeam2";
             teamDto.Color = "#123123";
             result = await _teamService!.AddTeam(season, teamDto);
             Assert.IsTrue(result.IsSuccess);
@@ -113,7 +120,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 Name = "",
                 Color = "123123"
             };
-            var result = await _teamService!.AddTeam(_context!.Seasons.First(), teamDto);
+            var result = await _teamService!.AddTeam(_context!.Seasons.FirstAsync().Result, teamDto);
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:TeamName"]);
         }
@@ -127,7 +134,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 Color = "WRONGC"
             };
 
-            var season = _context!.Seasons.First();
+            var season = _context!.Seasons.FirstAsync().Result;
 
             var result = await _teamService!.AddTeam(season, teamDto);
             Assert.IsFalse(result.IsSuccess);

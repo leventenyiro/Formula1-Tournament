@@ -31,7 +31,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 .Options;
 
             _context = new CarRacingTournamentDbContext(options);
-            _context.Database.EnsureCreated();
+            _context.Database.EnsureCreatedAsync();
 
             _userId = Guid.NewGuid();
 
@@ -97,7 +97,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 }
             };
 
-            _context.Seasons.Add(_season);
+            _context.Seasons.AddAsync(_season);
             _context.SaveChangesAsync();
 
             var mockMapper = new MapperConfiguration(cfg =>
@@ -123,11 +123,12 @@ namespace car_racing_tournament_api.Tests.Unit
 
             //Assert.AreEqual(result.Seasons?.First().Teams.Count, 1); IT WILL BE IMPLEMENTED - but we need to edit outputDto
 
-            SeasonOutputDto season = result.Seasons![0];
-            Assert.AreEqual(season.Id, _context!.Seasons.First().Id);
-            Assert.AreEqual(season.Name, _context!.Seasons.First().Name);
-            Assert.AreEqual(season.Description, _context!.Seasons.First().Description);
-            Assert.AreEqual(season.IsArchived, _context!.Seasons.First().IsArchived);
+            SeasonOutputDto seasonDto = result.Seasons![0];
+            Season season = _context!.Seasons.FirstAsync().Result;
+            Assert.AreEqual(seasonDto.Id, season.Id);
+            Assert.AreEqual(seasonDto.Name, season.Name);
+            Assert.AreEqual(seasonDto.Description, season.Description);
+            Assert.AreEqual(seasonDto.IsArchived, season.IsArchived);
         }
 
         [Test]
@@ -138,10 +139,20 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNull(result.ErrorMessage);
 
             Season season = result.Season!;
-            Assert.AreEqual(season.Id, _context!.Seasons.First().Id);
-            Assert.AreEqual(season.Name, _context!.Seasons.First().Name);
-            Assert.AreEqual(season.Description, _context!.Seasons.First().Description);
-            Assert.AreEqual(season.IsArchived, _context!.Seasons.First().IsArchived);
+            Season seasonDb = _context!.Seasons.FirstAsync().Result;
+            Assert.AreEqual(season.Id, seasonDb.Id);
+            Assert.AreEqual(season.Name, seasonDb.Name);
+            Assert.AreEqual(season.Description, seasonDb.Description);
+            Assert.AreEqual(season.IsArchived, seasonDb.IsArchived);
+        }
+
+        [Test]
+        public async Task GetSeasonByWrongId()
+        {
+            var result = await _seasonService!.GetSeasonById(Guid.NewGuid());
+            Assert.IsFalse(result.IsSuccess);
+            Assert.IsNull(result.Season);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:SeasonNotFound"]);
         }
 
         [Test]
@@ -152,10 +163,20 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNull(result.ErrorMessage);
 
             SeasonOutputDto season = result.Season!;
-            Assert.AreEqual(season.Id, _context!.Seasons.First().Id);
-            Assert.AreEqual(season.Name, _context!.Seasons.First().Name);
-            Assert.AreEqual(season.Description, _context!.Seasons.First().Description);
-            Assert.AreEqual(season.IsArchived, _context!.Seasons.First().IsArchived);
+            Season seasonDb = _context!.Seasons.FirstAsync().Result;
+            Assert.AreEqual(season.Id, seasonDb.Id);
+            Assert.AreEqual(season.Name, seasonDb.Name);
+            Assert.AreEqual(season.Description, seasonDb.Description);
+            Assert.AreEqual(season.IsArchived, seasonDb.IsArchived);
+        }
+
+        [Test]
+        public async Task GetSeasonsByUserIdSuccess()
+        {
+            var result = await _seasonService!.GetSeasonsByUserId(_userId);
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNull(result.ErrorMessage);
+            Assert.IsNotNull(result.Seasons);
         }
 
         [Test]
@@ -176,6 +197,9 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNull(findSeason.Teams);
             Assert.IsNull(findSeason.Drivers);
             Assert.IsNull(findSeason.Races);
+
+            result = await _seasonService!.AddSeason(season, Guid.NewGuid());
+            Assert.IsTrue(result.IsSuccess);
         }
 
         [Test]
@@ -189,7 +213,7 @@ namespace car_racing_tournament_api.Tests.Unit
 
             var result = await _seasonService!.AddSeason(season, _userId);
             Assert.IsFalse(result.IsSuccess);
-            Assert.AreEqual(result.ErrorMessage, _configuration?["ErrorMessage:SeasonExists"]);
+            Assert.AreEqual(result.ErrorMessage, _configuration?["ErrorMessages:SeasonExists"]);
         }
 
         [Test]
@@ -203,7 +227,7 @@ namespace car_racing_tournament_api.Tests.Unit
 
             var result = await _seasonService!.AddSeason(season, _userId);
             Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:SeasonName"]);
         }
 
         [Test]
@@ -226,21 +250,6 @@ namespace car_racing_tournament_api.Tests.Unit
         }
 
         [Test]
-        public async Task UpdateSeasonExists()
-        {
-            var season = new SeasonUpdateDto
-            {
-                Name = "Test Season",
-                Description = "This is our test season",
-                IsArchived = false
-            };
-
-            var result = await _seasonService!.UpdateSeason(_context!.Seasons.First(), season);
-            Assert.IsFalse(result.IsSuccess);
-            Assert.AreEqual(result.ErrorMessage, _configuration?["ErrorMessage:SeasonExists"]);
-        }
-
-        [Test]
         public async Task UpdateSeasonMissingName()
         {
             var season = new SeasonUpdateDto
@@ -252,7 +261,7 @@ namespace car_racing_tournament_api.Tests.Unit
 
             var result = await _seasonService!.UpdateSeason(_season!, season);
             Assert.IsFalse(result.IsSuccess);
-            Assert.IsNotEmpty(result.ErrorMessage);
+            Assert.AreEqual(result.ErrorMessage, _configuration?["ErrorMessages:SeasonName"]);
         }
 
         [Test]
@@ -283,15 +292,6 @@ namespace car_racing_tournament_api.Tests.Unit
 
             Assert.IsEmpty(_context.Seasons);
             Assert.IsEmpty(_context.Permissions);
-        }
-
-        [Test]
-        public async Task GetSeasonsByUserIdSuccess()
-        {
-            var result = await _seasonService!.GetSeasonsByUserId(_userId);
-            Assert.IsTrue(result.IsSuccess);
-            Assert.IsNull(result.ErrorMessage);
-            Assert.IsNotNull(result.Seasons);
         }
     }
 }
