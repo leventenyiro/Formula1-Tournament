@@ -115,9 +115,6 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, Season? Season, string? ErrorMessage)> AddSeason(SeasonCreateDto seasonDto, Guid userId)
         {
-            if (seasonDto == null)
-                return (false, null, _configuration["ErrorMessages:MissingSeason"]);
-
             seasonDto.Name = seasonDto.Name.Trim();
 
             if (string.IsNullOrEmpty(seasonDto.Name))
@@ -136,9 +133,6 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateSeason(Season season, SeasonUpdateDto seasonDto)
         {
-            if (seasonDto == null)
-                return (false, _configuration["ErrorMessages:MissingSeason"]);
-
             seasonDto.Name = seasonDto.Name.Trim();
             if (string.IsNullOrEmpty(seasonDto.Name))
                 return (false, _configuration["ErrorMessages:SeasonName"]);

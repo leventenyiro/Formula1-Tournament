@@ -108,9 +108,6 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> AddTeam(Season season, TeamDto teamDto)
         {
-            if (teamDto == null)
-                return (false, _configuration["ErrorMessages:MissingTeam"]);
-
             teamDto.Name = teamDto.Name.Trim();
             if (string.IsNullOrEmpty(teamDto.Name))
                 return (false, _configuration["ErrorMessages:TeamName"]);
@@ -143,9 +140,6 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateTeam(Team team, TeamDto teamDto)
         {
-            if (teamDto == null)
-                return (false, _configuration["ErrorMessages:MissingTeam"]);
-
             team.Name = teamDto.Name.Trim();
             if (string.IsNullOrEmpty(teamDto.Name))
                 return (false, _configuration["ErrorMessages:TeamName"]);
