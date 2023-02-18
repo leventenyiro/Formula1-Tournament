@@ -66,6 +66,7 @@ namespace car_racing_tournament_api.Services
                     Id = x.Id,
                     Name = x.Name,
                     DateTime = x.DateTime,
+                    SeasonId = x.SeasonId,
                     Results = x.Results!.Select(x => new Result
                     {
                         Id = x.Id,
@@ -84,7 +85,7 @@ namespace car_racing_tournament_api.Services
                             Name = x.Team.Name,
                             Color = x.Team.Color
                         }
-                    }).ToList()
+                    }).ToList(),
                 }).FirstOrDefaultAsync();
 
             if (race == null)
@@ -95,12 +96,13 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> AddRace(Season season, RaceDto raceDto)
         {
-            if (raceDto == null)
-                return (false, _configuration["ErrorMessages:MissingRace"]);
-
             raceDto.Name = raceDto.Name.Trim();
             if (string.IsNullOrEmpty(raceDto.Name))
                 return (false, _configuration["ErrorMessages:RaceNameCannotBeEmpty"]);
+
+            if (await _carRacingTournamentDbContext.Races.CountAsync(
+                x => x.Name == raceDto.Name && x.SeasonId == season.Id) != 0)
+                return (false, _configuration["ErrorMessages:RaceNameExists"]);
 
             raceDto.Name = raceDto.Name;
             var race = _mapper.Map<Race>(raceDto);
@@ -114,12 +116,14 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateRace(Race race, RaceDto raceDto)
         {
-            if (raceDto == null)
-                return (false, _configuration["ErrorMessages:MissingRace"]);
-
             raceDto.Name = raceDto.Name.Trim();
             if (string.IsNullOrEmpty(raceDto.Name))
                 return (false, _configuration["ErrorMessages:RaceNameCannotBeEmpty"]);
+
+            if (race.Name != raceDto.Name && 
+                await _carRacingTournamentDbContext.Races.CountAsync(
+                    x => x.Name == raceDto.Name && x.SeasonId == race.SeasonId) != 0)
+                return (false, _configuration["ErrorMessages:RaceNameExists"]);
 
             race.Name = raceDto.Name;
             race.DateTime = raceDto.DateTime;

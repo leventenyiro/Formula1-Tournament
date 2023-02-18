@@ -50,6 +50,16 @@ namespace car_racing_tournament_api.Controllers
             return Ok(result.Season);
         }
 
+        [HttpGet("{id}/details")]
+        public async Task<IActionResult> GetDetails(Guid id)
+        {
+            var result = await _seasonService.GetSeasonByIdWithDetails(id);
+            if (!result.IsSuccess)
+                return NotFound(result.ErrorMessage);
+
+            return Ok(result.Season);
+        }
+
         [HttpPost, Authorize]
         public async Task<IActionResult> Post([FromBody] SeasonCreateDto seasonDto)
         {

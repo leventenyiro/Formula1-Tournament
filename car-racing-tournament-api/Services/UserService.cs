@@ -24,9 +24,6 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? Token, string? ErrorMessage)> Login(LoginDto loginDto)
         {
-            if (loginDto == null)
-                return (false, null, _configuration["ErrorMessages:MissingLogin"]);
-
             var actualUser = await _carRacingTournamentDbContext.Users.Where(x => x.Username == loginDto.UsernameEmail || x.Email == loginDto.UsernameEmail).FirstOrDefaultAsync();
             if (actualUser == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, actualUser.Password))
                 return (false, null, _configuration["ErrorMessages:LoginDetails"]);
@@ -38,9 +35,6 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> Registration(RegistrationDto registrationDto)
         {
-            if (registrationDto == null)
-                return (false, _configuration["ErrorMessages:MissingRegistration"]);
-
             registrationDto.Username = registrationDto.Username.Trim();
             if (!Regex.IsMatch(registrationDto.Username, _configuration["Validation:NameRegexWithoutWhiteSpace"]))
                 return (false, _configuration["ErrorMessages:UserName"]);
@@ -55,7 +49,13 @@ namespace car_racing_tournament_api.Services
             if (registrationDto.Password != registrationDto.PasswordAgain)
                 return (false, _configuration["ErrorMessages:PasswordsPass"]);
 
-            await _carRacingTournamentDbContext.AddAsync(new User { 
+            if (await _carRacingTournamentDbContext.Users.CountAsync(x => x.Username == registrationDto.Username) != 0)
+                return (false, _configuration["ErrorMessages:UserNameExists"]);
+
+            if (await _carRacingTournamentDbContext.Users.CountAsync(x => x.Email == registrationDto.Email) != 0)
+                return (false, _configuration["ErrorMessages:EmailExists"]);
+
+            await _carRacingTournamentDbContext.Users.AddAsync(new User { 
                 Id = new Guid(), 
                 Username = registrationDto.Username,
                 Email = registrationDto.Email,
@@ -86,9 +86,6 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateUser(User user, UpdateUserDto updateUserDto)
         {
-            if (updateUserDto == null)
-                return (false, _configuration["ErrorMessages:MissingUpdateUser"]);
-
             updateUserDto.Username = updateUserDto.Username.Trim();
             if (!Regex.IsMatch(updateUserDto.Username, _configuration["Validation:NameRegexWithoutWhiteSpace"]))
                 return (false, _configuration["ErrorMessages:UserName"]);
@@ -96,6 +93,14 @@ namespace car_racing_tournament_api.Services
             updateUserDto.Email = updateUserDto.Email.Trim().ToLower();
             if (!Regex.IsMatch(updateUserDto.Email, _configuration["Validation:EmailRegex"]))
                 return (false, _configuration["ErrorMessages:EmailFormat"]);
+
+            if (user.Username != updateUserDto.Username && 
+                await _carRacingTournamentDbContext.Users.Where(x => x.Username == updateUserDto.Username).CountAsync() != 0)
+                return (false, _configuration["ErrorMessages:UserNameExists"]);
+
+            if (user.Email != updateUserDto.Email && 
+                await _carRacingTournamentDbContext.Users.Where(x => x.Email == updateUserDto.Email).CountAsync() != 0)
+                return (false, _configuration["ErrorMessages:EmailExists"]);
 
             user.Username = updateUserDto.Username;
             user.Email = updateUserDto.Email;
@@ -107,9 +112,6 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdatePassword(User user, UpdatePasswordDto updatePasswordDto)
         {
-            if (updatePasswordDto == null)
-                return (false, _configuration["ErrorMessages:MissingUpdatePassword"]);
-
             if (updatePasswordDto.Password != updatePasswordDto.PasswordAgain)
                 return (false, _configuration["ErrorMessages:PasswordsPass"]);
 

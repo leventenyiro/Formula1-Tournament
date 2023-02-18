@@ -45,6 +45,9 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> AddPermission(User user, Season season, PermissionType permissionType)
         {
+            if (await _carRacingTournamentDbContext.Permissions.CountAsync(x => x.UserId == user.Id && x.SeasonId == season.Id) != 0)
+                return (false, _configuration["ErrorMessages:PermissionExists"]);
+
             await _carRacingTournamentDbContext.Permissions.AddAsync(new Permission
             {
                 Id = Guid.NewGuid(),
@@ -59,7 +62,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdatePermissionType(Permission permission, PermissionType permissionType)
         {
-            if (permissionType == PermissionType.Admin && _carRacingTournamentDbContext.Permissions.Where(x => x.SeasonId == permission.SeasonId && x.Type == PermissionType.Admin).Count() > 0)
+            if (permissionType == PermissionType.Admin && await _carRacingTournamentDbContext.Permissions.CountAsync(x => x.SeasonId == permission.SeasonId && x.Type == PermissionType.Admin) > 0)
                 return (false, _configuration["ErrorMessages:SeasonHasAdmin"]);
 
             permission.Type = permissionType;

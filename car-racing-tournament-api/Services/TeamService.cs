@@ -3,6 +3,7 @@ using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using System.Drawing;
 
 namespace car_racing_tournament_api.Services
@@ -73,6 +74,7 @@ namespace car_racing_tournament_api.Services
                     Id = x.Id,
                     Name = x.Name,
                     Color = x.Color,
+                    SeasonId = x.SeasonId,
                     Drivers = x.Drivers!.Select(x => new Driver
                     {
                         Id = x.Id,
@@ -98,7 +100,7 @@ namespace car_racing_tournament_api.Services
                             RealName = x.Driver.RealName,
                             Number = x.Driver.Number
                         }
-                    }).ToList()
+                    }).ToList(),
                 }).FirstOrDefaultAsync();
             if (team == null)
                 return (false, null, _configuration["ErrorMessages:TeamNotFound"]);
@@ -108,13 +110,13 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> AddTeam(Season season, TeamDto teamDto)
         {
-            if (teamDto == null)
-                return (false, _configuration["ErrorMessages:MissingTeam"]);
-
             teamDto.Name = teamDto.Name.Trim();
             if (string.IsNullOrEmpty(teamDto.Name))
                 return (false, _configuration["ErrorMessages:TeamName"]);
 
+            if (await _carRacingTournamentDbContext.Teams.CountAsync(
+                x => x.Name == teamDto.Name && x.SeasonId == season.Id) != 0)
+                return (false, _configuration["ErrorMessages:TeamExists"]);
 
             Team teamObj = new Team
             {
@@ -143,13 +145,16 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateTeam(Team team, TeamDto teamDto)
         {
-            if (teamDto == null)
-                return (false, _configuration["ErrorMessages:MissingTeam"]);
-
-            team.Name = teamDto.Name.Trim();
+            teamDto.Name = teamDto.Name.Trim();
             if (string.IsNullOrEmpty(teamDto.Name))
                 return (false, _configuration["ErrorMessages:TeamName"]);
 
+            if (team.Name != teamDto.Name &&
+                await _carRacingTournamentDbContext.Teams.CountAsync(
+                    x => x.Name == teamDto.Name && x.SeasonId == team.SeasonId) != 0)
+                return (false, _configuration["ErrorMessages:TeamExists"]);
+
+            team.Name = teamDto.Name;
             try
             {
                 team.Color = teamDto.Color.Trim();

@@ -56,7 +56,7 @@ namespace car_racing_tournament_api.Services
                             Name = x.Team.Name,
                             Color = x.Team.Color
                         }
-                    }).ToList()
+                    }).ToList(),
                 }).ToListAsync();
 
             return (true, drivers, null);
@@ -81,7 +81,7 @@ namespace car_racing_tournament_api.Services
                         Point = x.Point,
                         Position = x.Position,
                         Team = x.Team
-                    }).ToList()
+                    }).ToList(),
                 }).FirstOrDefaultAsync();
             if (driver == null)
                 return (false, null, _configuration["ErrorMessages:DriverNotFound"]);
@@ -90,9 +90,6 @@ namespace car_racing_tournament_api.Services
         }
         public async Task<(bool IsSuccess, string? ErrorMessage)> AddDriver(Season season, DriverDto driverDto, Team team)
         {
-            if (driverDto == null)
-                return (false, _configuration["ErrorMessages:MissingDriver"]);
-
             driverDto.Name = driverDto.Name.Trim();
             if (string.IsNullOrEmpty(driverDto.Name))
                 return (false, _configuration["ErrorMessages:DriverName"]);
@@ -102,6 +99,14 @@ namespace car_racing_tournament_api.Services
 
             if (driverDto.ActualTeamId != null && season.Id != team.SeasonId)
                 return (false, _configuration["ErrorMessages:DriverTeamNotSameSeason"]);
+
+            if (await _carRacingTournamentDbContext.Drivers.CountAsync(
+                x => x.Name == driverDto.Name && x.SeasonId == season.Id) != 0)
+                return (false, _configuration["ErrorMessages:DriverNameExists"]);
+            
+            if (await _carRacingTournamentDbContext.Drivers.CountAsync(
+                x => x.Number == driverDto.Number && x.SeasonId == season.Id) != 0)
+                return (false, _configuration["ErrorMessages:DriverNumberExists"]);
 
             driverDto.RealName = driverDto.RealName?.Trim();
             var driver = _mapper.Map<Driver>(driverDto);
@@ -115,9 +120,6 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateDriver(Driver driver, DriverDto driverDto, Team team)
         {
-            if (driverDto == null)
-                return (false, _configuration["ErrorMessages:MissingDriver"]);
-
             driverDto.Name = driverDto.Name.Trim();
             if (string.IsNullOrEmpty(driverDto.Name))
                 return (false, _configuration["ErrorMessages:DriverName"]);
@@ -127,6 +129,16 @@ namespace car_racing_tournament_api.Services
 
             if (team != null && driver.SeasonId != team.SeasonId)
                 return (false, _configuration["ErrorMessages:DriverTeamNotSameSeason"]);
+
+            if (driver.Name != driverDto.Name && 
+                await _carRacingTournamentDbContext.Drivers.CountAsync(
+                    x => x.Name == driverDto.Name && x.SeasonId == driver.SeasonId) != 0)
+                return (false, _configuration["ErrorMessages:DriverNameExists"]);
+            
+            if (driver.Number != driverDto.Number && 
+                await _carRacingTournamentDbContext.Drivers.CountAsync(
+                    x => x.Number == driverDto.Number && x.SeasonId == driver.SeasonId) != 0)
+                return (false, _configuration["ErrorMessages:DriverNumberExists"]);
 
             driver.Name = driverDto.Name;
             driver.RealName = driverDto.RealName?.Trim();

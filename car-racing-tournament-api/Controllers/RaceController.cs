@@ -107,7 +107,7 @@ namespace car_racing_tournament_api.Controllers
             var resultUpdate = await _driverService.UpdateDriverTeam(resultGetDriver.Driver!, resultGetTeam.Team!);
             if (!resultUpdate.IsSuccess)
                 return BadRequest(resultUpdate.ErrorMessage);
-            
+
             return StatusCode(StatusCodes.Status201Created);
         }
     }

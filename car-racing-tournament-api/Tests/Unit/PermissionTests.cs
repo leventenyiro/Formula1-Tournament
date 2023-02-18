@@ -89,7 +89,20 @@ namespace car_racing_tournament_api.Tests.Unit
             _permissionService = new PermissionService(_context, _configuration);
         }
 
-        // permission not found - need to be implemented
+        [Test]
+        public async Task GetPermissionByIdSuccess() {
+            var result = await _permissionService!.GetPermissionById(_permissionAdmin!.Id);
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNull(result.ErrorMessage);
+            Assert.AreEqual(result.Permission!.Type, PermissionType.Admin);
+        }
+
+        [Test]
+        public async Task GetPermissionByIdNotFound() {
+            var result = await _permissionService!.GetPermissionById(Guid.NewGuid());
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:PermissionNotFound"]);
+        }
 
         [Test]
         public async Task IsAdminSuccess()
@@ -132,14 +145,14 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
             Assert.AreEqual(_context!.Permissions.Count(), 3);
-
-            result = await _permissionService!.AddPermission(_user1!, _season2!, PermissionType.Moderator);
-            Assert.IsTrue(result.IsSuccess);
-            Assert.IsNull(result.ErrorMessage);
-            Assert.AreEqual(_context!.Permissions.Count(), 4);
         }
 
-        // PERMISSION ALREADZ EXISTS
+        [Test]
+        public async Task AddPermissionExists() {
+            var result = await _permissionService!.AddPermission(_user1!, _season1!, PermissionType.Admin);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:PermissionExists"]);
+        }
 
         [Test]
         public async Task UpdatePermissionTypeSuccess()
@@ -205,6 +218,14 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:SeasonHasAdmin"]);
             Assert.AreEqual(season.Permissions.Count(), 2);
             Assert.AreEqual(permission.Type, PermissionType.Moderator);
+        }
+
+        [Test]
+        public async Task RemovePermission() {
+            var result = await _permissionService!.RemovePermission(_permissionAdmin!);
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNull(result.ErrorMessage);
+            Assert.AreEqual(_context!.Permissions.Count(), 1);
         }
     }
 }
