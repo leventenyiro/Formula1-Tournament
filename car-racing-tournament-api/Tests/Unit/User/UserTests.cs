@@ -83,31 +83,33 @@ namespace car_racing_tournament_api.Tests.Unit.User
             Assert.AreEqual(user.Result!.Email, updateUserDto.Email);
         }
 
-        /*[Test] IT WILL BE GOOD AFTER https://github.com/leventenyiro/car-racing-tournament/issues/85
+        [Test]
         public async Task AlreadyExists()
         {
-            _context!.Users.Add(new Models.User { Username = "username", Email = "test@test.com", Password = "$2a$10$/Mw2QNUGYbV1AIyQ8QxXC.IhNRrmjwAW9SBgUv8Vh9xX2goWsQwG." });
+            var user = new Models.User { Username = "username1", Email = "test1@test.com", Password = "$2a$10$/Mw2QNUGYbV1AIyQ8QxXC.IhNRrmjwAW9SBgUv8Vh9xX2goWsQwG." };
+            _context!.Users.Add(user);
             _context.SaveChanges();
 
-            var registrationDto = new RegistrationDto
+            var updateUserDto = new UpdateUserDto
             {
                 Username = "username",
                 Email = "test@test.com",
-                Password = "Password1",
-                PasswordAgain = "Password1"
             };
-            var result = await _userService!.Registration(registrationDto);
+            var result = await _userService!.UpdateUser(user, updateUserDto);
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:UserNameExists"]);
 
-            registrationDto.Email = "test1@test.com";
-            result = await _userService!.Registration(registrationDto);
+            updateUserDto.Email = "test1@test.com";
+            result = await _userService!.UpdateUser(user, updateUserDto);
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:UserNameExists"]);
 
-            registrationDto.Username = "username1";
-            registrationDto.Email = "test@test.com";
-            result = await _userService!.Registration(registrationDto);
+            updateUserDto.Username = "username1";
+            updateUserDto.Email = "test@test.com";
+            result = await _userService!.UpdateUser(user, updateUserDto);
             Assert.IsFalse(result.IsSuccess);
-        }*/
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:EmailExists"]);
+        }
 
         [Test]
         public async Task MissingUsername()

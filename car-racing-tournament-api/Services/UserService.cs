@@ -49,6 +49,12 @@ namespace car_racing_tournament_api.Services
             if (registrationDto.Password != registrationDto.PasswordAgain)
                 return (false, _configuration["ErrorMessages:PasswordsPass"]);
 
+            if (await _carRacingTournamentDbContext.Users.Where(x => x.Username == registrationDto.Username).CountAsync() != 0)
+                return (false, _configuration["ErrorMessages:UserNameExists"]);
+
+            if (await _carRacingTournamentDbContext.Users.Where(x => x.Email == registrationDto.Email).CountAsync() != 0)
+                return (false, _configuration["ErrorMessages:EmailExists"]);
+
             await _carRacingTournamentDbContext.AddAsync(new User { 
                 Id = new Guid(), 
                 Username = registrationDto.Username,
@@ -87,6 +93,14 @@ namespace car_racing_tournament_api.Services
             updateUserDto.Email = updateUserDto.Email.Trim().ToLower();
             if (!Regex.IsMatch(updateUserDto.Email, _configuration["Validation:EmailRegex"]))
                 return (false, _configuration["ErrorMessages:EmailFormat"]);
+
+            if (user.Username != updateUserDto.Username && 
+                await _carRacingTournamentDbContext.Users.Where(x => x.Username == updateUserDto.Username).CountAsync() != 0)
+                return (false, _configuration["ErrorMessages:UserNameExists"]);
+
+            if (user.Email != updateUserDto.Email && 
+                await _carRacingTournamentDbContext.Users.Where(x => x.Email == updateUserDto.Email).CountAsync() != 0)
+                return (false, _configuration["ErrorMessages:EmailExists"]);
 
             user.Username = updateUserDto.Username;
             user.Email = updateUserDto.Email;

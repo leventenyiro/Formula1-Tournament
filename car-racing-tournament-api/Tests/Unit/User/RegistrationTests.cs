@@ -61,7 +61,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
             Assert.IsNotNull(_context.Users.Where(x => x.Username == "username2" && x.Email == "test2@test.com").FirstOrDefault());
         }
 
-        /*[Test] IT WILL BE GOOD AFTER https://github.com/leventenyiro/car-racing-tournament/issues/85
+        [Test]
         public async Task AlreadyExists()
         {
             _context!.Users.Add(new Models.User { Username = "username", Email = "test@test.com", Password = "$2a$10$/Mw2QNUGYbV1AIyQ8QxXC.IhNRrmjwAW9SBgUv8Vh9xX2goWsQwG." });
@@ -76,16 +76,19 @@ namespace car_racing_tournament_api.Tests.Unit.User
             };
             var result = await _userService!.Registration(registrationDto);
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:UserNameExists"]);
 
             registrationDto.Email = "test1@test.com";
             result = await _userService!.Registration(registrationDto);
             Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:UserNameExists"]);
 
             registrationDto.Username = "username1";
             registrationDto.Email = "test@test.com";
             result = await _userService!.Registration(registrationDto);
             Assert.IsFalse(result.IsSuccess);
-        }*/
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:EmailExists"]);
+        }
 
         [Test]
         public async Task MissingUsername()
