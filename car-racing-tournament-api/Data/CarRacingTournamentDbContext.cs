@@ -69,6 +69,9 @@ namespace car_racing_tournament_api.Data
                 entity.Property(e => e.IsArchived)
                     .IsRequired()
                     .HasDefaultValue(false);
+
+                entity.Property(e => e.CreatedAt)
+                    .IsRequired();
             });
 
             modelBuilder.Entity<Team>(entity =>
