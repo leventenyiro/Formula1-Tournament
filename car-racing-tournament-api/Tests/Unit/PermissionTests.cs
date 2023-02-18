@@ -90,6 +90,16 @@ namespace car_racing_tournament_api.Tests.Unit
         }
 
         [Test]
+        public async Task GetPermissionsBySeasonSuccess()
+        {
+            var result = await _permissionService!.GetPermissionsBySeason(_context!.Seasons.First());
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNull(result.ErrorMessage);
+            Assert.IsNotNull(result.Permissions);
+            Assert.AreEqual(result.Permissions!.Count, 2);
+        }
+
+        [Test]
         public async Task GetPermissionByIdSuccess() {
             var result = await _permissionService!.GetPermissionById(_permissionAdmin!.Id);
             Assert.IsTrue(result.IsSuccess);
