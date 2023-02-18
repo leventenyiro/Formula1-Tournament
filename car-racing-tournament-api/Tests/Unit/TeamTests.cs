@@ -35,7 +35,8 @@ namespace car_racing_tournament_api.Tests.Unit
                 Id = Guid.NewGuid(),
                 Name = "First Team",
                 Color = "123123",
-                Season = season
+                Season = season,
+                SeasonId = season.Id
             };
 
             _context.Teams.Add(_team);
@@ -96,14 +97,13 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNull(result.ErrorMessage);
             Assert.AreEqual(_context!.Seasons.FirstOrDefaultAsync().Result!.Teams!.Count, 2);
 
+            teamDto.Name = "AddTeam2";
             teamDto.Color = "#123123";
             result = await _teamService!.AddTeam(season, teamDto);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
             Assert.AreEqual(_context.Seasons.FirstOrDefaultAsync().Result!.Teams!.Count, 3);
         }
-
-        // teamAlreadyExists
 
         [Test]
         public async Task AddTeamMissingName()
@@ -116,6 +116,20 @@ namespace car_racing_tournament_api.Tests.Unit
             var result = await _teamService!.AddTeam(_context!.Seasons.First(), teamDto);
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:TeamName"]);
+        }
+
+        [Test]
+        public async Task AddTeamExists()
+        {
+            var season = _context!.Seasons.First();
+
+            var result = await _teamService!.AddTeam(season, new TeamDto()
+            {
+                Name = "First Team",
+                Color = "123123"
+            });
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:TeamExists"]);
         }
 
         [Test]
@@ -162,8 +176,6 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.AreEqual(findTeam.Color, teamDto.Color);
         }
 
-        // update - team already exists
-
         [Test]
         public async Task UpdateTeamMissingName()
         {
@@ -175,6 +187,30 @@ namespace car_racing_tournament_api.Tests.Unit
             var result = await _teamService!.UpdateTeam(_team!, teamDto);
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:TeamName"]);
+        }
+
+        [Test]
+        public async Task UpdateTeamExists()
+        {
+            var season = _context!.Seasons.First();
+
+            var team = new Team
+            {
+                Id = Guid.NewGuid(),
+                Name = "Second Team",
+                Color = "123123",
+                SeasonId = season.Id
+            };
+
+            var teamDto = new TeamDto
+            {
+                Name = "First Team",
+                Color = "123123"
+            };
+
+            var result = await _teamService!.UpdateTeam(team, teamDto);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:TeamExists"]);
         }
 
         [Test]
