@@ -120,17 +120,14 @@ namespace car_racing_tournament_api.Services
             if (string.IsNullOrEmpty(seasonDto.Name))
                 return (false, null, _configuration["ErrorMessages:SeasonName"]);
 
-            var count = await _carRacingTournamentDbContext.Seasons
-                .CountAsync(s => s.Name == seasonDto.Name && s.Permissions
-                    .Any(x => x.UserId == userId && (int)x.Type == 1));
+            var permissions = await _carRacingTournamentDbContext.Permissions
+                .Where(x => x.UserId == userId && x.Type == PermissionType.Admin)
+                .Select(x => x.SeasonId)
+                .ToListAsync();
 
-            if (count != 0)
+            if (await _carRacingTournamentDbContext.Seasons
+                .CountAsync(x => x.Name == seasonDto.Name && permissions.Contains(x.Id)) != 0)
                 return (false, null, _configuration["ErrorMessages:SeasonExists"]);
-
-            // if (_carRacingTournamentDbContext.Seasons.Include(x => x.Permissions).CountAsync(
-            //     x => x.Name == seasonDto.Name && 
-            //     x.Permissions.Where(x => x.Type == PermissionType.Admin).First().UserId == userId).Result != 0)
-            //     return (false, null, _configuration["ErrorMessages:SeasonExists"]);
 
             seasonDto.Name = seasonDto.Name;
             var season = _mapper.Map<Season>(seasonDto);
@@ -149,10 +146,16 @@ namespace car_racing_tournament_api.Services
             if (string.IsNullOrEmpty(seasonDto.Name))
                 return (false, _configuration["ErrorMessages:SeasonName"]);
 
-            if (season.Name != seasonDto.Name && _carRacingTournamentDbContext.Seasons.Include(x => x.Permissions).CountAsync(
-                x => x.Name == seasonDto.Name && 
-                x.Permissions.Where(x => x.Type == PermissionType.Admin).First().UserId == 
-                    season.Permissions.Where(x => x.Type == PermissionType.Admin).First().UserId).Result != 0)
+            var adminId = await _carRacingTournamentDbContext.Permissions
+                .Where(x => x.SeasonId == season.Id).FirstOrDefaultAsync();
+
+            var permissions = await _carRacingTournamentDbContext.Permissions
+                .Where(x => x.UserId == adminId!.UserId && x.Type == PermissionType.Admin)
+                .Select(x => x.SeasonId)
+                .ToListAsync();
+
+            if (season.Name != seasonDto.Name && await _carRacingTournamentDbContext.Seasons
+                .CountAsync(x => x.Name == seasonDto.Name && permissions.Contains(x.Id)) != 0)
                 return (false, _configuration["ErrorMessages:SeasonExists"]);
 
             season.Name = seasonDto.Name;
