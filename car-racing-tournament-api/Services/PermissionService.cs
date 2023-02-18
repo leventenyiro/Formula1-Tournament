@@ -62,7 +62,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdatePermissionType(Permission permission, PermissionType permissionType)
         {
-            if (permissionType == PermissionType.Admin && _carRacingTournamentDbContext.Permissions.Where(x => x.SeasonId == permission.SeasonId && x.Type == PermissionType.Admin).Count() > 0)
+            if (permissionType == PermissionType.Admin && await _carRacingTournamentDbContext.Permissions.CountAsync(x => x.SeasonId == permission.SeasonId && x.Type == PermissionType.Admin) > 0)
                 return (false, _configuration["ErrorMessages:SeasonHasAdmin"]);
 
             permission.Type = permissionType;

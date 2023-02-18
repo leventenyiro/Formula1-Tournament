@@ -49,10 +49,10 @@ namespace car_racing_tournament_api.Services
             if (registrationDto.Password != registrationDto.PasswordAgain)
                 return (false, _configuration["ErrorMessages:PasswordsPass"]);
 
-            if (await _carRacingTournamentDbContext.Users.Where(x => x.Username == registrationDto.Username).CountAsync() != 0)
+            if (await _carRacingTournamentDbContext.Users.CountAsync(x => x.Username == registrationDto.Username) != 0)
                 return (false, _configuration["ErrorMessages:UserNameExists"]);
 
-            if (await _carRacingTournamentDbContext.Users.Where(x => x.Email == registrationDto.Email).CountAsync() != 0)
+            if (await _carRacingTournamentDbContext.Users.CountAsync(x => x.Email == registrationDto.Email) != 0)
                 return (false, _configuration["ErrorMessages:EmailExists"]);
 
             await _carRacingTournamentDbContext.AddAsync(new User { 
