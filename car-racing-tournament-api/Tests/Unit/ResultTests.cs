@@ -138,8 +138,21 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 2);
         }
 
-        //[Test]
-        //public async Task AddResultResultExists() // a driver cannot reach more result on a race
+        [Test]
+        public async Task AddResultExists() {
+            var driver = _context!.Drivers.Where(x => x.Number == 1).FirstOrDefaultAsync().Result;
+            var resultDto = new ResultDto
+            {
+                Point = 18,
+                Position = 2,
+                DriverId = driver!.Id,
+                TeamId = (Guid)driver.ActualTeamId!
+            };
+
+            var result = await _resultService!.AddResult(_context!.Races.First(), resultDto, driver, driver.ActualTeam!);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:ResultExists"]);
+        }
 
         [Test]
         public async Task AddResultNotPositivePosition()
@@ -251,7 +264,33 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.AreEqual(findResult.TeamId, resultDto.TeamId);
         }
 
-        // update - result already exists
+        [Test]
+        public async Task UpdateResultExists() {
+            var driver = _context!.Drivers.Where(x => x.Number == 2).FirstOrDefaultAsync().Result;
+            var race = _context.Races.First();
+
+            var result = new Result
+            {
+                Id = Guid.NewGuid(),
+                Point = 18,
+                Position = 2,
+                DriverId = driver!.Id,
+                TeamId = (Guid)driver.ActualTeamId!,
+                RaceId = race.Id
+            };
+
+            var resultDto = new ResultDto
+            {
+                Point = 18,
+                Position = 2,
+                DriverId = _result!.DriverId,
+                TeamId = (Guid)driver.ActualTeamId!
+            };
+
+            var resultUpdate = await _resultService!.UpdateResult(result, resultDto, race, driver, driver.ActualTeam!);
+            Assert.IsFalse(resultUpdate.IsSuccess);
+            Assert.AreEqual(resultUpdate.ErrorMessage, _configuration!["ErrorMessages:ResultExists"]);
+        }
 
         [Test]
         public async Task UpdateResultNotPositivePosition()

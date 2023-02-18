@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using car_racing_tournament_api.Data;
 using car_racing_tournament_api.DTO;
-using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
 using car_racing_tournament_api.Profiles;
 using car_racing_tournament_api.Services;
@@ -124,8 +123,6 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNull(result.Race);
         }
 
-        // Races exists
-
         [Test]
         public async Task AddRaceSuccess()
         {
@@ -142,6 +139,7 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNull(result.ErrorMessage);
             Assert.AreEqual(_context!.Seasons.FirstOrDefaultAsync().Result!.Races!.Count, 2);
 
+            raceDto.Name = "Another race";
             raceDto.DateTime = new DateTime();
             result = await _raceService!.AddRace(season, raceDto);
             Assert.IsTrue(result.IsSuccess);
@@ -160,6 +158,17 @@ namespace car_racing_tournament_api.Tests.Unit
             var result = await _raceService!.AddRace(_context!.Seasons.First(), raceDto);
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:RaceName"]);
+        }
+
+        [Test]
+        public async Task AddRaceExists() {
+            var season = _context!.Seasons.First();
+
+            var result = await _raceService!.AddRace(season, new RaceDto() {
+                Name = "My first race"
+            });
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:RaceNameExists"]);
         }
 
         [Test]
@@ -191,6 +200,25 @@ namespace car_racing_tournament_api.Tests.Unit
             var result = await _raceService!.UpdateRace(_race!, race);
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:RaceName"]);
+        }
+
+        [Test]
+        public async Task UpdateRaceExists() {
+            var season = _context!.Seasons.First();
+
+            var race = new Race {
+                Id = Guid.NewGuid(),
+                Name = "Second Race",
+                SeasonId = season.Id
+            };
+
+            var raceDto = new RaceDto() {
+                Name = "My first race"
+            };
+
+            var result = await _raceService!.UpdateRace(race, raceDto);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:RaceNameExists"]);
         }
 
         [Test]

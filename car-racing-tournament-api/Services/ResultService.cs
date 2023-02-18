@@ -96,6 +96,10 @@ namespace car_racing_tournament_api.Services
             if (resultDto.Point < 0)
                 return (false, _configuration["ErrorMessages:ResultPoint"]);
 
+            if (await _carRacingTournamentDbContext.Results.CountAsync(
+                x => x.DriverId == resultDto.DriverId && x.RaceId == race.Id) != 0)
+                return (false, _configuration["ErrorMessages:ResultExists"]);
+
             var result = _mapper.Map<Result>(resultDto);
             result.Id = Guid.NewGuid();
             result.Race = race;
@@ -118,6 +122,10 @@ namespace car_racing_tournament_api.Services
 
             if (resultDto.Point < 0)
                 return (false, _configuration["ErrorMessages:ResultPoint"]);
+
+            if (result.DriverId != resultDto.DriverId && await _carRacingTournamentDbContext.Results.CountAsync(
+                x => x.DriverId == resultDto.DriverId && x.RaceId == race.Id) != 0)
+                return (false, _configuration["ErrorMessages:ResultExists"]);
 
             result.Position = resultDto.Position;
             result.Point = resultDto.Point;

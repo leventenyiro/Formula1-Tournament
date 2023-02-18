@@ -99,6 +99,10 @@ namespace car_racing_tournament_api.Services
             if (string.IsNullOrEmpty(raceDto.Name))
                 return (false, _configuration["ErrorMessages:RaceNameCannotBeEmpty"]);
 
+            if (await _carRacingTournamentDbContext.Races.CountAsync(
+                x => x.Name == raceDto.Name && x.SeasonId == season.Id) != 0)
+                return (false, _configuration["ErrorMessages:RaceNameExists"]);
+
             raceDto.Name = raceDto.Name;
             var race = _mapper.Map<Race>(raceDto);
             race.Id = Guid.NewGuid();
@@ -114,6 +118,11 @@ namespace car_racing_tournament_api.Services
             raceDto.Name = raceDto.Name.Trim();
             if (string.IsNullOrEmpty(raceDto.Name))
                 return (false, _configuration["ErrorMessages:RaceNameCannotBeEmpty"]);
+
+            if (race.Name != raceDto.Name && 
+                await _carRacingTournamentDbContext.Races.CountAsync(
+                    x => x.Name == raceDto.Name && x.SeasonId == race.SeasonId) != 0)
+                return (false, _configuration["ErrorMessages:RaceNameExists"]);
 
             race.Name = raceDto.Name;
             race.DateTime = raceDto.DateTime;
