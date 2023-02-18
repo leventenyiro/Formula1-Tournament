@@ -39,11 +39,11 @@ namespace car_racing_tournament_api.Services
         {
             var permissions = await _carRacingTournamentDbContext.Permissions
                 .Where(x => x.SeasonId == season.Id)
-                //.Include(x => x.User)
                 .OrderByDescending(x => x.Type)
                 .Select(x => new PermissionOutputDto
                 {
                     Id = x.Id,
+                    Joined = x.Joined,
                     UserId = x.UserId,
                     Username = x.User.Username,
                     Type = x.Type,
@@ -70,6 +70,7 @@ namespace car_racing_tournament_api.Services
             await _carRacingTournamentDbContext.Permissions.AddAsync(new Permission
             {
                 Id = Guid.NewGuid(),
+                Joined = DateTime.Now,
                 UserId = user.Id,
                 SeasonId = season.Id,
                 Type = permissionType

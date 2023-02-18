@@ -5,6 +5,7 @@ namespace car_racing_tournament_api.Models
     public class Permission
     {
         public Guid Id { get; set; }
+        public DateTime Joined { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public virtual User User { get; set; } = default!;
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
