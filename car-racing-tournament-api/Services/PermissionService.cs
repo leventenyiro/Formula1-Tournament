@@ -45,6 +45,9 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> AddPermission(User user, Season season, PermissionType permissionType)
         {
+            if (await _carRacingTournamentDbContext.Permissions.CountAsync(x => x.UserId == user.Id && x.SeasonId == season.Id) != 0)
+                return (false, _configuration["ErrorMessages:PermissionExists"]);
+
             await _carRacingTournamentDbContext.Permissions.AddAsync(new Permission
             {
                 Id = Guid.NewGuid(),
