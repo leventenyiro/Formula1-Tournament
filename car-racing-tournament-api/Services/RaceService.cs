@@ -66,6 +66,7 @@ namespace car_racing_tournament_api.Services
                     Id = x.Id,
                     Name = x.Name,
                     DateTime = x.DateTime,
+                    SeasonId = x.SeasonId,
                     Results = x.Results!.Select(x => new Result
                     {
                         Id = x.Id,
@@ -84,7 +85,7 @@ namespace car_racing_tournament_api.Services
                             Name = x.Team.Name,
                             Color = x.Team.Color
                         }
-                    }).ToList()
+                    }).ToList(),
                 }).FirstOrDefaultAsync();
 
             if (race == null)

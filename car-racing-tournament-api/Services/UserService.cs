@@ -55,7 +55,7 @@ namespace car_racing_tournament_api.Services
             if (await _carRacingTournamentDbContext.Users.CountAsync(x => x.Email == registrationDto.Email) != 0)
                 return (false, _configuration["ErrorMessages:EmailExists"]);
 
-            await _carRacingTournamentDbContext.AddAsync(new User { 
+            await _carRacingTournamentDbContext.Users.AddAsync(new User { 
                 Id = new Guid(), 
                 Username = registrationDto.Username,
                 Email = registrationDto.Email,

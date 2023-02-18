@@ -42,7 +42,7 @@ namespace car_racing_tournament_api.Services
                     Id = x.Team.Id,
                     Name = x.Team.Name,
                     Color = x.Team.Color
-                }
+                },
             }).ToListAsync();
 
             if (results == null)
@@ -62,6 +62,7 @@ namespace car_racing_tournament_api.Services
                     Id = x.Id,
                     Position = x.Position,
                     Point = x.Point,
+                    RaceId = x.RaceId,
                     Driver = new Driver
                     {
                         Id = x.Driver.Id,
@@ -102,8 +103,8 @@ namespace car_racing_tournament_api.Services
 
             var result = _mapper.Map<Result>(resultDto);
             result.Id = Guid.NewGuid();
-            result.Race = race;
-            await _carRacingTournamentDbContext.AddAsync(result);
+            result.RaceId = race.Id;
+            await _carRacingTournamentDbContext.Results.AddAsync(result);
             await _carRacingTournamentDbContext.SaveChangesAsync();
 
             return (true, null);

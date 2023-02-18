@@ -61,6 +61,16 @@ namespace car_racing_tournament_api.Services
             SeasonOutputDto? season = await _carRacingTournamentDbContext.Seasons
                 .Where(x => x.Id == id)
                 .Include(x => x.Permissions)
+                .Include(x => x.Drivers!).ThenInclude(x => x.ActualTeam)
+                .Include(x => x.Drivers!).ThenInclude(x => x.Results!).ThenInclude(x => x.Race)
+                .Include(x => x.Drivers!).ThenInclude(x => x.Results!).ThenInclude(x => x.Team)
+
+                .Include(x => x.Teams!).ThenInclude(x => x.Drivers)
+                .Include(x => x.Teams!).ThenInclude(x => x.Results!).ThenInclude(x => x.Race)
+                .Include(x => x.Teams!).ThenInclude(x => x.Results!).ThenInclude(x => x.Driver)
+
+                .Include(x => x.Races!).ThenInclude(x => x.Results!).ThenInclude(x => x.Driver)
+                .Include(x => x.Races!).ThenInclude(x => x.Results!).ThenInclude(x => x.Team)
                 .Select(x => new SeasonOutputDto
                 {
                     Id = x.Id,
@@ -73,6 +83,94 @@ namespace car_racing_tournament_api.Services
                         UserId = x.UserId,
                         Username = x.User.Username,
                         Type = x.Type
+                    }).ToList(),
+                    Drivers = x.Drivers!.Select(x => new Driver
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        RealName = x.RealName,
+                        Number = x.Number,
+                        ActualTeam = x.ActualTeam != null ? new Team
+                        {
+                            Id = x.ActualTeam.Id,
+                            Name = x.ActualTeam.Name,
+                            Color = x.ActualTeam.Color
+                        } : null,
+                        Results = x.Results!.Select(x => new Result
+                        {
+                            Id = x.Id,
+                            Position = x.Position,
+                            Point = x.Point,
+                            Race = new Race
+                            {
+                                Id = x.Race.Id,
+                                Name = x.Race.Name,
+                                DateTime = x.Race.DateTime
+                            },
+                            Team = new Team
+                            {
+                                Id = x.Team.Id,
+                                Name = x.Team.Name,
+                                Color = x.Team.Color
+                            }
+                        }).ToList()
+                    }).ToList(),
+                    Teams = x.Teams!.Select(x => new Team
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Color = x.Color,
+                        Drivers = x.Drivers!.Select(x => new Driver
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                            RealName = x.RealName,
+                            Number = x.Number
+                        }).ToList(),
+                        Results = x.Results!.Select(x => new Result
+                        {
+                            Id = x.Id,
+                            Position = x.Position,
+                            Point = x.Point,
+                            Race = new Race
+                            {
+                                Id = x.Race.Id,
+                                Name = x.Race.Name,
+                                DateTime = x.Race.DateTime
+                            },
+                            Driver = new Driver
+                            {
+                                Id = x.Driver.Id,
+                                Name = x.Driver.Name,
+                                RealName = x.Driver.RealName,
+                                Number = x.Driver.Number
+                            }
+                        }).ToList()
+                    }).ToList(),
+                    Races = x.Races!.Select(x => new Race
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        DateTime = x.DateTime,
+                        Results = x.Results!.Select(x => new Result
+                        {
+                            Id = x.Id,
+                            Position = x.Position,
+                            Point = x.Point,
+                            Driver = new Driver
+                            {
+                                Id = x.Driver.Id,
+                                Name = x.Driver.Name,
+                                RealName = x.Driver.RealName,
+
+                            },
+                            Team = new Team
+                            {
+                                Id = x.Team.Id,
+                                Name = x.Team.Name,
+                                Color = x.Team.Color
+                            }
+                        }).ToList(),
                     }).ToList()
                 }).FirstOrDefaultAsync();
 

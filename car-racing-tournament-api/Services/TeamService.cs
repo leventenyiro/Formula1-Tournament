@@ -74,6 +74,7 @@ namespace car_racing_tournament_api.Services
                     Id = x.Id,
                     Name = x.Name,
                     Color = x.Color,
+                    SeasonId = x.SeasonId,
                     Drivers = x.Drivers!.Select(x => new Driver
                     {
                         Id = x.Id,
@@ -99,7 +100,7 @@ namespace car_racing_tournament_api.Services
                             RealName = x.Driver.RealName,
                             Number = x.Driver.Number
                         }
-                    }).ToList()
+                    }).ToList(),
                 }).FirstOrDefaultAsync();
             if (team == null)
                 return (false, null, _configuration["ErrorMessages:TeamNotFound"]);

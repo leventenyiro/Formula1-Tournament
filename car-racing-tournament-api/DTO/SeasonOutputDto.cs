@@ -1,4 +1,5 @@
 ﻿using car_racing_tournament_api.Models;
+using System.Text.Json.Serialization;
 
 namespace car_racing_tournament_api.DTO
 {
@@ -9,5 +10,11 @@ namespace car_racing_tournament_api.DTO
         public string? Description { get; set; }
         public bool IsArchived { get; set; }
         public List<PermissionOutputDto> Permissions { get; set; } = default!;
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<Team>? Teams { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<Driver>? Drivers { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<Race>? Races { get; set; }
     }
 }

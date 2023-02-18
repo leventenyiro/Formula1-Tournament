@@ -56,7 +56,7 @@ namespace car_racing_tournament_api.Services
                             Name = x.Team.Name,
                             Color = x.Team.Color
                         }
-                    }).ToList()
+                    }).ToList(),
                 }).ToListAsync();
 
             return (true, drivers, null);
@@ -81,7 +81,7 @@ namespace car_racing_tournament_api.Services
                         Point = x.Point,
                         Position = x.Position,
                         Team = x.Team
-                    }).ToList()
+                    }).ToList(),
                 }).FirstOrDefaultAsync();
             if (driver == null)
                 return (false, null, _configuration["ErrorMessages:DriverNotFound"]);

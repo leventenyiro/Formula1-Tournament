@@ -42,9 +42,6 @@ namespace car_racing_tournament_api.Data
                 entity.Property(e => e.Type)
                     .IsRequired();
 
-                entity.HasIndex(e => new { e.SeasonId, e.UserId })
-                    .IsUnique();
-
                 entity.HasOne(e => e.User)
                     .WithMany(e => e.Permissions)
                     .HasForeignKey(e => e.UserId)
@@ -81,9 +78,6 @@ namespace car_racing_tournament_api.Data
                 entity.Property(e => e.Color)
                     .IsRequired();
 
-                entity.HasIndex(e => new { e.SeasonId, e.Name, e.Color })
-                    .IsUnique();
-
                 entity.HasOne(e => e.Season)
                     .WithMany(e => e.Teams)
                     .HasForeignKey(e => e.SeasonId)
@@ -102,9 +96,6 @@ namespace car_racing_tournament_api.Data
 
                 entity.Property(e => e.Number)
                     .IsRequired();
-
-                entity.HasIndex(e => new { e.SeasonId, e.Name, e.Number })
-                    .IsUnique();
 
                 entity.HasOne(e => e.ActualTeam)
                     .WithMany(e => e.Drivers)
@@ -126,9 +117,6 @@ namespace car_racing_tournament_api.Data
                     .IsRequired();
 
                 entity.Property(e => e.DateTime);
-
-                entity.HasIndex(e => new { e.SeasonId, e.Name })
-                    .IsUnique();
 
                 entity.HasOne(e => e.Season)
                     .WithMany(e => e.Races)
