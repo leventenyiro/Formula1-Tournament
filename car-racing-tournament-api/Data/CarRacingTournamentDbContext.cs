@@ -39,7 +39,7 @@ namespace car_racing_tournament_api.Data
             {
                 entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.Joined)
+                entity.Property(e => e.JoinedAt)
                     .IsRequired();
 
                 entity.Property(e => e.Type)

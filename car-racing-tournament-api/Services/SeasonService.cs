@@ -34,7 +34,7 @@ namespace car_racing_tournament_api.Services
                     Permissions = x.Permissions.Select(x => new PermissionOutputDto
                     {
                         Id = x.Id,
-                        Joined = x.Joined,
+                        JoinedAt = x.JoinedAt,
                         UserId = x.UserId,
                         Username = x.User.Username,
                         Type = x.Type
@@ -81,7 +81,7 @@ namespace car_racing_tournament_api.Services
                     Permissions = x.Permissions.Select(x => new PermissionOutputDto
                     {
                         Id = x.Id,
-                        Joined = x.Joined,
+                        JoinedAt = x.JoinedAt,
                         UserId = x.UserId,
                         Username = x.User.Username,
                         Type = x.Type
@@ -204,7 +204,7 @@ namespace car_racing_tournament_api.Services
                     Permissions = x.Permissions.Select(x => new PermissionOutputDto
                     {
                         Id = x.Id,
-                        Joined = x.Joined,
+                        JoinedAt = x.JoinedAt,
                         UserId = x.UserId,
                         Username = x.User.Username,
                         Type = x.Type
