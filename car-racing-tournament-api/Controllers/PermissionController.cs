@@ -19,7 +19,7 @@ namespace car_racing_tournament_api.Controllers
         }
 
         [HttpPut("{id}"), Authorize]
-        public async Task<IActionResult> Put(Guid id, [FromForm] PermissionType permissionType)
+        public async Task<IActionResult> UpgradePermission(Guid id)
         {
             var resultGetPermission = await _permissionService.GetPermissionById(id);
             if (!resultGetPermission.IsSuccess)
@@ -28,9 +28,18 @@ namespace car_racing_tournament_api.Controllers
             if (!await _permissionService.IsAdmin(new Guid(User.Identity!.Name!), resultGetPermission.Permission!.SeasonId))
                 return Forbid();
 
-            // if downgrade himself, oldest moderator
+            if (resultGetPermission.Permission.Type == PermissionType.Admin)
+                return BadRequest("You cannot downgrade your permission in this way!");
 
-            var resultUpdate = await _permissionService.UpdatePermissionType(resultGetPermission.Permission, permissionType);
+            var resultGetAdmin = await _permissionService.GetPermissionByUserId(new Guid(User.Identity!.Name!));
+            if (!resultGetAdmin.IsSuccess)
+                return NotFound(resultGetAdmin.ErrorMessage);
+
+            var resultDowngrade = await _permissionService.UpdatePermissionType(resultGetAdmin.Permissions!, PermissionType.Moderator);
+            if (!resultDowngrade.IsSuccess)
+                return BadRequest(resultDowngrade.ErrorMessage);
+
+            var resultUpdate = await _permissionService.UpdatePermissionType(resultGetPermission.Permission, PermissionType.Admin);
             if (!resultUpdate.IsSuccess)
                 return BadRequest(resultUpdate.ErrorMessage);
 
@@ -47,7 +56,8 @@ namespace car_racing_tournament_api.Controllers
             if (!await _permissionService.IsAdmin(new Guid(User.Identity!.Name!), resultGet.Permission!.SeasonId))
                 return Forbid();
 
-            // if delete himself, oldest moderator
+            if (resultGet.Permission.Type == PermissionType.Admin)
+                return BadRequest("You cannot downgrade your permission in this way!");
 
             var resultDelete = await _permissionService.RemovePermission(resultGet.Permission);
             if (!resultDelete.IsSuccess)
