@@ -139,6 +139,20 @@ namespace car_racing_tournament_api.Controllers
             return Ok(resultGetSeasons.Seasons);
         }
 
+        [HttpGet("{seasonId}/permission")]
+        public async Task<IActionResult> GetPermissionBySeasonId(Guid seasonId)
+        {
+            var resultGetSeason = await _seasonService.GetSeasonById(seasonId);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
+
+            var resultGet = await _permissionService.GetPermissionsBySeason(resultGetSeason.Season!);
+            if (!resultGet.IsSuccess)
+                return NotFound(resultGet.ErrorMessage);
+
+            return Ok(resultGet.Permissions);
+        }
+
         [HttpPost("{seasonId}/permission"), Authorize]
         public async Task<IActionResult> Post(Guid seasonId, [FromForm] string usernameEmail)
         {

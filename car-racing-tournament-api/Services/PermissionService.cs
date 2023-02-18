@@ -1,4 +1,5 @@
 ﻿using car_racing_tournament_api.Data;
+using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,24 @@ namespace car_racing_tournament_api.Services
                 return false;
 
             return userSeason.Type == PermissionType.Moderator || userSeason.Type == PermissionType.Admin;
+        }
+
+        public async Task<(bool IsSuccess, List<PermissionOutputDto>? Permissions, string? ErrorMessage)> GetPermissionsBySeason(Season season)
+        {
+            var permissions = await _carRacingTournamentDbContext.Permissions
+                .Where(x => x.SeasonId == season.Id)
+                //.Include(x => x.User)
+                .OrderByDescending(x => x.Type)
+                .Select(x => new PermissionOutputDto
+                {
+                    Id = x.Id,
+                    UserId = x.UserId,
+                    Username = x.User.Username,
+                    Type = x.Type,
+                })
+                .ToListAsync();
+
+            return (true, permissions, null);
         }
 
         public async Task<(bool IsSuccess, Permission? Permission, string? ErrorMessage)> GetPermissionById(Guid id)
