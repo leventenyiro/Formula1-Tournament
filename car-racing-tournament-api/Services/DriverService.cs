@@ -100,6 +100,12 @@ namespace car_racing_tournament_api.Services
             if (driverDto.ActualTeamId != null && season.Id != team.SeasonId)
                 return (false, _configuration["ErrorMessages:DriverTeamNotSameSeason"]);
 
+            if (await _carRacingTournamentDbContext.Drivers.Where(x => x.Name == driverDto.Name && x.SeasonId == season.Id).CountAsync() != 0)
+                return (false, _configuration["ErrorMessages:DriverNameExists"]);
+            
+            if (await _carRacingTournamentDbContext.Drivers.Where(x => x.Number == driverDto.Number && x.SeasonId == season.Id).CountAsync() != 0)
+                return (false, _configuration["ErrorMessages:DriverNumberExists"]);
+
             driverDto.RealName = driverDto.RealName?.Trim();
             var driver = _mapper.Map<Driver>(driverDto);
             driver.Id = Guid.NewGuid();
@@ -121,6 +127,14 @@ namespace car_racing_tournament_api.Services
 
             if (team != null && driver.SeasonId != team.SeasonId)
                 return (false, _configuration["ErrorMessages:DriverTeamNotSameSeason"]);
+
+            if (driver.Name != driverDto.Name && 
+                await _carRacingTournamentDbContext.Drivers.Where(x => x.Name == driverDto.Name && x.SeasonId == driver.SeasonId).CountAsync() != 0)
+                return (false, _configuration["ErrorMessages:DriverNameExists"]);
+            
+            if (driver.Number != driverDto.Number && 
+                await _carRacingTournamentDbContext.Drivers.Where(x => x.Number == driverDto.Number && x.SeasonId == driver.SeasonId).CountAsync() != 0)
+                return (false, _configuration["ErrorMessages:DriverNumberExists"]);
 
             driver.Name = driverDto.Name;
             driver.RealName = driverDto.RealName?.Trim();

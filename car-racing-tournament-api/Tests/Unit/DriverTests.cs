@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using car_racing_tournament_api.Data;
 using car_racing_tournament_api.DTO;
-using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
 using car_racing_tournament_api.Profiles;
 using car_racing_tournament_api.Services;
@@ -136,7 +135,32 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.AreEqual(_context.Seasons.First().Teams!.First().Drivers!.Count, 3);
         }
 
-        // AddDriverExists - NEED TO BE IMPLEMENTED
+        [Test]
+        public async Task AddDriverExists() {
+            var season = _context!.Seasons.First();
+            var team = _context.Teams.First();
+
+            var driverDto = new DriverDto {
+                Name = "FirstDriver",
+                Number = 1,
+                RealName = "First driver"
+            };
+
+            var result = await _driverService!.AddDriver(season, driverDto, team);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:DriverNameExists"]);
+
+            driverDto.Number = 2;
+            result = await _driverService!.AddDriver(season, driverDto, team);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:DriverNameExists"]);
+
+            driverDto.Name = "SecondDriver";
+            driverDto.Number = 1;
+            result = await _driverService!.AddDriver(season, driverDto, team);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:DriverNumberExists"]);
+        }
 
         [Test]
         public async Task AddDriverMissingName()
@@ -279,7 +303,40 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNull(findDriver.ActualTeamId);
         }
 
-        // update - driver already exists
+        [Test]
+        public async Task UpdateDriverExists() {
+            var season = _context!.Seasons.First();
+            var team = _context.Teams.First();
+
+            var driver = new Driver {
+                Id = Guid.NewGuid(),
+                Name = "SecondDriver",
+                Number = 2,
+                SeasonId = season.Id,
+                ActualTeam = team
+            };
+
+            var driverDto = new DriverDto {
+                Name = "FirstDriver",
+                Number = 1,
+                RealName = "First driver"
+            };
+
+            var result = await _driverService!.UpdateDriver(driver, driverDto, team);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:DriverNameExists"]);
+
+            driverDto.Number = 2;
+            result = await _driverService!.UpdateDriver(driver, driverDto, team);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:DriverNameExists"]);
+
+            driverDto.Name = "SecondDriver";
+            driverDto.Number = 1;
+            result = await _driverService!.UpdateDriver(driver, driverDto, team);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:DriverNumberExists"]);
+        }
 
         [Test]
         public async Task UpdateDriverMissingName()
