@@ -105,6 +105,8 @@ namespace car_racing_tournament_api.Services
             result.Id = Guid.NewGuid();
             result.RaceId = race.Id;
             await _carRacingTournamentDbContext.Results.AddAsync(result);
+            _carRacingTournamentDbContext.Entry(driver).State = EntityState.Modified;
+            _carRacingTournamentDbContext.Entry(team).State = EntityState.Modified;
             await _carRacingTournamentDbContext.SaveChangesAsync();
 
             return (true, null);
