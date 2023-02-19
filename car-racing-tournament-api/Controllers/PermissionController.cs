@@ -61,11 +61,12 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetSeason.IsSuccess)
                 return NotFound(resultGetSeason.ErrorMessage);
 
-            var resultGetPermissions = await _permissionService.GetPermissionsBySeason(resultGetSeason.Season!);
-            if (!resultGetPermissions.IsSuccess)
-                return NotFound(resultGetPermissions.ErrorMessage);
 
             if (resultGet.Permission.Type == PermissionType.Admin) {
+                var resultGetPermissions = await _permissionService.GetPermissionsBySeason(resultGetSeason.Season!);
+                if (!resultGetPermissions.IsSuccess)
+                    return NotFound(resultGetPermissions.ErrorMessage);
+                    
                 if (resultGetPermissions.Permissions!.Count > 1)
                     return BadRequest("You cannot downgrade your permission in this way!");
                 else {
