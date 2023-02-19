@@ -35,7 +35,7 @@ namespace car_racing_tournament_api.Services
             return userSeason.Type == PermissionType.Moderator || userSeason.Type == PermissionType.Admin;
         }
 
-        public async Task<(bool IsSuccess, Permission? Permissions, string? ErrorMessage)> GetPermissionByUserId(Guid userId) {
+        public async Task<(bool IsSuccess, Permission? Permission, string? ErrorMessage)> GetPermissionByUserId(Guid userId) {
             var permission = await _carRacingTournamentDbContext.Permissions.Where(x => x.UserId == userId).FirstOrDefaultAsync();
             if (permission == null)
                 return (false, null, _configuration["ErrorMessages:PermissionNotFound"]);

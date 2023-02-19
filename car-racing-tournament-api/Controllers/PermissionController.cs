@@ -36,7 +36,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetAdmin.IsSuccess)
                 return NotFound(resultGetAdmin.ErrorMessage);
 
-            var resultDowngrade = await _permissionService.UpdatePermissionType(resultGetAdmin.Permissions!, PermissionType.Moderator);
+            var resultDowngrade = await _permissionService.UpdatePermissionType(resultGetAdmin.Permission!, PermissionType.Moderator);
             if (!resultDowngrade.IsSuccess)
                 return BadRequest(resultDowngrade.ErrorMessage);
 

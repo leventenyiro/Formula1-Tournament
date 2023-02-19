@@ -8,7 +8,7 @@ namespace car_racing_tournament_api.Interfaces
         Task<bool> IsAdmin(Guid userId, Guid seasonId);
         Task<bool> IsAdminModerator(Guid userId, Guid seasonId);
         Task<(bool IsSuccess, List<PermissionOutputDto>? Permissions, string? ErrorMessage)> GetPermissionsBySeason(Season season);
-        Task<(bool IsSuccess, Permission? Permissions, string? ErrorMessage)> GetPermissionByUserId(Guid userId);
+        Task<(bool IsSuccess, Permission? Permission, string? ErrorMessage)> GetPermissionByUserId(Guid userId);
         Task<(bool IsSuccess, Permission? Permission, string? ErrorMessage)> GetPermissionById(Guid id);
         Task<(bool IsSuccess, string? ErrorMessage)> AddPermission(User user, Season season, PermissionType permissionType);
         Task<(bool IsSuccess, string? ErrorMessage)> UpdatePermissionType(Permission permission, PermissionType permissionType);
