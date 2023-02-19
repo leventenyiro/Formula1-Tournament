@@ -1,7 +1,6 @@
 ﻿using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
-using car_racing_tournament_api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,10 +11,12 @@ namespace car_racing_tournament_api.Controllers
     public class PermissionController : Controller
     {
         private IPermission _permissionService;
+        private ISeason _seasonService;
 
-        public PermissionController(IPermission permissionService)
+        public PermissionController(IPermission permissionService, ISeason seasonService)
         {
             _permissionService = permissionService;
+            _seasonService = seasonService;
         }
 
         [HttpPut("{id}"), Authorize]
@@ -56,8 +57,23 @@ namespace car_racing_tournament_api.Controllers
             if (!await _permissionService.IsAdmin(new Guid(User.Identity!.Name!), resultGet.Permission!.SeasonId))
                 return Forbid();
 
-            if (resultGet.Permission.Type == PermissionType.Admin)
-                return BadRequest("You cannot downgrade your permission in this way!");
+            var resultGetSeason = await _seasonService.GetSeasonById(resultGet.Permission.SeasonId);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
+
+            var resultGetPermissions = await _permissionService.GetPermissionsBySeason(resultGetSeason.Season!);
+            if (!resultGetPermissions.IsSuccess)
+                return NotFound(resultGetPermissions.ErrorMessage);
+
+            if (resultGet.Permission.Type == PermissionType.Admin) {
+                if (resultGetPermissions.Permissions!.Count > 1)
+                    return BadRequest("You cannot downgrade your permission in this way!");
+                else {
+                    var resultDeleteSeason = await _seasonService.DeleteSeason(resultGetSeason.Season!);
+                    if (!resultDeleteSeason.IsSuccess)
+                        return BadRequest(resultDeleteSeason.ErrorMessage);
+                }
+            }
 
             var resultDelete = await _permissionService.RemovePermission(resultGet.Permission);
             if (!resultDelete.IsSuccess)

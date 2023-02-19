@@ -57,6 +57,8 @@ namespace car_racing_tournament_api.Services
                     Type = x.Type,
                 })
                 .ToListAsync();
+            if (permissions == null)
+                return (false, null, _configuration["ErrorMessages:PermissionNotFound"]);
 
             return (true, permissions, null);
         }
