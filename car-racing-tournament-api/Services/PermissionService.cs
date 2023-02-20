@@ -35,11 +35,18 @@ namespace car_racing_tournament_api.Services
             return userSeason.Type == PermissionType.Moderator || userSeason.Type == PermissionType.Admin;
         }
 
+        public async Task<(bool IsSuccess, Permission? Permission, string? ErrorMessage)> GetPermissionByUserId(Guid userId) {
+            var permission = await _carRacingTournamentDbContext.Permissions.Where(x => x.UserId == userId).FirstOrDefaultAsync();
+            if (permission == null)
+                return (false, null, _configuration["ErrorMessages:PermissionNotFound"]);
+
+            return (true, permission, null);
+        }
+
         public async Task<(bool IsSuccess, List<PermissionOutputDto>? Permissions, string? ErrorMessage)> GetPermissionsBySeason(Season season)
         {
             var permissions = await _carRacingTournamentDbContext.Permissions
                 .Where(x => x.SeasonId == season.Id)
-                //.Include(x => x.User)
                 .OrderByDescending(x => x.Type)
                 .Select(x => new PermissionOutputDto
                 {
@@ -49,6 +56,8 @@ namespace car_racing_tournament_api.Services
                     Type = x.Type,
                 })
                 .ToListAsync();
+            if (permissions == null)
+                return (false, null, _configuration["ErrorMessages:PermissionNotFound"]);
 
             return (true, permissions, null);
         }
