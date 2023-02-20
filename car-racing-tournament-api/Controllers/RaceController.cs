@@ -14,14 +14,22 @@ namespace car_racing_tournament_api.Controllers
         private IDriver _driverService;
         private ITeam _teamService;
         private Interfaces.IResult _resultService;
+        private IConfiguration _configuration;
 
-        public RaceController(IRace raceService, IPermission permissionService, IDriver driverService, ITeam teamService, Interfaces.IResult resultService)
+        public RaceController(
+            IRace raceService, 
+            IPermission permissionService, 
+            IDriver driverService, 
+            ITeam teamService, 
+            Interfaces.IResult resultService,
+            IConfiguration configuration)
         {
             _raceService = raceService;
             _permissionService = permissionService;
             _driverService = driverService;
             _teamService = teamService;
             _resultService = resultService;
+            _configuration = configuration;
         }
 
         [HttpGet("{id}")]
@@ -43,6 +51,10 @@ namespace car_racing_tournament_api.Controllers
 
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Race!.SeasonId))
                 return Forbid();
+
+            if (resultGet.Race.Season.IsArchived) {
+                return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
+            }
             
             var resultUpdate = await _raceService.UpdateRace(resultGet.Race, raceDto);
             if (!resultUpdate.IsSuccess)
@@ -60,6 +72,10 @@ namespace car_racing_tournament_api.Controllers
 
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Race!.SeasonId))
                 return Forbid();
+
+            if (resultGet.Race.Season.IsArchived) {
+                return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
+            }
 
             var result = await _raceService.DeleteRace(resultGet.Race);
             if (!result.IsSuccess)
@@ -91,6 +107,10 @@ namespace car_racing_tournament_api.Controllers
 
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetRace.Race!.SeasonId))
                 return Forbid();
+
+            if (resultGetRace.Race.Season.IsArchived) {
+                return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
+            }
 
             var resultGetDriver = await _driverService.GetDriverById(resultDto.DriverId);
             if (!resultGetDriver.IsSuccess)
