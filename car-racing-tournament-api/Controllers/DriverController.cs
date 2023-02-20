@@ -13,12 +13,18 @@ namespace car_racing_tournament_api.Controllers
         private IDriver _driverService;
         private IPermission _permissionService;
         private ITeam _teamService;
+        private IConfiguration _configuration;
 
-        public DriverController(IDriver driverService, IPermission permissionService, ITeam teamService)
+        public DriverController(
+            IDriver driverService, 
+            IPermission permissionService, 
+            ITeam teamService,
+            IConfiguration configuration)
         {
             _driverService = driverService;
             _permissionService = permissionService;
             _teamService = teamService;
+            _configuration = configuration;
         }
 
         [HttpGet("{id}")]
@@ -40,6 +46,10 @@ namespace car_racing_tournament_api.Controllers
 
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
+
+            if (resultGetDriver.Driver.Season.IsArchived) {
+                return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
+            }
 
             Team team = null!;
 
@@ -68,6 +78,10 @@ namespace car_racing_tournament_api.Controllers
 
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Driver!.SeasonId))
                 return Forbid();
+
+            if (resultGet.Driver.Season.IsArchived) {
+                return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
+            }
 
             var resultDelete = await _driverService.DeleteDriver(resultGet.Driver);
             if (!resultDelete.IsSuccess)
