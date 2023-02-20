@@ -226,13 +226,10 @@ namespace car_racing_tournament_api.Services
                 .Select(x => x.SeasonId)
                 .ToListAsync();
 
-            if (await _carRacingTournamentDbContext.Seasons
-                .CountAsync(x => x.Name == seasonDto.Name && permissions.Contains(x.Id)) != 0)
-                return (false, null, _configuration["ErrorMessages:SeasonExists"]);
-
             seasonDto.Name = seasonDto.Name;
             var season = _mapper.Map<Season>(seasonDto);
             season.Id = Guid.NewGuid();
+            season.CreatedAt = DateTime.Now;
             season.IsArchived = false;
 
             await _carRacingTournamentDbContext.Seasons.AddAsync(season);
@@ -254,10 +251,6 @@ namespace car_racing_tournament_api.Services
                 .Where(x => x.UserId == adminId!.UserId && x.Type == PermissionType.Admin)
                 .Select(x => x.SeasonId)
                 .ToListAsync();
-
-            if (season.Name != seasonDto.Name && await _carRacingTournamentDbContext.Seasons
-                .CountAsync(x => x.Name == seasonDto.Name && permissions.Contains(x.Id)) != 0)
-                return (false, _configuration["ErrorMessages:SeasonExists"]);
 
             season.Name = seasonDto.Name;
             season.Description = seasonDto.Description;

@@ -182,18 +182,6 @@ namespace car_racing_tournament_api.Tests.Unit
         }
 
         [Test]
-        public async Task AddSeasonExists() {
-            var season = new SeasonCreateDto
-            {
-                Name = "Test Season",
-            };
-            var result = await _seasonService!.AddSeason(season, _userId);
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNull(result.Season);
-            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:SeasonExists"]);
-        }
-
-        [Test]
         public async Task AddSeasonMissingName()
         {
             var season = new SeasonCreateDto
