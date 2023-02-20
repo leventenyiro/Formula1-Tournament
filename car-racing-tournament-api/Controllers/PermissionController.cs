@@ -47,7 +47,7 @@ namespace car_racing_tournament_api.Controllers
             return NoContent();
         }
 
-        [HttpDelete("id"), Authorize]
+        [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
             var resultGet = await _permissionService.GetPermissionById(id);
@@ -75,10 +75,13 @@ namespace car_racing_tournament_api.Controllers
                         return BadRequest(resultDeleteSeason.ErrorMessage);
                 }
             }
+            else
+            {
+                var resultDelete = await _permissionService.RemovePermission(resultGet.Permission);
+                if (!resultDelete.IsSuccess)
+                    return BadRequest(resultDelete.ErrorMessage);
+            }
 
-            var resultDelete = await _permissionService.RemovePermission(resultGet.Permission);
-            if (!resultDelete.IsSuccess)
-                return BadRequest(resultDelete.ErrorMessage);
 
             return NoContent();
         }

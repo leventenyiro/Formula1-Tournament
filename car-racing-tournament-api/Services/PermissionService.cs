@@ -51,7 +51,6 @@ namespace car_racing_tournament_api.Services
                 .Select(x => new PermissionOutputDto
                 {
                     Id = x.Id,
-                    JoinedAt = x.JoinedAt,
                     UserId = x.UserId,
                     Username = x.User.Username,
                     Type = x.Type,
@@ -80,7 +79,6 @@ namespace car_racing_tournament_api.Services
             await _carRacingTournamentDbContext.Permissions.AddAsync(new Permission
             {
                 Id = Guid.NewGuid(),
-                JoinedAt = DateTime.Now,
                 UserId = user.Id,
                 SeasonId = season.Id,
                 Type = permissionType
