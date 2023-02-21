@@ -35,8 +35,10 @@ namespace car_racing_tournament_api.Services
             return userSeason.Type == PermissionType.Moderator || userSeason.Type == PermissionType.Admin;
         }
 
-        public async Task<(bool IsSuccess, Permission? Permission, string? ErrorMessage)> GetPermissionByUserId(Guid userId) {
-            var permission = await _carRacingTournamentDbContext.Permissions.Where(x => x.UserId == userId).FirstOrDefaultAsync();
+        public async Task<(bool IsSuccess, Permission? Permission, string? ErrorMessage)> GetPermissionBySeasonAndUser(Season season, Guid userId) {
+            var permission = await _carRacingTournamentDbContext.Permissions
+                .Where(x => x.SeasonId == season.Id && x.UserId == userId)
+                .FirstOrDefaultAsync();
             if (permission == null)
                 return (false, null, _configuration["ErrorMessages:PermissionNotFound"]);
 
@@ -52,6 +54,27 @@ namespace car_racing_tournament_api.Services
                 {
                     Id = x.Id,
                     UserId = x.UserId,
+                    Username = x.User.Username,
+                    Type = x.Type,
+                })
+                .ToListAsync();
+            if (permissions == null)
+                return (false, null, _configuration["ErrorMessages:PermissionNotFound"]);
+
+            return (true, permissions, null);
+        }
+
+        public async Task<(bool IsSuccess, List<PermissionOutputDto>? Permissions, string? ErrorMessage)> GetPermissionsByUser(User user, PermissionType? permissionTypeFilter)
+        {
+            var permissions = await _carRacingTournamentDbContext.Permissions
+                .Where(x => permissionTypeFilter == null ?
+                    x.UserId == user.Id :
+                    x.UserId == user.Id && x.Type == permissionTypeFilter)
+                .OrderByDescending(x => x.Type)
+                .Select(x => new PermissionOutputDto
+                {
+                    Id = x.Id,
+                    SeasonId = x.SeasonId,
                     Username = x.User.Username,
                     Type = x.Type,
                 })

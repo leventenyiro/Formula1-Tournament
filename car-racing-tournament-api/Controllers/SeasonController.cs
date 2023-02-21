@@ -125,7 +125,7 @@ namespace car_racing_tournament_api.Controllers
         }
 
         [HttpDelete("{id}"), Authorize]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id, [FromForm] string password)
         {
             var resultGetSeason = await _seasonService.GetSeasonById(id);
             if (!resultGetSeason.IsSuccess)
@@ -133,6 +133,17 @@ namespace car_racing_tournament_api.Controllers
 
             if (!await _permissionService.IsAdmin(new Guid(User.Identity!.Name!), id))
                 return Forbid();
+
+            var resultGetUser = await _userService.GetUserById(new Guid(User.Identity.Name!));
+            if (!resultGetUser.IsSuccess)
+                return NotFound(resultGetUser.ErrorMessage);
+
+            var resultVerify = _userService.Login(resultGetSeason.Season!.Permissions
+                .Where(x => x.Type == PermissionType.Admin)
+                .FirstOrDefault()!.User, 
+                password, false);
+            if (!resultVerify.IsSuccess)
+                return BadRequest(resultVerify.ErrorMessage);
 
             var resultDelete = await _seasonService.DeleteSeason(resultGetSeason.Season!);
             if (!resultDelete.IsSuccess)

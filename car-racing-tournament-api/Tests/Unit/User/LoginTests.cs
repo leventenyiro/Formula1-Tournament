@@ -37,38 +37,16 @@ namespace car_racing_tournament_api.Tests.Unit.User
         }
         
         [Test]
-        public async Task Success()
+        public void Success()
         {
-            var result = await _userService!.Login(new LoginDto { UsernameEmail = "username", Password = "Password1" });
+            var result = _userService!.Login(_context!.Users.First(), "Password1", false);
             Assert.IsTrue(result.IsSuccess);
         }
 
         [Test]
-        public async Task MissingUsernameEmail()
+        public void MissingPassword()
         {
-            var result = await _userService!.Login(new LoginDto { UsernameEmail = "", Password = "Password1" });
-            Assert.IsFalse(result.IsSuccess);
-            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:LoginDetails"]);
-        }
-
-        [Test]
-        public async Task IncorrectUsernameEmail()
-        {
-            var loginDto = new LoginDto { UsernameEmail = "user", Password = "Password1" };
-            var result = await _userService!.Login(loginDto);
-            Assert.IsFalse(result.IsSuccess);
-            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:LoginDetails"]);
-
-            loginDto.UsernameEmail = "username";
-            loginDto.Password = "password";
-            Assert.IsFalse(result.IsSuccess);
-            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:LoginDetails"]);
-        }
-
-        [Test]
-        public async Task MissingPassword()
-        {
-            var result = await _userService!.Login(new LoginDto { UsernameEmail = "username", Password = "" });
+            var result = _userService!.Login(_context!.Users.First(), "", false);
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:LoginDetails"]);
         }

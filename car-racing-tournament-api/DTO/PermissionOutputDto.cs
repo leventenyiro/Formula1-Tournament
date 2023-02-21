@@ -6,6 +6,7 @@ namespace car_racing_tournament_api.DTO
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
+        public Guid SeasonId { get; set; }
         public string Username { get; set; } = default!;
         public PermissionType Type { get; set; }
     }

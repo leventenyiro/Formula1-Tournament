@@ -22,15 +22,16 @@ namespace car_racing_tournament_api.Services
             _configuration = configuration;
         }
 
-        public async Task<(bool IsSuccess, string? Token, string? ErrorMessage)> Login(LoginDto loginDto)
+        public (bool IsSuccess, string? Token, string? ErrorMessage) Login(User user, string password, bool needToken)
         {
-            var actualUser = await _carRacingTournamentDbContext.Users.Where(x => x.Username == loginDto.UsernameEmail || x.Email == loginDto.UsernameEmail).FirstOrDefaultAsync();
-            if (actualUser == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, actualUser.Password))
+            if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
                 return (false, null, _configuration["ErrorMessages:LoginDetails"]);
 
-            string token = CreateToken(actualUser);
-
-            return (true, token, _configuration["SuccessMessages:Login"]);
+            if (!needToken)
+                return (true, null, _configuration["SuccessMessages:Login"]);
+                
+            return (true, CreateToken(user), _configuration["SuccessMessages:Login"]);
+            
         }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> Registration(RegistrationDto registrationDto)
@@ -124,6 +125,19 @@ namespace car_racing_tournament_api.Services
 
             return (true, null);
         }
+
+        public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteUser(User user, string password)
+        {
+            if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
+                return (false, _configuration["ErrorMessages:LoginDetails"]);
+
+            _carRacingTournamentDbContext.Users.Remove(user);
+            await _carRacingTournamentDbContext.SaveChangesAsync();
+
+            return (true, null);
+        }
+
+        
 
         private string HashPassword(string password)
         {
