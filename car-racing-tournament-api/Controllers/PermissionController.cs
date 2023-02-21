@@ -32,6 +32,10 @@ namespace car_racing_tournament_api.Controllers
             if (resultGetPermission.Permission.Type == PermissionType.Admin)
                 return BadRequest("You cannot downgrade your permission in this way!");
 
+            var resultGetSeason = await _seasonService.GetSeasonById(resultGetPermission.Permission.SeasonId);
+            if (!resultGetPermission.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
+
             var resultGetAdmin = await _permissionService.GetPermissionBySeasonAndUser(resultGetPermission.Permission.Season, new Guid(User.Identity!.Name!));
             if (!resultGetAdmin.IsSuccess)
                 return NotFound(resultGetAdmin.ErrorMessage);
