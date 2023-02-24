@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, tap, throwError } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
 import { Login } from '../models/login';
 
 @Injectable({
@@ -14,7 +14,7 @@ export class LoginService {
   login(login: Login) {
     return this.http
     .post(
-      `${environment.backendUrl}/authentication/login`,
+      `${environment.backendUrl}/user/login`,
       {
         "usernameEmail": login.usernameEmail,
         "password": login.password
