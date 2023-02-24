@@ -1,0 +1,27 @@
+.season-box {
+    // aspect-ratio: 1/1;
+    height: 15em;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px;
+    width: 90%;
+    border-radius: 17px;
+    transition: 0.2s;
+
+    .description {
+        height: 2em;
+    }
+}
+
+.season-box:hover {
+    box-shadow: rgba(100, 100, 111, 0.4) 0px 7px 29px;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.archived-tag {
+    background-color: #ffb70040;
+    border: 2px solid #ffb700;
+    padding: 1.5px;
+    color: #ff9500;
+    border-radius: 5px;
+    font-size: small;
+}
