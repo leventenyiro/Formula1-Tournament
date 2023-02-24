@@ -36,4 +36,8 @@ export class MainComponent implements OnInit {
       complete: () => this.isFetching = false
     })
   }
+
+  onSearch() {
+
+  }
 }
