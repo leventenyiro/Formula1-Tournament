@@ -1,12 +1,13 @@
 import { Season } from "./season";
 import { User } from "./user";
-import { UserSeasonPermission } from "./user-season-permission";
+import { PermissionType } from "./permission-type";
 
-export class UserSeason {
+export class Permission {
   constructor(
     public id: string,
     public user: User,
     public season: Season,
-    public userSeasonPermission: UserSeasonPermission
+    public type: PermissionType,
+    public username?: string,
   ) {}
 }

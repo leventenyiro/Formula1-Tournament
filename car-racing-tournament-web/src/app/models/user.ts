@@ -1,9 +1,9 @@
-import { UserSeason } from "./user-season";
+import { Permission } from "./permission";
 
 export class User {
   constructor(
     public id: string,
     public username: string,
-    public userSeasons: UserSeason[]
+    public permissions: Permission[]
   ) {}
 }
