@@ -6,13 +6,13 @@
         <form #postForm="ngForm" (ngSubmit)="onLogin(postForm)">
             <div class="mb-3">
                 <label for="inputUsernameEmail" class="form-label">Username or email</label>
-                <input required type="email" class="form-control" id="inputUsernameEmail" ngModel name="usernameEmail" #usernameEmail="ngModel" [class.is-invalid]="!usernameEmail.valid && usernameEmail.touched" [class.is-valid]="usernameEmail.valid">
+                <input required type="email" class="form-control" id="inputUsernameEmail" ngModel name="usernameEmail" #usernameEmail="ngModel" [class.is-invalid]="!usernameEmail.valid && usernameEmail.touched">
                 <div class="invalid-feedback">Username or email is required</div>
             </div>
     
             <div class="mb-3">
                 <label for="inputPassword" class="form-label">Password</label>
-                <input required multiple type="password" class="form-control" id="inputPassword" ngModel name="password" #password="ngModel" [class.is-invalid]="!password.valid && password.touched" [class.is-valid]="password.valid" pattern="">
+                <input required multiple type="password" class="form-control" id="inputPassword" ngModel name="password" #password="ngModel" [class.is-invalid]="!password.valid && password.touched">
                 <div class="invalid-feedback">Password is required</div>
             </div>
     
