@@ -24,7 +24,9 @@ export class AuthService {
         responseType: 'text'
       }
     ).pipe(
-      catchError(this.handleError)
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
     )
   }
 

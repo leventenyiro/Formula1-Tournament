@@ -33,6 +33,14 @@ export class RegistrationComponent implements OnInit {
 
     this.isFetching = false;
   }
+  
+  usernamePattern() {
+    return environment.validation.nameRegex;
+  }
+  
+  emailPattern() {
+    return environment.validation.emailRegex;
+  }
 
   passwordPattern() {
     return environment.validation.passwordRegex;
@@ -40,10 +48,6 @@ export class RegistrationComponent implements OnInit {
 
   passwordErrorMsg() {
     return environment.errorMessages.passwordFormat;
-  }
-
-  emailPattern() {
-    return environment.validation.emailRegex;
   }
 
   login() {

@@ -6,25 +6,25 @@
         <form #postForm="ngForm" (ngSubmit)="onRegistration(postForm)">
             <div class="mb-3">
                 <label for="inputUsername" class="form-label">Username</label>
-                <input required type="text" class="form-control" id="inputUsername" ngModel name="username" #username="ngModel" [class.is-invalid]="!username.valid && username.touched" [class.is-valid]="username.valid">
+                <input required type="text" class="form-control" id="inputUsername" ngModel name="username" #username="ngModel" [class.is-invalid]="!username.valid && username.touched" [pattern]="usernamePattern()">
                 <div class="invalid-feedback">Invalid username</div>
             </div>
 
             <div class="mb-3">
                 <label for="inputEmail" class="form-label">Email address</label>
-                <input required type="text" class="form-control" id="inputEmail" ngModel name="email" #email="ngModel" [class.is-invalid]="!email.valid && email.touched" [class.is-valid]="email.valid" [pattern]="emailPattern()">
+                <input required type="text" class="form-control" id="inputEmail" ngModel name="email" #email="ngModel" [class.is-invalid]="!email.valid && email.touched" [pattern]="emailPattern()">
                 <div class="invalid-feedback">Invalid email address</div>
             </div>
     
             <div class="mb-3">
                 <label for="inputPassword" class="form-label">Password</label>
-                <input required multiple type="password" class="form-control" id="inputPassword" ngModel name="password" #password="ngModel" [class.is-invalid]="!password.valid && password.touched" [class.is-valid]="password.valid" [pattern]="passwordPattern()">
+                <input required multiple type="password" class="form-control" id="inputPassword" ngModel name="password" #password="ngModel" [class.is-invalid]="!password.valid && password.touched" [pattern]="passwordPattern()">
                 <div class="invalid-feedback">{{ passwordErrorMsg() }}</div>
             </div>
 
             <div class="mb-3">
                 <label for="inputPasswordAgain" class="form-label">Password again</label>
-                <input required multiple type="password" class="form-control" id="inputPasswordAgain" ngModel name="passwordAgain" #passwordAgain="ngModel" [class.is-invalid]="passwordAgain.touched && password.value !== passwordAgain.value" [class.is-valid]="passwordAgain.valid && password.value === passwordAgain.value">
+                <input required multiple type="password" class="form-control" id="inputPasswordAgain" ngModel name="passwordAgain" #passwordAgain="ngModel" [class.is-invalid]="passwordAgain.touched && password.value !== passwordAgain.value">
                 <div class="invalid-feedback">Passwords aren't pass</div>
             </div>
     
