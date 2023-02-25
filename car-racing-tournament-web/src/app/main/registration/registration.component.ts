@@ -41,4 +41,8 @@ export class RegistrationComponent implements OnInit {
   passwordErrorMsg() {
     return environment.errorMessages.passwordFormat;
   }
+
+  login() {
+    this.router.navigate(['/login'])
+  }
 }

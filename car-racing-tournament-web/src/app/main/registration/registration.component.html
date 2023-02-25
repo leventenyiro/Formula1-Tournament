@@ -28,7 +28,14 @@
                 <div class="invalid-feedback">Passwords aren't pass</div>
             </div>
     
-            <button class="btn btn-primary" [disabled]="!postForm.valid">Registration</button>
+            <div class="row">
+                <div class="col-4">
+                    <button class="btn btn-primary" [disabled]="!postForm.valid">Registration</button>
+                </div>
+                <div class="col-8 text-end">
+                    <button (click)="login()" class="btn btn-link">Do you already have an account?</button>
+                </div>
+            </div>
         </form>
 
         <div class="spinner-border" role="status" *ngIf="isFetching; else elseDiv">
