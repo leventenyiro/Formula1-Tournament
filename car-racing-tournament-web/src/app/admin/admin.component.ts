@@ -13,13 +13,13 @@ export class AdminComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.loginService.isSessionValid(document.cookie)) {
-      this.router.navigate(['/main']);
+      this.router.navigate(['']);
     }
   }
 
   logout() {
     document.cookie = "session=";
-    this.router.navigate(['/main']);
+    this.router.navigate(['']);
   }
 
 }
