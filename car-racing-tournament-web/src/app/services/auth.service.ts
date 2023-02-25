@@ -31,7 +31,7 @@ export class AuthService {
   registration(registation: Registration) {
     return this.http
     .post(
-      `${environment.backendUrl}/user/registation`,
+      `${environment.backendUrl}/user/registration`,
       {
         "username": registation.username,
         "email": registation.email,
