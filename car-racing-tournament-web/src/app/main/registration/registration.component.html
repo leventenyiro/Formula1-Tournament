@@ -5,15 +5,15 @@
     <div>
         <form #postForm="ngForm" (ngSubmit)="onRegistration(postForm)">
             <div class="mb-3">
-                <label for="inputUsername" class="form-label">Username or email</label>
+                <label for="inputUsername" class="form-label">Username</label>
                 <input required type="text" class="form-control" id="inputUsername" ngModel name="username" #username="ngModel" [class.is-invalid]="!username.valid && username.touched" [class.is-valid]="username.valid">
-                <div class="invalid-feedback">Username is required</div>
+                <div class="invalid-feedback">Invalid username</div>
             </div>
 
             <div class="mb-3">
-                <label for="inputEmail" class="form-label">Email</label>
-                <input required type="text" class="form-control" id="inputEmail" ngModel name="email" #email="ngModel" [class.is-invalid]="!email.valid && email.touched">
-                <div class="invalid-feedback">Email is required</div>
+                <label for="inputEmail" class="form-label">Email address</label>
+                <input required type="text" class="form-control" id="inputEmail" ngModel name="email" #email="ngModel" [class.is-invalid]="!email.valid && email.touched" [class.is-valid]="email.valid" [pattern]="emailPattern()">
+                <div class="invalid-feedback">Invalid email address</div>
             </div>
     
             <div class="mb-3">
@@ -24,7 +24,7 @@
 
             <div class="mb-3">
                 <label for="inputPasswordAgain" class="form-label">Password again</label>
-                <input required multiple type="password" class="form-control" id="inputPasswordAgain" ngModel name="passwordAgain" #passwordAgain="ngModel" [class.is-invalid]="!passwordAgain.valid && passwordAgain.touched" [class.is-valid]="passwordAgain.valid && password === passwordAgain">
+                <input required multiple type="password" class="form-control" id="inputPasswordAgain" ngModel name="passwordAgain" #passwordAgain="ngModel" [class.is-invalid]="passwordAgain.touched && password.value !== passwordAgain.value" [class.is-valid]="passwordAgain.valid && password.value === passwordAgain.value">
                 <div class="invalid-feedback">Passwords aren't pass</div>
             </div>
     
@@ -43,7 +43,7 @@
         </div>
 
         <ng-template #elseDiv>
-            <div class="alert alert-danger" role="alert" *ngIf="error">
+            <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
                 {{error}}
             </div>
         </ng-template>

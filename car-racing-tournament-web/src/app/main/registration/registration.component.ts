@@ -42,6 +42,10 @@ export class RegistrationComponent implements OnInit {
     return environment.errorMessages.passwordFormat;
   }
 
+  emailPattern() {
+    return environment.validation.emailRegex;
+  }
+
   login() {
     this.router.navigate(['/login'])
   }
