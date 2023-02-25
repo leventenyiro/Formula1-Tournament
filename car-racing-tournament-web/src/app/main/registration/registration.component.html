@@ -1,0 +1,44 @@
+<app-header></app-header>
+<div class="container col-xs-12 col-md-4 col-md-offset-4 mt-5">
+    <h1>Create new profile</h1>
+
+    <div>
+        <form #postForm="ngForm" (ngSubmit)="onRegistration(postForm)">
+            <div class="mb-3">
+                <label for="inputUsername" class="form-label">Username or email</label>
+                <input required type="text" class="form-control" id="inputUsername" ngModel name="username" #username="ngModel" [class.is-invalid]="!username.valid && username.touched" [class.is-valid]="username.valid">
+                <div class="invalid-feedback">Username is required</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="inputEmail" class="form-label">Email</label>
+                <input required type="text" class="form-control" id="inputEmail" ngModel name="email" #email="ngModel" [class.is-invalid]="!email.valid && email.touched">
+                <div class="invalid-feedback">Email is required</div>
+            </div>
+    
+            <div class="mb-3">
+                <label for="inputPassword" class="form-label">Password</label>
+                <input required multiple type="password" class="form-control" id="inputPassword" ngModel name="password" #password="ngModel" [class.is-invalid]="!password.valid && password.touched" [class.is-valid]="password.valid" [pattern]="passwordPattern()">
+                <div class="invalid-feedback">{{ passwordErrorMsg() }}</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="inputPasswordAgain" class="form-label">Password again</label>
+                <input required multiple type="password" class="form-control" id="inputPasswordAgain" ngModel name="passwordAgain" #passwordAgain="ngModel" [class.is-invalid]="!passwordAgain.valid && passwordAgain.touched" [class.is-valid]="passwordAgain.valid && password === passwordAgain">
+                <div class="invalid-feedback">Passwords aren't pass</div>
+            </div>
+    
+            <button class="btn btn-primary" [disabled]="!postForm.valid">Registration</button>
+        </form>
+
+        <div class="spinner-border" role="status" *ngIf="isFetching; else elseDiv">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+
+        <ng-template #elseDiv>
+            <div class="alert alert-danger" role="alert" *ngIf="error">
+                {{error}}
+            </div>
+        </ng-template>
+    </div>
+</div>
