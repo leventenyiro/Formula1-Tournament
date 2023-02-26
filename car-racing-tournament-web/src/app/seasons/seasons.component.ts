@@ -7,11 +7,11 @@ import { Season } from '../models/season';
 import { SeasonService } from '../services/season.service';
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrls: ['./main.component.scss']
+  selector: 'app-seasons',
+  templateUrl: './seasons.component.html',
+  styleUrls: ['./seasons.component.scss']
 })
-export class MainComponent implements OnInit {
+export class SeasonsComponent implements OnInit {
   seasons: Season[] = [];
   fetchedData: Season[] = [];
   subscription!: Subscription;
