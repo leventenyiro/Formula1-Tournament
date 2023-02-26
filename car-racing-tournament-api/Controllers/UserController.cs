@@ -12,12 +12,18 @@ namespace car_racing_tournament_api.Controllers
         private IUser _userService;
         private IPermission _permissionService;
         private ISeason _seasonService;
+        private IConfiguration _configuration;
 
-        public UserController(IUser userService, IPermission permissionService, ISeason seasonService)
+        public UserController(
+            IUser userService, 
+            IPermission permissionService, 
+            ISeason seasonService,
+            IConfiguration configuration)
         {
             _userService = userService;
             _permissionService = permissionService;
             _seasonService = seasonService;
+            _configuration = configuration;
         }
 
         [HttpPost("login")]
@@ -25,7 +31,7 @@ namespace car_racing_tournament_api.Controllers
         {
             var resultGetUser = await _userService.GetUserByUsernameEmail(loginDto.UsernameEmail);
             if (!resultGetUser.IsSuccess)
-                return NotFound(resultGetUser.ErrorMessage);
+                return NotFound(_configuration["ErrorMessages:LoginDetails"]);
 
             var result = _userService.Login(resultGetUser.User!, loginDto.Password, true);
             if (!result.IsSuccess)

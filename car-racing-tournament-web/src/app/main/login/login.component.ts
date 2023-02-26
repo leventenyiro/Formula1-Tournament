@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginService } from '../../services/login.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -11,10 +11,10 @@ export class LoginComponent implements OnInit {
   isFetching = false;
   error = "";
 
-  constructor(private loginService: LoginService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    if (this.loginService.isSessionValid(document.cookie)) {
+    if (this.authService.isSessionValid(document.cookie)) {
       this.router.navigate(['/admin']);
     }
   }
@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   onLogin(data: any) {
     this.isFetching = true
 
-    this.loginService.login(data.value).subscribe({
+    this.authService.login(data.value).subscribe({
       next: (data) => {
         document.cookie = `session=${data}`;
         this.router.navigate(['/admin']);
@@ -32,5 +32,9 @@ export class LoginComponent implements OnInit {
     })
 
     this.isFetching = false;
+  }
+
+  registration() {
+    this.router.navigate(['/registration']);
   }
 }

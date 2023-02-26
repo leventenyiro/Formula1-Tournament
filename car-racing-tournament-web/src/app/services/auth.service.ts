@@ -1,5 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Registration } from 'app/models/registration';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Login } from '../models/login';
@@ -7,7 +8,7 @@ import { Login } from '../models/login';
 @Injectable({
   providedIn: 'root'
 })
-export class LoginService {
+export class AuthService {
 
   constructor(private http: HttpClient) { }
 
@@ -23,7 +24,29 @@ export class LoginService {
         responseType: 'text'
       }
     ).pipe(
-      catchError(this.handleError)
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
+    )
+  }
+
+  registration(registation: Registration) {
+    return this.http
+    .post(
+      `${environment.backendUrl}/user/registration`,
+      {
+        "username": registation.username,
+        "email": registation.email,
+        "password": registation.password,
+        "passwordAgain": registation.passwordAgain
+      },
+      {
+        responseType: 'text'
+      }
+    ).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
     )
   }
 

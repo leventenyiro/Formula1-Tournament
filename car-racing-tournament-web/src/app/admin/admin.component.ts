@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginService } from '../services/login.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-admin',
@@ -9,10 +9,10 @@ import { LoginService } from '../services/login.service';
 })
 export class AdminComponent implements OnInit {
 
-  constructor(private loginService: LoginService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    if (!this.loginService.isSessionValid(document.cookie)) {
+    if (!this.authService.isSessionValid(document.cookie)) {
       this.router.navigate(['']);
     }
   }

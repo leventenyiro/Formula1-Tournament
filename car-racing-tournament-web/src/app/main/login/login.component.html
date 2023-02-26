@@ -16,7 +16,14 @@
                 <div class="invalid-feedback">Password is required</div>
             </div>
     
-            <button class="btn btn-primary" [disabled]="!postForm.valid">Login</button>
+            <div class="row">
+                <div class="col-5">
+                    <button class="btn btn-primary" [disabled]="!postForm.valid">Login</button>
+                </div>
+                <div class="col-7 text-end">
+                    <button (click)="registration()" class="btn btn-link">Don't you have an account?</button>
+                </div>
+            </div>
         </form>
 
         <div class="spinner-border" role="status" *ngIf="isFetching; else elseDiv">
@@ -24,7 +31,7 @@
         </div>
 
         <ng-template #elseDiv>
-            <div class="alert alert-danger" role="alert" *ngIf="error">
+            <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
                 {{error}}
             </div>
         </ng-template>
