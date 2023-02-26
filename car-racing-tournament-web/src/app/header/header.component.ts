@@ -18,6 +18,7 @@ export class HeaderComponent implements OnInit {
         this.isLoggedIn = loggedIn;
       }
     );
+    this.isLoggedInInit();
   }
 
   isLoggedInInit() {

@@ -62,7 +62,7 @@ export class AuthService {
     .set('Authorization', `Bearer ${bearerToken}`)
     return this.http
     .get<Login>(
-        `${environment.backendUrl}/authentication`,
+        `${environment.backendUrl}/user`,
         {
             headers: headers
         }

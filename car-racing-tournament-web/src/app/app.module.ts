@@ -10,6 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { SeasonsComponent } from './seasons/seasons.component';
 import { AdminComponent } from './admin/admin.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { MySeasonsComponent } from './my-seasons/my-seasons.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { RegistrationComponent } from './registration/registration.component';
     HeaderComponent,
     SeasonsComponent,
     AdminComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    MySeasonsComponent
   ],
   imports: [
     BrowserModule,

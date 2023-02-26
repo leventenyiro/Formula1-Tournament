@@ -20,23 +20,28 @@ export class SeasonService {
         }
     ).pipe(
         tap(data => JSON.stringify(data)),
-        catchError(this.handleError)
+        catchError((error: HttpErrorResponse) => {
+          return throwError(() => new Error(error.error));
+        })
     )
   }
 
-  private handleError(err: HttpErrorResponse): Observable<never> {
-    // in a real world app, we may send the server to some remote logging infrastructure
-    // instead of just logging it to the console
-    let errorMessage = '';
-    if (err.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      errorMessage = `An error occurred: ${err.error.message}`;
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
-    }
-
-    return throwError(() => new Error(errorMessage));
+  getSeasonsByUser(documentCookie: string): Observable<Season[]> {
+    const bearerToken = documentCookie.split("session=")[1].split(";")[0];
+    let headers = new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Access-Control-Allow-Origin', '*')
+    .set('Authorization', `Bearer ${bearerToken}`)
+    return this.http.get<Season[]>(
+      `${environment.backendUrl}/season/user`,
+        {
+            headers: headers
+        }
+    ).pipe(
+        tap(data => JSON.stringify(data)),
+        catchError((error: HttpErrorResponse) => {
+          return throwError(() => new Error(error.error));
+        })
+    )
   }
 }
