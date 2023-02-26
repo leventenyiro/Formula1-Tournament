@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.authService.isSessionValid(document.cookie)) {
-      this.router.navigate(['/admin']);
+      this.router.navigate(['']);
     }
   }
 
@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(data.value).subscribe({
       next: (data) => {
         document.cookie = `session=${data}`;
-        this.router.navigate(['/admin']);
+        this.router.navigate(['']);
       },
       error: err => this.error = err,
       complete: () => this.isFetching = false

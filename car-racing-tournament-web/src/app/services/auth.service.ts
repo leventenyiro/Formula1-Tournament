@@ -67,21 +67,12 @@ export class AuthService {
         }
     ).pipe(
         tap(data => JSON.stringify(data)),
-        catchError(this.handleError)
+        catchError((error: HttpErrorResponse) => {
+          return throwError(() => new Error(error.error));
+        })
     ).subscribe({
       next: data => { return true },
       error: err => { return false }
     })
-  }
-
-  private handleError(err: HttpErrorResponse): Observable<never> {
-    let errorMessage = '';
-    if (err.error instanceof ErrorEvent) {
-      errorMessage = `An error occurred: ${err.error.message}`;
-    } else {
-      errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
-    }
-
-    return throwError(() => new Error(errorMessage));
   }
 }
