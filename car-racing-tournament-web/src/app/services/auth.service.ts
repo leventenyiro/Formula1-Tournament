@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Registration } from 'app/models/registration';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -9,6 +9,7 @@ import { Login } from '../models/login';
   providedIn: 'root'
 })
 export class AuthService {
+  loggedIn = new EventEmitter<boolean>();
 
   constructor(private http: HttpClient) { }
 
