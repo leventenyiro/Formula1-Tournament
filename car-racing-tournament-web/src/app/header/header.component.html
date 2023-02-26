@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand-md navbar-light">
+  <div class="container-fluid">
+      <a class="navbar-brand" href="#">Car Racing Tournament</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-sm-0">
+              <li class="nav-item">
+                <a class="nav-link" routerLinkActive="active" routerLink="../">Seasons</a>
+              </li>
+              <li *ngIf="isLoggedIn" class="nav-item">
+                <a class="nav-link" routerLinkActive="active" routerLink="../">MySeasons</a>
+              </li>
+              <li *ngIf="isLoggedIn" class="nav-item">
+                <a class="nav-link disabled" routerLinkActive="active" routerLink="../">Favorites</a>
+              </li>
+              <li *ngIf="isLoggedIn" class="nav-item">
+                <a class="nav-link disabled" routerLinkActive="active" routerLink="../">Settings</a>
+              </li>
+            </ul>
+
+            <div class="d-flex justify-content-md-end mb-2 mb-sm-0">
+              <button *ngIf="!isLoggedIn" class="btn btn-primary btn-sm" routerLink="/login">Sign in</button>
+              <button *ngIf="isLoggedIn" class="btn btn-danger btn-sm" (click)="logout()">Sign out</button>
+            </div>
+        </div>
+    </div>
+</nav>
