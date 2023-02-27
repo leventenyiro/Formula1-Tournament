@@ -17,6 +17,7 @@ export class MySeasonsComponent implements OnInit {
   isFetching = false;
   error = "";
   search = new FormControl('');
+  selectRole = new FormControl('');
 
   constructor(private seasonService: SeasonService) { }
 
@@ -41,6 +42,20 @@ export class MySeasonsComponent implements OnInit {
     this.seasons = this.search.value !== '' ?
       this.seasons.filter(x => x.name === this.search.value) :
       this.seasons = this.fetchedData;
+  }
+
+  onSelectRole() {
+    switch (this.selectRole.value) {
+      case 'all':
+        this.seasons = this.fetchedData;
+        break;
+      case 'admin':
+        this.seasons = this.seasons.filter(x => x.permissions.find(x => x.type === PermissionType.Admin)?.user.id === ); // mi a userid-nk?
+        break;
+      case 'moderator':
+        this.seasons = this.seasons.filter(x => x.permissions.find(x => x.type === PermissionType.Moderator)?.user.id === );
+        break;
+    }
   }
 
   getAdminUsername(season: Season) {
