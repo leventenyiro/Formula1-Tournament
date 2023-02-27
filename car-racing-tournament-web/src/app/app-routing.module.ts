@@ -7,12 +7,12 @@ import { RegistrationComponent } from './registration/registration.component';
 import { MySeasonsComponent } from './my-seasons/my-seasons.component';
 
 const routes: Routes = [
-  { path: '', component: SeasonsComponent },
+  { path: 'seasons', component: SeasonsComponent },
   { path: 'login', component: LoginComponent},
   { path: 'registration', component: RegistrationComponent },
   { path: 'admin', component: AdminComponent },
   { path: 'my-seasons', component: MySeasonsComponent },
-  { path: '**', redirectTo: '/', pathMatch: 'full' }
+  { path: '**', redirectTo: 'seasons', pathMatch: 'full' }
 ];
 
 @NgModule({
