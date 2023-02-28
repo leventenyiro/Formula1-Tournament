@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 import { PermissionType } from 'app/models/permission-type';
 import { Season } from 'app/models/season';
+import { User } from 'app/models/user';
+import { AuthService } from 'app/services/auth.service';
 import { SeasonService } from 'app/services/season.service';
 import { Subscription } from 'rxjs';
 
@@ -18,17 +21,29 @@ export class MySeasonsComponent implements OnInit {
   error = "";
   search = new FormControl('');
   selectRole = new FormControl('');
+  user?: User;
 
-  constructor(private seasonService: SeasonService) { }
+  constructor(private seasonService: SeasonService, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
+    this.isFetching = true
+    
+    this.authService.getUser(document.cookie).subscribe({
+      next: user => this.user = user,
+      error: () => {
+        this.isFetching = false;
+        this.router.navigate([''])
+      },
+      complete: () => this.isFetching = false
+    });
+
     this.onFetchData()
   }
 
   onFetchData() {
     this.isFetching = true;
 
-    this.seasonService.getSeasons().subscribe({
+    this.seasonService.getSeasonsByUser(document.cookie).subscribe({
       next: seasons => {
         this.fetchedData = seasons;
         this.seasons = this.fetchedData;
@@ -50,10 +65,10 @@ export class MySeasonsComponent implements OnInit {
         this.seasons = this.fetchedData;
         break;
       case 'admin':
-        this.seasons = this.seasons.filter(x => x.permissions.find(x => x.type === PermissionType.Admin)?.user.id === ); // mi a userid-nk?
+        this.seasons = this.seasons.filter(x => x.permissions.find(x => x.type === PermissionType.Admin)?.user.id === this.user?.id);
         break;
       case 'moderator':
-        this.seasons = this.seasons.filter(x => x.permissions.find(x => x.type === PermissionType.Moderator)?.user.id === );
+        this.seasons = this.seasons.filter(x => x.permissions.find(x => x.type === PermissionType.Moderator)?.user.id === this.user?.id);
         break;
     }
   }

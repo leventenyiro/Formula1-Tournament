@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="col-sm-3">
-              <select class="form-select" aria-label="Select role" (select)="selectRole()">
+              <select class="form-select" aria-label="Select role" [formControl]="selectRole" (select)="selectRole()">
                 <option value="all" selected>All</option>
                 <option value="admin">Admin</option>
                 <option value="moderator">Moderator</option>

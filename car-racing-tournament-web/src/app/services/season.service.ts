@@ -1,5 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { User } from 'app/models/user';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment'
 import { Season } from '../models/season';
