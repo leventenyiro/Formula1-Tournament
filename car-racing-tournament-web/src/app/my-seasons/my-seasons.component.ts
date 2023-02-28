@@ -27,7 +27,7 @@ export class MySeasonsComponent implements OnInit {
 
   ngOnInit(): void {
     this.isFetching = true
-    
+
     this.authService.getUser(document.cookie).subscribe({
       next: user => this.user = user,
       error: () => {
@@ -65,10 +65,10 @@ export class MySeasonsComponent implements OnInit {
         this.seasons = this.fetchedData;
         break;
       case 'admin':
-        this.seasons = this.seasons.filter(x => x.permissions.find(x => x.type === PermissionType.Admin)?.user.id === this.user?.id);
+        this.seasons = this.fetchedData.filter(x => x.permissions.find(x => x.type === PermissionType.Admin)?.userId === this.user?.id);
         break;
       case 'moderator':
-        this.seasons = this.seasons.filter(x => x.permissions.find(x => x.type === PermissionType.Moderator)?.user.id === this.user?.id);
+        this.seasons = this.fetchedData.filter(x => x.permissions.find(x => x.type === PermissionType.Admin)?.userId !== this.user?.id);
         break;
     }
   }

@@ -8,6 +8,7 @@ export class Permission {
     public user: User,
     public season: Season,
     public type: PermissionType,
+    public userId: string,
     public username?: string,
   ) {}
 }
