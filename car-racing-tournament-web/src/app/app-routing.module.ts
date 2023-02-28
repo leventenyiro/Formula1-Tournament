@@ -1,16 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './admin/admin.component';
-import { LoginComponent } from './main/login/login.component';
-import { MainComponent } from './main/main.component';
-import { RegistrationComponent } from './main/registration/registration.component';
+import { LoginComponent } from './login/login.component';
+import { SeasonsComponent } from './seasons/seasons.component';
+import { RegistrationComponent } from './registration/registration.component';
+import { MySeasonsComponent } from './my-seasons/my-seasons.component';
 
 const routes: Routes = [
-  { path: '', component: MainComponent },
+  { path: 'seasons', component: SeasonsComponent },
   { path: 'login', component: LoginComponent},
   { path: 'registration', component: RegistrationComponent },
   { path: 'admin', component: AdminComponent },
-  { path: '**', redirectTo: '/', pathMatch: 'full' }
+  { path: 'my-seasons', component: MySeasonsComponent },
+  { path: '**', redirectTo: 'seasons', pathMatch: 'full' }
 ];
 
 @NgModule({

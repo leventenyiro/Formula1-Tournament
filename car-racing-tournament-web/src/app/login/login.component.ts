@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(data.value).subscribe({
       next: (data) => {
         document.cookie = `session=${data}`;
+        this.authService.loggedIn.emit(true); // emit the event here
         this.router.navigate(['']);
       },
       error: err => this.error = err,

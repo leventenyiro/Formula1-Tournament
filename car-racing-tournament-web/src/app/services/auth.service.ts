@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Registration } from 'app/models/registration';
+import { User } from 'app/models/user';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Login } from '../models/login';
@@ -9,6 +10,7 @@ import { Login } from '../models/login';
   providedIn: 'root'
 })
 export class AuthService {
+  loggedIn = new EventEmitter<boolean>();
 
   constructor(private http: HttpClient) { }
 
@@ -61,7 +63,7 @@ export class AuthService {
     .set('Authorization', `Bearer ${bearerToken}`)
     return this.http
     .get<Login>(
-        `${environment.backendUrl}/authentication`,
+        `${environment.backendUrl}/user`,
         {
             headers: headers
         }
@@ -74,5 +76,30 @@ export class AuthService {
       next: data => { return true },
       error: err => { return false }
     })
+  }
+
+  getUser(documentCookie: string): Observable<User> {
+    const bearerToken = documentCookie.split("session=")[1].split(";")[0];
+    if (!bearerToken) {
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
+    }
+    let headers = new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Access-Control-Allow-Origin', '*')
+    .set('Authorization', `Bearer ${bearerToken}`)
+    return this.http
+    .get<User>(
+        `${environment.backendUrl}/user`,
+        {
+            headers: headers
+        }
+    ).pipe(
+        tap(data => JSON.stringify(data)),
+        catchError((error: HttpErrorResponse) => {
+          return throwError(() => new Error(error.error));
+        })
+    );
   }
 }

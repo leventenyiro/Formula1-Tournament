@@ -16,7 +16,7 @@ export class RegistrationComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.authService.isSessionValid(document.cookie)) {
-      this.router.navigate(['/main']);
+      this.router.navigate(['']);
     }
   }
 
@@ -25,7 +25,7 @@ export class RegistrationComponent implements OnInit {
 
     this.authService.registration(data.value).subscribe({
       next: data => {
-        this.router.navigate(['/main']);
+        this.router.navigate(['']);
       },
       error: err => this.error = err,
       complete: () => this.isFetching = false

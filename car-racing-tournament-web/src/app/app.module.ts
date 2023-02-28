@@ -6,19 +6,21 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-import { LoginComponent } from './main/login/login.component';
-import { MainComponent } from './main/main.component';
+import { LoginComponent } from './login/login.component';
+import { SeasonsComponent } from './seasons/seasons.component';
 import { AdminComponent } from './admin/admin.component';
-import { RegistrationComponent } from './main/registration/registration.component';
+import { RegistrationComponent } from './registration/registration.component';
+import { MySeasonsComponent } from './my-seasons/my-seasons.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     HeaderComponent,
-    MainComponent,
+    SeasonsComponent,
     AdminComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    MySeasonsComponent
   ],
   imports: [
     BrowserModule,
