@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { PermissionType } from '../models/permission-type';
-import { Season } from '../models/season';
-import { SeasonService } from '../services/season.service';
+import { PermissionType } from '../../models/permission-type';
+import { Season } from '../../models/season';
+import { SeasonService } from '../../services/season.service';
 
 @Component({
   selector: 'app-seasons',
