@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { AuthService } from 'app/services/auth.service';
 import { Subscription } from 'rxjs';
 import { PermissionType } from '../../models/permission-type';
 import { Season } from '../../models/season';
@@ -18,11 +18,23 @@ export class SeasonsComponent implements OnInit {
   isFetching = false;
   error = "";
   search = new FormControl('');
+  isLoggedIn = false;
 
-  constructor(private seasonService: SeasonService, private router: Router) { }
+  constructor(private seasonService: SeasonService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.onFetchData();
+    
+    this.authService.loggedIn.subscribe(
+      (loggedIn: boolean) => {
+        this.isLoggedIn = loggedIn;
+      }
+    );
+    this.isLoggedInInit();
+  }
+
+  isLoggedInInit() {
+    this.isLoggedIn = this.authService.isSessionValid(document.cookie) ? true : false;
   }
 
   onFetchData() {

@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(data.value).subscribe({
       next: (data) => {
         document.cookie = `session=${data}`;
-        this.authService.loggedIn.emit(true); // emit the event here
+        this.authService.loggedIn.emit(true);
         this.router.navigate(['']);
       },
       error: err => this.error = err,
