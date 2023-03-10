@@ -32,7 +32,8 @@ export class SeasonService {
     let headers = new HttpHeaders()
     .set('content-type', 'application/json')
     .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${bearerToken}`)
+    .set('Authorization', `Bearer ${bearerToken}`);
+
     return this.http.get<Season[]>(
       `${environment.backendUrl}/season/user`,
         {
@@ -43,6 +44,29 @@ export class SeasonService {
         catchError((error: HttpErrorResponse) => {
           return throwError(() => new Error(error.error));
         })
+    )
+  }
+
+  createSeason(season: Season, documentCookie: string) {
+    const bearerToken = documentCookie.split("session=")[1].split(";")[0];
+    let headers = new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Access-Control-Allow-Origin', '*')
+    .set('Authorization', `Bearer ${bearerToken}`);
+
+    return this.http.post(
+      `${environment.backendUrl}/season`,
+      {
+        "name": season.name,
+        "description": season.description
+      },
+      {
+        responseType: 'text'
+      }
+    ).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
     )
   }
 }

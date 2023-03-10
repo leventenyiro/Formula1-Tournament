@@ -11,7 +11,7 @@
     
             <div class="mb-3">
                 <label for="inputPassword" class="form-label">Password</label>
-                <input required multiple type="password" class="form-control" id="inputPassword" ngModel name="password" #password="ngModel" [class.is-invalid]="!password.valid && password.touched">
+                <input required type="password" class="form-control" id="inputPassword" ngModel name="password" #password="ngModel" [class.is-invalid]="!password.valid && password.touched">
                 <div class="invalid-feedback">Password is required</div>
             </div>
     
