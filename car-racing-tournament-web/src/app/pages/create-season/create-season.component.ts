@@ -13,9 +13,9 @@ export class CreateSeasonComponent implements OnInit {
   error = "";
 
   constructor(
-    private authService: AuthService, 
-    private seasonService: SeasonService
-    , private router: Router
+    private authService: AuthService,
+    private seasonService: SeasonService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -29,9 +29,7 @@ export class CreateSeasonComponent implements OnInit {
 
     this.seasonService.createSeason(data.value, document.cookie).subscribe({
       next: (data) => {
-        console.log(data);
-        
-        this.router.navigate([`season/${data}`]);
+        // this.router.navigate([`season/${data}`]);
       },
       error: err => this.error = err,
       complete: () => this.isFetching = false

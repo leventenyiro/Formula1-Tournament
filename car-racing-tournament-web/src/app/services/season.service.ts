@@ -65,6 +65,7 @@ export class SeasonService {
         responseType: 'text'
       }
     ).pipe(
+      tap(data => JSON.stringify(data)),
       catchError((error: HttpErrorResponse) => {
         return throwError(() => new Error(error.error));
       })

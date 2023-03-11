@@ -52,7 +52,7 @@ export class SeasonsComponent implements OnInit {
 
   onSearch() {
     this.seasons = this.search.value !== '' ?
-      this.seasons.filter(x => x.name === this.search.value) :
+      this.seasons.filter(x => x.name.startsWith(this.search.value)) :
       this.seasons = this.fetchedData;
   }
 
