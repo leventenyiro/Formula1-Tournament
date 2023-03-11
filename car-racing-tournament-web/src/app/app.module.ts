@@ -5,12 +5,13 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
-import { LoginComponent } from './login/login.component';
-import { SeasonsComponent } from './seasons/seasons.component';
-import { AdminComponent } from './admin/admin.component';
-import { RegistrationComponent } from './registration/registration.component';
-import { MySeasonsComponent } from './my-seasons/my-seasons.component';
+import { HeaderComponent } from './components/header/header.component';
+import { LoginComponent } from './pages/login/login.component';
+import { SeasonsComponent } from './pages/seasons/seasons.component';
+import { AdminComponent } from './pages/admin/admin.component';
+import { RegistrationComponent } from './pages/registration/registration.component';
+import { MySeasonsComponent } from './pages/my-seasons/my-seasons.component';
+import { CreateSeasonComponent } from './pages/create-season/create-season.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { MySeasonsComponent } from './my-seasons/my-seasons.component';
     SeasonsComponent,
     AdminComponent,
     RegistrationComponent,
-    MySeasonsComponent
+    MySeasonsComponent,
+    CreateSeasonComponent
   ],
   imports: [
     BrowserModule,

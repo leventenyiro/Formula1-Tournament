@@ -1,0 +1,34 @@
+<div class="container col-xs-12 col-md-4 col-md-offset-4 mt-5">
+    <h1>Create season</h1>
+
+    <div>
+        <form #postForm="ngForm" (ngSubmit)="onCreate(postForm)">
+            <div class="mb-3">
+                <label for="inputName" class="form-label">Name</label>
+                <input required type="text" class="form-control" id="inputName" ngModel name="name" #name="ngModel" [class.is-invalid]="!name.valid && name.touched" [class.is-valid]="name.valid">
+                <div class="invalid-feedback">Name is required</div>
+            </div>
+    
+            <div class="mb-3">
+                <label for="inputDescription" class="form-label">Description</label>
+                <textarea class="form-control" id="inputDescription" rows="5" ngModel name="description" #name="ngModel"></textarea>
+            </div>
+    
+            <div class="row">
+                <div class="col-5">
+                    <button class="btn btn-primary" [disabled]="!postForm.valid">Create</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="spinner-border" role="status" *ngIf="isFetching; else elseDiv">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+
+        <ng-template #elseDiv>
+            <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
+                {{error}}
+            </div>
+        </ng-template>
+    </div>
+</div>

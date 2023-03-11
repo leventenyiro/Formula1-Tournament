@@ -22,6 +22,7 @@ export class MySeasonsComponent implements OnInit {
   search = new FormControl('');
   selectRole = new FormControl('');
   user?: User;
+  isLoggedIn = false;
 
   constructor(private seasonService: SeasonService, private authService: AuthService, private router: Router) { }
 
@@ -33,11 +34,10 @@ export class MySeasonsComponent implements OnInit {
       error: () => {
         this.isFetching = false;
         this.router.navigate([''])
-      },
-      complete: () => this.isFetching = false
+      }
     });
 
-    this.onFetchData()
+    this.onFetchData();
   }
 
   onFetchData() {
@@ -55,7 +55,7 @@ export class MySeasonsComponent implements OnInit {
 
   onSearch() {
     this.seasons = this.search.value !== '' ?
-      this.seasons.filter(x => x.name === this.search.value) :
+      this.seasons.filter(x => x.name.startsWith(this.search.value)) :
       this.seasons = this.fetchedData;
   }
 
