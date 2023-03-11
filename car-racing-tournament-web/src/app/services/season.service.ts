@@ -61,6 +61,7 @@ export class SeasonService {
         "description": season.description
       },
       {
+        headers: headers,
         responseType: 'text'
       }
     ).pipe(
