@@ -1,8 +1,8 @@
 <div class="row">
     <div class="col-sm-10">
         <div class="col-sm-6">
-            <h1>Season name</h1>
-            <p>Created on: </p>
+            <h1>{{ season?.name}}</h1>
+            <p>Created on {{ getFormattedDate(season!.createdAt) }}</p>
         </div>
         <div class="col-sm-6">
             <!-- select options -->

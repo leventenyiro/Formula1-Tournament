@@ -86,4 +86,8 @@ export class MySeasonsComponent implements OnInit {
     `${date.getMinutes().toString().padStart(2, '0')}:` +
     `${date.getSeconds().toString().padStart(2, '0')}`;
   }
+
+  navigateSeason(id: string) {
+    this.router.navigate([`season/${id}`])
+  }
 }

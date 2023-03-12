@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from 'app/services/auth.service';
 import { Subscription } from 'rxjs';
 import { PermissionType } from '../../models/permission-type';
@@ -20,7 +21,11 @@ export class SeasonsComponent implements OnInit {
   search = new FormControl('');
   isLoggedIn = false;
 
-  constructor(private seasonService: SeasonService, private authService: AuthService) { }
+  constructor(
+    private seasonService: SeasonService, 
+    private authService: AuthService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.onFetchData();
@@ -68,5 +73,9 @@ export class SeasonsComponent implements OnInit {
     `${date.getHours().toString().padStart(2, '0')}:` +
     `${date.getMinutes().toString().padStart(2, '0')}:` +
     `${date.getSeconds().toString().padStart(2, '0')}`;
+  }
+
+  navigateSeason(id: string) {
+    this.router.navigate([`season/${id}`]);
   }
 }

@@ -71,4 +71,21 @@ export class SeasonService {
       })
     )
   }
+
+  getSeason(id: string) {
+    let headers = new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Access-Control-Allow-Origin', '*')
+    return this.http.get<Season>(
+      `${environment.backendUrl}/season/${id}`,
+        {
+            headers: headers
+        }
+    ).pipe(
+        tap(data => JSON.stringify(data)),
+        catchError((error: HttpErrorResponse) => {
+          return throwError(() => new Error(error.error));
+        })
+    )
+  }
 }
