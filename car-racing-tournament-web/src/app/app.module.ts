@@ -12,6 +12,7 @@ import { AdminComponent } from './pages/admin/admin.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
 import { MySeasonsComponent } from './pages/my-seasons/my-seasons.component';
 import { CreateSeasonComponent } from './pages/create-season/create-season.component';
+import { SeasonComponent } from './pages/season/season.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { CreateSeasonComponent } from './pages/create-season/create-season.compo
     AdminComponent,
     RegistrationComponent,
     MySeasonsComponent,
-    CreateSeasonComponent
+    CreateSeasonComponent,
+    SeasonComponent
   ],
   imports: [
     BrowserModule,
