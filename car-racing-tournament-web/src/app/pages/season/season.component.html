@@ -5,19 +5,17 @@
             <p>Created on {{ getFormattedDate(season!.createdAt) }}</p>
         </div>
         <div class="col-sm-6">
-            <!-- select options -->
-            <select class="form-select">
-                <!-- drivers, teams, races -->
-                <!-- <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option> -->
+            <select class="form-select" [formControl]="selectType" (change)="onSelectType()">
+                <option value="drivers" [selected]="true">Drivers</option>
+                <option value="teams">Teams</option>
+                <option value="races">Races</option>
             </select>
-            <select class="form-select mt-3">
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+
+            <select class="form-select mt-3" [formControl]="selectValue" (change)="onSelectValue()">
+                <option value="all" [selected]="true">All</option>
+                <div *ngFor="let value in values">
+                    <option [value]="value.id">{{ value.name }}</option>
+                </div>
             </select>
         </div>
 

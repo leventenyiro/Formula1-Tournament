@@ -77,7 +77,7 @@ export class SeasonService {
     .set('content-type', 'application/json')
     .set('Access-Control-Allow-Origin', '*')
     return this.http.get<Season>(
-      `${environment.backendUrl}/season/${id}`,
+      `${environment.backendUrl}/season/${id}/details`,
         {
             headers: headers
         }
