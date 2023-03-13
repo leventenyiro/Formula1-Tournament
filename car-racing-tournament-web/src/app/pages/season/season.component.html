@@ -12,11 +12,9 @@
             </select>
 
             <select class="form-select mt-3" [formControl]="selectValue" (change)="onSelectValue()">
-                <option value="all" [selected]="true">All</option>
-                <div *ngFor="let value in values">
-                    <option [value]="value.id">{{ value.name }}</option>
-                </div>
-            </select>
+                <option value="" [selected]="true">All</option>
+                <option *ngFor="let option of selectValue.value" [value]="option.id">{{ option.name }}</option>
+            </select>  
         </div>
 
         <!-- table -->

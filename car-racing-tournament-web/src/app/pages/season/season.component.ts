@@ -33,7 +33,7 @@ export class SeasonComponent implements OnInit {
       error: () => this.router.navigate(['season']),
       complete: () => {
         this.isFetching = false;
-        console.log(this.season);
+        this.selectValue.setValue(this.season?.drivers);
       }
     });
   }
@@ -51,18 +51,18 @@ export class SeasonComponent implements OnInit {
   onSelectType() {
     switch (this.selectType.value) {
       case 'drivers':
-        this.values = this.season!.drivers;
+        this.selectValue.setValue(this.season?.drivers);
         break;
       case 'teams':
-        this.values = this.season!.teams;
+        this.selectValue.setValue(this.season?.teams);
         break;
       case 'races':
-        this.values = this.season!.races;
+        this.selectValue.setValue(this.season?.races);
         break;
     }
   }
 
   onSelectValue() {
-
+    // table actions
   }
 }
