@@ -6,7 +6,7 @@
         </div>
         <div class="col-sm-6">
             <select class="form-select" [formControl]="selectType" (change)="onSelectType()">
-                <option value="drivers" [selected]="true">Drivers</option>
+                <option value="drivers">Drivers</option>
                 <option value="teams">Teams</option>
                 <option value="races">Races</option>
             </select>
@@ -17,7 +17,23 @@
             </select>  
         </div>
 
-        <!-- table -->
+        <div [ngSwitch]="selectType.value">
+            <div *ngSwitchCase="'drivers'">
+                drivers
+                <!-- drivers header -->
+                <!-- body -->
+            </div>
+            <div *ngSwitchCase="'teams'">
+                teams
+                <!-- teams header -->
+                <!-- body -->
+            </div>
+            <div *ngSwitchCase="'races'">
+                races
+                <!-- races header -->
+                <!-- body -->
+            </div>
+        </div>
     </div>
     <div class="col-sm-2">
         <!-- admin, moderators, description -->

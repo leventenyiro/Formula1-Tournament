@@ -14,7 +14,7 @@ export class SeasonComponent implements OnInit {
   season?: Season;
   error = "";
   isFetching = false;
-  selectType = new FormControl('');
+  selectType = new FormControl('drivers');
   selectValue = new FormControl('');
   values = {};
 
