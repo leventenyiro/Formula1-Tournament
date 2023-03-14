@@ -14,12 +14,13 @@ export class SeasonComponent implements OnInit {
   season?: Season;
   error = "";
   isFetching = false;
+  createdAt?: string;
   selectType = new FormControl('drivers');
   selectValue = new FormControl('');
   values = {};
 
   constructor(
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private seasonService: SeasonService,
     private router: Router
   ) { }
@@ -34,6 +35,7 @@ export class SeasonComponent implements OnInit {
       complete: () => {
         this.isFetching = false;
         this.selectValue.setValue(this.season?.drivers);
+        this.createdAt = this.getFormattedDate(this.season!.createdAt);
       }
     });
   }

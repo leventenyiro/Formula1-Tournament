@@ -2,7 +2,7 @@
     <div class="col-sm-10 row pt-3 ps-5">
         <div class="col-sm-6">
             <h1>{{ season?.name}}</h1>
-            <p>Created on {{ getFormattedDate(season!.createdAt) }}</p>
+            <p>Created on {{ this.createdAt }}</p>
         </div>
         <div class="col-sm-6">
             <select class="form-select" [formControl]="selectType" (change)="onSelectType()">
@@ -14,7 +14,7 @@
             <select class="form-select mt-3" [formControl]="selectValue" (change)="onSelectValue()">
                 <option value="" [selected]="true">All</option>
                 <option *ngFor="let option of selectValue.value" [value]="option.id">{{ option.name }}</option>
-            </select>  
+            </select>
         </div>
 
         <div [ngSwitch]="selectType.value">
@@ -22,7 +22,7 @@
                 drivers
                 <!-- drivers header -->
                 <div class="row">
-                    
+
                 </div>
                 <!-- body -->
                 <!-- if all: drivers and their points -->
