@@ -1,0 +1,18 @@
+.table-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;;
+    padding: 10px;
+}
+
+.table-row p {
+    margin: 0;
+}
+
+.team-color {
+    height: 3.5vh;
+    width: 10px;
+    border-radius: 2px;
+}

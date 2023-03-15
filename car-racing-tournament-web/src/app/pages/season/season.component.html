@@ -39,9 +39,13 @@
                 <!-- if all: drivers and their points -->
                 <div *ngIf="selectValue.value === 'all'">
                     all
-                    <!-- <div class="row" *ngFor="let driver in getDriverAll()"> -->
-                        <!-- <p>{{ driver.name }}</p> -->
-                    <!-- </div> -->
+                    <div class="table-row mb-3" *ngFor="let driver of getDriverAll(); index as i;">
+                        <p>{{ i + 1 }}</p>
+                        <p>{{ driver.name }}</p>
+                        <p>{{ driver.actualTeam.name }}</p>
+                        <p>{{ driver.point }}</p>
+                        <div class="team-color" [ngStyle]="{'background-color': driver.actualTeam.color}"></div>
+                    </div>
                 </div>
                 <!-- else: driver results -->
                 <div class="row"></div>
