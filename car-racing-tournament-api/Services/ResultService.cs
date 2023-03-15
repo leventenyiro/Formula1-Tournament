@@ -63,6 +63,8 @@ namespace car_racing_tournament_api.Services
                     Position = x.Position,
                     Point = x.Point,
                     RaceId = x.RaceId,
+                    DriverId = x.DriverId,
+                    TeamId = x.TeamId,
                     Driver = new Driver
                     {
                         Id = x.Driver.Id,
@@ -77,6 +79,7 @@ namespace car_racing_tournament_api.Services
                         Color = x.Team.Color
                     }
                 }).FirstOrDefaultAsync();
+
             if (result == null)
                 return (false, null, _configuration["ErrorMessages:ResultNotFound"]);
             
@@ -142,9 +145,16 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteResult(Result result)
         {
-            _carRacingTournamentDbContext.Results.Remove(result);
-            await _carRacingTournamentDbContext.SaveChangesAsync();
-
+            var existingResult = await _carRacingTournamentDbContext.Results.FindAsync(result.Id);
+            if (existingResult != null)
+            {
+                _carRacingTournamentDbContext.Results.Remove(existingResult);
+                await _carRacingTournamentDbContext.SaveChangesAsync();
+            }
+            else
+            {
+                return (false, _configuration["ErrorMessages:ResultNotFound"]);
+            }
             return (true, null);
         }
     }

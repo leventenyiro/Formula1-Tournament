@@ -49,7 +49,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetResult.IsSuccess)
                 return NotFound(resultGetResult.ErrorMessage);
 
-            var resultGetDriver = await _driverService.GetDriverById(resultGetResult.Result!.DriverId);
+            var resultGetDriver = await _driverService.GetDriverById(resultGetResult.Result!.Driver.Id);
             if (!resultGetDriver.IsSuccess)
                 return NotFound(resultGetDriver.ErrorMessage);
 
@@ -82,7 +82,7 @@ namespace car_racing_tournament_api.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
             var resultGetResult = await _resultService.GetResultById(id);
@@ -96,9 +96,9 @@ namespace car_racing_tournament_api.Controllers
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
 
-            if (resultGetDriver.Driver.Season.IsArchived) {
+            /*if (resultGetDriver.Driver.Season.IsArchived) {
                 return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
-            }
+            }*/
 
             var resultDelete = await _resultService.DeleteResult(resultGetResult.Result);
             if (!resultDelete.IsSuccess)

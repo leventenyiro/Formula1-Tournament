@@ -79,9 +79,9 @@ namespace car_racing_tournament_api.Controllers
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Driver!.SeasonId))
                 return Forbid();
 
-            if (resultGet.Driver.Season.IsArchived) {
+            /*if (resultGet.Driver.Season.IsArchived) {
                 return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
-            }
+            }*/
 
             var resultDelete = await _driverService.DeleteDriver(resultGet.Driver);
             if (!resultDelete.IsSuccess)
