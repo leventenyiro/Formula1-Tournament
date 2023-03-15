@@ -5,15 +5,26 @@
             <p>Created on {{ this.createdAt }}</p>
         </div>
         <div class="col-sm-6">
-            <select class="form-select" [formControl]="selectType" (change)="onSelectType()">
+            <select class="form-select" [formControl]="selectType">
                 <option value="drivers">Drivers</option>
                 <option value="teams">Teams</option>
                 <option value="races">Races</option>
             </select>
 
-            <select class="form-select mt-3" [formControl]="selectValue" (change)="onSelectValue()">
-                <option value="" [selected]="true">All</option>
-                <option *ngFor="let option of selectValue.value" [value]="option.id">{{ option.name }}</option>
+            <select class="form-select mt-3" [formControl]="selectValue">
+                <option value="all" [selected]="true">All</option>
+
+                <ng-template [ngIf]="selectType.value === 'drivers'">
+                    <option *ngFor="let option of season?.drivers" [value]="option.id">{{ option.name }}</option>
+                </ng-template>
+
+                <ng-template [ngIf]="selectType.value === 'teams'">
+                    <option *ngFor="let option of season?.teams" [value]="option.id">{{ option.name }}</option>
+                </ng-template>
+
+                <ng-template [ngIf]="selectType.value === 'races'">
+                    <option *ngFor="let option of season?.races" [value]="option.id">{{ option.name }}</option>
+                </ng-template>
             </select>
         </div>
 
@@ -22,12 +33,17 @@
                 drivers
                 <!-- drivers header -->
                 <div class="row">
-
+                    
                 </div>
                 <!-- body -->
                 <!-- if all: drivers and their points -->
+                <div *ngIf="selectValue.value === 'all'">
+                    <div class="row" *ngFor="let driver in getDriverAll()">
+                        <p>{{ driver.name }}</p>
+                    </div>
+                </div>
                 <!-- else: driver results -->
-                <div class="row" ></div>
+                <div class="row"></div>
             </div>
             <div *ngSwitchCase="'teams'">
                 teams

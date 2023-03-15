@@ -16,8 +16,7 @@ export class SeasonComponent implements OnInit {
   isFetching = false;
   createdAt?: string;
   selectType = new FormControl('drivers');
-  selectValue = new FormControl('');
-  values = {};
+  selectValue = new FormControl('all');
 
   constructor(
     private route: ActivatedRoute,
@@ -26,7 +25,11 @@ export class SeasonComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.paramMap.get("id")!
+    this.id = this.route.snapshot.paramMap.get("id")!;
+
+    console.log(this.selectType.value);
+    console.log(this.selectValue.value);
+    
 
     this.isFetching = true;
     this.seasonService.getSeason(this.id).subscribe({
@@ -34,7 +37,6 @@ export class SeasonComponent implements OnInit {
       error: () => this.router.navigate(['season']),
       complete: () => {
         this.isFetching = false;
-        this.selectValue.setValue(this.season?.drivers);
         this.createdAt = this.getFormattedDate(this.season!.createdAt);
       }
     });
@@ -50,21 +52,10 @@ export class SeasonComponent implements OnInit {
     `${date.getSeconds().toString().padStart(2, '0')}`;
   }
 
-  onSelectType() {
-    switch (this.selectType.value) {
-      case 'drivers':
-        this.selectValue.setValue(this.season?.drivers);
-        break;
-      case 'teams':
-        this.selectValue.setValue(this.season?.teams);
-        break;
-      case 'races':
-        this.selectValue.setValue(this.season?.races);
-        break;
-    }
-  }
-
-  onSelectValue() {
-    // table actions
+  getDriverAll() {
+    // sort by sumpoints
+    // name, realname, actualTeam, number, sumpoints
+    console.log(this.season);
+    
   }
 }

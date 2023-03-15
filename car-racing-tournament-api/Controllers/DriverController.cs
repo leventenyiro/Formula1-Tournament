@@ -47,9 +47,9 @@ namespace car_racing_tournament_api.Controllers
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
 
-            if (resultGetDriver.Driver.Season.IsArchived) {
-                return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
-            }
+            // if (resultGetDriver.Driver.Season.IsArchived) {
+            //     return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
+            // }
 
             Team team = null!;
 
