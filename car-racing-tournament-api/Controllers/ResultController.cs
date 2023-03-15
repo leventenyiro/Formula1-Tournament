@@ -89,7 +89,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetResult.IsSuccess)
                 return BadRequest(resultGetResult.ErrorMessage);
 
-            var resultGetDriver = await _driverService.GetDriverById(resultGetResult.Result!.DriverId);
+            var resultGetDriver = await _driverService.GetDriverById(resultGetResult.Result!.Driver.Id);
             if (!resultGetDriver.IsSuccess)
                 return BadRequest(resultGetDriver.ErrorMessage);
 
