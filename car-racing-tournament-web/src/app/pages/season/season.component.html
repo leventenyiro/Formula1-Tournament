@@ -30,21 +30,44 @@
 
         <div [ngSwitch]="selectType.value">
             <div *ngSwitchCase="'drivers'">
-                drivers
-                <!-- drivers header -->
-                <div class="row">
-                    
-                </div>
                 <!-- body -->
                 <!-- if all: drivers and their points -->
-                <div *ngIf="selectValue.value === 'all'">
-                    all
+                <div *ngIf="selectValue.value === 'all'" class="mt-5">
+                    <div class="header-row">
+                        <div class="col"></div>
+                        <div class="col">
+                            <p>Position</p>
+                        </div>
+                        <div class="col">
+                            <p>Name</p>
+                        </div>
+                        <div class="col">
+                            <p>Real Name</p>
+                        </div>
+                        <div class="col">
+                            <p>Team</p>
+                        </div>
+                        <div class="col">
+                            <p>Points</p>
+                        </div>
+                    </div>
                     <div class="table-row mb-3" *ngFor="let driver of getDriverAll(); index as i;">
-                        <p>{{ i + 1 }}</p>
-                        <p>{{ driver.name }}</p>
-                        <p>{{ driver.actualTeam.name }}</p>
-                        <p>{{ driver.point }}</p>
-                        <div class="team-color" [ngStyle]="{'background-color': driver.actualTeam.color}"></div>
+                        <div class="col team-color" [ngStyle]="{'background-color': driver.actualTeam.color}"></div>
+                        <div class="col">
+                            <p>{{ i + 1 }}</p>
+                        </div>
+                        <div class="col">
+                            <p>{{ driver.name }}</p>
+                        </div>
+                        <div class="col">
+                            <p>{{ driver.realName }}</p>
+                        </div>
+                        <div class="col">
+                            <p>{{ driver.actualTeam.name }}</p>
+                        </div>
+                        <div class="col">
+                            <p>{{ driver.point }}</p>
+                        </div>
                     </div>
                 </div>
                 <!-- else: driver results -->
