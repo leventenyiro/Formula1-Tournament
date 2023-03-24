@@ -18,49 +18,6 @@ namespace car_racing_tournament_api.Services
             _configuration = configuration;
         }
 
-        public async Task<(bool IsSuccess, List<Team>? Teams, string? ErrorMessage)> GetTeamsBySeason(Season season)
-        {
-            var teams = await _carRacingTournamentDbContext.Teams
-                .Where(x => x.SeasonId == season.Id)
-                .Include(x => x.Drivers)
-                .Include(x => x.Results!).ThenInclude(x => x.Race)
-                .Include(x => x.Results!).ThenInclude(x => x.Driver)
-                .Select(x => new Team
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Color = x.Color,
-                    Drivers = x.Drivers!.Select(x => new Driver
-                    {
-                        Id = x.Id,
-                        Name = x.Name,
-                        RealName = x.RealName,
-                        Number = x.Number
-                    }).ToList(),
-                    Results = x.Results!.Select(x => new Result
-                    {
-                        Id = x.Id,
-                        Position = x.Position,
-                        Point = x.Point,
-                        Race = new Race
-                        {
-                            Id = x.Race.Id,
-                            Name = x.Race.Name,
-                            DateTime = x.Race.DateTime
-                        },
-                        Driver = new Driver
-                        {
-                            Id = x.Driver.Id,
-                            Name = x.Driver.Name,
-                            RealName = x.Driver.RealName,
-                            Number = x.Driver.Number
-                        }
-                    }).ToList()
-                }).ToListAsync();
-
-            return (true, teams, null);
-        }
-
         public async Task<(bool IsSuccess, Team? Team, string? ErrorMessage)> GetTeamById(Guid id)
         {
             var team = await _carRacingTournamentDbContext.Teams

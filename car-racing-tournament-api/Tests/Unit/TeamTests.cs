@@ -50,16 +50,6 @@ namespace car_racing_tournament_api.Tests.Unit
         }
 
         [Test]
-        public async Task GetTeamsBySeasonSuccess()
-        {
-            var result = await _teamService!.GetTeamsBySeason(_context!.Seasons.First());
-            Assert.IsTrue(result.IsSuccess);
-            Assert.IsNull(result.ErrorMessage);
-            Assert.IsNotNull(result.Teams);
-            Assert.AreEqual(result.Teams!.Count, 1);
-        }
-
-        [Test]
         public async Task GetTeamByIdSuccess()
         {
             var result = await _teamService!.GetTeamById(_team!.Id);

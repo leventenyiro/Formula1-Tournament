@@ -89,16 +89,6 @@ namespace car_racing_tournament_api.Tests.Unit
         }
 
         [Test]
-        public async Task GetResultsByRaceSuccess()
-        {
-            var result = await _resultService!.GetResultsByRace(_context!.Races.First());
-            Assert.IsTrue(result.IsSuccess);
-            Assert.IsNull(result.ErrorMessage);
-            Assert.IsNotNull(result.Results);
-            Assert.AreEqual(result.Results!.Count, 1);
-        }
-
-        [Test]
         public async Task GetResultByIdSuccess()
         {
             var result = await _resultService!.GetResultById(_result!.Id);

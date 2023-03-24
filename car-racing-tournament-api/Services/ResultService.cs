@@ -19,38 +19,6 @@ namespace car_racing_tournament_api.Services
             _configuration = configuration;
         }
 
-        public async Task<(bool IsSuccess, List<Result>? Results, string? ErrorMessage)> GetResultsByRace(Race race)
-        {
-            var results = await _carRacingTournamentDbContext.Results
-            .Where(x => x.RaceId == race.Id)
-            .Include(x => x.Driver)
-            .Include(x => x.Team)
-            .Select(x => new Result
-            {
-                Id = x.Id,
-                Position = x.Position,
-                Point = x.Point,
-                Driver = new Driver
-                {
-                    Id = x.Driver.Id,
-                    Name = x.Driver.Name,
-                    RealName = x.Driver.RealName,
-                    Number = x.Driver.Number
-                },
-                Team = new Team
-                {
-                    Id = x.Team.Id,
-                    Name = x.Team.Name,
-                    Color = x.Team.Color
-                },
-            }).ToListAsync();
-
-            if (results == null)
-                return (false, null, _configuration["ErrorMessages:ResultNotFound"]);
-
-            return (true, results, null);
-        }
-
         public async Task<(bool IsSuccess, Result? Result, string? ErrorMessage)> GetResultById(Guid id)
         {
             var result = await _carRacingTournamentDbContext.Results

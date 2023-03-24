@@ -35,16 +35,6 @@ namespace car_racing_tournament_api.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(Guid id)
-        {
-            var result = await _resultService.GetResultById(id);
-            if (!result.IsSuccess)
-                return NotFound(result.ErrorMessage);
-            
-            return Ok(result.Result);
-        }
-
         [HttpPut("{id}"), Authorize]
         public async Task<IActionResult> Put(Guid id, [FromBody] ResultDto resultDto)
         {

@@ -20,48 +20,6 @@ namespace car_racing_tournament_api.Services
             _configuration = configuration;
         }
 
-        public async Task<(bool IsSuccess, List<Driver>? Drivers, string? ErrorMessage)> GetDriversBySeason(Season season)
-        {
-            var drivers = await _carRacingTournamentDbContext.Drivers
-                .Where(x => x.SeasonId == season.Id)
-                .Include(x => x.ActualTeam)
-                .Include(x => x.Results!).ThenInclude(x => x.Race)
-                .Include(x => x.Results!).ThenInclude(x => x.Team)
-                .Select(x => new Driver
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    RealName = x.RealName,
-                    Number = x.Number,
-                    ActualTeam = x.ActualTeam != null ? new Team
-                    {
-                        Id = x.ActualTeam.Id,
-                        Name = x.ActualTeam.Name,
-                        Color = x.ActualTeam.Color
-                    } : null,
-                    Results = x.Results!.Select(x => new Result
-                    {
-                        Id = x.Id,
-                        Position = x.Position,
-                        Point = x.Point,
-                        Race = new Race
-                        {
-                            Id = x.Race.Id,
-                            Name = x.Race.Name,
-                            DateTime = x.Race.DateTime
-                        },
-                        Team = new Team
-                        {
-                            Id = x.Team.Id,
-                            Name = x.Team.Name,
-                            Color = x.Team.Color
-                        }
-                    }).ToList(),
-                }).ToListAsync();
-
-            return (true, drivers, null);
-        }
-
         public async Task<(bool IsSuccess, Driver? Driver, string? ErrorMessage)> GetDriverById(Guid id)
         {
             var driver = await _carRacingTournamentDbContext.Drivers.Where(e => e.Id == id)
@@ -88,6 +46,7 @@ namespace car_racing_tournament_api.Services
             
             return (true, driver, null);
         }
+        
         public async Task<(bool IsSuccess, string? ErrorMessage)> AddDriver(Season season, DriverDto driverDto, Team team)
         {
             driverDto.Name = driverDto.Name.Trim();
