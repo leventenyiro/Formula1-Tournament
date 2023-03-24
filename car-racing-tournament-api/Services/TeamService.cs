@@ -156,9 +156,12 @@ namespace car_racing_tournament_api.Services
             team.Name = teamDto.Name;
             try
             {
-                team.Color = teamDto.Color.Trim();
-                ColorTranslator.FromHtml(teamDto.Color.Trim());
-                team.Color = teamDto.Color.Trim();
+                teamDto.Color = teamDto.Color.Trim();
+                if (teamDto.Color.Substring(0, 1) != "#")
+                    teamDto.Color = "#" + teamDto.Color;
+                var color = ColorTranslator.FromHtml(teamDto.Color);
+
+                team.Color = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
             }
             catch (Exception)
             {
