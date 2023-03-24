@@ -11,15 +11,18 @@ namespace car_racing_tournament_api.Controllers
     {
         private ITeam _teamService;
         private IPermission _permissionService;
+        private ISeason _seasonService;
         private IConfiguration _configuration;
 
         public TeamController(
             ITeam teamService, 
             IPermission permissionService,
+            ISeason seasonService,
             IConfiguration configuration)
         {
             _teamService = teamService;
             _permissionService = permissionService;
+            _seasonService = seasonService;
             _configuration = configuration;
         }
 
@@ -43,9 +46,13 @@ namespace car_racing_tournament_api.Controllers
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Team!.SeasonId))
                 return Forbid();
 
-            /*if (resultGet.Team.Season.IsArchived) {
+            var resultGetSeason = await _seasonService.GetSeasonById(resultGet.Team.SeasonId);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
+
+            if (resultGetSeason.Season!.IsArchived) {
                 return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
-            }*/
+            }
 
             var resultUpdate = await _teamService.UpdateTeam(resultGet.Team, teamDto);
             if (!resultUpdate.IsSuccess)
@@ -64,9 +71,13 @@ namespace car_racing_tournament_api.Controllers
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Team!.SeasonId))
                 return Forbid();
 
-            /*if (resultGet.Team.Season.IsArchived) {
+            var resultGetSeason = await _seasonService.GetSeasonById(resultGet.Team.SeasonId);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
+
+            if (resultGetSeason.Season!.IsArchived) {
                 return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
-            }*/
+            }
 
             var resultDelete = await _teamService.DeleteTeam(resultGet.Team);
             if (!resultDelete.IsSuccess)

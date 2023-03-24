@@ -14,6 +14,7 @@ namespace car_racing_tournament_api.Controllers
         private IDriver _driverService;
         private ITeam _teamService;
         private IRace _raceService;
+        private ISeason _seasonService;
         private IConfiguration _configuration;
 
         public ResultController(
@@ -22,6 +23,7 @@ namespace car_racing_tournament_api.Controllers
             IDriver driverService, 
             ITeam teamService, 
             IRace raceService,
+            ISeason seasonService,
             IConfiguration configuration)
         {
             _resultService = resultService;
@@ -29,6 +31,7 @@ namespace car_racing_tournament_api.Controllers
             _driverService = driverService;
             _teamService = teamService;
             _raceService = raceService;
+            _seasonService = seasonService;
             _configuration = configuration;
         }
 
@@ -56,9 +59,13 @@ namespace car_racing_tournament_api.Controllers
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
 
-            /*if (resultGetDriver.Driver.Season.IsArchived) {
+            var resultGetSeason = await _seasonService.GetSeasonById(resultGetDriver.Driver.SeasonId);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
+
+            if (resultGetSeason.Season!.IsArchived) {
                 return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
-            }*/
+            }
 
             var resultGetTeam = await _teamService.GetTeamById(resultGetResult.Result!.TeamId);
             if (!resultGetTeam.IsSuccess)
@@ -89,9 +96,13 @@ namespace car_racing_tournament_api.Controllers
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
 
-            /*if (resultGetDriver.Driver.Season.IsArchived) {
+            var resultGetSeason = await _seasonService.GetSeasonById(resultGetDriver.Driver.SeasonId);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
+
+            if (resultGetSeason.Season!.IsArchived) {
                 return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
-            }*/
+            }
 
             var resultDelete = await _resultService.DeleteResult(resultGetResult.Result);
             if (!resultDelete.IsSuccess)

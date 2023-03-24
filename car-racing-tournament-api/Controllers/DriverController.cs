@@ -13,17 +13,20 @@ namespace car_racing_tournament_api.Controllers
         private IDriver _driverService;
         private IPermission _permissionService;
         private ITeam _teamService;
+        private ISeason _seasonService;
         private IConfiguration _configuration;
 
         public DriverController(
             IDriver driverService, 
             IPermission permissionService, 
             ITeam teamService,
+            ISeason seasonService,
             IConfiguration configuration)
         {
             _driverService = driverService;
             _permissionService = permissionService;
             _teamService = teamService;
+            _seasonService = seasonService;
             _configuration = configuration;
         }
 
@@ -47,9 +50,13 @@ namespace car_racing_tournament_api.Controllers
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
 
-            // if (resultGetDriver.Driver.Season.IsArchived) {
-            //     return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
-            // }
+            var resultGetSeason = await _seasonService.GetSeasonById(resultGetDriver.Driver.SeasonId);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
+
+            if (resultGetSeason.Season!.IsArchived) {
+                return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
+            }
 
             Team team = null!;
 
@@ -79,9 +86,13 @@ namespace car_racing_tournament_api.Controllers
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Driver!.SeasonId))
                 return Forbid();
 
-            /*if (resultGet.Driver.Season.IsArchived) {
+            var resultGetSeason = await _seasonService.GetSeasonById(resultGet.Driver.SeasonId);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
+
+            if (resultGetSeason.Season!.IsArchived) {
                 return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
-            }*/
+            }
 
             var resultDelete = await _driverService.DeleteDriver(resultGet.Driver);
             if (!resultDelete.IsSuccess)
