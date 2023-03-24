@@ -178,16 +178,16 @@ namespace car_racing_tournament_api.Controllers
         [HttpPost("{seasonId}/permission"), Authorize]
         public async Task<IActionResult> Post(Guid seasonId, [FromForm] string usernameEmail)
         {
-            if (!await _permissionService.IsAdmin(new Guid(User.Identity!.Name!), seasonId))
-                return Forbid();
+            var resultGetSeason = await _seasonService.GetSeasonById(seasonId);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
 
             var resultGetUser = await _userService.GetUserByUsernameEmail(usernameEmail);
             if (!resultGetUser.IsSuccess)
                 return NotFound(resultGetUser.ErrorMessage);
 
-            var resultGetSeason = await _seasonService.GetSeasonById(seasonId);
-            if (!resultGetSeason.IsSuccess)
-                return NotFound(resultGetSeason.ErrorMessage);
+            if (!await _permissionService.IsAdmin(new Guid(User.Identity!.Name!), seasonId))
+                return Forbid();
 
             var resultAdd = await _permissionService.AddPermission(resultGetUser.User!, resultGetSeason.Season!, PermissionType.Moderator);
             if (!resultAdd.IsSuccess)

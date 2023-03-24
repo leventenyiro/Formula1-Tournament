@@ -12,11 +12,13 @@ namespace car_racing_tournament_api.Controllers
     {
         private IPermission _permissionService;
         private ISeason _seasonService;
+        private IConfiguration _configuration;
 
-        public PermissionController(IPermission permissionService, ISeason seasonService)
+        public PermissionController(IPermission permissionService, ISeason seasonService, IConfiguration configuration)
         {
             _permissionService = permissionService;
             _seasonService = seasonService;
+            _configuration = configuration;
         }
 
         [HttpPut("{id}"), Authorize]
@@ -30,7 +32,7 @@ namespace car_racing_tournament_api.Controllers
                 return Forbid();
 
             if (resultGetPermission.Permission.Type == PermissionType.Admin)
-                return BadRequest("You cannot downgrade your permission in this way!");
+                return BadRequest();
 
             var resultGetSeason = await _seasonService.GetSeasonById(resultGetPermission.Permission.SeasonId);
             if (!resultGetPermission.IsSuccess)
@@ -72,7 +74,7 @@ namespace car_racing_tournament_api.Controllers
                     return NotFound(resultGetPermissions.ErrorMessage);
 
                 if (resultGetPermissions.Permissions!.Count > 1)
-                    return BadRequest("You cannot downgrade your permission in this way!");
+                    return BadRequest(_configuration["ErrorMessages:CannotDowngrade"]);
                 else {
                     var resultDeleteSeason = await _seasonService.DeleteSeason(resultGetSeason.Season!);
                     if (!resultDeleteSeason.IsSuccess)
