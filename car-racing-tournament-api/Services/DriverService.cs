@@ -144,7 +144,7 @@ namespace car_racing_tournament_api.Services
             driver.RealName = driverDto.RealName?.Trim();
             driver.Number = driverDto.Number;
             driver.ActualTeamId = driverDto.ActualTeamId;
-            _carRacingTournamentDbContext.Drivers.Update(driver);
+            _carRacingTournamentDbContext.Entry(driver).State = EntityState.Modified;
             await _carRacingTournamentDbContext.SaveChangesAsync();
 
             return (true, null);
