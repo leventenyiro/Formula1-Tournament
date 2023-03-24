@@ -3,7 +3,6 @@ using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 using System.Drawing;
 
 namespace car_racing_tournament_api.Services
@@ -165,7 +164,8 @@ namespace car_racing_tournament_api.Services
             {
                 return (false, _configuration["ErrorMessages:TeamColor"]);
             }
-            _carRacingTournamentDbContext.Teams.Update(team);
+            
+            _carRacingTournamentDbContext.Entry(team).State = EntityState.Modified;
             await _carRacingTournamentDbContext.SaveChangesAsync();
             
             return (true, null);

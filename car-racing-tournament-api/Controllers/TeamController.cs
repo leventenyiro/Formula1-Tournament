@@ -43,9 +43,9 @@ namespace car_racing_tournament_api.Controllers
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Team!.SeasonId))
                 return Forbid();
 
-            if (resultGet.Team.Season.IsArchived) {
+            /*if (resultGet.Team.Season.IsArchived) {
                 return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
-            }
+            }*/
 
             var resultUpdate = await _teamService.UpdateTeam(resultGet.Team, teamDto);
             if (!resultUpdate.IsSuccess)
@@ -64,9 +64,9 @@ namespace car_racing_tournament_api.Controllers
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Team!.SeasonId))
                 return Forbid();
 
-            if (resultGet.Team.Season.IsArchived) {
+            /*if (resultGet.Team.Season.IsArchived) {
                 return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
-            }
+            }*/
 
             var resultDelete = await _teamService.DeleteTeam(resultGet.Team);
             if (!resultDelete.IsSuccess)

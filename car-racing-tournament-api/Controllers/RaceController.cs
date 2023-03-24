@@ -52,9 +52,9 @@ namespace car_racing_tournament_api.Controllers
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGet.Race!.SeasonId))
                 return Forbid();
 
-            if (resultGet.Race.Season.IsArchived) {
+            /*if (resultGet.Race.Season.IsArchived) {
                 return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
-            }
+            }*/
             
             var resultUpdate = await _raceService.UpdateRace(resultGet.Race, raceDto);
             if (!resultUpdate.IsSuccess)

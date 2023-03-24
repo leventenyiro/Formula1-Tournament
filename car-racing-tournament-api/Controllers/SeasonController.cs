@@ -1,7 +1,6 @@
 ﻿using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
-using car_racing_tournament_api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;

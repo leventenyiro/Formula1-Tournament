@@ -127,7 +127,7 @@ namespace car_racing_tournament_api.Services
 
             race.Name = raceDto.Name;
             race.DateTime = raceDto.DateTime;
-            _carRacingTournamentDbContext.Races.Update(race);
+            _carRacingTournamentDbContext.Entry(race).State = EntityState.Modified;
             await _carRacingTournamentDbContext.SaveChangesAsync();
             
             return (true, null);
