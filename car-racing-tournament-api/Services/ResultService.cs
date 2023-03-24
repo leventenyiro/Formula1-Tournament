@@ -136,7 +136,9 @@ namespace car_racing_tournament_api.Services
             result.Point = resultDto.Point;
             result.DriverId = resultDto.DriverId;
             result.TeamId = resultDto.TeamId;
-            _carRacingTournamentDbContext.Results.Update(result);
+            // _carRacingTournamentDbContext.Results.Update(result);
+            _carRacingTournamentDbContext.Entry(driver).State = EntityState.Modified;
+            _carRacingTournamentDbContext.Entry(result).State = EntityState.Modified;
             await _carRacingTournamentDbContext.SaveChangesAsync();
 
             return (true, null);
