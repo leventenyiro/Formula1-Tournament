@@ -124,13 +124,6 @@ namespace car_racing_tournament_api.Controllers
             if (!resultAdd.IsSuccess)
                 return BadRequest(resultAdd.ErrorMessage);
 
-            if (resultGetDriver.Driver!.ActualTeamId != resultDto.TeamId) {
-                var resultUpdateTeam = await _driverService.UpdateDriverTeam(resultGetDriver.Driver, resultGetTeam.Team!);
-                if (!resultUpdateTeam.IsSuccess) {
-                    return BadRequest(resultUpdateTeam.ErrorMessage);
-                }
-            }
-
             return StatusCode(StatusCodes.Status201Created);
         }
     }
