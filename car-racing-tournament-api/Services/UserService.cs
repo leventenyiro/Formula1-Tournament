@@ -69,7 +69,13 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, User? User, string? ErrorMessage)> GetUserById(Guid id)
         {
-            var result = await _carRacingTournamentDbContext.Users.Where(x => x.Id == id).FirstOrDefaultAsync();
+            var result = await _carRacingTournamentDbContext.Users
+            .Where(x => x.Id == id)
+            .Select(x => new User {
+                Id = x.Id,
+                Username = x.Username,
+                Email = x.Email
+            }).FirstOrDefaultAsync();
             if (result == null)
                 return (false, null, _configuration["ErrorMessages:UserNotFound"]);
             
