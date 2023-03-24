@@ -30,16 +30,6 @@ namespace car_racing_tournament_api.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(Guid id)
-        {
-            var resultGet = await _driverService.GetDriverById(id);
-            if (!resultGet.IsSuccess)
-                return NotFound(resultGet.ErrorMessage);
-            
-            return Ok(resultGet.Driver);
-        }
-
         [HttpPut("{id}"), Authorize]
         public async Task<IActionResult> Put(Guid id, [FromBody] DriverDto driverDto)
         {

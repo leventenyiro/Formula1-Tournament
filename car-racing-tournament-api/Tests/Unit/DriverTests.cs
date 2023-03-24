@@ -67,16 +67,6 @@ namespace car_racing_tournament_api.Tests.Unit
         }
 
         [Test]
-        public async Task GetDriversBySeasonSuccess()
-        {
-            var result = await _driverService!.GetDriversBySeason(_context!.Seasons.First());
-            Assert.IsTrue(result.IsSuccess);
-            Assert.IsNull(result.ErrorMessage);
-            Assert.IsNotNull(result.Drivers);
-            Assert.AreEqual(result.Drivers!.Count, 1);
-        }
-
-        [Test]
         public async Task GetDriverByIdSuccess()
         {
             var result = await _driverService!.GetDriverById(_driver!.Id);

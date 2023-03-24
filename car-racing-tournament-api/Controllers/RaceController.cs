@@ -35,16 +35,6 @@ namespace car_racing_tournament_api.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(Guid id)
-        {
-            var resultGet = await _raceService.GetRaceById(id);
-            if (!resultGet.IsSuccess)
-                return NotFound(resultGet.ErrorMessage);
-            
-            return Ok(resultGet.Race);
-        }
-
         [HttpPut("{id}"), Authorize]
         public async Task<IActionResult> Put(Guid id, [FromBody] RaceDto raceDto)
         {
@@ -93,20 +83,6 @@ namespace car_racing_tournament_api.Controllers
                 return BadRequest(result.ErrorMessage);
             
             return NoContent();
-        }
-
-        [HttpGet("{raceId}/result")]
-        public async Task<IActionResult> GetResultsByRaceId(Guid raceId)
-        {
-            var resultGet = await _raceService.GetRaceById(raceId);
-            if (!resultGet.IsSuccess)
-                return NotFound(resultGet.ErrorMessage);
-
-            var result = await _resultService.GetResultsByRace(resultGet.Race!);
-            if (!result.IsSuccess)
-                return NotFound(result.ErrorMessage);
-            
-            return Ok(result.Results);
         }
 
         [HttpPost("{raceId}/result"), Authorize]
