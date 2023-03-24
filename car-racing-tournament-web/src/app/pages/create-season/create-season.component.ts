@@ -29,16 +29,16 @@ export class CreateSeasonComponent implements OnInit {
 
     this.seasonService.createSeason(data.value, document.cookie).subscribe({
       next: (data) => {
-        // this.router.navigate([`season/${data}`]);
+        this.router.navigate([`season/${JSON.parse(data)}`]);
       },
       error: err => this.error = err,
-      complete: () => this.isFetching = false
+      complete: () => {
+        this.isFetching = false;
+      }
     });
 
-    this.isFetching = false;
-  }
 
-  registration() {
-    this.router.navigate(['/registration']);
+
+
   }
 }

@@ -144,7 +144,7 @@ namespace car_racing_tournament_api.Services
             driver.RealName = driverDto.RealName?.Trim();
             driver.Number = driverDto.Number;
             driver.ActualTeamId = driverDto.ActualTeamId;
-            _carRacingTournamentDbContext.Drivers.Update(driver);
+            _carRacingTournamentDbContext.Entry(driver).State = EntityState.Modified;
             await _carRacingTournamentDbContext.SaveChangesAsync();
 
             return (true, null);
@@ -155,7 +155,7 @@ namespace car_racing_tournament_api.Services
             if (team != null && driver.SeasonId != team.SeasonId)
                 return (false, _configuration["ErrorMessages:DriverTeamNotSameSeason"]);
 
-            driver.ActualTeam = team != null ? team : null;
+            driver.ActualTeamId = team != null ? team.Id : null;
             _carRacingTournamentDbContext.Drivers.Update(driver);
             await _carRacingTournamentDbContext.SaveChangesAsync();
 

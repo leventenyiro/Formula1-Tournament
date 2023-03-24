@@ -6,7 +6,7 @@ export class Result {
   constructor(
     public id: string,
     public position: number,
-    public points: number,
+    public point: number,
     public driver: Driver,
     public team: Team,
     public race: Race

@@ -6,6 +6,7 @@ import { SeasonsComponent } from './pages/seasons/seasons.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
 import { MySeasonsComponent } from './pages/my-seasons/my-seasons.component';
 import { CreateSeasonComponent } from './pages/create-season/create-season.component';
+import { SeasonComponent } from './pages/season/season.component';
 
 const routes: Routes = [
   { path: 'seasons', component: SeasonsComponent },
@@ -14,7 +15,7 @@ const routes: Routes = [
   { path: 'admin', component: AdminComponent },
   { path: 'my-seasons', component: MySeasonsComponent },
   { path: 'create', component: CreateSeasonComponent },
-  // { path: 'season', component: SeasonComponent },
+  { path: 'season/:id', component: SeasonComponent },
   { path: '**', redirectTo: 'seasons', pathMatch: 'full' }
 ];
 

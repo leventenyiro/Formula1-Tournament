@@ -1,0 +1,95 @@
+<div class="row">
+    <div class="col-sm-10 row pt-3 ps-5">
+        <div class="col-sm-6">
+            <h1>{{ season?.name}}</h1>
+            <p>Created on {{ this.createdAt }}</p>
+        </div>
+        <div class="col-sm-6">
+            <select class="form-select" [formControl]="selectType">
+                <option value="drivers">Drivers</option>
+                <option value="teams">Teams</option>
+                <option value="races">Races</option>
+            </select>
+
+            <select class="form-select mt-3" [formControl]="selectValue">
+                <option value="all" [selected]="true">All</option>
+
+                <ng-template [ngIf]="selectType.value === 'drivers'">
+                    <option *ngFor="let option of season?.drivers" [value]="option.id">{{ option.name }}</option>
+                </ng-template>
+
+                <ng-template [ngIf]="selectType.value === 'teams'">
+                    <option *ngFor="let option of season?.teams" [value]="option.id">{{ option.name }}</option>
+                </ng-template>
+
+                <ng-template [ngIf]="selectType.value === 'races'">
+                    <option *ngFor="let option of season?.races" [value]="option.id">{{ option.name }}</option>
+                </ng-template>
+            </select>
+        </div>
+
+        <div [ngSwitch]="selectType.value">
+            <div *ngSwitchCase="'drivers'">
+                <!-- body -->
+                <!-- if all: drivers and their points -->
+                <div *ngIf="selectValue.value === 'all'" class="mt-5">
+                    <div class="header-row">
+                        <div class="col"></div>
+                        <div class="col">
+                            <p>Position</p>
+                        </div>
+                        <div class="col">
+                            <p>Name</p>
+                        </div>
+                        <div class="col">
+                            <p>Real Name</p>
+                        </div>
+                        <div class="col">
+                            <p>Team</p>
+                        </div>
+                        <div class="col">
+                            <p>Points</p>
+                        </div>
+                    </div>
+                    <div class="table-row mb-3" *ngFor="let driver of getDriverAll(); index as i;">
+                        <div class="col team-color" [ngStyle]="{'background-color': driver.actualTeam.color}"></div>
+                        <div class="col">
+                            <p>{{ i + 1 }}</p>
+                        </div>
+                        <div class="col">
+                            <p>{{ driver.name }}</p>
+                        </div>
+                        <div class="col">
+                            <p>{{ driver.realName }}</p>
+                        </div>
+                        <div class="col">
+                            <p>{{ driver.actualTeam.name }}</p>
+                        </div>
+                        <div class="col">
+                            <p>{{ driver.point }}</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- else: driver results -->
+                <div class="row"></div>
+            </div>
+            <div *ngSwitchCase="'teams'">
+                teams
+                <!-- teams header -->
+                <!-- body -->
+                <!-- if all: teams and their points -->
+                <!-- else: team results -->
+            </div>
+            <div *ngSwitchCase="'races'">
+                races
+                <!-- races header -->
+                <!-- body -->
+                <!-- if all: races with winners -->
+                <!-- else: race results -->
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-2">
+        <!-- admin, moderators, description -->
+    </div>
+</div>

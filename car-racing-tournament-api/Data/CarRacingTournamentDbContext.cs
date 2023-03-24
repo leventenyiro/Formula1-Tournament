@@ -141,19 +141,16 @@ namespace car_racing_tournament_api.Data
                 entity.HasOne(e => e.Driver)
                     .WithMany(e => e.Results)
                     .HasForeignKey(e => e.DriverId)
-                    .OnDelete(DeleteBehavior.Restrict)
                     .IsRequired();
 
                 entity.HasOne(e => e.Team)
                     .WithMany(e => e.Results)
                     .HasForeignKey(e => e.TeamId)
-                    .OnDelete(DeleteBehavior.Restrict)
                     .IsRequired();
 
                 entity.HasOne(e => e.Race)
                     .WithMany(e => e.Results)
                     .HasForeignKey(e => e.RaceId)
-                    .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
             });
         }

@@ -65,10 +65,27 @@ export class SeasonService {
         responseType: 'text'
       }
     ).pipe(
-      tap(data => JSON.stringify(data)),
+      tap(data => data),
       catchError((error: HttpErrorResponse) => {
         return throwError(() => new Error(error.error));
       })
+    )
+  }
+
+  getSeason(id: string) {
+    let headers = new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Access-Control-Allow-Origin', '*')
+    return this.http.get<Season>(
+      `${environment.backendUrl}/season/${id}/details`,
+        {
+            headers: headers
+        }
+    ).pipe(
+        tap(data => JSON.stringify(data)),
+        catchError((error: HttpErrorResponse) => {
+          return throwError(() => new Error(error.error));
+        })
     )
   }
 }

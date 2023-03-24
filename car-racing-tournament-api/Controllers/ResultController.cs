@@ -49,16 +49,16 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetResult.IsSuccess)
                 return NotFound(resultGetResult.ErrorMessage);
 
-            var resultGetDriver = await _driverService.GetDriverById(resultGetResult.Result!.DriverId);
+            var resultGetDriver = await _driverService.GetDriverById(resultGetResult.Result!.Driver.Id);
             if (!resultGetDriver.IsSuccess)
                 return NotFound(resultGetDriver.ErrorMessage);
 
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
 
-            if (resultGetDriver.Driver.Season.IsArchived) {
+            /*if (resultGetDriver.Driver.Season.IsArchived) {
                 return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
-            }
+            }*/
 
             var resultGetTeam = await _teamService.GetTeamById(resultGetResult.Result!.TeamId);
             if (!resultGetTeam.IsSuccess)
@@ -72,33 +72,33 @@ namespace car_racing_tournament_api.Controllers
             if (!resultUpdate.IsSuccess)
                 return BadRequest(resultUpdate.ErrorMessage);
 
-            if (resultGetDriver.Driver.ActualTeamId != resultDto.TeamId)
+            /*if (resultGetDriver.Driver.ActualTeamId != resultDto.TeamId)
             {
                 var resultUpdateTeam = await _driverService.UpdateDriverTeam(resultGetDriver.Driver, resultGetTeam.Team!);
                 if (!resultUpdateTeam.IsSuccess)
                     return BadRequest(resultUpdateTeam.ErrorMessage);
-            }
+            }*/
 
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
             var resultGetResult = await _resultService.GetResultById(id);
             if (!resultGetResult.IsSuccess)
                 return BadRequest(resultGetResult.ErrorMessage);
 
-            var resultGetDriver = await _driverService.GetDriverById(resultGetResult.Result!.DriverId);
+            var resultGetDriver = await _driverService.GetDriverById(resultGetResult.Result!.Driver.Id);
             if (!resultGetDriver.IsSuccess)
                 return BadRequest(resultGetDriver.ErrorMessage);
 
             if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetDriver.Driver!.SeasonId))
                 return Forbid();
 
-            if (resultGetDriver.Driver.Season.IsArchived) {
+            /*if (resultGetDriver.Driver.Season.IsArchived) {
                 return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
-            }
+            }*/
 
             var resultDelete = await _resultService.DeleteResult(resultGetResult.Result);
             if (!resultDelete.IsSuccess)
