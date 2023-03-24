@@ -72,13 +72,6 @@ namespace car_racing_tournament_api.Controllers
             if (!resultUpdate.IsSuccess)
                 return BadRequest(resultUpdate.ErrorMessage);
 
-            /*if (resultGetDriver.Driver.ActualTeamId != resultDto.TeamId)
-            {
-                var resultUpdateTeam = await _driverService.UpdateDriverTeam(resultGetDriver.Driver, resultGetTeam.Team!);
-                if (!resultUpdateTeam.IsSuccess)
-                    return BadRequest(resultUpdateTeam.ErrorMessage);
-            }*/
-
             return NoContent();
         }
 
