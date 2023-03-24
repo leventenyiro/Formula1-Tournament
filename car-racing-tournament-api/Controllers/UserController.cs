@@ -31,7 +31,7 @@ namespace car_racing_tournament_api.Controllers
         {
             var resultGetUser = await _userService.GetUserByUsernameEmail(loginDto.UsernameEmail);
             if (!resultGetUser.IsSuccess)
-                return NotFound(_configuration["ErrorMessages:LoginDetails"]);
+                return BadRequest(_configuration["ErrorMessages:LoginDetails"]);
 
             var result = _userService.Login(resultGetUser.User!, loginDto.Password, true);
             if (!result.IsSuccess)
