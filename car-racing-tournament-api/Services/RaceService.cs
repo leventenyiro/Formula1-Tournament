@@ -41,7 +41,7 @@ namespace car_racing_tournament_api.Services
                             Id = x.Driver.Id,
                             Name = x.Driver.Name,
                             RealName = x.Driver.RealName,
-
+                            Number = x.Driver.Number
                         },
                         Team = new Team
                         {
@@ -77,7 +77,7 @@ namespace car_racing_tournament_api.Services
                             Id = x.Driver.Id,
                             Name = x.Driver.Name,
                             RealName = x.Driver.RealName,
-
+                            Number = x.Driver.Number
                         },
                         Team = new Team
                         {
