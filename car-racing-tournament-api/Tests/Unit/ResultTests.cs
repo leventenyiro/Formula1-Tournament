@@ -48,6 +48,12 @@ namespace car_racing_tournament_api.Tests.Unit
                         Name = "SecondDriver",
                         Number = 2,
                         ActualTeam = team
+                    },
+                    new Driver {
+                        Id = Guid.NewGuid(),
+                        Name = "ThirdDriver",
+                        Number = 3,
+                        ActualTeam = team
                     }
                 }
             };
@@ -69,7 +75,10 @@ namespace car_racing_tournament_api.Tests.Unit
                     Name = "FirstRace",
                     Season = season
                 },
-                Team = team
+                Team = team,
+                Type = ResultType.Finished,
+                Position = 3,
+                Point = 15
             };
 
             _context.Results.Add(_result);
@@ -126,6 +135,21 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
             Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 2);
+
+            driver = _context!.Drivers.Where(x => x.Number == 3).FirstOrDefaultAsync().Result;
+            resultDto = new ResultDto
+            {
+                Point = 0,
+                Position = null,
+                Type = ResultType.DSQ,
+                DriverId = driver!.Id,
+                TeamId = (Guid)driver.ActualTeamId!
+            };
+
+            result = await _resultService!.AddResult(_context!.Races.First(), resultDto, driver, driver.ActualTeam!);
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNull(result.ErrorMessage);
+            Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 3);
         }
 
         [Test]
@@ -145,13 +169,14 @@ namespace car_racing_tournament_api.Tests.Unit
         }
 
         [Test]
-        public async Task AddResultNotPositivePosition()
+        public async Task AddResultInvalidPosition()
         {
             var driver = _context!.Drivers.Where(x => x.Number == 2).FirstOrDefaultAsync().Result;
             var resultDto = new ResultDto
             {
                 Point = 18,
-                Position = -1,
+                Type = ResultType.Finished,
+                Position = 0,
                 DriverId = driver!.Id,
                 TeamId = (Guid)driver.ActualTeamId!
             };
@@ -163,7 +188,7 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:ResultPosition"]);
             Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
 
-            resultDto.Position = 0;
+            resultDto.Position = null;
             result = await _resultService!.AddResult(race, resultDto, driver, driver.ActualTeam!);
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:ResultPosition"]);
@@ -247,6 +272,20 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
 
+            driver = _context!.Drivers.Where(x => x.Number == 3).FirstOrDefaultAsync().Result;
+            resultDto = new ResultDto
+            {
+                Point = 0,
+                Position = null,
+                Type = ResultType.DSQ,
+                DriverId = driver!.Id,
+                TeamId = (Guid)driver.ActualTeamId!
+            };
+
+            result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.First(), driver, driver.ActualTeam!);
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNull(result.ErrorMessage);
+
             var findResult = _context!.Results.FirstAsync().Result;
             Assert.AreEqual(findResult.Point, resultDto.Point);
             Assert.AreEqual(findResult.Position, resultDto.Position);
@@ -283,13 +322,13 @@ namespace car_racing_tournament_api.Tests.Unit
         }
 
         [Test]
-        public async Task UpdateResultNotPositivePosition()
+        public async Task UpdateResultInvalidPosition()
         {
             var driver = _context!.Drivers.Where(x => x.Number == 1).FirstOrDefaultAsync().Result;
             var resultDto = new ResultDto
             {
                 Point = 18,
-                Position = -1,
+                Position = 0,
                 DriverId = driver!.Id,
                 TeamId = (Guid)driver.ActualTeamId!
             };
@@ -299,7 +338,7 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:ResultPosition"]);
             Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
 
-            resultDto.Position = 0;
+            resultDto.Position = null;
             result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.First(), driver, driver.ActualTeam!);
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:ResultPosition"]);

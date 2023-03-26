@@ -132,8 +132,11 @@ namespace car_racing_tournament_api.Data
             {
                 entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.Position)
+                entity.Property(e => e.Type)
+                    .HasConversion<string>()
                     .IsRequired();
+
+                entity.Property(e => e.Position);
 
                 entity.Property(e => e.Point)
                     .IsRequired();

@@ -28,6 +28,7 @@ namespace car_racing_tournament_api.Services
                 .Select(x => new Result
                 {
                     Id = x.Id,
+                    Type = x.Type,
                     Position = x.Position,
                     Point = x.Point,
                     RaceId = x.RaceId,
@@ -50,37 +51,38 @@ namespace car_racing_tournament_api.Services
 
             if (result == null)
                 return (false, null, _configuration["ErrorMessages:ResultNotFound"]);
-            
+
             return (true, result, null);
         }
 
-    public async Task<(bool IsSuccess, string? ErrorMessage)> AddResult(Race race, ResultDto resultDto, Driver driver, Team team)
-    {
-        if (race.SeasonId != team.SeasonId)
-            return (false, _configuration["ErrorMessages:RaceTeamNotSameSeason"]);
+        public async Task<(bool IsSuccess, string? ErrorMessage)> AddResult(Race race, ResultDto resultDto, Driver driver, Team team)
+        {
+            if (race.SeasonId != team.SeasonId)
+                return (false, _configuration["ErrorMessages:RaceTeamNotSameSeason"]);
 
-        if (race.SeasonId != driver.SeasonId)
-            return (false, _configuration["ErrorMessages:RaceDriverNotSameSeason"]);
+            if (race.SeasonId != driver.SeasonId)
+                return (false, _configuration["ErrorMessages:RaceDriverNotSameSeason"]);
 
-        if (resultDto.Position <= 0)
-            return (false, _configuration["ErrorMessages:ResultPosition"]);
+            if (resultDto.Type == ResultType.Finished && (resultDto.Position <= 0 || resultDto.Position == null))
+                return (false, _configuration["ErrorMessages:ResultPosition"]);
 
-        if (resultDto.Point < 0)
-            return (false, _configuration["ErrorMessages:ResultPoint"]);
+            if (resultDto.Point < 0)
+                return (false, _configuration["ErrorMessages:ResultPoint"]);
 
-        if (await _carRacingTournamentDbContext.Results.CountAsync(
-            x => x.DriverId == resultDto.DriverId && x.RaceId == race.Id) != 0)
-            return (false, _configuration["ErrorMessages:ResultExists"]);
+            if (await _carRacingTournamentDbContext.Results.CountAsync(
+                x => x.DriverId == resultDto.DriverId && x.RaceId == race.Id) != 0)
+                return (false, _configuration["ErrorMessages:ResultExists"]);
 
-        var result = _mapper.Map<Result>(resultDto);
-        result.Id = Guid.NewGuid();
-        result.RaceId = race.Id;
-        await _carRacingTournamentDbContext.Results.AddAsync(result);
-        _carRacingTournamentDbContext.Entry(driver).State = EntityState.Modified;
-        await _carRacingTournamentDbContext.SaveChangesAsync();
+            var result = _mapper.Map<Result>(resultDto);
+            result.Id = Guid.NewGuid();
+            result.RaceId = race.Id;
+            result.Position = resultDto.Type == ResultType.Finished ? resultDto.Position : null;
+            await _carRacingTournamentDbContext.Results.AddAsync(result);
+            _carRacingTournamentDbContext.Entry(driver).State = EntityState.Modified;
+            await _carRacingTournamentDbContext.SaveChangesAsync();
 
-        return (true, null);
-    }
+            return (true, null);
+        }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateResult(Result result, ResultDto resultDto, Race race, Driver driver, Team team)
         {
@@ -90,7 +92,7 @@ namespace car_racing_tournament_api.Services
             if (race.SeasonId != driver.SeasonId)
                 return (false, _configuration["ErrorMessages:RaceDriverNotSameSeason"]);
 
-            if (resultDto.Position <= 0)
+            if (resultDto.Type == ResultType.Finished && (resultDto.Position <= 0 || resultDto.Position == null))
                 return (false, _configuration["ErrorMessages:ResultPosition"]);
 
             if (resultDto.Point < 0)
@@ -100,7 +102,8 @@ namespace car_racing_tournament_api.Services
                 x => x.DriverId == resultDto.DriverId && x.RaceId == race.Id) != 0)
                 return (false, _configuration["ErrorMessages:ResultExists"]);
 
-            result.Position = resultDto.Position;
+            result.Type = resultDto.Type;
+            result.Position = resultDto.Type == ResultType.Finished ? resultDto.Position : null;
             result.Point = resultDto.Point;
             result.DriverId = resultDto.DriverId;
             result.TeamId = resultDto.TeamId;

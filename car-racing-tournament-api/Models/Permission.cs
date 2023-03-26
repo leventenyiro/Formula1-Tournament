@@ -11,6 +11,7 @@ namespace car_racing_tournament_api.Models
         public virtual Season Season { get; set; } = default!;
         public Guid UserId { get; set; }
         public Guid SeasonId { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public PermissionType Type { get; set; }
     }
 

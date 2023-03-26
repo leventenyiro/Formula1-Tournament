@@ -52,7 +52,7 @@ namespace car_racing_tournament_api.Tests.Unit
                             ActualTeam = team
                         },
                         Point = 25,
-                        Position = 1,
+                        Position = 20,
                         Team = team
                     }
                 },

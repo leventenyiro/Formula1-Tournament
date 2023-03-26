@@ -36,8 +36,9 @@ namespace car_racing_tournament_api.Services
                     Results = x.Results!.Select(x => new Result
                     {
                         Id = x.Id,
-                        Point = x.Point,
+                        Type = x.Type,
                         Position = x.Position,
+                        Point = x.Point,
                         Team = x.Team
                     }).ToList(),
                 }).FirstOrDefaultAsync();
