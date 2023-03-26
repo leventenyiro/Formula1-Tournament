@@ -76,7 +76,7 @@ namespace car_racing_tournament_api.Tests.Unit
                     Season = season
                 },
                 Team = team,
-                Type = ResultType.FINISHED,
+                Type = ResultType.Finished,
                 Position = 3,
                 Point = 15
             };
@@ -139,9 +139,9 @@ namespace car_racing_tournament_api.Tests.Unit
             driver = _context!.Drivers.Where(x => x.Number == 3).FirstOrDefaultAsync().Result;
             resultDto = new ResultDto
             {
-                Point = 18,
-                Position = 5,
-                Type = ResultType.DNF,
+                Point = 0,
+                Position = null,
+                Type = ResultType.DSQ,
                 DriverId = driver!.Id,
                 TeamId = (Guid)driver.ActualTeamId!
             };
@@ -175,7 +175,7 @@ namespace car_racing_tournament_api.Tests.Unit
             var resultDto = new ResultDto
             {
                 Point = 18,
-                Type = ResultType.FINISHED,
+                Type = ResultType.Finished,
                 Position = 0,
                 DriverId = driver!.Id,
                 TeamId = (Guid)driver.ActualTeamId!
@@ -269,6 +269,20 @@ namespace car_racing_tournament_api.Tests.Unit
             };
 
             var result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.First(), driver, driver.ActualTeam!);
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNull(result.ErrorMessage);
+
+            driver = _context!.Drivers.Where(x => x.Number == 3).FirstOrDefaultAsync().Result;
+            resultDto = new ResultDto
+            {
+                Point = 0,
+                Position = null,
+                Type = ResultType.DSQ,
+                DriverId = driver!.Id,
+                TeamId = (Guid)driver.ActualTeamId!
+            };
+
+            result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.First(), driver, driver.ActualTeam!);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
 

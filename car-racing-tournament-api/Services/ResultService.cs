@@ -63,7 +63,7 @@ namespace car_racing_tournament_api.Services
             if (race.SeasonId != driver.SeasonId)
                 return (false, _configuration["ErrorMessages:RaceDriverNotSameSeason"]);
 
-            if (resultDto.Type == ResultType.FINISHED && (resultDto.Position <= 0 || resultDto.Position == null))
+            if (resultDto.Type == ResultType.Finished && (resultDto.Position <= 0 || resultDto.Position == null))
                 return (false, _configuration["ErrorMessages:ResultPosition"]);
 
             if (resultDto.Point < 0)
@@ -76,7 +76,7 @@ namespace car_racing_tournament_api.Services
             var result = _mapper.Map<Result>(resultDto);
             result.Id = Guid.NewGuid();
             result.RaceId = race.Id;
-            result.Position = resultDto.Type == ResultType.FINISHED ? resultDto.Position : null;
+            result.Position = resultDto.Type == ResultType.Finished ? resultDto.Position : null;
             await _carRacingTournamentDbContext.Results.AddAsync(result);
             _carRacingTournamentDbContext.Entry(driver).State = EntityState.Modified;
             await _carRacingTournamentDbContext.SaveChangesAsync();
@@ -92,7 +92,7 @@ namespace car_racing_tournament_api.Services
             if (race.SeasonId != driver.SeasonId)
                 return (false, _configuration["ErrorMessages:RaceDriverNotSameSeason"]);
 
-            if (resultDto.Type == ResultType.FINISHED && (resultDto.Position <= 0 || resultDto.Position == null))
+            if (resultDto.Type == ResultType.Finished && (resultDto.Position <= 0 || resultDto.Position == null))
                 return (false, _configuration["ErrorMessages:ResultPosition"]);
 
             if (resultDto.Point < 0)
@@ -103,7 +103,7 @@ namespace car_racing_tournament_api.Services
                 return (false, _configuration["ErrorMessages:ResultExists"]);
 
             result.Type = resultDto.Type;
-            result.Position = resultDto.Type == ResultType.FINISHED ? resultDto.Position : null;
+            result.Position = resultDto.Type == ResultType.Finished ? resultDto.Position : null;
             result.Point = resultDto.Point;
             result.DriverId = resultDto.DriverId;
             result.TeamId = resultDto.TeamId;

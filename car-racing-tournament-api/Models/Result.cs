@@ -5,6 +5,7 @@ namespace car_racing_tournament_api.Models
     public class Result
     {
         public Guid Id { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public ResultType Type { get; set; }
         public int? Position { get; set; }
         public int Point { get; set; }
@@ -24,7 +25,7 @@ namespace car_racing_tournament_api.Models
 
     public enum ResultType
     {
-        FINISHED,
+        Finished,
         DNF,
         DSQ
     }
