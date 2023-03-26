@@ -63,7 +63,7 @@ namespace car_racing_tournament_api.Services
             if (race.SeasonId != driver.SeasonId)
                 return (false, _configuration["ErrorMessages:RaceDriverNotSameSeason"]);
 
-            if (resultDto.Type == ResultType.FINISHED && resultDto.Position <= 0)
+            if (resultDto.Type == ResultType.FINISHED && (resultDto.Position <= 0 || resultDto.Position == null))
                 return (false, _configuration["ErrorMessages:ResultPosition"]);
 
             if (resultDto.Point < 0)
@@ -92,7 +92,7 @@ namespace car_racing_tournament_api.Services
             if (race.SeasonId != driver.SeasonId)
                 return (false, _configuration["ErrorMessages:RaceDriverNotSameSeason"]);
 
-            if (resultDto.Type == ResultType.FINISHED && resultDto.Position <= 0)
+            if (resultDto.Type == ResultType.FINISHED && (resultDto.Position <= 0 || resultDto.Position == null))
                 return (false, _configuration["ErrorMessages:ResultPosition"]);
 
             if (resultDto.Point < 0)
