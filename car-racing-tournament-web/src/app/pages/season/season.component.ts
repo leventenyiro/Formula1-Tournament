@@ -1,6 +1,8 @@
+import { Time } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ResultType } from 'app/models/result-type';
 import { Season } from 'app/models/season';
 import { SeasonService } from 'app/services/season.service';
 
@@ -55,37 +57,46 @@ export class SeasonComponent implements OnInit {
   }
 
   getDriverAll() {
-    interface AllDriver {
-      id: string,
-      name: string,
-      realName: string,
-      number: number,
+    return this.season?.drivers.map(x => ({
+      id: x.id,
+      name: x.name,
+      realName: x.realName,
+      number: x.number,
       actualTeam: {
-        name: string,
-        color: string
+        name: x.actualTeam.name,
+        color: x.actualTeam.color,
       },
-      point: number,
-    };    
+      point: x.results.length === 0 
+        ? 0 
+        : x.results.map(x => x.point).reduce((sum, current) => sum + current)
+    })).sort((a: any, b: any) => b.point - a.point);
+  }
 
-    const allDrivers: AllDriver[] = [];
+  getDriverById(id: string) {
+    return this.season?.drivers
+      .find(x => x.id === id)?.results
+      .sort((a: any, b: any) => a.dateTime - b.dateTime);
+  }
 
-    this.season?.drivers.forEach(x => {
-      allDrivers.push({
-        'id': x.id,
-        'name': x.name,
-        'realName': x.realName,
-        'number': x.number,
-        'actualTeam': {
-          'name': x.actualTeam.name,
-          'color': x.actualTeam.color,
-        },
-        // 'point': x.results.map(x => x.points).reduce((total, point) => total + point),
-        'point': x.results.length === 0 
-          ? 0 
-          : x.results.map(x => x.point).reduce((sum, current) => sum + current)
-      })
-    });
+  getTeamAll() {
+    return this.season?.teams.map(x => ({
+      id: x.id,
+      name: x.name,
+      color: x.color,
+      point: x.results.length === 0 
+        ? 0 
+        : x.results.map(x => x.point).reduce((sum, current) => sum + current)
+    })).sort((a: any, b: any) => b.point - a.point);
+  }
 
-    return allDrivers.sort((a: AllDriver, b: AllDriver) => b.point - a.point);
+  getTeamById(id: string) {
+    /*return this.season?.teams
+      .find(x => x.id === id)?.results
+      .map(x => ({
+        id: x.id,
+        name: x.race.name,
+        
+      }))
+      .sort((a: any, b: any) => a.dateTime - b.dateTime);*/
   }
 }
