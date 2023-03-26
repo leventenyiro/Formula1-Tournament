@@ -5,7 +5,8 @@ namespace car_racing_tournament_api.Models
     public class Result
     {
         public Guid Id { get; set; }
-        public int Position { get; set; }
+        public ResultType Type { get; set; }
+        public int? Position { get; set; }
         public int Point { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public virtual Driver Driver { get; set; } = default!;
@@ -19,5 +20,12 @@ namespace car_racing_tournament_api.Models
         public Guid TeamId { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public Guid RaceId { get; set; }
+    }
+
+    public enum ResultType
+    {
+        FINISHED,
+        DNF,
+        DSQ
     }
 }

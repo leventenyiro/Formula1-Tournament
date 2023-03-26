@@ -48,6 +48,12 @@ namespace car_racing_tournament_api.Tests.Unit
                         Name = "SecondDriver",
                         Number = 2,
                         ActualTeam = team
+                    },
+                    new Driver {
+                        Id = Guid.NewGuid(),
+                        Name = "ThirdDriver",
+                        Number = 3,
+                        ActualTeam = team
                     }
                 }
             };
@@ -69,7 +75,10 @@ namespace car_racing_tournament_api.Tests.Unit
                     Name = "FirstRace",
                     Season = season
                 },
-                Team = team
+                Team = team,
+                Type = ResultType.FINISHED,
+                Position = 3,
+                Point = 15
             };
 
             _context.Results.Add(_result);
@@ -126,6 +135,21 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
             Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 2);
+
+            driver = _context!.Drivers.Where(x => x.Number == 3).FirstOrDefaultAsync().Result;
+            resultDto = new ResultDto
+            {
+                Point = 18,
+                Position = 5,
+                Type = ResultType.DNF,
+                DriverId = driver!.Id,
+                TeamId = (Guid)driver.ActualTeamId!
+            };
+
+            result = await _resultService!.AddResult(_context!.Races.First(), resultDto, driver, driver.ActualTeam!);
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNull(result.ErrorMessage);
+            Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 3);
         }
 
         [Test]
@@ -145,13 +169,14 @@ namespace car_racing_tournament_api.Tests.Unit
         }
 
         [Test]
-        public async Task AddResultNotPositivePosition()
+        public async Task AddResultLessOrEqualZeroPosition()
         {
             var driver = _context!.Drivers.Where(x => x.Number == 2).FirstOrDefaultAsync().Result;
             var resultDto = new ResultDto
             {
                 Point = 18,
-                Position = -1,
+                Type = ResultType.FINISHED,
+                Position = 0,
                 DriverId = driver!.Id,
                 TeamId = (Guid)driver.ActualTeamId!
             };
@@ -283,13 +308,13 @@ namespace car_racing_tournament_api.Tests.Unit
         }
 
         [Test]
-        public async Task UpdateResultNotPositivePosition()
+        public async Task UpdateResultLessOrEqualZeroPosition()
         {
             var driver = _context!.Drivers.Where(x => x.Number == 1).FirstOrDefaultAsync().Result;
             var resultDto = new ResultDto
             {
                 Point = 18,
-                Position = -1,
+                Position = 0,
                 DriverId = driver!.Id,
                 TeamId = (Guid)driver.ActualTeamId!
             };
