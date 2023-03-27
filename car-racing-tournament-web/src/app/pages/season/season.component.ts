@@ -2,7 +2,6 @@ import { Time } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ResultType } from 'app/models/result-type';
 import { Season } from 'app/models/season';
 import { SeasonService } from 'app/services/season.service';
 
@@ -24,7 +23,11 @@ export class SeasonComponent implements OnInit {
     private route: ActivatedRoute,
     private seasonService: SeasonService,
     private router: Router
-  ) { }
+  ) {
+    this.selectType.valueChanges.subscribe(() => {
+      this.selectValue.setValue('all');
+    });
+  }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get("id")!;

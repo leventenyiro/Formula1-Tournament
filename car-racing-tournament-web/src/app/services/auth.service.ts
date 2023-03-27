@@ -53,6 +53,8 @@ export class AuthService {
   }
 
   isSessionValid(documentCookie: string) {
+    if (!documentCookie.includes('session=') || documentCookie.split('session=').length == 1)
+      return false;
     const bearerToken = documentCookie.split("session=")[1].split(";")[0];
     if (!bearerToken) {
       return false;
