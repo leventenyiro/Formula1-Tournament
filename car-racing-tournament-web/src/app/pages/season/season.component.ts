@@ -31,10 +31,7 @@ export class SeasonComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get("id")!;
-
-    console.log(this.selectType.value);
-    console.log(this.selectValue.value);
-    
+  
 
     this.isFetching = true;
     this.seasonService.getSeason(this.id).subscribe({
@@ -43,8 +40,6 @@ export class SeasonComponent implements OnInit {
       complete: () => {
         this.isFetching = false;
         this.createdAt = this.getFormattedDate(this.season!.createdAt);
-        console.log(this.getDriverAll()); // debug
-
       }
     });
   }
@@ -92,14 +87,24 @@ export class SeasonComponent implements OnInit {
     })).sort((a: any, b: any) => b.point - a.point);
   }
 
-  getTeamById(id: string) {
-    /*return this.season?.teams
+  getTeamById(id: string): any {
+    const racePoints: any = this.season?.teams
       .find(x => x.id === id)?.results
-      .map(x => ({
-        id: x.id,
-        name: x.race.name,
-        
-      }))
-      .sort((a: any, b: any) => a.dateTime - b.dateTime);*/
+      .reduce((sum: any, result: any) => {
+        const { id, name, dateTime } = result.race;
+        const existingRace = sum[id];
+        if (!existingRace) {
+          sum[id] = { id, name, dateTime, point: result.point };
+        } else {
+          existingRace.point += result.point;
+        }
+        return sum;
+      }, {});
+  
+    return Object.values(racePoints).sort((a: any, b: any) => a.dateTime - b.dateTime);
   }
+
+  getRaceAll() {}
+
+  getRaceById(id: string) {}
 }

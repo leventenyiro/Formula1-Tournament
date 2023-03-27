@@ -111,7 +111,17 @@
                     </div>
                 </div>
                 <ng-template #elseDiv>
-
+                    <div class="table-row mb-3" *ngFor="let result of getTeamById(selectValue.value)">
+                        <div class="col">
+                            <p>{{ result.name }}</p>
+                        </div>
+                        <div class="col">
+                            <p>{{ result.dateTime }}</p>
+                        </div>
+                        <div class="col">
+                            <p>{{ result.point }}</p>
+                        </div>
+                    </div>
                 </ng-template>
             </div>
             <div *ngSwitchCase="'races'">
