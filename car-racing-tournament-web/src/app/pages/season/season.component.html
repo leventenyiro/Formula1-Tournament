@@ -125,7 +125,12 @@
                 </ng-template>
             </div>
             <div *ngSwitchCase="'races'">
-                races
+                <div *ngIf="selectValue.value === 'all'; else elseDiv" class="mt-5">
+                    <div class="table-row mb-3" *ngFor="let team of getRaceAll();"></div>
+                </div>
+                <ng-template #elseDiv>
+
+                </ng-template>
                 <!-- races header -->
                 <!-- body -->
                 <!-- if all: races with winners -->

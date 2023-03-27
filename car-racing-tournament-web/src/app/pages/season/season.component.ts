@@ -104,7 +104,10 @@ export class SeasonComponent implements OnInit {
     return Object.values(racePoints).sort((a: any, b: any) => a.dateTime - b.dateTime);
   }
 
-  getRaceAll() {}
+  getRaceAll() {
+    // who was the winner?
+    return this.season?.races;
+  }
 
   getRaceById(id: string) {}
 }
