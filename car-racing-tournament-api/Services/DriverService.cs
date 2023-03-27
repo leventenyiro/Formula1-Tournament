@@ -110,18 +110,6 @@ namespace car_racing_tournament_api.Services
             return (true, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateDriverTeam(Driver driver, Team team)
-        {
-            if (team != null && driver.SeasonId != team.SeasonId)
-                return (false, _configuration["ErrorMessages:DriverTeamNotSameSeason"]);
-
-            driver.ActualTeamId = team != null ? team.Id : null;
-            _carRacingTournamentDbContext.Drivers.Update(driver);
-            await _carRacingTournamentDbContext.SaveChangesAsync();
-
-            return (true, null);
-        }
-
         public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteDriver(Driver driver)
         {
             _carRacingTournamentDbContext.Drivers.Remove(driver);
