@@ -35,10 +35,6 @@ export class SeasonsComponent implements OnInit {
         this.isLoggedIn = loggedIn;
       }
     );
-    this.isLoggedInInit();
-  }
-
-  isLoggedInInit() {
     this.isLoggedIn = this.authService.isSessionValid(document.cookie) ? true : false;
   }
 

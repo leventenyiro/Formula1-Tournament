@@ -4,6 +4,7 @@ import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Permission } from 'app/models/permission';
 import { Season } from 'app/models/season';
+import { AuthService } from 'app/services/auth.service';
 import { SeasonService } from 'app/services/season.service';
 
 @Component({
@@ -19,12 +20,13 @@ export class SeasonComponent implements OnInit {
   createdAt?: string;
   selectType = new FormControl('drivers');
   selectValue = new FormControl('all');
-PermissionType: any;
+  isLoggedIn = false;
 
   constructor(
     private route: ActivatedRoute,
     private seasonService: SeasonService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.selectType.valueChanges.subscribe(() => {
       this.selectValue.setValue('all');
@@ -33,7 +35,7 @@ PermissionType: any;
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get("id")!;
-  
+
 
     this.isFetching = true;
     this.seasonService.getSeason(this.id).subscribe({
@@ -44,6 +46,14 @@ PermissionType: any;
         this.createdAt = this.getFormattedDate(this.season!.createdAt);
       }
     });
+
+    this.authService.loggedIn.subscribe(
+      (loggedIn: boolean) => {
+        this.isLoggedIn = loggedIn;
+      }
+    );
+
+    this.isLoggedIn = this.authService.isSessionValid(document.cookie) ? true : false;
   }
 
   getFormattedDate(dateStr: any) {
@@ -66,8 +76,8 @@ PermissionType: any;
         name: x.actualTeam.name,
         color: x.actualTeam.color,
       },
-      point: x.results.length === 0 
-        ? 0 
+      point: x.results.length === 0
+        ? 0
         : x.results.map(x => x.point).reduce((sum, current) => sum + current)
     })).sort((a: any, b: any) => b.point - a.point);
   }
@@ -93,8 +103,8 @@ PermissionType: any;
       id: x.id,
       name: x.name,
       color: x.color,
-      point: x.results.length === 0 
-        ? 0 
+      point: x.results.length === 0
+        ? 0
         : x.results.map(x => x.point).reduce((sum, current) => sum + current)
     })).sort((a: any, b: any) => b.point - a.point);
   }
@@ -113,7 +123,7 @@ PermissionType: any;
         }
         return sum;
       }, {});
-  
+
     return Object.values(racePoints).sort((a: any, b: any) => a.dateTime - b.dateTime);
   }
 
@@ -150,5 +160,73 @@ PermissionType: any;
 
   getPermissions() {
     return this.season?.permissions.sort((a: Permission, b: Permission) => b.type - a.type);
+  }
+
+  createDriver() {
+    console.log("createDriver");
+  }
+
+  updateDriver(id: string) {
+    console.log("updateDriver");
+  }
+
+  deleteDriver(id: string) {
+    console.log("deleteDriver");
+  }
+
+  createResult() {
+    console.log("createResult");
+  }
+
+  updateResult(id: string) {
+    console.log("updateResult");
+  }
+
+  deleteResult(id: string) {
+    console.log("deleteResult");
+  }
+
+  createTeam() {
+    console.log("createTeam");
+  }
+
+  updateTeam(id: string) {
+    console.log("updateTeam");
+  }
+
+  deleteTeam(id: string) {
+    console.log("deleteTeam");
+  }
+
+  createRace() {
+    console.log("createRace");
+  }
+
+  updateRace(id: string) {
+    console.log("updateRace");
+  }
+
+  deleteRace(id: string) {
+    console.log("deleteRace");
+  }
+
+  updateSeason() {
+    console.log("updateSeason");
+  }
+
+  archiveSeason() {
+    console.log("archiveSeason");
+  }
+
+  deleteSeason() {
+    console.log("deleteSeason");
+  }
+
+  deletePermission(id: string) {
+    console.log("deletePermission");
+  }
+
+  updatePermission(id: string) {
+    console.log("updatePermission");
   }
 }
