@@ -16,10 +16,12 @@ namespace car_racing_tournament_api.Services
         private readonly CarRacingTournamentDbContext _carRacingTournamentDbContext;
         private readonly IConfiguration _configuration;
 
-        public UserService(CarRacingTournamentDbContext carRacingTournamentDbContext, IConfiguration configuration)
+        public UserService(CarRacingTournamentDbContext carRacingTournamentDbContext)
         {
             _carRacingTournamentDbContext = carRacingTournamentDbContext;
-            _configuration = configuration;
+            _configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();;
         }
 
         public (bool IsSuccess, string? Token, string? ErrorMessage) Login(User user, string password, bool needToken)

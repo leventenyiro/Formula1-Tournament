@@ -17,13 +17,14 @@ namespace car_racing_tournament_api.Controllers
         public TeamController(
             ITeam teamService, 
             IPermission permissionService,
-            ISeason seasonService,
-            IConfiguration configuration)
+            ISeason seasonService)
         {
             _teamService = teamService;
             _permissionService = permissionService;
             _seasonService = seasonService;
-            _configuration = configuration;
+            _configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();;
         }
 
         [HttpPut("{id}"), Authorize]

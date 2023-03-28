@@ -14,11 +14,13 @@ namespace car_racing_tournament_api.Services
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
 
-        public SeasonService(CarRacingTournamentDbContext carRacingTournamentDbContext, IMapper mapper, IConfiguration configuration)
+        public SeasonService(CarRacingTournamentDbContext carRacingTournamentDbContext, IMapper mapper)
         {
             _carRacingTournamentDbContext = carRacingTournamentDbContext;
             _mapper = mapper;
-            _configuration = configuration;
+            _configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();;
         }
 
         public async Task<(bool IsSuccess, List<SeasonOutputDto>? Seasons, string? ErrorMessage)> GetSeasons()

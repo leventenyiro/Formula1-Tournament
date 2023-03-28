@@ -12,10 +12,12 @@ namespace car_racing_tournament_api.Services
         private readonly CarRacingTournamentDbContext _carRacingTournamentDbContext;
         private readonly IConfiguration _configuration;
 
-        public TeamService(CarRacingTournamentDbContext carRacingTournamentDbContext, IConfiguration configuration)
+        public TeamService(CarRacingTournamentDbContext carRacingTournamentDbContext)
         {
             _carRacingTournamentDbContext = carRacingTournamentDbContext;
-            _configuration = configuration;
+            _configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();;
         }
 
         public async Task<(bool IsSuccess, Team? Team, string? ErrorMessage)> GetTeamById(Guid id)
