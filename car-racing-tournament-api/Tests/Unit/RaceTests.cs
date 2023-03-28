@@ -88,7 +88,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            _raceService = new RaceService(_context, mapper, _configuration);
+            _raceService = new RaceService(_context, mapper);
         }
 
         [Test]

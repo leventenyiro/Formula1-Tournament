@@ -86,7 +86,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            _permissionService = new PermissionService(_context, _configuration);
+            _permissionService = new PermissionService(_context);
         }
 
         [Test]
