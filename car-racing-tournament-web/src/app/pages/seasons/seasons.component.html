@@ -34,7 +34,7 @@
                 <p class="description">{{ season.description }}</p>
                 <p>Admin: {{ getAdminUsername(season) }}</p>
                 <p>{{ getFormattedDate(season.createdAt) }}</p>
-                <span *ngIf="season.isArchived" class="archived-tag">archived</span>
+                <span *ngIf="season.isArchived" class="gold-tag">archived</span>
             </div>
         </div>
       </div>

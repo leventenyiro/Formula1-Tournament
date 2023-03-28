@@ -2,6 +2,7 @@ import { Time } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Permission } from 'app/models/permission';
 import { Season } from 'app/models/season';
 import { SeasonService } from 'app/services/season.service';
 
@@ -18,6 +19,7 @@ export class SeasonComponent implements OnInit {
   createdAt?: string;
   selectType = new FormControl('drivers');
   selectValue = new FormControl('all');
+PermissionType: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -44,7 +46,7 @@ export class SeasonComponent implements OnInit {
     });
   }
 
-  getFormattedDate(dateStr: Date) {
+  getFormattedDate(dateStr: any) {
     const date = new Date(dateStr);
     return `${date.getFullYear()}-` +
     `${(Number(date.getMonth()) + 1).toString().padStart(2, '0')}-` +
@@ -73,7 +75,17 @@ export class SeasonComponent implements OnInit {
   getDriverById(id: string) {
     return this.season?.drivers
       .find(x => x.id === id)?.results
-      .sort((a: any, b: any) => a.dateTime - b.dateTime);
+      .sort((a: any, b: any) => a.dateTime - b.dateTime)
+      .map(x => ({
+        id: x.id,
+        race: {
+          name: x.race.name,
+          dateTime: this.getFormattedDate(x.race.dateTime)
+        },
+        team: x.team,
+        position: x.type.toString() === 'Finished' ? x.position : x.type.toString(),
+        point: x.point
+      }));
   }
 
   getTeamAll() {
@@ -94,7 +106,8 @@ export class SeasonComponent implements OnInit {
         const { id, name, dateTime } = result.race;
         const existingRace = sum[id];
         if (!existingRace) {
-          sum[id] = { id, name, dateTime, point: result.point };
+          let formattedDateTime = this.getFormattedDate(dateTime);
+          sum[id] = { id, race: {name, dateTime: formattedDateTime}, point: result.point };
         } else {
           existingRace.point += result.point;
         }
@@ -110,9 +123,10 @@ export class SeasonComponent implements OnInit {
       return {
         id: x.id,
         name: x.name,
-        dateTime: x.dateTime,
+        dateTime: this.getFormattedDate(x.dateTime),
         winner: {
           name: winnerResult?.driver.name,
+          realName: winnerResult?.driver.realName,
           team: {
             name: winnerResult?.team.name,
             color: winnerResult?.team.color
@@ -132,5 +146,9 @@ export class SeasonComponent implements OnInit {
       position: x.type.toString() === 'Finished' ? x.position : x.type.toString(),
       point: x.point
     }))
+  }
+
+  getPermissions() {
+    return this.season?.permissions.sort((a: Permission, b: Permission) => b.type - a.type);
   }
 }

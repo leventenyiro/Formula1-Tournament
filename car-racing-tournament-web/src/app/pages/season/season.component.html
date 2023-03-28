@@ -34,7 +34,6 @@
                 <!-- if all: drivers and their points -->
                 <div *ngIf="selectValue.value === 'all'; else elseDiv" class="mt-5">
                     <div class="header-row">
-                        <div class="col"></div>
                         <div class="col">
                             <p>Position</p>
                         </div>
@@ -78,6 +77,23 @@
                 </div>
                 <!-- else: driver results -->
                 <ng-template #elseDiv>
+                    <div class="header-row">
+                        <div class="col">
+                            <p>Race</p>
+                        </div>
+                        <div class="col">
+                            <p>Date</p>
+                        </div>
+                        <div class="col">
+                            <p>Team</p>
+                        </div>
+                        <div class="col">
+                            <p>Position</p>
+                        </div>
+                        <div class="col">
+                            <p>Points</p>
+                        </div>
+                    </div>
                     <div class="table-row mb-3" *ngFor="let result of getDriverById(selectValue.value)">
                         <div class="col team-color" [ngStyle]="{'background-color': result.team.color}"></div>
                         <div class="col">
@@ -90,10 +106,11 @@
                             <p>{{ result.team.name }}</p>
                         </div>
                         <div class="col">
-                            <p>{{ result.type }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ result.position }}</p>
+                            <p>
+                                <span [ngClass]="result.position === 'DSQ' ? 'dsq-tag' : ''">
+                                    {{ result.position }}
+                                </span>
+                            </p>
                         </div>
                         <div class="col">
                             <p>{{ result.point }}</p>
@@ -103,6 +120,17 @@
             </div>
             <div *ngSwitchCase="'teams'">
                 <div *ngIf="selectValue.value === 'all'; else elseDiv" class="mt-5">
+                    <div class="header-row">
+                        <div class="col">
+                            <p>Position</p>
+                        </div>
+                        <div class="col">
+                            <p>Race</p>
+                        </div>
+                        <div class="col">
+                            <p>Points</p>
+                        </div>
+                    </div>
                     <div class="table-row mb-3" *ngFor="let team of getTeamAll(); index as i;">
                         <div class="col team-color" [ngStyle]="{'background-color': team.color}"></div>
                         <div class="col">
@@ -117,12 +145,23 @@
                     </div>
                 </div>
                 <ng-template #elseDiv>
-                    <div class="table-row mb-3" *ngFor="let result of getTeamById(selectValue.value)">
+                    <div class="header-row">
                         <div class="col">
-                            <p>{{ result.name }}</p>
+                            <p>Race</p>
                         </div>
                         <div class="col">
-                            <p>{{ result.dateTime }}</p>
+                            <p>Date</p>
+                        </div>
+                        <div class="col">
+                            <p>Points</p>
+                        </div>
+                    </div>
+                    <div class="table-row mb-3" *ngFor="let result of getTeamById(selectValue.value)">
+                        <div class="col">
+                            <p>{{ result.race.name }}</p>
+                        </div>
+                        <div class="col">
+                            <p>{{ result.race.dateTime }}</p>
                         </div>
                         <div class="col">
                             <p>{{ result.point }}</p>
@@ -132,6 +171,20 @@
             </div>
             <div *ngSwitchCase="'races'">
                 <div *ngIf="selectValue.value === 'all'; else elseDiv" class="mt-5">
+                    <div class="header-row">
+                        <div class="col">
+                            <p>Race</p>
+                        </div>
+                        <div class="col">
+                            <p>Date</p>
+                        </div>
+                        <div class="col">
+                            <p>Winner</p>
+                        </div>
+                        <div class="col">
+                            <p>Team</p>
+                        </div>
+                    </div>
                     <div class="table-row mb-3" *ngFor="let race of getRaceAll();">
                         <div class="col team-color" [ngStyle]="{'background-color': race.winner.team.color}"></div>
                         <div class="col">
@@ -149,6 +202,29 @@
                     </div>
                 </div>
                 <ng-template #elseDiv>
+                    <div class="header-row">
+                        <div class="col">
+                            <p>Name</p>
+                        </div>
+                        <div class="col">
+                            <p>Number</p>
+                        </div>
+                        <div class="col">
+                            <p>Real Name</p>
+                        </div>
+                        <div class="col">
+                            <p>Number</p>
+                        </div>
+                        <div class="col">
+                            <p>Team</p>
+                        </div>
+                        <div class="col">
+                            <p>Position</p>
+                        </div>
+                        <div class="col">
+                            <p>Points</p>
+                        </div>
+                    </div>
                     <div class="table-row mb-3" *ngFor="let result of getRaceById(selectValue.value); index as i;">
                         <div class="col team-color" [ngStyle]="{'background-color': result.team.color}"></div>
                         <div class="col">
@@ -156,6 +232,9 @@
                         </div>
                         <div class="col">
                             <p>{{ result.driver.name }}</p>
+                        </div>
+                        <div class="col">
+                            <p>{{ result.driver.realName }}</p>
                         </div>
                         <div class="col">
                             <p>{{ result.driver.number }}</p>
@@ -175,14 +254,19 @@
                         </div>
                     </div>
                 </ng-template>
-                <!-- races header -->
-                <!-- body -->
-                <!-- if all: races with winners -->
-                <!-- else: race results -->
             </div>
         </div>
     </div>
     <div class="col-sm-2">
-        <!-- admin, moderators, description -->
+        <h2>Moderators</h2>
+        <div *ngFor="let permission of getPermissions()" class="mb-2">
+            {{ permission.username }}
+            <span *ngIf="permission.type === 1" class="gold-tag">admin</span>
+        </div>
+        
+        <hr>
+
+        <h2>Description</h2>
+        <p>{{ season?.description }}</p>
     </div>
 </div>
