@@ -105,9 +105,32 @@ export class SeasonComponent implements OnInit {
   }
 
   getRaceAll() {
-    // who was the winner?
-    return this.season?.races;
+    return this.season?.races.map(x => {
+      const winnerResult = x.results.find(x => x.position === 1);
+      return {
+        id: x.id,
+        name: x.name,
+        dateTime: x.dateTime,
+        winner: {
+          name: winnerResult?.driver.name,
+          team: {
+            name: winnerResult?.team.name,
+            color: winnerResult?.team.color
+          }
+        }
+      }
+    });
   }
 
-  getRaceById(id: string) {}
+  getRaceById(id: string) {
+    return this.season?.races.find(x => x.id === id)?.results
+    .sort((a: any, b: any) => b.point - a.point)
+    .map(x => ({
+      id: x.id,
+      driver: x.driver,
+      team: x.team,
+      position: x.type.toString() === 'Finished' ? x.position : x.type.toString(),
+      point: x.point
+    }))
+  }
 }
