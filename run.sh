@@ -1,6 +1,4 @@
-#Enable-Migration
-#Add-Migration
-#Update-Database
+#!/bin/bash
 
 cd car-racing-tournament-api;
 if [[ $1 = init ]]
