@@ -36,7 +36,18 @@ export class SeasonComponent implements OnInit {
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get("id")!;
 
+    this.onFetchData();
 
+    this.authService.loggedIn.subscribe(
+      (loggedIn: boolean) => {
+        this.isLoggedIn = loggedIn;
+      }
+    );
+
+    this.isLoggedIn = this.authService.isSessionValid(document.cookie) ? true : false;
+  }
+
+  onFetchData() {
     this.isFetching = true;
     this.seasonService.getSeason(this.id).subscribe({
       next: season => this.season = season,
@@ -46,14 +57,6 @@ export class SeasonComponent implements OnInit {
         this.createdAt = this.getFormattedDate(this.season!.createdAt);
       }
     });
-
-    this.authService.loggedIn.subscribe(
-      (loggedIn: boolean) => {
-        this.isLoggedIn = loggedIn;
-      }
-    );
-
-    this.isLoggedIn = this.authService.isSessionValid(document.cookie) ? true : false;
   }
 
   getFormattedDate(dateStr: any) {
@@ -171,7 +174,14 @@ export class SeasonComponent implements OnInit {
   }
 
   deleteDriver(id: string) {
-    console.log("deleteDriver");
+    this.isFetching = true;
+    this.seasonService.deleteDriver(id).subscribe({
+      error: () => {},
+      complete: () => {
+        this.isFetching = false;
+        this.onFetchData();
+      }
+    });
   }
 
   createResult() {
@@ -183,7 +193,14 @@ export class SeasonComponent implements OnInit {
   }
 
   deleteResult(id: string) {
-    console.log("deleteResult");
+    this.isFetching = true;
+    this.seasonService.deleteResult(id).subscribe({
+      error: () => {},
+      complete: () => {
+        this.isFetching = false;
+        this.onFetchData();
+      }
+    });
   }
 
   createTeam() {
@@ -195,7 +212,16 @@ export class SeasonComponent implements OnInit {
   }
 
   deleteTeam(id: string) {
-    console.log("deleteTeam");
+    console.log(id);
+    
+    this.isFetching = true;
+    this.seasonService.deleteTeam(id).subscribe({
+      error: () => {},
+      complete: () => {
+        this.isFetching = false;
+        this.onFetchData();
+      }
+    });
   }
 
   createRace() {
