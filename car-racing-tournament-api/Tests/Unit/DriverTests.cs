@@ -63,7 +63,7 @@ namespace car_racing_tournament_api.Tests.Unit
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            _driverService = new DriverService(_context, mapper, _configuration);
+            _driverService = new DriverService(_context, mapper);
         }
 
         [Test]

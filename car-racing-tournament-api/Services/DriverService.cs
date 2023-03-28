@@ -13,11 +13,13 @@ namespace car_racing_tournament_api.Services
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
 
-        public DriverService(CarRacingTournamentDbContext carRacingTournamentDbContext, IMapper mapper, IConfiguration configuration)
+        public DriverService(CarRacingTournamentDbContext carRacingTournamentDbContext, IMapper mapper)
         {
             _carRacingTournamentDbContext = carRacingTournamentDbContext;
             _mapper = mapper;
-            _configuration = configuration;
+            _configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();;
         }
 
         public async Task<(bool IsSuccess, Driver? Driver, string? ErrorMessage)> GetDriverById(Guid id)

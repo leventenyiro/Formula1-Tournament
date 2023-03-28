@@ -38,7 +38,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            _userService = new UserService(_context, _configuration);
+            _userService = new UserService(_context);
         }
         
         [Test]

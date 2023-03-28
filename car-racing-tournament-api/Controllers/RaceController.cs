@@ -23,8 +23,7 @@ namespace car_racing_tournament_api.Controllers
             IDriver driverService, 
             ITeam teamService, 
             Interfaces.IResult resultService,
-            ISeason seasonService,
-            IConfiguration configuration)
+            ISeason seasonService)
         {
             _raceService = raceService;
             _permissionService = permissionService;
@@ -32,7 +31,9 @@ namespace car_racing_tournament_api.Controllers
             _teamService = teamService;
             _resultService = resultService;
             _seasonService = seasonService;
-            _configuration = configuration;
+            _configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();;
         }
 
         [HttpPut("{id}"), Authorize]
