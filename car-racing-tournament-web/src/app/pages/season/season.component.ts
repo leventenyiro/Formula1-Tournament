@@ -4,6 +4,7 @@ import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Permission } from 'app/models/permission';
 import { Season } from 'app/models/season';
+import { User } from 'app/models/user';
 import { AuthService } from 'app/services/auth.service';
 import { SeasonService } from 'app/services/season.service';
 
@@ -21,6 +22,7 @@ export class SeasonComponent implements OnInit {
   selectType = new FormControl('drivers');
   selectValue = new FormControl('all');
   isLoggedIn = false;
+  user?: User;
 
   constructor(
     private route: ActivatedRoute,
@@ -38,6 +40,7 @@ export class SeasonComponent implements OnInit {
 
     this.onFetchData();
 
+    this.isFetching = true;
     this.authService.loggedIn.subscribe(
       (loggedIn: boolean) => {
         this.isLoggedIn = loggedIn;
@@ -45,6 +48,17 @@ export class SeasonComponent implements OnInit {
     );
 
     this.isLoggedIn = this.authService.isSessionValid(document.cookie) ? true : false;
+    this.isFetching = false;
+
+    if (this.isLoggedIn) {
+      this.isFetching = true;
+      this.authService.getUser(document.cookie).subscribe({
+        next: user => this.user = user,
+        error: () => {
+          this.isFetching = false;
+        }
+      });
+    }
   }
 
   onFetchData() {
@@ -67,6 +81,10 @@ export class SeasonComponent implements OnInit {
     `${date.getHours().toString().padStart(2, '0')}:` +
     `${date.getMinutes().toString().padStart(2, '0')}:` +
     `${date.getSeconds().toString().padStart(2, '0')}`;
+  }
+
+  getUserPermission() {    
+    return this.season?.permissions.find(x => x.userId === this.user?.id);
   }
 
   getDriverAll() {
@@ -211,9 +229,7 @@ export class SeasonComponent implements OnInit {
     console.log("updateTeam");
   }
 
-  deleteTeam(id: string) {
-    console.log(id);
-    
+  deleteTeam(id: string) {    
     this.isFetching = true;
     this.seasonService.deleteTeam(id).subscribe({
       error: () => {},
@@ -233,7 +249,14 @@ export class SeasonComponent implements OnInit {
   }
 
   deleteRace(id: string) {
-    console.log("deleteRace");
+    this.isFetching = true;
+    this.seasonService.deleteRace(id).subscribe({
+      error: () => {},
+      complete: () => {
+        this.isFetching = false;
+        this.onFetchData();
+      }
+    });
   }
 
   updateSeason() {
@@ -245,11 +268,25 @@ export class SeasonComponent implements OnInit {
   }
 
   deleteSeason() {
-    console.log("deleteSeason");
+    /*this.isFetching = true;
+    this.seasonService.deleteSeason(this.season?.id).subscribe({
+      error: () => {},
+      complete: () => {
+        this.isFetching = false;
+        this.router.navigate(['seasons'])
+      }
+    });*/
   }
 
   deletePermission(id: string) {
-    console.log("deletePermission");
+    this.isFetching = true;
+    this.seasonService.deletePermission(id).subscribe({
+      error: () => {},
+      complete: () => {
+        this.isFetching = false;
+        this.onFetchData();
+      }
+    });
   }
 
   updatePermission(id: string) {

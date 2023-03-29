@@ -305,7 +305,7 @@
         </div>
     </div>
     <div class="col-sm-2">
-        <div *ngIf="this.isLoggedIn" class="d-grid gap-2 my-3">
+        <div *ngIf="this.isLoggedIn && getUserPermission()?.type === 1" class="d-grid gap-2 my-3">
             <div class="btn btn-outline-primary btn-sm btn-block" (click)="updateSeason()">Edit</div>
             <div class="btn btn-outline-primary btn-sm btn-block" (click)="archiveSeason()">Archive</div>
             <div class="btn btn-outline-danger btn-sm btn-block" (click)="deleteSeason()">Delete</div>
@@ -314,11 +314,11 @@
         <h2>Moderators</h2>
         <div *ngFor="let permission of getPermissions()" class="mb-2">
             <div>
-                <button *ngIf="this.isLoggedIn && permission.type === 0" class="btn btn-danger btn-sm d-inline-flex me-1" (click)="deletePermission(permission.id)">
+                <button *ngIf="this.isLoggedIn && getUserPermission()?.type === 1 && permission.type === 0" class="btn btn-danger btn-sm d-inline-flex me-1" (click)="deletePermission(permission.id)">
                     <i class="bi bi-x-lg"></i>
                 </button>
                 <button 
-                    *ngIf="this.isLoggedIn && permission.type === 0" 
+                    *ngIf="this.isLoggedIn && getUserPermission()?.type === 1 && permission.type === 0" 
                     class="btn btn-primary btn-sm d-inline-flex me-1"
                     (click)="updatePermission(permission.id)">
                     <i class="bi bi-chevron-up"></i>
@@ -326,7 +326,9 @@
                 <div *ngIf="permission.type === 1" class="btn btn-warning btn-sm d-inline-flex me-1 disabled">
                     <i class="bi bi-shield-fill"></i>
                 </div>
-                <div class="d-inline-flex me-1">{{ permission.username }}</div>
+                <div class="d-inline-flex me-1" [ngClass]="this.user?.username === permission.username ? 'fw-bold' : ''">
+                    {{ permission.username }}
+                </div>
             </div>
         </div>
         
