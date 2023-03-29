@@ -290,6 +290,13 @@ export class SeasonComponent implements OnInit {
   }
 
   updatePermission(id: string) {
-    console.log("updatePermission");
+    this.isFetching = true;
+    this.seasonService.updatePermission(id).subscribe({
+      error: () => {},
+      complete: () => {
+        this.isFetching = false;
+        this.onFetchData();
+      }
+    });
   }
 }

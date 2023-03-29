@@ -188,4 +188,24 @@ export class SeasonService {
       })
     )
   }
+
+  updatePermission(id: string) {
+    const bearerToken = document.cookie.split("session=")[1].split(";")[0];
+    let headers = new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Access-Control-Allow-Origin', '*')
+    .set('Authorization', `Bearer ${bearerToken}`);
+
+    return this.http.put(
+      `${environment.backendUrl}/permission/${id}`, null,
+      {
+        headers: headers
+      }
+    ).pipe(
+      tap(data => data),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
+    )
+  }
 }
