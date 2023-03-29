@@ -194,11 +194,8 @@ export class SeasonComponent implements OnInit {
   deleteDriver(id: string) {
     this.isFetching = true;
     this.seasonService.deleteDriver(id).subscribe({
-      error: () => {},
-      complete: () => {
-        this.isFetching = false;
-        this.onFetchData();
-      }
+      error: () => this.onFetchData(),
+      complete: () => this.onFetchData()
     });
   }
 
@@ -213,11 +210,8 @@ export class SeasonComponent implements OnInit {
   deleteResult(id: string) {
     this.isFetching = true;
     this.seasonService.deleteResult(id).subscribe({
-      error: () => {},
-      complete: () => {
-        this.isFetching = false;
-        this.onFetchData();
-      }
+      error: () => this.onFetchData(),
+      complete: () => this.onFetchData()
     });
   }
 
@@ -232,11 +226,8 @@ export class SeasonComponent implements OnInit {
   deleteTeam(id: string) {    
     this.isFetching = true;
     this.seasonService.deleteTeam(id).subscribe({
-      error: () => {},
-      complete: () => {
-        this.isFetching = false;
-        this.onFetchData();
-      }
+      error: () => this.onFetchData(),
+      complete: () => this.onFetchData()
     });
   }
 
@@ -251,11 +242,8 @@ export class SeasonComponent implements OnInit {
   deleteRace(id: string) {
     this.isFetching = true;
     this.seasonService.deleteRace(id).subscribe({
-      error: () => {},
-      complete: () => {
-        this.isFetching = false;
-        this.onFetchData();
-      }
+      error: () => this.onFetchData(),
+      complete: () => this.onFetchData()
     });
   }
 
@@ -281,22 +269,16 @@ export class SeasonComponent implements OnInit {
   deletePermission(id: string) {
     this.isFetching = true;
     this.seasonService.deletePermission(id).subscribe({
-      error: () => {},
-      complete: () => {
-        this.isFetching = false;
-        this.onFetchData();
-      }
+      error: () => this.onFetchData(),
+      complete: () => this.onFetchData()
     });
   }
 
   updatePermission(id: string) {
     this.isFetching = true;
     this.seasonService.updatePermission(id).subscribe({
-      error: () => {},
-      complete: () => {
-        this.isFetching = false;
-        this.onFetchData();
-      }
+      error: () => this.onFetchData(),
+      complete: () => this.onFetchData()
     });
   }
 }
