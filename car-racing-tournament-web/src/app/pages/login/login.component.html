@@ -20,14 +20,12 @@
                     <button class="btn btn-primary" [disabled]="!postForm.valid">Login</button>
                 </div>
                 <div class="col-7 text-end">
-                    <button (click)="registration()" class="btn btn-link">Don't you have an account?</button>
+                    <button (mouseup)="registration()" class="btn btn-link">Don't you have an account?</button>
                 </div>
             </div>
         </form>
 
-        <div class="spinner-border" role="status" *ngIf="isFetching; else elseDiv">
-            <span class="visually-hidden">Loading...</span>
-        </div>
+        <app-modal *ngIf="isFetching; else elseDiv"></app-modal>
 
         <ng-template #elseDiv>
             <div class="alert alert-danger mt-3" role="alert" *ngIf="error">

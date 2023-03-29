@@ -1,42 +1,36 @@
-<div class="center" *ngIf="isFetching || error; else elseDiv">
-  <div class="spinner-border" role="status" *ngIf="isFetching">
-      <span class="visually-hidden">Loading...</span>
+<app-modal *ngIf="isFetching"></app-modal>
+
+<div class="container">
+  <div class="row mt-4">
+    <h1 class="mx-4">Seasons</h1>
   </div>
-  <div class="alert alert-danger" role="alert" *ngIf="error">
-      {{error}}
+
+  <div class="row mx-3">
+    <div class="col-sm-5">
+      <button class="btn btn-primary" (mouseup)="onFetchData()">Refresh</button>
+    </div>
+    <div class="col-sm-7">
+      <div class="input-group">
+        <span class="input-group-text"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+            fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path
+              d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+          </svg></span>
+        <input type="text" class="form-control" id="name" [formControl]="search" placeholder="Start typing to filter..."
+          (keyup)="onSearch()">
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-md-4 mb-5" *ngFor="let season of seasons">
+      <div class="season-box mx-auto text-left p-3" (mouseup)="navigateSeason(season.id)">
+        <h2>{{ season.name }}</h2>
+        <p class="description">{{ season.description }}</p>
+        <p>Admin: {{ getAdminUsername(season) }}</p>
+        <p>{{ getFormattedDate(season.createdAt) }}</p>
+        <span *ngIf="season.isArchived" class="gold-tag">archived</span>
+      </div>
+    </div>
   </div>
 </div>
-
-<ng-template #elseDiv>
-  <div class="container">
-      <div class="row mt-4">
-        <h1 class="mx-4">Seasons</h1>
-      </div>
-
-      <div class="row mx-3">
-          <div class="col-sm-5">
-              <button class="btn btn-primary" (click)="onFetchData()">Refresh</button>
-          </div>
-          <div class="col-sm-7">
-              <div class="input-group">
-                  <span class="input-group-text"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                    </svg></span>
-                  <input type="text" class="form-control" id="name" [formControl]="search" placeholder="Start typing to filter..." (keyup)="onSearch()">
-              </div>
-          </div>
-      </div>
-
-      <div class="row mt-5">
-        <div class="col-md-4 mb-5" *ngFor="let season of seasons">
-            <div class="season-box mx-auto text-left p-3" (click)="navigateSeason(season.id)">
-                <h2>{{ season.name }}</h2>
-                <p class="description">{{ season.description }}</p>
-                <p>Admin: {{ getAdminUsername(season) }}</p>
-                <p>{{ getFormattedDate(season.createdAt) }}</p>
-                <span *ngIf="season.isArchived" class="archived-tag">archived</span>
-            </div>
-        </div>
-      </div>
-  </div>
-</ng-template>

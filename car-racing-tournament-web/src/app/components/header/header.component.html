@@ -27,7 +27,7 @@
 
       <div class="d-flex justify-content-md-end mb-2 mb-sm-0">
         <button *ngIf="!isLoggedIn" class="btn btn-primary btn-sm" routerLink="/login">Sign in</button>
-        <button *ngIf="isLoggedIn" class="btn btn-danger btn-sm" (click)="logout()">Sign out</button>
+        <button *ngIf="isLoggedIn" class="btn btn-danger btn-sm" (mouseup)="logout()">Sign out</button>
       </div>
     </div>
   </div>

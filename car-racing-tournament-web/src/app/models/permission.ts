@@ -7,6 +7,7 @@ export class Permission {
     public id: string,
     public user: User,
     public season: Season,
+    public seasonId: string,
     public type: PermissionType,
     public userId: string,
     public username?: string,
