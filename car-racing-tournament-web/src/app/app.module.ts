@@ -13,6 +13,7 @@ import { RegistrationComponent } from './pages/registration/registration.compone
 import { MySeasonsComponent } from './pages/my-seasons/my-seasons.component';
 import { CreateSeasonComponent } from './pages/create-season/create-season.component';
 import { SeasonComponent } from './pages/season/season.component';
+import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { SeasonComponent } from './pages/season/season.component';
     RegistrationComponent,
     MySeasonsComponent,
     CreateSeasonComponent,
-    SeasonComponent
+    SeasonComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,

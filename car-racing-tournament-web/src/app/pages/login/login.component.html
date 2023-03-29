@@ -25,9 +25,7 @@
             </div>
         </form>
 
-        <div class="spinner-border" role="status" *ngIf="isFetching; else elseDiv">
-            <span class="visually-hidden">Loading...</span>
-        </div>
+        <app-modal *ngIf="isFetching; else elseDiv"></app-modal>
 
         <ng-template #elseDiv>
             <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
