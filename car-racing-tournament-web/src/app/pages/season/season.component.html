@@ -54,7 +54,7 @@
                             <p>Points</p>
                         </div>
                         <div *ngIf="this.isLoggedIn" class="col">
-                            <button class="btn btn-success btn-sm" (mouseup)="createDriver()">Add driver</button>
+                            <button class="btn btn-success btn-sm" (mouseup)="openModal('createDriver')">Add driver</button>
                         </div>
                     </div>
                     <div class="table-row mb-3" *ngFor="let driver of getDriverAll(); index as i;">
@@ -347,3 +347,47 @@
         <p>{{ season?.description }}</p>
     </div>
 </div>
+
+<!-- modals -->
+<app-modal type="form" *ngIf="modal === 'createDriver'">
+    <h1>Create</h1>
+    <form #postForm="ngForm" (ngSubmit)="createDriver(postForm)">
+        <div class="mb-3">
+            <label for="inputName" class="form-label">Name</label>
+            <input required type="text" class="form-control" id="inputName" ngModel name="name" #name="ngModel" [class.is-invalid]="!name.valid && name.touched" [class.is-valid]="name.valid">
+            <div class="invalid-feedback">Name is required</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="inputRealName" class="form-label">Real Name</label>
+            <input type="text" class="form-control" id="inputRealName" ngModel name="realName" #realName="ngModel">
+        </div>
+
+        <div class="mb-3">
+            <label for="inputNumber" class="form-label">Number</label>
+            <input type="number" required min="1" max="99" class="form-control" id="inputNumber" ngModel name="number" #number="ngModel" [class.is-invalid]="!number.valid && number.touched">
+        </div>
+
+        <div class="mb-3">
+            <label for="inputActualTeamId" class="form-label">Actual Team</label>
+            <select name="actualTeamId" id="inputActualTeamId" class="form-select">
+                <option [ngValue]="null">None</option>
+                <option *ngFor="let option of season?.teams" [value]="option.id">
+                    {{ option.name }}                                                
+                </option>
+            </select>
+        </div>
+
+        <div class="row d-flex">
+            <div class="col-6">
+                <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="closeModal()" (keypress.esc)="closeModal()">Cancel</button>
+            </div>
+            <div class="col-6">
+                <button class="btn btn-primary btn-sm btn-block" [disabled]="!postForm.valid">Create</button>
+            </div>
+        </div>
+    </form>
+    <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
+        {{error}}
+    </div>
+</app-modal>

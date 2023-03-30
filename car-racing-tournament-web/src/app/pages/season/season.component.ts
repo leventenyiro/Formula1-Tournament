@@ -1,7 +1,7 @@
-import { Time } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ModalComponent } from 'app/components/modal/modal.component';
 import { Permission } from 'app/models/permission';
 import { Season } from 'app/models/season';
 import { User } from 'app/models/user';
@@ -23,12 +23,13 @@ export class SeasonComponent implements OnInit {
   selectValue = new FormControl('all');
   isLoggedIn = false;
   user?: User;
+  modal: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private seasonService: SeasonService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
   ) {
     this.selectType.valueChanges.subscribe(() => {
       this.selectValue.setValue('all');
@@ -94,8 +95,8 @@ export class SeasonComponent implements OnInit {
       realName: x.realName,
       number: x.number,
       actualTeam: {
-        name: x.actualTeam.name,
-        color: x.actualTeam.color,
+        name: x.actualTeam?.name,
+        color: x.actualTeam?.color,
       },
       point: x.results.length === 0
         ? 0
@@ -183,8 +184,20 @@ export class SeasonComponent implements OnInit {
     return this.season?.permissions.sort((a: Permission, b: Permission) => b.type - a.type);
   }
 
-  createDriver() {
-    console.log("createDriver");
+  createDriver(data: any) {
+    console.log(data.value);
+    
+    this.isFetching = true;    
+    this.seasonService.createDriver(data.value, this.season?.id!).subscribe({
+      error: err => {
+        this.error = err;
+        this.onFetchData();
+      },
+      complete: () => {
+        this.onFetchData();
+        this.closeModal();
+      }
+    });
   }
 
   updateDriver(id: string) {
@@ -280,5 +293,14 @@ export class SeasonComponent implements OnInit {
       error: () => this.onFetchData(),
       complete: () => this.onFetchData()
     });
+  }
+
+  openModal(modal: string) {
+    this.modal = modal;
+  }
+
+  closeModal() {
+    this.modal = '';
+    this.error = '';
   }
 }

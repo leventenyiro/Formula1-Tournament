@@ -36,9 +36,5 @@ export class CreateSeasonComponent implements OnInit {
         this.isFetching = false;
       }
     });
-
-
-
-
   }
 }

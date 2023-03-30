@@ -4,6 +4,7 @@ import { User } from 'app/models/user';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment'
 import { Season } from '../models/season';
+import { Driver } from 'app/models/driver';
 
 @Injectable({
   providedIn: 'root'
@@ -200,6 +201,33 @@ export class SeasonService {
       `${environment.backendUrl}/permission/${id}`, null,
       {
         headers: headers
+      }
+    ).pipe(
+      tap(data => data),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
+    )
+  }
+
+  createDriver(driver: Driver, seasonId: string) {
+    const bearerToken = document.cookie.split("session=")[1].split(";")[0];
+    let headers = new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Access-Control-Allow-Origin', '*')
+    .set('Authorization', `Bearer ${bearerToken}`);
+
+    return this.http.post(
+      `${environment.backendUrl}/season/${seasonId}/driver`,
+      {
+        "name": driver.name,
+        "realName": driver.realName,
+        "number": driver.number,
+        "actualTeamId": driver.actualTeamId
+      },
+      {
+        headers: headers,
+        responseType: 'text'
       }
     ).pipe(
       tap(data => data),
