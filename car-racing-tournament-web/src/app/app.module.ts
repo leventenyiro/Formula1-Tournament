@@ -17,6 +17,7 @@ import { ModalComponent } from './components/modal/modal.component';
 import { DriverAllComponent } from './components/tables/driver-all/driver-all.component';
 import { DriverResultComponent } from './components/tables/driver-result/driver-result.component';
 import { TeamAllComponent } from './components/tables/team-all/team-all.component';
+import { TeamResultComponent } from './components/tables/team-result/team-result.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { TeamAllComponent } from './components/tables/team-all/team-all.componen
     ModalComponent,
     DriverAllComponent,
     DriverResultComponent,
-    TeamAllComponent
+    TeamAllComponent,
+    TeamResultComponent
   ],
   imports: [
     BrowserModule,

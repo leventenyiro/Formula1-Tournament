@@ -1,0 +1,22 @@
+<div class="header-row">
+    <div class="col">
+        <p>Race</p>
+    </div>
+    <div class="col">
+        <p>Date</p>
+    </div>
+    <div class="col">
+        <p>Points</p>
+    </div>
+</div>
+<div class="table-row mb-3" *ngFor="let result of teamResults">
+    <div class="col">
+        <p>{{ result.race.name }}</p>
+    </div>
+    <div class="col">
+        <p>{{ result.race.dateTime }}</p>
+    </div>
+    <div class="col">
+        <p>{{ result.point }}</p>
+    </div>
+</div>

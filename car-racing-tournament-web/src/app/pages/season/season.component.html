@@ -61,28 +61,9 @@
                     ></app-team-all>
                 </div>
                 <ng-template #elseDiv>
-                    <div class="header-row">
-                        <div class="col">
-                            <p>Race</p>
-                        </div>
-                        <div class="col">
-                            <p>Date</p>
-                        </div>
-                        <div class="col">
-                            <p>Points</p>
-                        </div>
-                    </div>
-                    <div class="table-row mb-3" *ngFor="let result of getTeamById(selectValue.value)">
-                        <div class="col">
-                            <p>{{ result.race.name }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ result.race.dateTime }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ result.point }}</p>
-                        </div>
-                    </div>
+                    <app-team-result
+                        [teamResults]="getTeamById(selectValue.value)"
+                    ></app-team-result>
                 </ng-template>
             </div>
             <div *ngSwitchCase="'races'">
