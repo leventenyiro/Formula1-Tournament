@@ -1,14 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Driver } from 'app/models/driver';
 import { Season } from 'app/models/season';
+import { Team } from 'app/models/team';
 import { SeasonService } from 'app/services/season.service';
 
 @Component({
-  selector: 'app-driver-all',
-  templateUrl: './driver-all.component.html',
-  styleUrls: ['./driver-all.component.scss']
+  selector: 'app-team-all',
+  templateUrl: './team-all.component.html',
+  styleUrls: ['./team-all.component.scss']
 })
-export class DriverAllComponent implements OnInit {
+export class TeamAllComponent implements OnInit {
   @Input()
   isLoggedIn!: boolean;
 
@@ -16,22 +16,22 @@ export class DriverAllComponent implements OnInit {
   season!: Season;
 
   @Input()
-  driverAll?: any[];
+  teamAll?: any[];
 
   @Output()
   onFetchDataEmitter = new EventEmitter<undefined>();
 
   error: string = '';
   modal: boolean = false;
-  selectedDriver?: Driver;
+  selectedTeam?: Team;
 
   constructor(private seasonService: SeasonService) { }
 
   ngOnInit(): void {
   }
 
-  createDriver(data: any) {    
-    this.seasonService.createDriver(data.value, this.season?.id!).subscribe({
+  createTeam(data: any) {    
+    this.seasonService.createTeam(data.value, this.season?.id!).subscribe({
       error: err => {
         this.error = err;
         this.onFetchDataEmitter.emit();
@@ -43,8 +43,8 @@ export class DriverAllComponent implements OnInit {
     });
   }
 
-  updateDriver(id: string, data: any) {
-    this.seasonService.updateDriver(id, data.value).subscribe({
+  updateTeam(id: string, data: any) {
+    this.seasonService.updateTeam(id, data.value).subscribe({
       error: err => {
         this.error = err;
         this.onFetchDataEmitter.emit();
@@ -56,21 +56,21 @@ export class DriverAllComponent implements OnInit {
     });
   }
 
-  deleteDriver(id: string) {
-    this.seasonService.deleteDriver(id).subscribe({
+  deleteTeam(id: string) {
+    this.seasonService.deleteTeam(id).subscribe({
       error: () => this.onFetchDataEmitter.emit(),
       complete: () => this.onFetchDataEmitter.emit()
     });
   }
 
-  openModal(selectedDriver?: Driver) {
+  openModal(selectedTeam?: Team) {
     this.modal = true;    
-    this.selectedDriver = selectedDriver;
+    this.selectedTeam = selectedTeam;
   }
 
   closeModal() {
     this.modal = false;
     this.error = '';
-    this.selectedDriver = undefined;
+    this.selectedTeam = undefined;
   }
 }

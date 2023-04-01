@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment'
 import { Season } from '../models/season';
 import { Driver } from 'app/models/driver';
 import { Result } from 'app/models/result';
+import { Team } from 'app/models/team';
 
 @Injectable({
   providedIn: 'root'
@@ -307,6 +308,56 @@ export class SeasonService {
         "point": result.point,
         "driverId": result.driverId,
         "teamId": result.teamId
+      },
+      {
+        headers: headers,
+        responseType: 'text'
+      }
+    ).pipe(
+      tap(data => data),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
+    )
+  }
+
+  createTeam(team: Team, seasonId: string) {
+    const bearerToken = document.cookie.split("session=")[1].split(";")[0];
+    let headers = new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Access-Control-Allow-Origin', '*')
+    .set('Authorization', `Bearer ${bearerToken}`);
+
+    return this.http.post(
+      `${environment.backendUrl}/season/${seasonId}/team`,
+      {
+        "name": team.name,
+        "color": team.color
+      },
+      {
+        headers: headers,
+        responseType: 'text'
+      }
+    ).pipe(
+      tap(data => data),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
+    )
+  }
+
+  updateTeam(id: string, team: Team) {
+    const bearerToken = document.cookie.split("session=")[1].split(";")[0];
+    let headers = new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Access-Control-Allow-Origin', '*')
+    .set('Authorization', `Bearer ${bearerToken}`);
+
+    return this.http.put(
+      `${environment.backendUrl}/team/${id}`,
+      {
+        "name": team.name,
+        "color": team.color
       },
       {
         headers: headers,

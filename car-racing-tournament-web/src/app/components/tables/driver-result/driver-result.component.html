@@ -54,7 +54,7 @@
     <form #postForm="ngForm" (ngSubmit)="selectedResult == undefined ? this.createResult(postForm) : this.updateResult(selectedResult!.id, postForm)">
         <div class="mb-3">
             <label for="inputTeamId" class="form-label">Team</label>
-            <select name="teamId" id="inputTeamId" class="form-select" [ngModel]="selectedResult === undefined ? season!.teams[0].id : selectedResult.team.id" #teamId="ngModel">
+            <select name="teamId" id="inputTeamId" class="form-select" [ngModel]="selectedResult === undefined ? (getDriverActualTeam() === undefined ? season!.teams[0].id : getDriverActualTeam()) : selectedResult.team.id" #teamId="ngModel">
                 <option *ngFor="let team of season?.teams" [value]="team.id">
                     {{ team.name }}                                                
                 </option>

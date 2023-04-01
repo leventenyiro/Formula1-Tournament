@@ -16,6 +16,7 @@ import { SeasonComponent } from './pages/season/season.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { DriverAllComponent } from './components/tables/driver-all/driver-all.component';
 import { DriverResultComponent } from './components/tables/driver-result/driver-result.component';
+import { TeamAllComponent } from './components/tables/team-all/team-all.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { DriverResultComponent } from './components/tables/driver-result/driver-
     SeasonComponent,
     ModalComponent,
     DriverAllComponent,
-    DriverResultComponent
+    DriverResultComponent,
+    TeamAllComponent
   ],
   imports: [
     BrowserModule,

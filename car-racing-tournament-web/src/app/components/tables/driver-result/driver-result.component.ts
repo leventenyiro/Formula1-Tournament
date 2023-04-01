@@ -28,13 +28,12 @@ export class DriverResultComponent implements OnInit {
   isFetching: boolean = false;
   error: string = '';
   modal: boolean = false;
-
   selectedResult?: Result;
+  actualTeamId!: string;
 
   constructor(private seasonService: SeasonService) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   createResult(data: any) {
     if (data.value.position === 'DNF' || data.value.position === 'DSQ') {
@@ -101,5 +100,9 @@ export class DriverResultComponent implements OnInit {
       positions.push(i);
     }
     return positions;
+  }
+
+  getDriverActualTeam() {
+    return this.season.drivers.find(x => x.id === this.driverId)?.actualTeam?.id;
   }
 }
