@@ -51,8 +51,6 @@
     </div>
 </div>
 
-<app-modal type="loading" *ngIf="isFetching"></app-modal>
-
 <app-modal type="form" *ngIf="modal">
     <h1>Create</h1>
     <form #postForm="ngForm" (ngSubmit)="selectedDriver == undefined ? this.createDriver(postForm) : this.updateDriver(selectedDriver!.id, postForm)">
@@ -74,7 +72,7 @@
 
         <div class="mb-3">
             <label for="inputActualTeamId" class="form-label">Actual Team</label>
-            <select name="actualTeamId" id="inputActualTeamId" class="form-select" id="inputActualTeamId" [ngModel]="selectedDriver === undefined ? null : selectedDriver.actualTeam.id" #actualTeamId="ngModel">
+            <select name="actualTeamId" id="inputActualTeamId" class="form-select" [ngModel]="selectedDriver === undefined ? null : selectedDriver.actualTeam.id" #actualTeamId="ngModel">
                 <option [ngValue]="null">None</option>
                 <option *ngFor="let option of season?.teams" [value]="option.id">
                     {{ option.name }}                                                

@@ -10,7 +10,10 @@ export class Result {
     public position: number,
     public point: number,
     public driver: Driver,
+    public driverId: string,
     public team: Team,
-    public race: Race
+    public teamId: string,
+    public race: Race,
+    public raceId: string
   ) {}
 }

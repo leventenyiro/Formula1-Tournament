@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModalComponent } from 'app/components/modal/modal.component';
 import { Permission } from 'app/models/permission';
 import { Season } from 'app/models/season';
 import { User } from 'app/models/user';
@@ -112,11 +111,13 @@ export class SeasonComponent implements OnInit {
       .map(x => ({
         id: x.id,
         race: {
+          id: x.race.id,
           name: x.race.name,
           dateTime: this.getFormattedDate(x.race.dateTime)
         },
         team: x.team,
         position: x.type.toString() === 'Finished' ? x.position : x.type.toString(),
+        type: x.type.toString(),
         point: x.point
       }));
   }

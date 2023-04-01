@@ -4,6 +4,7 @@ import { catchError, Observable, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment'
 import { Season } from '../models/season';
 import { Driver } from 'app/models/driver';
+import { Result } from 'app/models/result';
 
 @Injectable({
   providedIn: 'root'
@@ -250,6 +251,62 @@ export class SeasonService {
         "realName": driver.realName,
         "number": driver.number,
         "actualTeamId": driver.actualTeamId
+      },
+      {
+        headers: headers,
+        responseType: 'text'
+      }
+    ).pipe(
+      tap(data => data),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
+    )
+  }
+
+  createResult(result: Result) {
+    const bearerToken = document.cookie.split("session=")[1].split(";")[0];
+    let headers = new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Access-Control-Allow-Origin', '*')
+    .set('Authorization', `Bearer ${bearerToken}`);
+
+    return this.http.post(
+      `${environment.backendUrl}/race/${result.raceId}/result`,
+      {
+        "type": result.type,
+        "position": result.position,
+        "point": result.point,
+        "driverId": result.driverId,
+        "teamId": result.teamId
+      },
+      {
+        headers: headers,
+        responseType: 'text'
+      }
+    ).pipe(
+      tap(data => data),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
+    )
+  }
+
+  updateResult(id: string, result: Result) {
+    const bearerToken = document.cookie.split("session=")[1].split(";")[0];
+    let headers = new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Access-Control-Allow-Origin', '*')
+    .set('Authorization', `Bearer ${bearerToken}`);  
+    
+    return this.http.put(
+      `${environment.backendUrl}/result/${id}`,
+      {
+        "type": result.type,
+        "position": result.position,
+        "point": result.point,
+        "driverId": result.driverId,
+        "teamId": result.teamId
       },
       {
         headers: headers,

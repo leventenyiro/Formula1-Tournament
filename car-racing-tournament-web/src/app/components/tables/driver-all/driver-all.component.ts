@@ -13,7 +13,7 @@ export class DriverAllComponent implements OnInit {
   isLoggedIn!: boolean;
 
   @Input()
-  season?: Season;
+  season!: Season;
 
   @Input()
   driverAll?: any[];
@@ -21,7 +21,6 @@ export class DriverAllComponent implements OnInit {
   @Output()
   onFetchDataEmitter = new EventEmitter<undefined>();
 
-  isFetching: boolean = false;
   error: string = '';
   modal: boolean = false;
 
