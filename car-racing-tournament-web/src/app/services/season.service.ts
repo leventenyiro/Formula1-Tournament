@@ -6,6 +6,7 @@ import { Season } from '../models/season';
 import { Driver } from 'app/models/driver';
 import { Result } from 'app/models/result';
 import { Team } from 'app/models/team';
+import { Race } from 'app/models/race';
 
 @Injectable({
   providedIn: 'root'
@@ -358,6 +359,56 @@ export class SeasonService {
       {
         "name": team.name,
         "color": team.color
+      },
+      {
+        headers: headers,
+        responseType: 'text'
+      }
+    ).pipe(
+      tap(data => data),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
+    )
+  }
+
+  createRace(race: Race, seasonId: string) {
+    const bearerToken = document.cookie.split("session=")[1].split(";")[0];
+    let headers = new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Access-Control-Allow-Origin', '*')
+    .set('Authorization', `Bearer ${bearerToken}`);
+
+    return this.http.post(
+      `${environment.backendUrl}/season/${seasonId}/race`,
+      {
+        "name": race.name,
+        "dateTime": race.dateTime
+      },
+      {
+        headers: headers,
+        responseType: 'text'
+      }
+    ).pipe(
+      tap(data => data),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
+    )
+  }
+
+  updateRace(id: string, race: Race) {
+    const bearerToken = document.cookie.split("session=")[1].split(";")[0];
+    let headers = new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Access-Control-Allow-Origin', '*')
+    .set('Authorization', `Bearer ${bearerToken}`);
+
+    return this.http.put(
+      `${environment.backendUrl}/race/${id}`,
+      {
+        "name": race.name,
+        "dateTime": race.dateTime
       },
       {
         headers: headers,

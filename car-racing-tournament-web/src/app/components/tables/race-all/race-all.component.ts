@@ -1,14 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Race } from 'app/models/race';
 import { Season } from 'app/models/season';
-import { Team } from 'app/models/team';
 import { SeasonService } from 'app/services/season.service';
 
 @Component({
-  selector: 'app-team-all',
-  templateUrl: './team-all.component.html',
-  styleUrls: ['./team-all.component.scss']
+  selector: 'app-race-all',
+  templateUrl: './race-all.component.html',
+  styleUrls: ['./race-all.component.scss']
 })
-export class TeamAllComponent implements OnInit {
+export class RaceAllComponent implements OnInit {
   @Input()
   isLoggedIn!: boolean;
 
@@ -16,22 +16,21 @@ export class TeamAllComponent implements OnInit {
   season!: Season;
 
   @Input()
-  teamAll?: any[];
+  raceAll?: any[];
 
   @Output()
   onFetchDataEmitter = new EventEmitter<undefined>();
 
   error: string = '';
   modal: boolean = false;
-  selectedTeam?: Team;
+  selectedRace?: Race;
 
   constructor(private seasonService: SeasonService) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
-  createTeam(data: any) {
-    this.seasonService.createTeam(data.value, this.season?.id!).subscribe({
+  createRace(data: any) {
+    this.seasonService.createRace(data.value, this.season?.id!).subscribe({
       error: err => {
         this.error = err;
         this.onFetchDataEmitter.emit();
@@ -43,8 +42,8 @@ export class TeamAllComponent implements OnInit {
     });
   }
 
-  updateTeam(id: string, data: any) {
-    this.seasonService.updateTeam(id, data.value).subscribe({
+  updateRace(id: string, data: any) {
+    this.seasonService.updateRace(id, data.value).subscribe({
       error: err => {
         this.error = err;
         this.onFetchDataEmitter.emit();
@@ -56,21 +55,33 @@ export class TeamAllComponent implements OnInit {
     });
   }
 
-  deleteTeam(id: string) {
-    this.seasonService.deleteTeam(id).subscribe({
+  deleteRace(id: string) {
+    this.seasonService.deleteRace(id).subscribe({
       error: () => this.onFetchDataEmitter.emit(),
       complete: () => this.onFetchDataEmitter.emit()
     });
   }
 
-  openModal(selectedTeam?: Team) {
-    this.modal = true;    
-    this.selectedTeam = selectedTeam;
+  openModal(selectedRace?: Race) {
+    this.modal = true;
+    console.log(selectedRace?.dateTime);
+    
+    this.selectedRace = selectedRace;
   }
 
   closeModal() {
     this.modal = false;
     this.error = '';
-    this.selectedTeam = undefined;
+    this.selectedRace = undefined;
+  }
+
+  getCurrentDate() {
+    return Date.now();
+  }
+
+  getSelectedDate() {
+    // console.log(`${this.selectedRace?.dateTime.hours}:${this.selectedRace?.dateTime.minutes}`);
+    
+    return `${this.selectedRace?.dateTime.hours}:${this.selectedRace?.dateTime.minutes}`;
   }
 }
