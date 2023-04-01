@@ -14,6 +14,7 @@ import { MySeasonsComponent } from './pages/my-seasons/my-seasons.component';
 import { CreateSeasonComponent } from './pages/create-season/create-season.component';
 import { SeasonComponent } from './pages/season/season.component';
 import { ModalComponent } from './components/modal/modal.component';
+import { DriverAllComponent } from './components/tables/driver-all/driver-all.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { ModalComponent } from './components/modal/modal.component';
     MySeasonsComponent,
     CreateSeasonComponent,
     SeasonComponent,
-    ModalComponent
+    ModalComponent,
+    DriverAllComponent
   ],
   imports: [
     BrowserModule,

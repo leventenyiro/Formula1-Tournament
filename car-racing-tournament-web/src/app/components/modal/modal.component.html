@@ -1,4 +1,4 @@
-<div class="modal">
+<div class="modal" [ngClass]="type === 'loading' ? 'modal-loading' : ''">
     <div class="modal-content">
         <div class="spinner" *ngIf="type === 'loading'">
             <div class="spinner-border" role="status">

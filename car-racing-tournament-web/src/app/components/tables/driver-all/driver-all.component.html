@@ -1,0 +1,97 @@
+<div class="header-row">
+    <div class="col">
+        <p>Position</p>
+    </div>
+    <div class="col">
+        <p>Name</p>
+    </div>
+    <div class="col">
+        <p>Real Name</p>
+    </div>
+    <div class="col">
+        <p>Number</p>
+    </div>
+    <div class="col">
+        <p>Team</p>
+    </div>
+    <div class="col">
+        <p>Points</p>
+    </div>
+    <div *ngIf="this.isLoggedIn" class="col">
+        <button class="btn btn-success btn-sm" (mouseup)="openModal()">Add driver</button>
+    </div>
+</div>
+<div class="table-row mb-3" *ngFor="let driver of driverAll; index as i;">
+    <div class="col team-color" [ngStyle]="{'background-color': driver.actualTeam.color}"></div>
+    <div class="col">
+        <p>{{ i + 1 }}</p>
+    </div>
+    <div class="col">
+        <p>{{ driver.name }}</p>
+    </div>
+    <div class="col">
+        <p>{{ driver.realName }}</p>
+    </div>
+    <div class="col">
+        <p>{{ driver.number }}</p>
+    </div>
+    <div class="col">
+        <p>{{ driver.actualTeam.name }}</p>
+    </div>
+    <div class="col">
+        <p>{{ driver.point }}</p>
+    </div>
+    <div *ngIf="this.isLoggedIn" class="col">
+        <div class="btn btn-primary btn-sm me-2" (mouseup)="openModal(driver)">
+            <i class="bi bi-pen"></i>
+        </div>
+        <div class="btn btn-danger btn-sm" (mouseup)="deleteDriver(driver.id)">
+            <i class="bi bi-trash3"></i>
+        </div>
+    </div>
+</div>
+
+<app-modal type="loading" *ngIf="isFetching"></app-modal>
+
+<app-modal type="form" *ngIf="modal">
+    <h1>Create</h1>
+    <form #postForm="ngForm" (ngSubmit)="selectedDriver == undefined ? this.createDriver(postForm) : this.updateDriver(selectedDriver!.id, postForm)">
+        <div class="mb-3">
+            <label for="inputName" class="form-label">Name</label>
+            <input required type="text" class="form-control" id="inputName" [ngModel]="selectedDriver?.name" name="name" #name="ngModel" [class.is-invalid]="!name.valid && name.touched" [class.is-valid]="name.valid">
+            <div class="invalid-feedback">Name is required</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="inputRealName" class="form-label">Real Name</label>
+            <input type="text" class="form-control" id="inputRealName" [ngModel]="selectedDriver?.realName" name="realName" #realName="ngModel">
+        </div>
+
+        <div class="mb-3">
+            <label for="inputNumber" class="form-label">Number</label>
+            <input type="number" required min="1" max="99" class="form-control" id="inputNumber" [ngModel]="selectedDriver === undefined ? 1 : selectedDriver.number" name="number" #number="ngModel" [class.is-invalid]="!number.valid && number.touched">
+        </div>
+
+        <div class="mb-3">
+            <label for="inputActualTeamId" class="form-label">Actual Team</label>
+            <select name="actualTeamId" id="inputActualTeamId" class="form-select" id="inputActualTeamId" [ngModel]="selectedDriver === undefined ? null : selectedDriver.actualTeam.id" #actualTeamId="ngModel">
+                <option [ngValue]="null">None</option>
+                <option *ngFor="let option of season?.teams" [value]="option.id">
+                    {{ option.name }}                                                
+                </option>
+            </select>
+        </div>
+
+        <div class="row d-flex">
+            <div class="col-6">
+                <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="closeModal()" (keypress.esc)="closeModal()">Cancel</button>
+            </div>
+            <div class="col-6">
+                <button class="btn btn-primary btn-sm btn-block" [disabled]="!postForm.valid">Create</button>
+            </div>
+        </div>
+    </form>
+    <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
+        {{error}}
+    </div>
+</app-modal>

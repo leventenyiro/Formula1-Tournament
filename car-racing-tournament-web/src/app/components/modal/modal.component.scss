@@ -12,6 +12,10 @@
     align-items: center;
 }
 
+.modal-loading {
+    z-index: 10000;
+}
+
 .modal-content {
     position: relative;
     padding: 20px;

@@ -1,6 +1,5 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from 'app/models/user';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment'
 import { Season } from '../models/season';
@@ -219,6 +218,33 @@ export class SeasonService {
 
     return this.http.post(
       `${environment.backendUrl}/season/${seasonId}/driver`,
+      {
+        "name": driver.name,
+        "realName": driver.realName,
+        "number": driver.number,
+        "actualTeamId": driver.actualTeamId
+      },
+      {
+        headers: headers,
+        responseType: 'text'
+      }
+    ).pipe(
+      tap(data => data),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
+    )
+  }
+
+  updateDriver(id: string, driver: Driver) {
+    const bearerToken = document.cookie.split("session=")[1].split(";")[0];
+    let headers = new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Access-Control-Allow-Origin', '*')
+    .set('Authorization', `Bearer ${bearerToken}`);
+
+    return this.http.put(
+      `${environment.backendUrl}/driver/${id}`,
       {
         "name": driver.name,
         "realName": driver.realName,

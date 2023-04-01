@@ -62,7 +62,7 @@ export class SeasonComponent implements OnInit {
     }
   }
 
-  onFetchData() {
+  onFetchData(): any {
     this.isFetching = true;
     this.seasonService.getSeason(this.id).subscribe({
       next: season => this.season = season,
@@ -95,6 +95,7 @@ export class SeasonComponent implements OnInit {
       realName: x.realName,
       number: x.number,
       actualTeam: {
+        id: x.actualTeam?.id,
         name: x.actualTeam?.name,
         color: x.actualTeam?.color,
       },
@@ -182,34 +183,6 @@ export class SeasonComponent implements OnInit {
 
   getPermissions() {
     return this.season?.permissions.sort((a: Permission, b: Permission) => b.type - a.type);
-  }
-
-  createDriver(data: any) {
-    console.log(data.value);
-    
-    this.isFetching = true;    
-    this.seasonService.createDriver(data.value, this.season?.id!).subscribe({
-      error: err => {
-        this.error = err;
-        this.onFetchData();
-      },
-      complete: () => {
-        this.onFetchData();
-        this.closeModal();
-      }
-    });
-  }
-
-  updateDriver(id: string) {
-    console.log("updateDriver");
-  }
-
-  deleteDriver(id: string) {
-    this.isFetching = true;
-    this.seasonService.deleteDriver(id).subscribe({
-      error: () => this.onFetchData(),
-      complete: () => this.onFetchData()
-    });
   }
 
   createResult() {
