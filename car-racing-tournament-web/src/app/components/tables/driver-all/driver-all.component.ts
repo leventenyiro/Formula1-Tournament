@@ -27,8 +27,7 @@ export class DriverAllComponent implements OnInit {
 
   constructor(private seasonService: SeasonService) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   createDriver(data: any) {    
     this.seasonService.createDriver(data.value, this.season?.id!).subscribe({

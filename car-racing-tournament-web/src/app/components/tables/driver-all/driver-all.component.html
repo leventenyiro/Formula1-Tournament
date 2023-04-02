@@ -72,7 +72,7 @@
 
         <div class="mb-3">
             <label for="inputActualTeamId" class="form-label">Actual Team</label>
-            <select name="actualTeamId" id="inputActualTeamId" class="form-select" [ngModel]="selectedDriver === undefined ? null : selectedDriver.actualTeam.id" #actualTeamId="ngModel">
+            <select name="actualTeamId" id="inputActualTeamId" class="form-select" [ngModel]="selectedDriver?.actualTeam?.id === undefined ? null : selectedDriver?.actualTeam?.id" #actualTeamId="ngModel">
                 <option [ngValue]="null">None</option>
                 <option *ngFor="let option of season?.teams" [value]="option.id">
                     {{ option.name }}
