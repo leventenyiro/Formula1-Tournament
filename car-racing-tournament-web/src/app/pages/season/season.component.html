@@ -9,7 +9,7 @@
             <p>Created on {{ this.createdAt }}</p>
             <button class="btn btn-primary btn-sm" (mouseup)="onFetchData()">Refresh</button>
         </div>
-    <div class="col-sm-6">
+        <div class="col-sm-6">
             <select class="form-select" [formControl]="selectType">
                 <option value="drivers">Drivers</option>
                 <option value="teams">Teams</option>
@@ -36,74 +36,67 @@
         <div [ngSwitch]="selectType.value" class="row">
             <div *ngSwitchCase="'drivers'">
                 <div *ngIf="selectValue.value === 'all'; else elseDiv">
-                    <app-driver-all
-                        [isLoggedIn]="isLoggedIn"
-                        [season]="season!"
-                        [driverAll]="getDriverAll()"
-                        (onFetchDataEmitter)="onFetchData()"
-                    ></app-driver-all>
+                    <app-driver-all [isLoggedIn]="isLoggedIn" [season]="season!" [driverAll]="getDriverAll()"
+                        (onFetchDataEmitter)="onFetchData()"></app-driver-all>
                 </div>
                 <ng-template #elseDiv>
-                    <app-driver-result
-                        [isLoggedIn]="isLoggedIn"
-                        [season]="season!"
-                        [driverResults]="getDriverById(selectValue.value)"
-                        [driverId]="selectValue.value"
-                        (onFetchDataEmitter)="onFetchData()"
-                    ></app-driver-result>
+                    <app-driver-result [isLoggedIn]="isLoggedIn" [season]="season!"
+                        [driverResults]="getDriverById(selectValue.value)" [driverId]="selectValue.value"
+                        (onFetchDataEmitter)="onFetchData()"></app-driver-result>
                 </ng-template>
             </div>
             <div *ngSwitchCase="'teams'">
                 <div *ngIf="selectValue.value === 'all'; else elseDiv">
-                    <app-team-all
-                        [isLoggedIn]="isLoggedIn"
-                        [season]="season!"
-                        [teamAll]="getTeamAll()"
-                        (onFetchDataEmitter)="onFetchData()"
-                    ></app-team-all>
+                    <app-team-all [isLoggedIn]="isLoggedIn" [season]="season!" [teamAll]="getTeamAll()"
+                        (onFetchDataEmitter)="onFetchData()"></app-team-all>
                 </div>
                 <ng-template #elseDiv>
-                    <app-team-result
-                        [teamResults]="getTeamById(selectValue.value)"
-                    ></app-team-result>
+                    <app-team-result [teamResults]="getTeamById(selectValue.value)"></app-team-result>
                 </ng-template>
             </div>
             <div *ngSwitchCase="'races'">
                 <div *ngIf="selectValue.value === 'all'; else elseDiv">
-                    <app-race-all
-                        [isLoggedIn]="isLoggedIn"
-                        [season]="season!"
-                        [raceAll]="getRaceAll()"
-                        (onFetchDataEmitter)="onFetchData()"
-                    ></app-race-all>
+                    <app-race-all [isLoggedIn]="isLoggedIn" [season]="season!" [raceAll]="getRaceAll()"
+                        (onFetchDataEmitter)="onFetchData()"></app-race-all>
                 </div>
                 <ng-template #elseDiv>
-                    <app-race-result
-                        [isLoggedIn]="isLoggedIn"
-                        [season]="season!"
-                        [raceResults]="getRaceById(selectValue.value)"
-                        [raceId]="selectValue.value"
-                        (onFetchDataEmitter)="onFetchData()"
-                    ></app-race-result>
+                    <app-race-result [isLoggedIn]="isLoggedIn" [season]="season!"
+                        [raceResults]="getRaceById(selectValue.value)" [raceId]="selectValue.value"
+                        (onFetchDataEmitter)="onFetchData()"></app-race-result>
                 </ng-template>
             </div>
         </div>
     </div>
     <div class="col-sm-2">
         <div *ngIf="this.isLoggedIn && getUserPermission()?.type === 1" class="d-grid gap-2 mt-3">
-            <div class="btn btn-outline-primary btn-sm btn-block" (mouseup)="openModal('updateSeason')" *ngIf="!season!.isArchived">Edit</div>
-            <div class="btn btn-outline-primary btn-sm btn-block" (mouseup)="archiveSeason()">{{ season!.isArchived ? 'Unarchive' : 'Archive' }}</div>
-            <div class="btn btn-outline-danger btn-sm btn-block" (mouseup)="openModal('deleteSeason')" *ngIf="!season!.isArchived">Delete</div>
+            <div class="btn btn-outline-primary btn-sm btn-block" (mouseup)="openModal('updateSeason')"
+                *ngIf="!season!.isArchived">Edit</div>
+            <div class="btn btn-outline-primary btn-sm btn-block" (mouseup)="archiveSeason()">{{ season!.isArchived ?
+                'Unarchive' : 'Archive' }}</div>
+            <div class="btn btn-outline-danger btn-sm btn-block" (mouseup)="openModal('deleteSeason')"
+                *ngIf="!season!.isArchived">Delete</div>
         </div>
 
-        <h2 class="mt-3">Moderators</h2>
-        <div *ngFor="let permission of getPermissions()" class="mb-2">
+        <hr>
+
+        <h2>Moderators</h2>
+
+        <div class="d-grid">
+            <button *ngIf="this.isLoggedIn && getUserPermission()?.type === 1 && !season!.isArchived"
+                class="btn btn-outline-primary btn-sm btn-block" (mouseup)="openModal('createPermission')">
+                Add moderator
+            </button>
+        </div>
+
+        <div *ngFor="let permission of getPermissions()" class="my-2">
             <div>
-                <button *ngIf="this.isLoggedIn && getUserPermission()?.type === 1 && permission.type === 0 && !season!.isArchived"
+                <button
+                    *ngIf="this.isLoggedIn && getUserPermission()?.type === 1 && permission.type === 0 && !season!.isArchived"
                     class="btn btn-danger btn-sm d-inline-flex me-1" (mouseup)="deletePermission(permission.id)">
                     <i class="bi bi-x-lg"></i>
                 </button>
-                <button *ngIf="this.isLoggedIn && getUserPermission()?.type === 1 && permission.type === 0 && !season!.isArchived"
+                <button
+                    *ngIf="this.isLoggedIn && getUserPermission()?.type === 1 && permission.type === 0 && !season!.isArchived"
                     class="btn btn-primary btn-sm d-inline-flex me-1" (mouseup)="updatePermission(permission.id)">
                     <i class="bi bi-chevron-up"></i>
                 </button>
@@ -125,11 +118,33 @@
 </div>
 
 <app-modal type="form" *ngIf="modal === 'updateSeason'">
-    <app-season-form
-        [selectedSeason]="season"
-        (onCloseModalEmitter)="closeModal()"
-        (onFetchDataEmitter)="onFetchData()"
-    ></app-season-form>
+    <app-season-form [selectedSeason]="season" (onCloseModalEmitter)="closeModal()"
+        (onFetchDataEmitter)="onFetchData()"></app-season-form>
+</app-modal>
+
+<app-modal type="form" *ngIf="modal === 'createPermission'">
+    <h1>Add moderator</h1>
+    <form #postForm="ngForm" (ngSubmit)="this.createPermission(postForm)">
+        <div class="mb-3">
+            <label for="inputUsernameEmail" class="form-label">Username or E-mail</label>
+            <input required type="text" class="form-control" id="inputUsernameEmail" ngModel name="usernameEmail" #usernameEmail="ngModel"
+            [class.is-invalid]="!usernameEmail.valid && usernameEmail.touched" [class.is-valid]="usernameEmail.valid">
+            <div class="invalid-feedback">Username or E-mail is required</div>
+        </div>
+
+        <div class="row d-flex">
+            <div class="col-6">
+                <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="closeModal()">Cancel</button>
+            </div>
+            <div class="col-6">
+                <button class="btn btn-primary btn-sm btn-block" [disabled]="!postForm.valid">Add</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
+        {{error}}
+    </div>
 </app-modal>
 
 <app-modal type="form" *ngIf="modal === 'deleteSeason'">
