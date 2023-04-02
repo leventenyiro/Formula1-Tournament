@@ -8,7 +8,7 @@
     <div class="col">
         <p>Points</p>
     </div>
-    <div *ngIf="this.isLoggedIn" class="col">
+    <div *ngIf="this.isLoggedIn && !season.isArchived" class="col">
         <button class="btn btn-success btn-sm" (mouseup)="openModal()">Add team</button>
     </div>
 </div>
@@ -23,7 +23,7 @@
     <div class="col">
         <p>{{ team.point }}</p>
     </div>
-    <div *ngIf="this.isLoggedIn" class="col">
+    <div *ngIf="this.isLoggedIn && !season.isArchived" class="col">
         <div class="btn btn-primary btn-sm me-2" (mouseup)="openModal(team)">
             <i class="bi bi-pen"></i>
         </div>

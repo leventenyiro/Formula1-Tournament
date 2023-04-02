@@ -17,7 +17,7 @@
     <div class="col">
         <p>Points</p>
     </div>
-    <div *ngIf="this.isLoggedIn" class="col">
+    <div *ngIf="this.isLoggedIn && !season.isArchived" class="col">
         <button class="btn btn-success btn-sm" (mouseup)="openModal()">Add driver</button>
     </div>
 </div>
@@ -41,7 +41,7 @@
     <div class="col">
         <p>{{ driver.point }}</p>
     </div>
-    <div *ngIf="this.isLoggedIn" class="col">
+    <div *ngIf="this.isLoggedIn && !season.isArchived" class="col">
         <div class="btn btn-primary btn-sm me-2" (mouseup)="openModal(driver)">
             <i class="bi bi-pen"></i>
         </div>
@@ -75,7 +75,7 @@
             <select name="actualTeamId" id="inputActualTeamId" class="form-select" [ngModel]="selectedDriver === undefined ? null : selectedDriver.actualTeam.id" #actualTeamId="ngModel">
                 <option [ngValue]="null">None</option>
                 <option *ngFor="let option of season?.teams" [value]="option.id">
-                    {{ option.name }}                                                
+                    {{ option.name }}
                 </option>
             </select>
         </div>
