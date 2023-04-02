@@ -23,6 +23,7 @@ export class MySeasonsComponent implements OnInit {
   selectRole = new FormControl('');
   user?: User;
   isLoggedIn = false;
+  modal: boolean = false;
 
   constructor(private seasonService: SeasonService, private authService: AuthService, private router: Router) { }
 
@@ -89,5 +90,9 @@ export class MySeasonsComponent implements OnInit {
 
   navigateSeason(id: string) {
     this.router.navigate([`season/${id}`])
+  }
+
+  setModal(modal: boolean) {
+    this.modal = modal;
   }
 }

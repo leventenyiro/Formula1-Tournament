@@ -1,15 +1,16 @@
 <app-modal type="loading" *ngIf="isFetching"></app-modal>
 
-<div class="container">
+<div class="container-lg">
   <div class="row mt-4">
     <h1 class="mx-4">My Seasons</h1>
   </div>
 
   <div class="row mx-3">
-    <div class="col-sm-3">
+    <div class="col-sm-4">
       <button class="btn btn-primary" (mouseup)="onFetchData()">Refresh</button>
+      <button class="btn btn-success ms-3" (mouseup)="setModal(true)">Create</button>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-5">
       <div class="input-group">
         <span class="input-group-text"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
             fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -20,7 +21,7 @@
           (keyup)="onSearch()">
       </div>
     </div>
-    <div class="col-sm-3">
+    <div class="col-sm-2">
       <select class="form-select" aria-label="Select role" [formControl]="selectRole" (change)="onSelectRole()">
         <option [selected]="true" value="all">All</option>
         <option value="admin">Admin</option>
@@ -41,3 +42,10 @@
     </div>
   </div>
 </div>
+
+<app-modal type="form" *ngIf="modal">
+  <app-season-form
+      (onCloseModalEmitter)="setModal(false)"
+      (onFetchDataEmitter)="onFetchData()"
+  ></app-season-form>
+</app-modal>
