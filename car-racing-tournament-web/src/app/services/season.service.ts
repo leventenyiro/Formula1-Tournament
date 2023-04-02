@@ -488,4 +488,29 @@ export class SeasonService {
       })
     )
   }
+
+  createPermission(usernameEmail: string, seasonId: string) {
+    const bearerToken = document.cookie.split("session=")[1].split(";")[0];
+    let headers = new HttpHeaders()
+      .set('content-type', 'application/x-www-form-urlencoded')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${bearerToken}`);
+  
+    const params = new URLSearchParams();
+    params.set('usernameEmail', usernameEmail);
+  
+    return this.http.post(
+      `${environment.backendUrl}/season/${seasonId}/permission`,
+      params.toString(),
+      {
+        headers: headers,
+        responseType: 'text'
+      }
+    ).pipe(
+      tap(data => data),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
+    )
+  }
 }

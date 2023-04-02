@@ -221,6 +221,22 @@ export class SeasonComponent implements OnInit {
     });
   }
 
+  createPermission(data: any) {
+    this.isFetching = true;
+    this.seasonService.createPermission(data.value.usernameEmail, this.season!.id).subscribe({
+      error: err => {
+        this.error = err;
+        this.onFetchData();
+        this.isFetching = false;
+      },
+      complete: () => {
+        this.onFetchData();
+        this.closeModal();
+        this.isFetching = false;
+      }
+    });
+  }
+
   openModal(modal: string) {
     this.modal = modal;
   }
