@@ -185,18 +185,18 @@ export class SeasonComponent implements OnInit {
     return this.season?.permissions.sort((a: Permission, b: Permission) => b.type - a.type);
   }
 
-  updateSeason() {
-    console.log("updateSeason");
-  }
-
   archiveSeason() {
-    console.log("archiveSeason");
+    this.isFetching = true;
+    this.seasonService.archiveSeason(this.season!.id).subscribe({
+      error: () => this.isFetching = false,
+      complete: () => this.onFetchData()
+    });
   }
 
   deleteSeason() {
     this.isFetching = true;
     this.seasonService.deleteSeason(this.season!.id).subscribe({
-      error: () => {},
+      error: () => this.isFetching = false,
       complete: () => {
         this.isFetching = false;
         this.modal = '';
