@@ -8,6 +8,7 @@
   <div class="row mx-3">
     <div class="col-sm-5">
       <button class="btn btn-primary" (mouseup)="onFetchData()">Refresh</button>
+      <button class="btn btn-success ms-3" (mouseup)="setModal(true)">Create</button>
     </div>
     <div class="col-sm-7">
       <div class="input-group">
@@ -34,3 +35,10 @@
     </div>
   </div>
 </div>
+
+<app-modal type="form" *ngIf="modal">
+  <app-season-form
+      (onCloseModalEmitter)="setModal(false)"
+      (onFetchDataEmitter)="onFetchData()"
+  ></app-season-form>
+</app-modal>

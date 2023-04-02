@@ -20,6 +20,7 @@ export class SeasonsComponent implements OnInit {
   error = "";
   search = new FormControl('');
   isLoggedIn = false;
+  modal: boolean = false;
 
   constructor(
     private seasonService: SeasonService, 
@@ -73,5 +74,9 @@ export class SeasonsComponent implements OnInit {
 
   navigateSeason(id: string) {
     this.router.navigate([`season/${id}`]);
+  }
+
+  setModal(modal: boolean) {
+    this.modal = modal;
   }
 }
