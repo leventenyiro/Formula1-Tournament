@@ -66,19 +66,19 @@
     <h1>Create</h1>
     <form #postForm="ngForm" (ngSubmit)="selectedResult == undefined ? this.createResult(postForm) : this.updateResult(selectedResult!.id, postForm)">
         <div class="mb-3">
-            <label for="inputTeamId" class="form-label">Team</label>
-            <select name="teamId" id="inputTeamId" class="form-select" [formControl]="teamId">
-                <option *ngFor="let team of season?.teams" [value]="team.id">
-                    {{ team.name }}
+            <label for="inputDriverId" class="form-label">Driver</label>
+            <select name="driverId" id="inputDriverId" class="form-select" [formControl]="driverId" (change)="setTeamId()">
+                <option *ngFor="let driver of season?.drivers" [value]="driver.id">
+                    {{ driver.name }}
                 </option>
             </select>
         </div>
 
         <div class="mb-3">
-            <label for="inputDriverId" class="form-label">Driver</label>
-            <select name="driverId" id="inputDriverId" class="form-select" [ngModel]="selectedResult === undefined ? season!.drivers[0].id : selectedResult.driver.id" #driverId="ngModel" (change)="setTeamId(postForm.value.driverId)">
-                <option *ngFor="let driver of season?.drivers" [value]="driver.id">
-                    {{ driver.name }}
+            <label for="inputTeamId" class="form-label">Team</label>
+            <select name="teamId" id="inputTeamId" class="form-select" [formControl]="teamId">
+                <option *ngFor="let team of season?.teams" [value]="team.id">
+                    {{ team.name }}
                 </option>
             </select>
         </div>

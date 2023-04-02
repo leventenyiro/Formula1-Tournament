@@ -17,7 +17,7 @@
     <div class="col">
         <p>Points</p>
     </div>
-    <div *ngIf="this.isLoggedIn && !season.isArchived" class="col">
+    <div *ngIf="this.isLoggedIn && !season?.isArchived" class="col">
         <button class="btn btn-success btn-sm" (mouseup)="openModal()">Add driver</button>
     </div>
 </div>

@@ -30,11 +30,11 @@ export class RaceResultComponent implements OnInit {
   modal: boolean = false;
   selectedResult?: Result;
   teamId = new FormControl('');
+  driverId = new FormControl('');
 
   constructor(private seasonService: SeasonService) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   createResult(data: any) {
     if (data.value.position === 'DNF' || data.value.position === 'DSQ') {
@@ -43,6 +43,7 @@ export class RaceResultComponent implements OnInit {
     } else
       data.value.type = 'Finished';
     data.value.raceId = this.raceId;
+    data.value.driverId = this.driverId.value;
     data.value.teamId = this.teamId.value;
 
     this.seasonService.createResult(data.value).subscribe({
@@ -64,6 +65,7 @@ export class RaceResultComponent implements OnInit {
     } else
       data.value.type = 'Finished';
     data.value.raceId = this.raceId;
+    data.value.driverId = this.driverId.value;
     data.value.teamId = this.teamId.value;
     
     this.seasonService.updateResult(id, data.value).subscribe({
@@ -87,9 +89,16 @@ export class RaceResultComponent implements OnInit {
   }
 
   openModal(selectedResult?: Result) {
-    this.modal = true;    
-    this.selectedResult = selectedResult;    
-    this.teamId.setValue(selectedResult === undefined ? this.season!.teams[0].id : selectedResult.team.id);
+    this.modal = true;
+    this.selectedResult = selectedResult;
+
+    this.driverId.setValue(this.selectedResult === undefined ? 
+      this.season!.drivers[0].id : 
+      this.selectedResult.driver.id);
+
+    const actualTeamId = this.season.drivers.find(x => x.id === this.driverId.value)?.actualTeam?.id;
+    if (actualTeamId !== undefined)
+      this.teamId.setValue(actualTeamId);
   }
 
   closeModal() {
@@ -106,8 +115,8 @@ export class RaceResultComponent implements OnInit {
     return positions;
   }
 
-  setTeamId(driverId: string) {    
-    const actualTeamId = this.season.drivers.find(x => x.id === driverId)?.actualTeam?.id;
+  setTeamId() {
+    const actualTeamId = this.season.drivers.find(x => x.id === this.driverId.value)?.actualTeam?.id;
     if (actualTeamId !== undefined)
       this.teamId.setValue(actualTeamId);
   }

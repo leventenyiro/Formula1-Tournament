@@ -3,8 +3,8 @@
 <div class="row" #elseDiv>
     <div class="col-sm-10 row pt-3 ps-5">
         <div class="col-sm-6">
-            <h1>{{ season?.name}}
-                <span *ngIf="season!.isArchived" class="gold-tag">archived</span>
+            <h1>{{ season?.name }}
+                <span *ngIf="season?.isArchived" class="gold-tag">archived</span>
             </h1>
             <p>Created on {{ this.createdAt }}</p>
             <button class="btn btn-primary btn-sm" (mouseup)="onFetchData()">Refresh</button>
