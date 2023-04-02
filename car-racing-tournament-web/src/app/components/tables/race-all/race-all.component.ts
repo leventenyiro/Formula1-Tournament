@@ -30,6 +30,8 @@ export class RaceAllComponent implements OnInit {
   ngOnInit(): void { }
 
   createRace(data: any) {
+    data.value.dateTime = `${data.value.date}T${data.value.time}`;
+    
     this.seasonService.createRace(data.value, this.season?.id!).subscribe({
       error: err => {
         this.error = err;
@@ -43,6 +45,8 @@ export class RaceAllComponent implements OnInit {
   }
 
   updateRace(id: string, data: any) {
+    data.value.dateTime = `${data.value.date}T${data.value.time}`;
+
     this.seasonService.updateRace(id, data.value).subscribe({
       error: err => {
         this.error = err;
@@ -64,8 +68,6 @@ export class RaceAllComponent implements OnInit {
 
   openModal(selectedRace?: Race) {
     this.modal = true;
-    console.log(selectedRace?.dateTime);
-    
     this.selectedRace = selectedRace;
   }
 
@@ -75,13 +77,11 @@ export class RaceAllComponent implements OnInit {
     this.selectedRace = undefined;
   }
 
-  getCurrentDate() {
-    return Date.now();
+  getCurrentDate() {    
+    return new Date().toISOString().split('T')[0];
   }
 
-  getSelectedDate() {
-    // console.log(`${this.selectedRace?.dateTime.hours}:${this.selectedRace?.dateTime.minutes}`);
-    
-    return `${this.selectedRace?.dateTime.hours}:${this.selectedRace?.dateTime.minutes}`;
+  getCurrentTime() {
+    return new Date().toISOString().split('T')[1].substring(0, 5);
   }
 }

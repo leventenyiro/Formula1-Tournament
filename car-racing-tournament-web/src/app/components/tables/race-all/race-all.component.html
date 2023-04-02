@@ -51,11 +51,11 @@
         <div class="row">
             <div class="col-sm-6">
                 <label for="inputDate" class="form-label">Date</label>
-                <input required type="date" class="form-control" id="inputDate" [ngModel]="selectedRace?.dateTime === undefined ? getCurrentDate() : selectedRace?.dateTime" name="date" #date="ngModel">
+                <input required type="date" class="form-control" id="inputDate" [ngModel]="selectedRace === undefined ? getCurrentDate() : selectedRace.dateTime!.toString().split(' ')[0]" name="date" #date="ngModel">
             </div>
             <div class="col-sm-6">
                 <label for="inputTime" class="form-label">Time</label>
-                <input required type="time" class="form-control" id="inputTime" [ngModel]="getSelectedDate()" name="time" #time="ngModel">
+                <input required type="time" class="form-control" id="inputTime" [ngModel]="selectedRace === undefined ? getCurrentTime() : selectedRace.dateTime!.toString().split(' ')[1]" name="time" #time="ngModel">
             </div>
         </div>
         <div class="mb-3">
