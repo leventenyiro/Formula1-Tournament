@@ -50,8 +50,8 @@ export class SeasonService {
     )
   }
 
-  createSeason(season: Season, documentCookie: string) {
-    const bearerToken = documentCookie.split("session=")[1].split(";")[0];
+  createSeason(season: Season) {
+    const bearerToken = document.cookie.split("session=")[1].split(";")[0];
     let headers = new HttpHeaders()
     .set('content-type', 'application/json')
     .set('Access-Control-Allow-Origin', '*')
@@ -66,6 +66,51 @@ export class SeasonService {
       {
         headers: headers,
         responseType: 'text'
+      }
+    ).pipe(
+      tap(data => data),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
+    )
+  }
+
+  updateSeason(id: string, season: Season) {
+    const bearerToken = document.cookie.split("session=")[1].split(";")[0];
+    let headers = new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Access-Control-Allow-Origin', '*')
+    .set('Authorization', `Bearer ${bearerToken}`);
+
+    return this.http.put(
+      `${environment.backendUrl}/season/${id}`,
+      {
+        "name": season.name,
+        "description": season.description
+      },
+      {
+        headers: headers,
+        responseType: 'text'
+      }
+    ).pipe(
+      tap(data => data),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
+    )
+  }
+
+  deleteSeason(id: string) {
+    const bearerToken = document.cookie.split("session=")[1].split(";")[0];
+    let headers = new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Access-Control-Allow-Origin', '*')
+    .set('Authorization', `Bearer ${bearerToken}`);
+
+    return this.http.delete(
+      `${environment.backendUrl}/season/${id}`,
+      {
+        headers: headers
       }
     ).pipe(
       tap(data => data),

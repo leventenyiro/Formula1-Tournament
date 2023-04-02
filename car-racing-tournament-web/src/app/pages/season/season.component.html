@@ -89,9 +89,9 @@
     </div>
     <div class="col-sm-2">
         <div *ngIf="this.isLoggedIn && getUserPermission()?.type === 1" class="d-grid gap-2 mt-3">
-            <div class="btn btn-outline-primary btn-sm btn-block" (mouseup)="updateSeason()">Edit</div>
+            <div class="btn btn-outline-primary btn-sm btn-block" (mouseup)="openModal('updateSeason')">Edit</div>
             <div class="btn btn-outline-primary btn-sm btn-block" (mouseup)="archiveSeason()">Archive</div>
-            <div class="btn btn-outline-danger btn-sm btn-block" (mouseup)="deleteSeason()">Delete</div>
+            <div class="btn btn-outline-danger btn-sm btn-block" (mouseup)="openModal('deleteSeason')">Delete</div>
         </div>
 
         <h2 class="mt-3">Moderators</h2>
@@ -121,3 +121,30 @@
         <p>{{ season?.description }}</p>
     </div>
 </div>
+
+<app-modal type="form" *ngIf="modal === 'updateSeason'">
+    <app-season-form
+        [selectedSeason]="season"
+        (onCloseModalEmitter)="closeModal()"
+        (onFetchDataEmitter)="onFetchData()"
+    ></app-season-form>
+</app-modal>
+
+<app-modal type="form" *ngIf="modal === 'deleteSeason'">
+    <h1>Delete "{{ season?.name }}" season</h1>
+    <p>Are you sure?</p>
+    <form #postForm="ngForm" (ngSubmit)="deleteSeason()">
+        <div class="row d-flex">
+            <div class="col-6">
+                <button class="btn btn-outline-primary btn-sm btn-block" (mouseup)="closeModal()">Cancel</button>
+            </div>
+            <div class="col-6">
+                <button class="btn btn-danger btn-sm btn-block">Delete</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
+        {{error}}
+    </div>
+</app-modal>

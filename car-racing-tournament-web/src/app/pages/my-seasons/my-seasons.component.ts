@@ -29,7 +29,7 @@ export class MySeasonsComponent implements OnInit {
   ngOnInit(): void {
     this.isFetching = true
 
-    this.authService.getUser(document.cookie).subscribe({
+    this.authService.getUser().subscribe({
       next: user => this.user = user,
       error: () => {
         this.isFetching = false;

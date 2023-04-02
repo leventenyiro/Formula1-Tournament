@@ -52,12 +52,10 @@ export class SeasonComponent implements OnInit {
 
     if (this.isLoggedIn) {
       this.isFetching = true;
-      this.authService.getUser(document.cookie).subscribe({
-        next: user => this.user = user,
-        error: () => {
-          this.isFetching = false;
-        }
+      this.authService.getUser().subscribe({
+        next: user => this.user = user
       });
+      this.isFetching = false;
     }
   }
 
@@ -196,14 +194,15 @@ export class SeasonComponent implements OnInit {
   }
 
   deleteSeason() {
-    /*this.isFetching = true;
-    this.seasonService.deleteSeason(this.season?.id).subscribe({
+    this.isFetching = true;
+    this.seasonService.deleteSeason(this.season!.id).subscribe({
       error: () => {},
       complete: () => {
         this.isFetching = false;
+        this.modal = '';
         this.router.navigate(['seasons'])
       }
-    });*/
+    });
   }
 
   deletePermission(id: string) {
