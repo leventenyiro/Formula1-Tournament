@@ -88,9 +88,7 @@ export class RaceResultComponent implements OnInit {
 
   openModal(selectedResult?: Result) {
     this.modal = true;    
-    this.selectedResult = selectedResult;
-    console.log(this.selectedResult);
-    
+    this.selectedResult = selectedResult;    
     this.teamId.setValue(selectedResult === undefined ? this.season!.teams[0].id : selectedResult.team.id);
   }
 
@@ -108,9 +106,7 @@ export class RaceResultComponent implements OnInit {
     return positions;
   }
 
-  setTeamId(driverId: string) {
-    console.log(driverId);
-    
+  setTeamId(driverId: string) {    
     const actualTeamId = this.season.drivers.find(x => x.id === driverId)?.actualTeam?.id;
     if (actualTeamId !== undefined)
       this.teamId.setValue(actualTeamId);

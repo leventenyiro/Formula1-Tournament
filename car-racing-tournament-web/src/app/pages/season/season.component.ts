@@ -187,54 +187,6 @@ export class SeasonComponent implements OnInit {
     return this.season?.permissions.sort((a: Permission, b: Permission) => b.type - a.type);
   }
 
-  createResult() {
-    console.log("createResult");
-  }
-
-  updateResult(id: string) {
-    console.log("updateResult");
-  }
-
-  deleteResult(id: string) {
-    this.isFetching = true;
-    this.seasonService.deleteResult(id).subscribe({
-      error: () => this.onFetchData(),
-      complete: () => this.onFetchData()
-    });
-  }
-
-  createTeam() {
-    console.log("createTeam");
-  }
-
-  updateTeam(id: string) {
-    console.log("updateTeam");
-  }
-
-  deleteTeam(id: string) {    
-    this.isFetching = true;
-    this.seasonService.deleteTeam(id).subscribe({
-      error: () => this.onFetchData(),
-      complete: () => this.onFetchData()
-    });
-  }
-
-  createRace() {
-    console.log("createRace");
-  }
-
-  updateRace(id: string) {
-    console.log("updateRace");
-  }
-
-  deleteRace(id: string) {
-    this.isFetching = true;
-    this.seasonService.deleteRace(id).subscribe({
-      error: () => this.onFetchData(),
-      complete: () => this.onFetchData()
-    });
-  }
-
   updateSeason() {
     console.log("updateSeason");
   }
