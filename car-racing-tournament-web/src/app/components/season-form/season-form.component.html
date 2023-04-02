@@ -1,0 +1,27 @@
+<h1>Create season</h1>
+<form #postForm="ngForm" (ngSubmit)="selectedSeason == undefined ? this.createSeason(postForm) : this.updateSeason(selectedSeason!.id, postForm)">
+    <div class="mb-3">
+        <label for="inputName" class="form-label">Name</label>
+        <input required type="text" class="form-control" id="inputName" [ngModel]="selectedSeason?.name" name="name" #name="ngModel"
+            [class.is-invalid]="!name.valid && name.touched" [class.is-valid]="name.valid">
+        <div class="invalid-feedback">Name is required</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="inputDescription" class="form-label">Description</label>
+        <textarea class="form-control" id="inputDescription" rows="5" [ngModel]="selectedSeason?.description" name="description" #name="ngModel"></textarea>
+    </div>
+
+    <div class="row d-flex">
+        <div class="col-6">
+            <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="closeModal()">Cancel</button>
+        </div>
+        <div class="col-6">
+            <button class="btn btn-primary btn-sm btn-block" [disabled]="!postForm.valid">Create</button>
+        </div>
+    </div>
+</form>
+
+<div class="alert alert-danger mt-3" role="alert" *ngIf="error">
+    {{error}}
+</div>

@@ -1,6 +1,6 @@
-<div class="modal">
+<div class="modal" [ngClass]="type === 'loading' ? 'modal-loading' : ''">
     <div class="modal-content">
-        <div class="spinner">
+        <div class="spinner" *ngIf="type === 'loading'">
             <div class="spinner-border" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
@@ -8,5 +8,13 @@
         <!-- <div class="alert alert-danger" role="alert" *ngIf="error">
             {{error}}
         </div> -->
+        <div class="row" *ngIf="type === 'error'">
+            <div class="col-2 bg-danger font-light">
+                <i class="bi bi-exclamation-lg"></i>
+            </div>
+        </div>
+        <div class="row" *ngIf="type === 'form'">
+            <ng-content></ng-content>
+        </div>
     </div>
 </div>

@@ -80,8 +80,8 @@ export class AuthService {
     })
   }
 
-  getUser(documentCookie: string): Observable<User> {
-    const bearerToken = documentCookie.split("session=")[1].split(";")[0];
+  getUser(): Observable<User> {
+    const bearerToken = document.cookie.split("session=")[1].split(";")[0];
     if (!bearerToken) {
       catchError((error: HttpErrorResponse) => {
         return throwError(() => new Error(error.error));

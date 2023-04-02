@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateSeasonComponent } from './create-season.component';
+import { DriverAllComponent } from './driver-all.component';
 
-describe('CreateComponent', () => {
-  let component: CreateSeasonComponent;
-  let fixture: ComponentFixture<CreateSeasonComponent>;
+describe('DriverAllComponent', () => {
+  let component: DriverAllComponent;
+  let fixture: ComponentFixture<DriverAllComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CreateSeasonComponent ]
+      declarations: [ DriverAllComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateSeasonComponent);
+    fixture = TestBed.createComponent(DriverAllComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

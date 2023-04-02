@@ -12,6 +12,7 @@ export class Driver {
     public actualTeam: Team,
     public season: Season,
     public races: Race[],
-    public results: Result[]
+    public results: Result[],
+    public actualTeamId?: string
   ) {}
 }

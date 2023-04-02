@@ -29,6 +29,5 @@ export class HeaderComponent implements OnInit {
     document.cookie = "session=";
     this.isLoggedInInit();
     this.authService.loggedIn.emit(false);
-    this.router.navigate(['']);
   }
 }

@@ -1,13 +1,15 @@
-<app-modal *ngIf="isFetching"></app-modal>
+<app-modal type="loading" *ngIf="isFetching"></app-modal>
 
 <div class="row" #elseDiv>
     <div class="col-sm-10 row pt-3 ps-5">
         <div class="col-sm-6">
-            <h1>{{ season?.name}}</h1>
+            <h1>{{ season?.name }}
+                <span *ngIf="season?.isArchived" class="gold-tag">archived</span>
+            </h1>
             <p>Created on {{ this.createdAt }}</p>
             <button class="btn btn-primary btn-sm" (mouseup)="onFetchData()">Refresh</button>
         </div>
-        <div class="col-sm-6">
+    <div class="col-sm-6">
             <select class="form-select" [formControl]="selectType">
                 <option value="drivers">Drivers</option>
                 <option value="teams">Teams</option>
@@ -34,300 +36,74 @@
         <div [ngSwitch]="selectType.value" class="row">
             <div *ngSwitchCase="'drivers'">
                 <div *ngIf="selectValue.value === 'all'; else elseDiv">
-                    <div class="header-row">
-                        <div class="col">
-                            <p>Position</p>
-                        </div>
-                        <div class="col">
-                            <p>Name</p>
-                        </div>
-                        <div class="col">
-                            <p>Real Name</p>
-                        </div>
-                        <div class="col">
-                            <p>Number</p>
-                        </div>
-                        <div class="col">
-                            <p>Team</p>
-                        </div>
-                        <div class="col">
-                            <p>Points</p>
-                        </div>
-                        <div *ngIf="this.isLoggedIn" class="col">
-                            <button class="btn btn-success btn-sm" (mouseup)="createDriver()">Add driver</button>
-                        </div>
-                    </div>
-                    <div class="table-row mb-3" *ngFor="let driver of getDriverAll(); index as i;">
-                        <div class="col team-color" [ngStyle]="{'background-color': driver.actualTeam.color}"></div>
-                        <div class="col">
-                            <p>{{ i + 1 }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ driver.name }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ driver.realName }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ driver.number }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ driver.actualTeam.name }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ driver.point }}</p>
-                        </div>
-                        <div *ngIf="this.isLoggedIn" class="col">
-                            <div class="btn btn-primary btn-sm me-2" (mouseup)="updateDriver(driver.id)">
-                                <i class="bi bi-pen"></i>
-                            </div>
-                            <div class="btn btn-danger btn-sm" (mouseup)="deleteDriver(driver.id)">
-                                <i class="bi bi-trash3"></i>
-                            </div>
-                        </div>
-                    </div>
+                    <app-driver-all
+                        [isLoggedIn]="isLoggedIn"
+                        [season]="season!"
+                        [driverAll]="getDriverAll()"
+                        (onFetchDataEmitter)="onFetchData()"
+                    ></app-driver-all>
                 </div>
                 <ng-template #elseDiv>
-                    <div class="header-row">
-                        <div class="col">
-                            <p>Race</p>
-                        </div>
-                        <div class="col">
-                            <p>Date</p>
-                        </div>
-                        <div class="col">
-                            <p>Team</p>
-                        </div>
-                        <div class="col">
-                            <p>Position</p>
-                        </div>
-                        <div class="col">
-                            <p>Points</p>
-                        </div>
-                        <div *ngIf="this.isLoggedIn" class="col">
-                            <button class="btn btn-success btn-sm" (mouseup)="createResult()">Add result</button>
-                        </div>
-                    </div>
-                    <div class="table-row mb-3" *ngFor="let result of getDriverById(selectValue.value)">
-                        <div class="col team-color" [ngStyle]="{'background-color': result.team.color}"></div>
-                        <div class="col">
-                            <p>{{ result.race.name }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ result.race.dateTime }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ result.team.name }}</p>
-                        </div>
-                        <div class="col">
-                            <p>
-                                <span [ngClass]="result.position === 'DSQ' ? 'dsq-tag' : ''">
-                                    {{ result.position }}
-                                </span>
-                            </p>
-                        </div>
-                        <div class="col">
-                            <p>{{ result.point }}</p>
-                        </div>
-                        <div *ngIf="this.isLoggedIn" class="col">
-                            <div class="btn btn-primary btn-sm me-2" (mouseup)="updateResult(result.id)">
-                                <i class="bi bi-pen"></i>
-                            </div>
-                            <div class="btn btn-danger btn-sm" (mouseup)="deleteResult(result.id)">
-                                <i class="bi bi-trash3"></i>
-                            </div>
-                        </div>
-                    </div>
+                    <app-driver-result
+                        [isLoggedIn]="isLoggedIn"
+                        [season]="season!"
+                        [driverResults]="getDriverById(selectValue.value)"
+                        [driverId]="selectValue.value"
+                        (onFetchDataEmitter)="onFetchData()"
+                    ></app-driver-result>
                 </ng-template>
             </div>
             <div *ngSwitchCase="'teams'">
                 <div *ngIf="selectValue.value === 'all'; else elseDiv">
-                    <div class="header-row">
-                        <div class="col">
-                            <p>Position</p>
-                        </div>
-                        <div class="col">
-                            <p>Race</p>
-                        </div>
-                        <div class="col">
-                            <p>Points</p>
-                        </div>
-                        <div *ngIf="this.isLoggedIn" class="col">
-                            <button class="btn btn-success btn-sm" (mouseup)="createTeam()">Add team</button>
-                        </div>
-                    </div>
-                    <div class="table-row mb-3" *ngFor="let team of getTeamAll(); index as i;">
-                        <div class="col team-color" [ngStyle]="{'background-color': team.color}"></div>
-                        <div class="col">
-                            <p>{{ i + 1 }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ team.name }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ team.point }}</p>
-                        </div>
-                        <div *ngIf="this.isLoggedIn" class="col">
-                            <div class="btn btn-primary btn-sm me-2" (mouseup)="updateTeam(team.id)">
-                                <i class="bi bi-pen"></i>
-                            </div>
-                            <div class="btn btn-danger btn-sm" (mouseup)="deleteTeam(team.id)">
-                                <i class="bi bi-trash3"></i>
-                            </div>
-                        </div>
-                    </div>
+                    <app-team-all
+                        [isLoggedIn]="isLoggedIn"
+                        [season]="season!"
+                        [teamAll]="getTeamAll()"
+                        (onFetchDataEmitter)="onFetchData()"
+                    ></app-team-all>
                 </div>
                 <ng-template #elseDiv>
-                    <div class="header-row">
-                        <div class="col">
-                            <p>Race</p>
-                        </div>
-                        <div class="col">
-                            <p>Date</p>
-                        </div>
-                        <div class="col">
-                            <p>Points</p>
-                        </div>
-                    </div>
-                    <div class="table-row mb-3" *ngFor="let result of getTeamById(selectValue.value)">
-                        <div class="col">
-                            <p>{{ result.race.name }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ result.race.dateTime }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ result.point }}</p>
-                        </div>
-                    </div>
+                    <app-team-result
+                        [teamResults]="getTeamById(selectValue.value)"
+                    ></app-team-result>
                 </ng-template>
             </div>
             <div *ngSwitchCase="'races'">
                 <div *ngIf="selectValue.value === 'all'; else elseDiv">
-                    <div class="header-row">
-                        <div class="col">
-                            <p>Race</p>
-                        </div>
-                        <div class="col">
-                            <p>Date</p>
-                        </div>
-                        <div class="col">
-                            <p>Winner</p>
-                        </div>
-                        <div class="col">
-                            <p>Team</p>
-                        </div>
-                        <div *ngIf="this.isLoggedIn" class="col">
-                            <button class="btn btn-success btn-sm" (mouseup)="createRace()">Add race</button>
-                        </div>
-                    </div>
-                    <div class="table-row mb-3" *ngFor="let race of getRaceAll();">
-                        <div class="col team-color" [ngStyle]="{'background-color': race.winner.team.color}"></div>
-                        <div class="col">
-                            <p>{{ race.name }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ race.dateTime }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ race.winner.name }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ race.winner.team.name }}</p>
-                        </div>
-                        <div *ngIf="this.isLoggedIn" class="col">
-                            <div class="btn btn-primary btn-sm me-2" (mouseup)="updateRace(race.id)">
-                                <i class="bi bi-pen"></i>
-                            </div>
-                            <div class="btn btn-danger btn-sm" (mouseup)="deleteRace(race.id)">
-                                <i class="bi bi-trash3"></i>
-                            </div>
-                        </div>
-                    </div>
+                    <app-race-all
+                        [isLoggedIn]="isLoggedIn"
+                        [season]="season!"
+                        [raceAll]="getRaceAll()"
+                        (onFetchDataEmitter)="onFetchData()"
+                    ></app-race-all>
                 </div>
                 <ng-template #elseDiv>
-                    <div class="header-row">
-                        <div class="col">
-                            <p>Name</p>
-                        </div>
-                        <div class="col">
-                            <p>Number</p>
-                        </div>
-                        <div class="col">
-                            <p>Real Name</p>
-                        </div>
-                        <div class="col">
-                            <p>Number</p>
-                        </div>
-                        <div class="col">
-                            <p>Team</p>
-                        </div>
-                        <div class="col">
-                            <p>Position</p>
-                        </div>
-                        <div class="col">
-                            <p>Points</p>
-                        </div>
-                        <div *ngIf="this.isLoggedIn" class="col">
-                            <button *ngIf="this.isLoggedIn" class="btn btn-success btn-sm"
-                                (mouseup)="createResult()">Add result</button>
-                        </div>
-                    </div>
-                    <div class="table-row mb-3" *ngFor="let result of getRaceById(selectValue.value); index as i;">
-                        <div class="col team-color" [ngStyle]="{'background-color': result.team.color}"></div>
-                        <div class="col">
-                            <p>{{ i + 1 }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ result.driver.name }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ result.driver.realName }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ result.driver.number }}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{ result.team.name }}</p>
-                        </div>
-                        <div class="col">
-                            <p>
-                                <span [ngClass]="result.position === 'DSQ' ? 'dsq-tag' : ''">
-                                    {{ result.position }}
-                                </span>
-                            </p>
-                        </div>
-                        <div class="col">
-                            <p>{{ result.point }}</p>
-                        </div>
-                        <div *ngIf="this.isLoggedIn" class="col">
-                            <div class="btn btn-primary btn-sm me-2" (mouseup)="updateResult(result.id)">
-                                <i class="bi bi-pen"></i>
-                            </div>
-                            <div class="btn btn-danger btn-sm" (mouseup)="deleteResult(result.id)">
-                                <i class="bi bi-trash3"></i>
-                            </div>
-                        </div>
-                    </div>
+                    <app-race-result
+                        [isLoggedIn]="isLoggedIn"
+                        [season]="season!"
+                        [raceResults]="getRaceById(selectValue.value)"
+                        [raceId]="selectValue.value"
+                        (onFetchDataEmitter)="onFetchData()"
+                    ></app-race-result>
                 </ng-template>
             </div>
         </div>
     </div>
     <div class="col-sm-2">
         <div *ngIf="this.isLoggedIn && getUserPermission()?.type === 1" class="d-grid gap-2 mt-3">
-            <div class="btn btn-outline-primary btn-sm btn-block" (mouseup)="updateSeason()">Edit</div>
-            <div class="btn btn-outline-primary btn-sm btn-block" (mouseup)="archiveSeason()">Archive</div>
-            <div class="btn btn-outline-danger btn-sm btn-block" (mouseup)="deleteSeason()">Delete</div>
+            <div class="btn btn-outline-primary btn-sm btn-block" (mouseup)="openModal('updateSeason')" *ngIf="!season!.isArchived">Edit</div>
+            <div class="btn btn-outline-primary btn-sm btn-block" (mouseup)="archiveSeason()">{{ season!.isArchived ? 'Unarchive' : 'Archive' }}</div>
+            <div class="btn btn-outline-danger btn-sm btn-block" (mouseup)="openModal('deleteSeason')" *ngIf="!season!.isArchived">Delete</div>
         </div>
 
         <h2 class="mt-3">Moderators</h2>
         <div *ngFor="let permission of getPermissions()" class="mb-2">
             <div>
-                <button *ngIf="this.isLoggedIn && getUserPermission()?.type === 1 && permission.type === 0"
+                <button *ngIf="this.isLoggedIn && getUserPermission()?.type === 1 && permission.type === 0 && !season!.isArchived"
                     class="btn btn-danger btn-sm d-inline-flex me-1" (mouseup)="deletePermission(permission.id)">
                     <i class="bi bi-x-lg"></i>
                 </button>
-                <button *ngIf="this.isLoggedIn && getUserPermission()?.type === 1 && permission.type === 0"
+                <button *ngIf="this.isLoggedIn && getUserPermission()?.type === 1 && permission.type === 0 && !season!.isArchived"
                     class="btn btn-primary btn-sm d-inline-flex me-1" (mouseup)="updatePermission(permission.id)">
                     <i class="bi bi-chevron-up"></i>
                 </button>
@@ -347,3 +123,30 @@
         <p>{{ season?.description }}</p>
     </div>
 </div>
+
+<app-modal type="form" *ngIf="modal === 'updateSeason'">
+    <app-season-form
+        [selectedSeason]="season"
+        (onCloseModalEmitter)="closeModal()"
+        (onFetchDataEmitter)="onFetchData()"
+    ></app-season-form>
+</app-modal>
+
+<app-modal type="form" *ngIf="modal === 'deleteSeason'">
+    <h1>Delete "{{ season?.name }}" season</h1>
+    <p>Are you sure?</p>
+    <form #postForm="ngForm" (ngSubmit)="deleteSeason()">
+        <div class="row d-flex">
+            <div class="col-6">
+                <button class="btn btn-outline-primary btn-sm btn-block" (mouseup)="closeModal()">Cancel</button>
+            </div>
+            <div class="col-6">
+                <button class="btn btn-danger btn-sm btn-block">Delete</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
+        {{error}}
+    </div>
+</app-modal>

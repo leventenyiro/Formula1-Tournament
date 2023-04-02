@@ -11,7 +11,7 @@ import { Location } from '@angular/common';
 export class LoginComponent implements OnInit {
   isFetching = false;
   error = "";
-
+  
   constructor(private authService: AuthService, private router: Router, private location: Location) { }
 
   ngOnInit(): void {
