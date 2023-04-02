@@ -178,6 +178,7 @@ export class SeasonComponent implements OnInit {
       driver: x.driver,
       team: x.team,
       position: x.type.toString() === 'Finished' ? x.position : x.type.toString(),
+      type: x.type.toString(),
       point: x.point
     }))
   }

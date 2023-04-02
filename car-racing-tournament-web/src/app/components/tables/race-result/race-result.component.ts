@@ -1,14 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Result } from 'app/models/result';
 import { Season } from 'app/models/season';
 import { SeasonService } from 'app/services/season.service';
 
 @Component({
-  selector: 'app-driver-result',
-  templateUrl: './driver-result.component.html',
-  styleUrls: ['./driver-result.component.scss']
+  selector: 'app-race-result',
+  templateUrl: './race-result.component.html',
+  styleUrls: ['./race-result.component.scss']
 })
-export class DriverResultComponent implements OnInit {
+export class RaceResultComponent implements OnInit {
   @Input()
   isLoggedIn!: boolean;
 
@@ -16,10 +17,10 @@ export class DriverResultComponent implements OnInit {
   season!: Season;
 
   @Input()
-  driverId!: string;
+  raceId!: string;
 
   @Input()
-  driverResults?: any[];
+  raceResults?: any[];
 
   @Output()
   onFetchDataEmitter = new EventEmitter<undefined>();
@@ -28,10 +29,12 @@ export class DriverResultComponent implements OnInit {
   error: string = '';
   modal: boolean = false;
   selectedResult?: Result;
+  teamId = new FormControl('');
 
   constructor(private seasonService: SeasonService) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
 
   createResult(data: any) {
     if (data.value.position === 'DNF' || data.value.position === 'DSQ') {
@@ -39,7 +42,8 @@ export class DriverResultComponent implements OnInit {
       data.value.position = 0;
     } else
       data.value.type = 'Finished';
-    data.value.driverId = this.driverId;    
+    data.value.raceId = this.raceId;
+    data.value.teamId = this.teamId.value;
 
     this.seasonService.createResult(data.value).subscribe({
       error: err => {
@@ -59,7 +63,8 @@ export class DriverResultComponent implements OnInit {
       data.value.position = 0;
     } else
       data.value.type = 'Finished';
-    data.value.driverId = this.driverId;  
+    data.value.raceId = this.raceId;
+    data.value.teamId = this.teamId.value;
     
     this.seasonService.updateResult(id, data.value).subscribe({
       error: err => {
@@ -84,6 +89,9 @@ export class DriverResultComponent implements OnInit {
   openModal(selectedResult?: Result) {
     this.modal = true;    
     this.selectedResult = selectedResult;
+    console.log(this.selectedResult);
+    
+    this.teamId.setValue(selectedResult === undefined ? this.season!.teams[0].id : selectedResult.team.id);
   }
 
   closeModal() {
@@ -100,7 +108,11 @@ export class DriverResultComponent implements OnInit {
     return positions;
   }
 
-  getDriverActualTeam() {
-    return this.season.drivers.find(x => x.id === this.driverId)?.actualTeam?.id;
+  setTeamId(driverId: string) {
+    console.log(driverId);
+    
+    const actualTeamId = this.season.drivers.find(x => x.id === driverId)?.actualTeam?.id;
+    if (actualTeamId !== undefined)
+      this.teamId.setValue(actualTeamId);
   }
 }

@@ -19,6 +19,7 @@ import { DriverResultComponent } from './components/tables/driver-result/driver-
 import { TeamAllComponent } from './components/tables/team-all/team-all.component';
 import { TeamResultComponent } from './components/tables/team-result/team-result.component';
 import { RaceAllComponent } from './components/tables/race-all/race-all.component';
+import { RaceResultComponent } from './components/tables/race-result/race-result.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { RaceAllComponent } from './components/tables/race-all/race-all.componen
     DriverResultComponent,
     TeamAllComponent,
     TeamResultComponent,
-    RaceAllComponent
+    RaceAllComponent,
+    RaceResultComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,114 @@
+<div class="header-row">
+    <div class="col">
+        <p>Name</p>
+    </div>
+    <div class="col">
+        <p>Number</p>
+    </div>
+    <div class="col">
+        <p>Real Name</p>
+    </div>
+    <div class="col">
+        <p>Number</p>
+    </div>
+    <div class="col">
+        <p>Team</p>
+    </div>
+    <div class="col">
+        <p>Position</p>
+    </div>
+    <div class="col">
+        <p>Points</p>
+    </div>
+    <div *ngIf="this.isLoggedIn" class="col">
+        <button *ngIf="this.isLoggedIn" class="btn btn-success btn-sm"
+            (mouseup)="openModal()">Add result</button>
+    </div>
+</div>
+<div class="table-row mb-3" *ngFor="let result of raceResults; index as i;">
+    <div class="col team-color" [ngStyle]="{'background-color': result.team.color}"></div>
+    <div class="col">
+        <p>{{ i + 1 }}</p>
+    </div>
+    <div class="col">
+        <p>{{ result.driver.name }}</p>
+    </div>
+    <div class="col">
+        <p>{{ result.driver.realName }}</p>
+    </div>
+    <div class="col">
+        <p>{{ result.driver.number }}</p>
+    </div>
+    <div class="col">
+        <p>{{ result.team.name }}</p>
+    </div>
+    <div class="col">
+        <p>
+            <span [ngClass]="result.position === 'DSQ' ? 'dsq-tag' : ''">
+                {{ result.position }}
+            </span>
+        </p>
+    </div>
+    <div class="col">
+        <p>{{ result.point }}</p>
+    </div>
+    <div *ngIf="this.isLoggedIn" class="col">
+        <div class="btn btn-primary btn-sm me-2" (mouseup)="openModal(result)">
+            <i class="bi bi-pen"></i>
+        </div>
+        <div class="btn btn-danger btn-sm" (mouseup)="deleteResult(result.id)">
+            <i class="bi bi-trash3"></i>
+        </div>
+    </div>
+</div>
+
+<app-modal type="form" *ngIf="modal">
+    <h1>Create</h1>
+    <form #postForm="ngForm" (ngSubmit)="selectedResult == undefined ? this.createResult(postForm) : this.updateResult(selectedResult!.id, postForm)">
+        <div class="mb-3">
+            <label for="inputTeamId" class="form-label">Team</label>
+            <select name="teamId" id="inputTeamId" class="form-select" [formControl]="teamId">
+                <option *ngFor="let team of season?.teams" [value]="team.id">
+                    {{ team.name }}
+                </option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="inputDriverId" class="form-label">Driver</label>
+            <select name="driverId" id="inputDriverId" class="form-select" [ngModel]="selectedResult === undefined ? season!.drivers[0].id : selectedResult.driver.id" #driverId="ngModel" (change)="setTeamId(postForm.value.driverId)">
+                <option *ngFor="let driver of season?.drivers" [value]="driver.id">
+                    {{ driver.name }}
+                </option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="inputPosition" class="form-label">Position</label>
+            <select name="position" id="inputPosition" class="form-select" [ngModel]="selectedResult === undefined ? 1 : (selectedResult.type.toString() === 'Finished' ? selectedResult.position : selectedResult.type)" #position="ngModel">
+                <option value="DNF">DNF</option>
+                <option value="DSQ">DSQ</option>
+                <option *ngFor="let position of availablePositions()" [value]="position">
+                    {{ position }}
+                </option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="inputPoint" class="form-label">Point</label>
+            <input type="number" required min="0" class="form-control" id="inputPoint" [ngModel]="selectedResult === undefined ? 0 : selectedResult.point" name="point" #point="ngModel" [class.is-invalid]="!point.valid && point.touched">
+        </div>
+
+        <div class="row d-flex">
+            <div class="col-6">
+                <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="closeModal()" (keypress.esc)="closeModal()">Cancel</button>
+            </div>
+            <div class="col-6">
+                <button class="btn btn-primary btn-sm btn-block" [disabled]="!postForm.valid">Create</button>
+            </div>
+        </div>
+    </form>
+    <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
+        {{error}}
+    </div>
+</app-modal>
