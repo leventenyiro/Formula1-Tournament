@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SeasonsComponent } from './pages/seasons/seasons.component';
-import { AdminComponent } from './pages/admin/admin.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
 import { MySeasonsComponent } from './pages/my-seasons/my-seasons.component';
 import { SeasonComponent } from './pages/season/season.component';
@@ -28,7 +27,6 @@ import { VerifyFormComponent } from './components/verify-form/verify-form.compon
     LoginComponent,
     HeaderComponent,
     SeasonsComponent,
-    AdminComponent,
     RegistrationComponent,
     MySeasonsComponent,
     SeasonComponent,
