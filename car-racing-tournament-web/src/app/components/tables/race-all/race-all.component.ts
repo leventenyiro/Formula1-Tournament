@@ -22,7 +22,7 @@ export class RaceAllComponent implements OnInit {
   onFetchDataEmitter = new EventEmitter<undefined>();
 
   error: string = '';
-  modal: boolean = false;
+  modal: string = '';
   selectedRace?: Race;
 
   constructor(private seasonService: SeasonService) { }
@@ -66,13 +66,13 @@ export class RaceAllComponent implements OnInit {
     });
   }
 
-  openModal(selectedRace?: Race) {
-    this.modal = true;
+  openModal(modal: string, selectedRace?: Race) {
+    this.modal = modal;
     this.selectedRace = selectedRace;
   }
 
   closeModal() {
-    this.modal = false;
+    this.modal = '';
     this.error = '';
     this.selectedRace = undefined;
   }
