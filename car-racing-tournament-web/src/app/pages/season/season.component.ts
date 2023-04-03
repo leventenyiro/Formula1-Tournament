@@ -23,6 +23,7 @@ export class SeasonComponent implements OnInit {
   isLoggedIn = false;
   user?: User;
   modal: string = '';
+  selectedPermissionId?: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -189,7 +190,10 @@ export class SeasonComponent implements OnInit {
     this.isFetching = true;
     this.seasonService.archiveSeason(this.season!.id).subscribe({
       error: () => this.isFetching = false,
-      complete: () => this.onFetchData()
+      complete: () => {
+        this.onFetchData();
+        this.modal = '';
+      }
     });
   }
 
@@ -209,7 +213,11 @@ export class SeasonComponent implements OnInit {
     this.isFetching = true;
     this.seasonService.deletePermission(id).subscribe({
       error: () => this.onFetchData(),
-      complete: () => this.onFetchData()
+      complete: () => {
+        this.onFetchData();
+        this.modal = '';
+        this.selectedPermissionId = '';
+      }
     });
   }
 
@@ -217,7 +225,11 @@ export class SeasonComponent implements OnInit {
     this.isFetching = true;
     this.seasonService.updatePermission(id).subscribe({
       error: () => this.onFetchData(),
-      complete: () => this.onFetchData()
+      complete: () => {
+        this.onFetchData();
+        this.modal = '';
+        this.selectedPermissionId = '';
+      }
     });
   }
 
@@ -237,12 +249,19 @@ export class SeasonComponent implements OnInit {
     });
   }
 
-  openModal(modal: string) {
+  openModal(modal: string, id?: string) {
+    if (this.season?.isArchived)
+      return;
     this.modal = modal;
+    this.selectedPermissionId = id;
   }
 
   closeModal() {
     this.modal = '';
     this.error = '';
+    this.selectedPermissionId = '';
+    console.log(this.modal);
+    console.log(this.selectedPermissionId);
+    
   }
 }

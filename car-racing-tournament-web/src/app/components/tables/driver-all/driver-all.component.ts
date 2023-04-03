@@ -22,7 +22,7 @@ export class DriverAllComponent implements OnInit {
   onFetchDataEmitter = new EventEmitter<undefined>();
 
   error: string = '';
-  modal: boolean = false;
+  modal: string = '';
   selectedDriver?: Driver;
 
   constructor(private seasonService: SeasonService) { }
@@ -62,13 +62,13 @@ export class DriverAllComponent implements OnInit {
     });
   }
 
-  openModal(selectedDriver?: Driver) {
-    this.modal = true;    
+  openModal(modal: string, selectedDriver?: Driver) {
+    this.modal = modal;    
     this.selectedDriver = selectedDriver;
   }
 
   closeModal() {
-    this.modal = false;
+    this.modal = '';
     this.error = '';
     this.selectedDriver = undefined;
   }
