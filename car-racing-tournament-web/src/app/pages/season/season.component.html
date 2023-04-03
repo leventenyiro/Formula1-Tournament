@@ -71,13 +71,14 @@
         <div *ngIf="this.isLoggedIn && getUserPermission()?.type === 1" class="d-grid gap-2 mt-3">
             <div class="btn btn-outline-primary btn-sm btn-block" (mouseup)="openModal('updateSeason')"
                 *ngIf="!season!.isArchived">Edit</div>
-            <div class="btn btn-outline-primary btn-sm btn-block" (mouseup)="archiveSeason()">{{ season!.isArchived ?
+            <div class="btn btn-outline-primary btn-sm btn-block" (mouseup)="!season!.isArchived ? openModal('archiveSeason') : archiveSeason()">{{ season!.isArchived ?
                 'Unarchive' : 'Archive' }}</div>
             <div class="btn btn-outline-danger btn-sm btn-block" (mouseup)="openModal('deleteSeason')"
                 *ngIf="!season!.isArchived">Delete</div>
+                
+            <hr>
         </div>
 
-        <hr>
 
         <h2>Moderators</h2>
 
@@ -92,14 +93,35 @@
             <div>
                 <button
                     *ngIf="this.isLoggedIn && getUserPermission()?.type === 1 && permission.type === 0 && !season!.isArchived"
-                    class="btn btn-danger btn-sm d-inline-flex me-1" (mouseup)="deletePermission(permission.id)">
+                    class="btn btn-danger btn-sm d-inline-flex me-1" (mouseup)="openModal('deletePermission', permission.id)">
                     <i class="bi bi-x-lg"></i>
                 </button>
+
+                <app-modal type="form" *ngIf="modal === 'deletePermission' && selectedPermissionId === permission.id">
+                    <app-verify-form
+                        title='Kick "{{ permission.username }}" moderator'
+                        executeButtonText="Kick"
+                        (executionEmitter)="deletePermission(permission.id)"
+                        (closeModalEmitter)="closeModal()"
+                    ></app-verify-form>
+                </app-modal>
+
                 <button
                     *ngIf="this.isLoggedIn && getUserPermission()?.type === 1 && permission.type === 0 && !season!.isArchived"
-                    class="btn btn-primary btn-sm d-inline-flex me-1" (mouseup)="updatePermission(permission.id)">
+                    class="btn btn-primary btn-sm d-inline-flex me-1" (mouseup)="openModal('updatePermission', permission.id)">
                     <i class="bi bi-chevron-up"></i>
                 </button>
+
+                <app-modal type="form" *ngIf="modal === 'updatePermission' && selectedPermissionId === permission.id">
+                    <app-verify-form
+                        title='Promote "{{ permission.username }}" moderator'
+                        subtext="You will lose your admin rights!"
+                        executeButtonText="Promote"
+                        (executionEmitter)="updatePermission(permission.id)"
+                        (closeModalEmitter)="closeModal()"
+                    ></app-verify-form>
+                </app-modal>
+
                 <div *ngIf="permission.type === 1" class="btn btn-warning btn-sm d-inline-flex me-1 disabled">
                     <i class="bi bi-shield-fill"></i>
                 </div>
@@ -148,20 +170,19 @@
 </app-modal>
 
 <app-modal type="form" *ngIf="modal === 'deleteSeason'">
-    <h1>Delete "{{ season?.name }}" season</h1>
-    <p>Are you sure?</p>
-    <form #postForm="ngForm" (ngSubmit)="deleteSeason()">
-        <div class="row d-flex">
-            <div class="col-6">
-                <button class="btn btn-outline-primary btn-sm btn-block" (mouseup)="closeModal()">Cancel</button>
-            </div>
-            <div class="col-6">
-                <button class="btn btn-danger btn-sm btn-block">Delete</button>
-            </div>
-        </div>
-    </form>
+    <app-verify-form
+        title='Delete "{{ season?.name }}" season'
+        executeButtonText="Delete"
+        (executionEmitter)="deleteSeason()"
+        (closeModalEmitter)="closeModal()"
+    ></app-verify-form>
+</app-modal>
 
-    <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
-        {{error}}
-    </div>
+<app-modal type="form" *ngIf="modal === 'archiveSeason'">
+    <app-verify-form
+        title='Archive "{{ season?.name }}" season'
+        executeButtonText="Archive"
+        (executionEmitter)="archiveSeason()"
+        (closeModalEmitter)="closeModal()"
+    ></app-verify-form>
 </app-modal>

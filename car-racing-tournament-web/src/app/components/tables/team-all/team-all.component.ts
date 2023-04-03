@@ -22,7 +22,7 @@ export class TeamAllComponent implements OnInit {
   onFetchDataEmitter = new EventEmitter<undefined>();
 
   error: string = '';
-  modal: boolean = false;
+  modal: string = '';
   selectedTeam?: Team;
 
   constructor(private seasonService: SeasonService) { }
@@ -63,13 +63,13 @@ export class TeamAllComponent implements OnInit {
     });
   }
 
-  openModal(selectedTeam?: Team) {
-    this.modal = true;    
+  openModal(modal: string, selectedTeam?: Team) {
+    this.modal = modal;    
     this.selectedTeam = selectedTeam;
   }
 
   closeModal() {
-    this.modal = false;
+    this.modal = '';
     this.error = '';
     this.selectedTeam = undefined;
   }

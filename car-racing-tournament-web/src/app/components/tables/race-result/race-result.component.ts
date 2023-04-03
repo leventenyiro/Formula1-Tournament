@@ -27,7 +27,7 @@ export class RaceResultComponent implements OnInit {
 
   isFetching: boolean = false;
   error: string = '';
-  modal: boolean = false;
+  modal: string = '';
   selectedResult?: Result;
   teamId = new FormControl('');
   driverId = new FormControl('');
@@ -88,8 +88,8 @@ export class RaceResultComponent implements OnInit {
     });
   }
 
-  openModal(selectedResult?: Result) {
-    this.modal = true;
+  openModal(modal: string, selectedResult?: Result) {
+    this.modal = modal;
     this.selectedResult = selectedResult;
 
     this.driverId.setValue(this.selectedResult === undefined ? 
@@ -102,7 +102,7 @@ export class RaceResultComponent implements OnInit {
   }
 
   closeModal() {
-    this.modal = false;
+    this.modal = '';
     this.error = '';
     this.selectedResult = undefined;
   }

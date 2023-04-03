@@ -1,0 +1,12 @@
+<h1>{{ title }}</h1>
+<p class="mt-1 mb-3">{{ subtext }}</p>
+<form #postForm="ngForm" (ngSubmit)="executionEmitter.emit()">
+    <div class="row d-flex">
+        <div class="col-6">
+            <button class="btn btn-primary btn-sm btn-block" (mouseup)="closeModalEmitter.emit()">Cancel</button>
+        </div>
+        <div class="col-6">
+            <button class="btn btn-outline-danger btn-sm btn-block">{{ executeButtonText }}</button>
+        </div>
+    </div>
+</form>

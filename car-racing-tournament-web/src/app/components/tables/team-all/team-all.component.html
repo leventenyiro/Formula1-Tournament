@@ -9,7 +9,7 @@
         <p>Points</p>
     </div>
     <div *ngIf="this.isLoggedIn && !season.isArchived" class="col">
-        <button class="btn btn-success btn-sm" (mouseup)="openModal()">Add team</button>
+        <button class="btn btn-success btn-sm" (mouseup)="openModal('createTeam')">Add team</button>
     </div>
 </div>
 <div class="table-row mb-3" *ngFor="let team of teamAll; index as i;">
@@ -24,16 +24,25 @@
         <p>{{ team.point }}</p>
     </div>
     <div *ngIf="this.isLoggedIn && !season.isArchived" class="col">
-        <div class="btn btn-primary btn-sm me-2" (mouseup)="openModal(team)">
+        <button class="btn btn-primary btn-sm me-2" (mouseup)="openModal('updateTeam', team)">
             <i class="bi bi-pen"></i>
-        </div>
-        <div class="btn btn-danger btn-sm" (mouseup)="deleteTeam(team.id)">
+        </button>
+        <button class="btn btn-danger btn-sm" (mouseup)="openModal('deleteTeam', team)">
             <i class="bi bi-trash3"></i>
-        </div>
+        </button>
+
+        <app-modal type="form" *ngIf="modal === 'deleteTeam' && selectedTeam!.id === team.id">
+            <app-verify-form
+                title='Delete "{{ team.name }}" team'
+                executeButtonText="Delete"
+                (executionEmitter)="deleteTeam(team.id)"
+                (closeModalEmitter)="closeModal()"
+            ></app-verify-form>
+        </app-modal>
     </div>
 </div>
 
-<app-modal type="form" *ngIf="modal">
+<app-modal type="form" *ngIf="modal === 'createTeam' || modal === 'updateTeam'">
     <h1>Create</h1>
     <form #postForm="ngForm" (ngSubmit)="selectedTeam == undefined ? this.createTeam(postForm) : this.updateTeam(selectedTeam!.id, postForm)">
         <div class="mb-3">
