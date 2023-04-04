@@ -15,12 +15,19 @@ import { SeasonService } from '../../services/season.service';
 export class SeasonsComponent implements OnInit {
   seasons: Season[] = [];
   fetchedData: Season[] = [];
+  fetchedMyData: Season[] = [];
+
   subscription!: Subscription;
   isFetching = false;
   error = "";
   search = new FormControl('');
   isLoggedIn = false;
   modal: boolean = false;
+
+  // filters
+  checkBoxFavorites = new FormControl('');
+  checkBoxAdmin = new FormControl('');
+  checkBoxModerator = new FormControl('');
 
   constructor(
     private seasonService: SeasonService, 
@@ -37,10 +44,21 @@ export class SeasonsComponent implements OnInit {
       }
     );
     this.isLoggedIn = this.authService.isSessionValid(document.cookie) ? true : false;
+
+    this.checkBoxFavorites.disable();
+    this.checkBoxAdmin.setValue(false);
   }
 
   onFetchData() {
     this.isFetching = true;
+
+    this.seasonService.getSeasonsByUser(document.cookie).subscribe({
+      next: seasons => {
+        this.fetchedMyData = seasons;
+      },
+      error: err => this.error = err,
+      complete: () => this.isFetching = false
+    })
 
     this.seasonService.getSeasons().subscribe({
       next: seasons => {
@@ -56,6 +74,13 @@ export class SeasonsComponent implements OnInit {
     this.seasons = this.search.value !== '' ?
       this.seasons.filter(x => x.name.startsWith(this.search.value)) :
       this.seasons = this.fetchedData;
+  }
+
+  onFilter() {
+    if (!this.checkBoxAdmin.value) {
+      console.log(true);
+      
+    }
   }
 
   getAdminUsername(season: Season) {
