@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { PermissionType } from '../../models/permission-type';
 import { Season } from '../../models/season';
 import { SeasonService } from '../../services/season.service';
+import { User } from 'app/models/user';
 
 @Component({
   selector: 'app-seasons',
@@ -15,12 +16,20 @@ import { SeasonService } from '../../services/season.service';
 export class SeasonsComponent implements OnInit {
   seasons: Season[] = [];
   fetchedData: Season[] = [];
+  fetchedMyData: Season[] = [];
+
   subscription!: Subscription;
   isFetching = false;
   error = "";
   search = new FormControl('');
   isLoggedIn = false;
   modal: boolean = false;
+  user?: User;
+
+  // filters
+  checkBoxFavorites = new FormControl('');
+  checkBoxAdmin = new FormControl('');
+  checkBoxModerator = new FormControl('');
 
   constructor(
     private seasonService: SeasonService, 
@@ -29,33 +38,67 @@ export class SeasonsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.onFetchData();
-    
     this.authService.loggedIn.subscribe(
       (loggedIn: boolean) => {
         this.isLoggedIn = loggedIn;
+        this.onFetchData();
       }
     );
     this.isLoggedIn = this.authService.isSessionValid(document.cookie) ? true : false;
+      
+    this.onFetchData();
+    this.checkBoxFavorites.disable();
+    this.checkBoxAdmin.setValue(false);
+    this.checkBoxModerator.setValue(false);
   }
 
   onFetchData() {
     this.isFetching = true;
 
+    if (this.isLoggedIn) {
+      this.authService.getUser().subscribe({
+        next: user => this.user = user,
+        error: () => this.isFetching = false
+      });
+
+      this.seasonService.getSeasonsByUser(document.cookie).subscribe({
+        next: seasons => {
+          this.fetchedMyData = seasons;
+        },
+        error: err => this.error = err,
+        complete: () => this.isFetching = false
+      });
+    }
+    
     this.seasonService.getSeasons().subscribe({
       next: seasons => {
         this.fetchedData = seasons;
-        this.seasons = this.fetchedData;
+        this.onFilter();
       },
       error: err => this.error = err,
       complete: () => this.isFetching = false
-    })
+    });
   }
 
   onSearch() {
     this.seasons = this.search.value !== '' ?
       this.seasons.filter(x => x.name.startsWith(this.search.value)) :
       this.seasons = this.fetchedData;
+  }
+  
+  onFilter() {
+    this.seasons = [];
+    if (this.checkBoxAdmin.value) {
+      this.seasons.push(...this.fetchedMyData.filter(x => x.permissions.find(x => x.type === PermissionType.Admin)?.userId === this.user?.id));
+    }
+
+    if (this.checkBoxModerator.value) {      
+      this.seasons.push(...this.fetchedMyData.filter(x => x.permissions.find(x => x.type === PermissionType.Admin)?.userId !== this.user?.id));
+    }
+
+    if (!this.checkBoxAdmin.value && !this.checkBoxModerator.value) {
+      this.seasons = this.fetchedData;
+    }
   }
 
   getAdminUsername(season: Season) {
