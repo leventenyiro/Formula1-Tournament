@@ -259,9 +259,6 @@ export class SeasonComponent implements OnInit {
   closeModal() {
     this.modal = '';
     this.error = '';
-    this.selectedPermissionId = '';
-    console.log(this.modal);
-    console.log(this.selectedPermissionId);
-    
+    this.selectedPermissionId = '';    
   }
 }

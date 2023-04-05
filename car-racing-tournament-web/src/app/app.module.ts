@@ -9,7 +9,6 @@ import { HeaderComponent } from './components/header/header.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SeasonsComponent } from './pages/seasons/seasons.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
-import { MySeasonsComponent } from './pages/my-seasons/my-seasons.component';
 import { SeasonComponent } from './pages/season/season.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { DriverAllComponent } from './components/tables/driver-all/driver-all.component';
@@ -28,7 +27,6 @@ import { VerifyFormComponent } from './components/verify-form/verify-form.compon
     HeaderComponent,
     SeasonsComponent,
     RegistrationComponent,
-    MySeasonsComponent,
     SeasonComponent,
     ModalComponent,
     DriverAllComponent,

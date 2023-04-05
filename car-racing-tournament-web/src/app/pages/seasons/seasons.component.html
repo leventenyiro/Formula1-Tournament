@@ -7,55 +7,53 @@
 
   <div class="row mx-3">
     <div *ngIf="isLoggedIn" class="col-sm-5">
-      <input type="checkbox" class="btn-check" id="btn-check-favorite" autocomplete="off" [formControl]="checkBoxFavorites">
+      <input type="checkbox" class="btn-check" id="btn-check-favorite" autocomplete="off"
+        [formControl]="checkBoxFavorites">
       <label class="btn btn-outline-danger btn-sm me-2" for="btn-check-favorite" title="Favorite filter">
         <i class="bi bi-heart"></i>
       </label>
 
-      <input type="checkbox" class="btn-check" id="btn-check-admin" autocomplete="off"  [formControl]="checkBoxAdmin">
-      <label class="btn btn-outline-primary btn-sm me-2" for="btn-check-admin" (mouseup)="onFilter()">
+      <input type="checkbox" class="btn-check" id="btn-check-admin" autocomplete="off" [formControl]="checkBoxAdmin"
+        (change)="onFilter()">
+      <label class="btn btn-outline-primary btn-sm me-2" for="btn-check-admin">
         Admin
       </label>
 
-      <input type="checkbox" class="btn-check" id="btn-check-moderator" autocomplete="off" [formControl]="checkBoxModerator">
+      <input type="checkbox" class="btn-check" id="btn-check-moderator" autocomplete="off"
+        [formControl]="checkBoxModerator" (change)="onFilter()">
       <label class="btn btn-outline-primary btn-sm me-2" for="btn-check-moderator">
         Moderator
       </label>
     </div>
-    <div class="col-sm-7">
-      <div class="input-group input-group-sm">
+    <div class="col-sm-7 d-flex">
+      <div class="input-group input-group-sm me-2">
         <span class="input-group-text">
           <i class="bi bi-search"></i>
         </span>
         <input type="text" class="form-control" id="name" [formControl]="search" placeholder="Start typing to filter..."
           (keyup)="onSearch()">
-        </div>
-        
-        <button class="btn btn-outline-primary btn-sm me-3" (mouseup)="onFetchData()" title="Refresh">
-          <i class="bi bi-arrow-clockwise"></i>
-        </button>
-        <button *ngIf="isLoggedIn" class="btn btn-sm btn-outline-success" (mouseup)="setModal(true)" title="Create season">
-          <i class="bi bi-plus-lg"></i>
-        </button>
+      </div>
+      <button class="btn btn-outline-primary btn-sm me-2" (mouseup)="onFetchData()" title="Refresh">
+        <i class="bi bi-arrow-clockwise"></i>
+      </button>
+      <button *ngIf="isLoggedIn" class="btn btn-sm btn-outline-success" (mouseup)="setModal(true)" title="Create season">
+        <i class="bi bi-plus-lg"></i>
+      </button>
     </div>
-  </div>
 
-  <div class="row mt-5">
-    <div class="col-md-4 mb-5" *ngFor="let season of seasons">
-      <div class="season-box mx-auto text-left p-3" (mouseup)="navigateSeason(season.id)">
-        <h2>{{ season.name }}</h2>
-        <p class="description">{{ season.description }}</p>
-        <p>Admin: {{ getAdminUsername(season) }}</p>
-        <p>{{ getFormattedDate(season.createdAt) }}</p>
-        <span *ngIf="season.isArchived" class="gold-tag">archived</span>
+    <div class="row mt-5">
+      <div class="col-md-4 mb-5" *ngFor="let season of seasons">
+        <div class="season-box mx-auto text-left p-3" (mouseup)="navigateSeason(season.id)">
+          <h2>{{ season.name }}</h2>
+          <p class="description">{{ season.description }}</p>
+          <p>Admin: {{ getAdminUsername(season) }}</p>
+          <p>{{ getFormattedDate(season.createdAt) }}</p>
+          <span *ngIf="season.isArchived" class="gold-tag">archived</span>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<app-modal type="form" *ngIf="modal">
-  <app-season-form
-      (onCloseModalEmitter)="setModal(false)"
-      (onFetchDataEmitter)="onFetchData()"
-  ></app-season-form>
-</app-modal>
+  <app-modal type="form" *ngIf="modal">
+    <app-season-form (onCloseModalEmitter)="setModal(false)" (onFetchDataEmitter)="onFetchData()"></app-season-form>
+  </app-modal>
