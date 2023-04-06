@@ -69,7 +69,9 @@ export class SettingsComponent implements OnInit {
       complete: () => {
         this.isFetching = false;
         this.modal = '';
-        this.router.navigate(['seasons'])
+        this.authService.loggedIn.emit(false);
+        document.cookie = "session=";
+        this.router.navigate(['seasons']);
       }
     });
   }
