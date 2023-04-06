@@ -33,13 +33,13 @@ export class RegistrationComponent implements OnInit {
 
     this.isFetching = false;
   }
-  
+
   usernamePattern() {
-    return environment.validation.nameRegex;
+    return this.authService.usernamePattern();
   }
-  
+
   emailPattern() {
-    return environment.validation.emailRegex;
+    return this.authService.emailPattern();
   }
 
   passwordPattern() {

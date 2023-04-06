@@ -1,0 +1,44 @@
+<app-modal type="loading" *ngIf="isFetching"></app-modal>
+
+<div class="container">
+    <h1>Settings</h1>
+    <form #postForm="ngForm" (ngSubmit)="edit && updateUser()">
+        <div class="mb-3">
+            <label for="inputUsername" class="form-label">Username</label>
+            <input required type="text" class="form-control" id="inputUsername" [ngModel]="user?.username" name="username" #username="ngModel" [class.is-invalid]="!username.valid && username.touched" [pattern]="usernamePattern()" [attr.disabled]="!edit ? '' : null">
+            <div class="invalid-feedback">Invalid username</div>
+        </div>
+    
+        <div class="mb-3">
+            <label for="inputEmail" class="form-label">Email address</label>
+            <input required type="text" class="form-control" id="inputEmail" [ngModel]="user?.email" name="email" #email="ngModel" [class.is-invalid]="!email.valid && email.touched" [pattern]="emailPattern()" [attr.disabled]="!edit ? '' : null">
+            <div class="invalid-feedback">Invalid email address</div>
+        </div>
+    
+        <div *ngIf="!edit; else elseDiv">
+            <button class="btn btn-outline-primary btn-sm" (mouseup)="setEdit(true)">Edit</button>
+            <button class="btn btn-outline-warning btn-sm" (mouseup)="openModal('updatePassword')">Change password</button>
+            <button class="btn btn-outline-danger btn-sm" (mouseup)="openModal('deleteUser')">Delete</button>
+        </div>
+            
+        <ng-template #elseDiv class="row d-flex">
+            <div class="col-6">
+                <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="setEdit(false)">Cancel</button>
+                <button class="btn btn-primary btn-sm btn-block" [disabled]="!postForm.valid">Confirm</button>
+            </div>
+        </ng-template>
+    </form>
+    
+    <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
+        {{error}}
+    </div>
+</div>
+
+<app-modal type="form" *ngIf="modal === 'deleteUser'">
+    <app-verify-form
+        title='Delete your profile'
+        executeButtonText="Delete"
+        (executionEmitter)="deleteUser()"
+        (closeModalEmitter)="closeModal()"
+    ></app-verify-form>
+</app-modal>

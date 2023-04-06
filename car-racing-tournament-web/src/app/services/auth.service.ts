@@ -104,4 +104,12 @@ export class AuthService {
         })
     );
   }
+
+  public usernamePattern() {
+    return environment.validation.nameRegex;
+  }
+  
+  public emailPattern() {
+    return environment.validation.emailRegex;
+  }
 }
