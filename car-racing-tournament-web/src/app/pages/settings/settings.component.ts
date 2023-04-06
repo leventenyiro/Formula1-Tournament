@@ -57,9 +57,18 @@ export class SettingsComponent implements OnInit {
   }
 
   updateUser() {
+    this.isFetching = true;
+    this.authService.updateUser({ username: this.inputUsername.value, email: this.inputEmail.value }).subscribe({
+      error: error => {
+        this.error = error;
+        this.isFetching = false
+      },
+      complete: () => {
+        this.isFetching = false;
+      }
+    });
 
-
-    this.closeModal();
+    this.setEdit(false);
   }
 
   deleteUser() {

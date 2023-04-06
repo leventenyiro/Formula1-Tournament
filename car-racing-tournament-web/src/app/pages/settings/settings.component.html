@@ -1,6 +1,6 @@
 <app-modal type="loading" *ngIf="isFetching"></app-modal>
 
-<div class="container">
+<div class="container col-lg-4 offset-lg-4 mt-4">
     <h1>Settings</h1>
 
     <div class="mb-3">
@@ -19,18 +19,22 @@
         <div class="invalid-feedback">Invalid email address</div>
     </div>
 
-    <div *ngIf="!edit; else elseDiv">
+    <div *ngIf="!edit; else elseDiv" class="d-grid">
         <button class="btn btn-outline-primary btn-sm" (mouseup)="setEdit(true)">Edit</button>
-        <button class="btn btn-outline-warning btn-sm" (mouseup)="openModal('updatePassword')">Change password</button>
-        <button class="btn btn-outline-danger btn-sm" (mouseup)="openModal('deleteUser')">Delete</button>
+        <button class="btn btn-outline-primary btn-sm mt-2" (mouseup)="openModal('updatePassword')">Change password</button>
+        <button class="btn btn-outline-danger btn-sm mt-2" (mouseup)="openModal('deleteUser')">Delete</button>
     </div>
 
-    <ng-template #elseDiv class="row d-flex">
-        <div class="col-6">
-            <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="setEdit(false)">Cancel</button>
-            <button class="btn btn-primary btn-sm btn-block" (mouseup)="updateUser()">Confirm</button>
+    <ng-template #elseDiv>
+        <div class="row">
+            <div class="col-6 d-flex flex-column">
+            <button class="btn btn-outline-danger btn-sm" (mouseup)="setEdit(false)">Cancel</button>
+            </div>
+            <div class="col-6 d-flex flex-column">
+            <button class="btn btn-primary btn-sm" (mouseup)="updateUser()">Confirm</button>
+            </div>
         </div>
-    </ng-template>
+      </ng-template>
 
     <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
         {{error}}
