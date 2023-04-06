@@ -76,7 +76,8 @@ namespace car_racing_tournament_api.Services
             .Select(x => new User {
                 Id = x.Id,
                 Username = x.Username,
-                Email = x.Email
+                Email = x.Email,
+                Password = x.Password
             }).FirstOrDefaultAsync();
             if (result == null)
                 return (false, null, _configuration["ErrorMessages:UserNotFound"]);
