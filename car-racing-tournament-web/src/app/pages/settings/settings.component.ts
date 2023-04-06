@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from 'app/models/user';
 import { AuthService } from 'app/services/auth.service';
@@ -15,6 +16,9 @@ export class SettingsComponent implements OnInit {
   isFetching: boolean = false;
   modal: string = '';
 
+  inputUsername = new FormControl('');
+  inputEmail = new FormControl('');
+
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
@@ -29,9 +33,15 @@ export class SettingsComponent implements OnInit {
     );
 
     this.authService.getUser().subscribe({
-      next: user => this.user = user
+      next: user => {
+        this.user = user;
+        this.inputUsername.setValue(user.username);
+        this.inputEmail.setValue(user.email);
+      }
     });
     this.isFetching = false;
+
+
   }
 
   setEdit(edit: boolean) {
@@ -48,10 +58,20 @@ export class SettingsComponent implements OnInit {
 
   updateUser() {
 
+
+    this.closeModal();
   }
 
   deleteUser() {
-
+    this.isFetching = true;
+    this.authService.deleteUser().subscribe({
+      error: () => this.isFetching = false,
+      complete: () => {
+        this.isFetching = false;
+        this.modal = '';
+        this.router.navigate(['seasons'])
+      }
+    });
   }
 
   openModal(modal: string) {

@@ -134,11 +134,8 @@ namespace car_racing_tournament_api.Services
             return (true, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteUser(User user, string password)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteUser(User user)
         {
-            if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
-                return (false, _configuration["ErrorMessages:LoginDetails"]);
-
             _carRacingTournamentDbContext.Users.Remove(user);
             await _carRacingTournamentDbContext.SaveChangesAsync();
 
