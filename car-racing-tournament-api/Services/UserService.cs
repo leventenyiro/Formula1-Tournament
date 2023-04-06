@@ -21,7 +21,7 @@ namespace car_racing_tournament_api.Services
             _carRacingTournamentDbContext = carRacingTournamentDbContext;
             _configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
-                .Build();;
+                .Build();
         }
 
         public (bool IsSuccess, string? Token, string? ErrorMessage) Login(User user, string password, bool needToken)
@@ -121,6 +121,9 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdatePassword(User user, UpdatePasswordDto updatePasswordDto)
         {
+            if (!BCrypt.Net.BCrypt.Verify(updatePasswordDto.PasswordOld, user.Password))
+                return (false, _configuration["ErrorMessages:LoginDetails"]);
+
             if (updatePasswordDto.Password != updatePasswordDto.PasswordAgain)
                 return (false, _configuration["ErrorMessages:PasswordsPass"]);
 
