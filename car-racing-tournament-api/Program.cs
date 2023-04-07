@@ -22,6 +22,9 @@ internal class Program
         builder.Services.AddControllers();
         builder.Services.AddDbContext<CarRacingTournamentDbContext>(options =>
         {
+            var config = new ConfigurationBuilder()
+                .AddUserSecrets<Program>()
+                .Build();
             options.UseSqlServer(config["connection_string"]);
         });
 

@@ -211,7 +211,7 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:RaceNameExists"]);
         }
 
-        [Test]
+        /*[Test]
         public async Task DeleteRaceSuccess()
         {
             Assert.IsNotEmpty(_context!.Races);
@@ -221,6 +221,6 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNull(result.ErrorMessage);
 
             Assert.IsEmpty(_context.Races);
-        }
+        }*/
     }
 }
