@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from 'app/models/user';
 import { AuthService } from 'app/services/auth.service';
@@ -19,9 +19,11 @@ export class SettingsComponent implements OnInit {
   inputUsername = new FormControl('');
   inputEmail = new FormControl('');
 
-  inputPasswordOld = new FormControl('');
-  inputPassword = new FormControl('');
-  inputPasswordAgain = new FormControl('');
+  updatePasswordForm = new FormGroup({
+    inputPasswordOld: new FormControl(''),
+    inputPassword: new FormControl(''),
+    inputPasswordAgain: new FormControl(''),
+  });
 
   constructor(private authService: AuthService, private router: Router) { }
 
@@ -91,14 +93,14 @@ export class SettingsComponent implements OnInit {
   updatePassword() {
     this.isFetching = true;
     this.authService.updatePassword(
-      this.inputPasswordOld.value,
-      this.inputPassword.value,
-      this.inputPasswordAgain.value
+      this.updatePasswordForm.get('inputPasswordOld')!.value,
+      this.updatePasswordForm.get('inputPassword')!.value,
+      this.updatePasswordForm.get('inputPasswordAgain')!.value,
     ).subscribe({
       error: error => {
-        this.inputPasswordOld.setValue('');
-        this.inputPassword.setValue('');
-        this.inputPasswordAgain.setValue('');
+        this.updatePasswordForm.get('inputPasswordOld')!.setValue('');
+        this.updatePasswordForm.get('inputPassword')!.setValue('');
+        this.updatePasswordForm.get('inputPasswordAgain')!.setValue('');
         
         this.error = error;
         this.isFetching = false;
@@ -130,6 +132,7 @@ export class SettingsComponent implements OnInit {
   }
 
   closeModal() {
+    this.error = '';
     this.modal = '';
   }
 }
