@@ -52,26 +52,26 @@ jobs:
         run: dotnet ef database update --connection "${{ env.CONNECTIONSTRING }}"
         working-directory: car-racing-tournament-api
 
-  # backend-deploy-web:
-  #   if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-  #   needs: backend-check
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Checkout repository
-  #     uses: actions/checkout@v2
-  #   - name: Setup .NET
-  #     uses: actions/setup-dotnet@v2
-  #     with:
-  #       dotnet-version: '6.0.x'
-  #   - name: Publish application
-  #     run: dotnet publish -c Release -o publish --no-restore
-  #     working-directory: car-racing-tournament-api
-  #   - name: Deploy to Azure Web App
-  #     uses: azure/webapps-deploy@v2
-  #     with:
-  #       app-name: 'car-racing-tournament-api'
-  #       publish-profile: ${{ secrets.PUBLISH_PROFILE_API }}
-  #       package: './car-racing-tournament-api/publish'
+  backend-deploy:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: backend-check
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '6.0.x'
+    - name: Publish application
+      run: dotnet publish -c Release -o publish --no-restore
+      working-directory: car-racing-tournament-api
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'car-racing-tournament-api'
+        publish-profile: ${{ secrets.PUBLISH_PROFILE_API }}
+        package: './car-racing-tournament-api/publish'
 
   # webapp:
   #   runs-on: ubuntu-latest
