@@ -44,6 +44,9 @@ jobs:
         run: dotnet tool install --global dotnet-ef
         env:
           NUGET_XMLDOC_MODE: skip
+      - name: Restore dependencies
+        run: dotnet restore
+        working-directory: car-racing-tournament-api
       - name: Migrate database
         env:
           ASPNETCORE_ENVIRONMENT: Production
