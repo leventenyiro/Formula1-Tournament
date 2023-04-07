@@ -19,6 +19,10 @@ export class SettingsComponent implements OnInit {
   inputUsername = new FormControl('');
   inputEmail = new FormControl('');
 
+  inputPasswordOld = new FormControl('');
+  inputPassword = new FormControl('');
+  inputPasswordAgain = new FormControl('');
+
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
@@ -61,6 +65,14 @@ export class SettingsComponent implements OnInit {
     return this.authService.emailPattern();
   }
 
+  passwordPattern() {
+    return this.authService.passwordPattern();
+  }
+
+  passwordErrorMsg() {
+    return this.authService.passwordErrorMsg();
+  }
+
   updateUser() {
     this.isFetching = true;
     this.authService.updateUser({ username: this.inputUsername.value, email: this.inputEmail.value }).subscribe({
@@ -72,6 +84,29 @@ export class SettingsComponent implements OnInit {
         this.isFetching = false;
         this.error = '';
         this.setEdit(false);
+      }
+    });
+  }
+
+  updatePassword() {
+    this.isFetching = true;
+    this.authService.updatePassword(
+      this.inputPasswordOld.value,
+      this.inputPassword.value,
+      this.inputPasswordAgain.value
+    ).subscribe({
+      error: error => {
+        this.inputPasswordOld.setValue('');
+        this.inputPassword.setValue('');
+        this.inputPasswordAgain.setValue('');
+        
+        this.error = error;
+        this.isFetching = false;
+      },
+      complete: () => {
+        this.error = '';
+        this.closeModal();
+        this.isFetching = false;
       }
     });
   }

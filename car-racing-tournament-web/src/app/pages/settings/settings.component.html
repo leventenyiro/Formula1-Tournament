@@ -21,25 +21,65 @@
 
     <div *ngIf="!edit; else elseDiv" class="d-grid">
         <button class="btn btn-outline-primary btn-sm" (mouseup)="setEdit(true)">Edit</button>
-        <button class="btn btn-outline-primary btn-sm mt-2" (mouseup)="openModal('updatePassword')">Change password</button>
+        <button class="btn btn-outline-primary btn-sm mt-2" (mouseup)="openModal('updatePassword')">Change
+            password</button>
         <button class="btn btn-outline-danger btn-sm mt-2" (mouseup)="openModal('deleteUser')">Delete</button>
     </div>
 
     <ng-template #elseDiv>
         <div class="row">
             <div class="col-6 d-flex flex-column">
-            <button class="btn btn-outline-danger btn-sm" (mouseup)="onCancel()">Cancel</button>
+                <button class="btn btn-outline-danger btn-sm" (mouseup)="onCancel()">Cancel</button>
             </div>
             <div class="col-6 d-flex flex-column">
-            <button class="btn btn-primary btn-sm" (mouseup)="updateUser()">Confirm</button>
+                <button class="btn btn-primary btn-sm" (mouseup)="updateUser()">Confirm</button>
             </div>
         </div>
-      </ng-template>
+    </ng-template>
 
     <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
         {{error}}
     </div>
 </div>
+
+<app-modal type="form" *ngIf="modal === 'updatePassword'">
+    <h1>Change password</h1>
+
+    <div class="mb-3">
+        <label for="inputPasswordOld" class="form-label">Old password</label>
+        <input required multiple type="password" class="form-control" id="inputPasswordOld" [formControl]="inputPasswordOld"
+            name="password" [class.is-invalid]="!inputPasswordOld.valid && inputPasswordOld.touched">
+    </div>
+
+    <div class="mb-3">
+        <label for="inputPassword" class="form-label">Password</label>
+        <input required multiple type="password" class="form-control" id="inputPassword" [formControl]="inputPassword"
+            name="password" [class.is-invalid]="!inputPassword.valid && inputPassword.touched"
+            [pattern]="passwordPattern()">
+        <div class="invalid-feedback">{{ passwordErrorMsg() }}</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="inputPasswordAgain" class="form-label">Password again</label>
+        <input required multiple type="password" class="form-control" id="inputPasswordAgain"
+            [formControl]="inputPasswordAgain" name="passwordAgain"
+            [class.is-invalid]="inputPasswordAgain.touched && inputPassword.value !== inputPasswordAgain.value">
+        <div class="invalid-feedback">Passwords aren't pass</div>
+    </div>
+
+    <div class="row d-flex">
+        <div class="col-6">
+            <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="closeModal()">Cancel</button>
+        </div>
+        <div class="col-6">
+            <button class="btn btn-primary btn-sm btn-block" (mouseup)="updatePassword()">Confiem</button>
+        </div>
+    </div>
+
+    <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
+        {{error}}
+    </div>
+</app-modal>
 
 <app-modal type="form" *ngIf="modal === 'deleteUser'">
     <app-verify-form title='Delete your profile' executeButtonText="Delete" (executionEmitter)="deleteUser()"
