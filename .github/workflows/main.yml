@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
-        ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_ENVIRONMENT: Production
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
