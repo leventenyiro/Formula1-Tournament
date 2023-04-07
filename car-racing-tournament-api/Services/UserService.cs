@@ -69,7 +69,7 @@ namespace car_racing_tournament_api.Services
             return (true, null);
         }
 
-        public async Task<(bool IsSuccess, User? User, string? ErrorMessage)> GetUserById(Guid id)
+        public async Task<(bool IsSuccess, User? User, string? ErrorMessage)> GetUserById(Guid id, bool needPassword)
         {
             var result = await _carRacingTournamentDbContext.Users
             .Where(x => x.Id == id)
@@ -77,7 +77,7 @@ namespace car_racing_tournament_api.Services
                 Id = x.Id,
                 Username = x.Username,
                 Email = x.Email,
-                Password = x.Password
+                Password = needPassword ? x.Password : ""
             }).FirstOrDefaultAsync();
             if (result == null)
                 return (false, null, _configuration["ErrorMessages:UserNotFound"]);
@@ -122,9 +122,6 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdatePassword(User user, UpdatePasswordDto updatePasswordDto)
         {
-            if (!BCrypt.Net.BCrypt.Verify(updatePasswordDto.PasswordOld, user.Password))
-                return (false, _configuration["ErrorMessages:LoginDetails"]);
-
             if (updatePasswordDto.Password != updatePasswordDto.PasswordAgain)
                 return (false, _configuration["ErrorMessages:PasswordsPass"]);
 
@@ -145,8 +142,6 @@ namespace car_racing_tournament_api.Services
 
             return (true, null);
         }
-
-        
 
         private string HashPassword(string password)
         {

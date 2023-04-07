@@ -65,7 +65,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultAddSeason.IsSuccess)
                 return BadRequest(resultAddSeason.ErrorMessage);
 
-            var resultGet = _userService.GetUserById(new Guid(User.Identity!.Name!)).Result;
+            var resultGet = _userService.GetUserById(new Guid(User.Identity!.Name!), false).Result;
             if (!resultGet.IsSuccess)
                 return BadRequest(resultGet.ErrorMessage);
 

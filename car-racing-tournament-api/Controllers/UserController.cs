@@ -54,7 +54,7 @@ namespace car_racing_tournament_api.Controllers
         [HttpGet, Authorize]
         public async Task<IActionResult> Get()
         {
-            var result = await _userService.GetUserById(new Guid(User.Identity!.Name!));
+            var result = await _userService.GetUserById(new Guid(User.Identity!.Name!), false);
             if (!result.IsSuccess)
                 return NotFound(result.ErrorMessage);
             
@@ -64,7 +64,7 @@ namespace car_racing_tournament_api.Controllers
         [HttpPut, Authorize]
         public async Task<IActionResult> Put([FromBody] UpdateUserDto updateUserDto)
         {
-            var resultGetUser = await _userService.GetUserById(new Guid(User.Identity!.Name!));
+            var resultGetUser = await _userService.GetUserById(new Guid(User.Identity!.Name!), false);
             if (!resultGetUser.IsSuccess)
                 return NotFound(resultGetUser.ErrorMessage);
 
@@ -78,9 +78,13 @@ namespace car_racing_tournament_api.Controllers
         [HttpPut("password"), Authorize]
         public async Task<IActionResult> Put([FromBody] UpdatePasswordDto updatePasswordDto)
         {
-            var resultGetUser = await _userService.GetUserById(new Guid(User.Identity!.Name!));
+            var resultGetUser = await _userService.GetUserById(new Guid(User.Identity!.Name!), true);
             if (!resultGetUser.IsSuccess)
                 return NotFound(resultGetUser.ErrorMessage);
+
+            var resultAuth = _userService.Login(resultGetUser.User!, updatePasswordDto.PasswordOld, false);
+            if (!resultAuth.IsSuccess)
+                return BadRequest(resultAuth.ErrorMessage);
 
             var result = await _userService.UpdatePassword(resultGetUser.User!, updatePasswordDto);
             if (!result.IsSuccess)
@@ -91,7 +95,7 @@ namespace car_racing_tournament_api.Controllers
 
         [HttpDelete, Authorize]
         public async Task<IActionResult> Delete() {
-            var resultGetUser = await _userService.GetUserById(new Guid(User.Identity!.Name!));
+            var resultGetUser = await _userService.GetUserById(new Guid(User.Identity!.Name!), false);
             if (!resultGetUser.IsSuccess)
                 return NotFound(resultGetUser.ErrorMessage);        
             
