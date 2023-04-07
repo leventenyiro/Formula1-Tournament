@@ -44,7 +44,7 @@ namespace car_racing_tournament_api.Tests.Unit.User
         [Test]
         public async Task GetUserSuccess()
         {
-            var result = await _userService!.GetUserById(_user!.Id, false);
+            var result = await _userService!.GetUserById(_user!.Id);
             Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual(result.User!.Username, "username");
             Assert.AreEqual(result.User!.Email, "test@test.com");

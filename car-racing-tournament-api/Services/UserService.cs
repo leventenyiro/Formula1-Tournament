@@ -69,7 +69,7 @@ namespace car_racing_tournament_api.Services
             return (true, null);
         }
 
-        public async Task<(bool IsSuccess, User? User, string? ErrorMessage)> GetUserById(Guid id, bool needPassword)
+        public async Task<(bool IsSuccess, User? User, string? ErrorMessage)> GetUserById(Guid id)
         {
             var result = await _carRacingTournamentDbContext.Users
             .Where(x => x.Id == id)
@@ -77,7 +77,7 @@ namespace car_racing_tournament_api.Services
                 Id = x.Id,
                 Username = x.Username,
                 Email = x.Email,
-                Password = needPassword ? x.Password : null!
+                Password = x.Password
             }).FirstOrDefaultAsync();
             if (result == null)
                 return (false, null, _configuration["ErrorMessages:UserNotFound"]);

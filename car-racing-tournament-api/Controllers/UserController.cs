@@ -54,9 +54,12 @@ namespace car_racing_tournament_api.Controllers
         [HttpGet, Authorize]
         public async Task<IActionResult> Get()
         {
-            var result = await _userService.GetUserById(new Guid(User.Identity!.Name!), false);
+            var result = await _userService.GetUserById(new Guid(User.Identity!.Name!));
             if (!result.IsSuccess)
                 return NotFound(result.ErrorMessage);
+
+            result.User!.Password = null!;
+            var user = result.User;
             
             return Ok(result.User);
         }
@@ -64,7 +67,7 @@ namespace car_racing_tournament_api.Controllers
         [HttpPut, Authorize]
         public async Task<IActionResult> Put([FromBody] UpdateUserDto updateUserDto)
         {
-            var resultGetUser = await _userService.GetUserById(new Guid(User.Identity!.Name!), false);
+            var resultGetUser = await _userService.GetUserById(new Guid(User.Identity!.Name!));
             if (!resultGetUser.IsSuccess)
                 return NotFound(resultGetUser.ErrorMessage);
 
@@ -78,7 +81,7 @@ namespace car_racing_tournament_api.Controllers
         [HttpPut("password"), Authorize]
         public async Task<IActionResult> Put([FromBody] UpdatePasswordDto updatePasswordDto)
         {
-            var resultGetUser = await _userService.GetUserById(new Guid(User.Identity!.Name!), true);
+            var resultGetUser = await _userService.GetUserById(new Guid(User.Identity!.Name!));
             if (!resultGetUser.IsSuccess)
                 return NotFound(resultGetUser.ErrorMessage);
 
@@ -95,7 +98,7 @@ namespace car_racing_tournament_api.Controllers
 
         [HttpDelete, Authorize]
         public async Task<IActionResult> Delete() {
-            var resultGetUser = await _userService.GetUserById(new Guid(User.Identity!.Name!), false);
+            var resultGetUser = await _userService.GetUserById(new Guid(User.Identity!.Name!));
             if (!resultGetUser.IsSuccess)
                 return NotFound(resultGetUser.ErrorMessage);        
             
