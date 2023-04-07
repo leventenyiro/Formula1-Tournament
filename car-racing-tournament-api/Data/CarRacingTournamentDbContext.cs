@@ -101,7 +101,7 @@ namespace car_racing_tournament_api.Data
                 entity.HasOne(e => e.ActualTeam)
                     .WithMany(e => e.Drivers)
                     .HasForeignKey(e => e.ActualTeamId)
-                    .OnDelete(DeleteBehavior.SetNull);
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(e => e.Season)
                     .WithMany(e => e.Drivers)
@@ -147,11 +147,13 @@ namespace car_racing_tournament_api.Data
                 entity.HasOne(e => e.Team)
                     .WithMany(e => e.Results)
                     .HasForeignKey(e => e.TeamId)
+                    .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
 
                 entity.HasOne(e => e.Race)
                     .WithMany(e => e.Results)
                     .HasForeignKey(e => e.RaceId)
+                    .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
             });
 

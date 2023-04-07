@@ -22,7 +22,7 @@ internal class Program
         builder.Services.AddControllers();
         builder.Services.AddDbContext<CarRacingTournamentDbContext>(options =>
         {
-            options.UseMySql(builder.Configuration.GetConnectionString("Default"), new MySqlServerVersion(new Version(8, 0, 22)), options => options.EnableRetryOnFailure());
+            options.UseSqlServer(config["connection_string"]);
         });
 
         builder.Services.AddMvc().AddJsonOptions(options =>

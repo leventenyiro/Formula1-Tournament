@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>car_racing_tournament_api</RootNamespace>
 	<StartupObject>Program</StartupObject>
+    <UserSecretsId>b0f4ca26-5de8-4d91-a6fb-f01e99e62f09</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
