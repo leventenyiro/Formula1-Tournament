@@ -25,7 +25,7 @@ internal class Program
             var config = new ConfigurationBuilder()
                 .AddUserSecrets<Program>()
                 .Build();
-            options.UseSqlServer(config["connection_string"]);
+            options.UseSqlServer(config["connectionString"]);
         });
 
         builder.Services.AddMvc().AddJsonOptions(options =>
