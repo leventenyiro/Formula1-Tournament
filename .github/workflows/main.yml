@@ -34,18 +34,17 @@ jobs:
     env:
       CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: '6.0.x'
-    - name: Restore dependencies
-      run: dotnet restore
-      working-directory: car-racing-tournament-api
-    - name: Migrate database
-      run: dotnet ef database update --no-build
-      working-directory: car-racing-tournament-api
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '6.0.x'
+      - name: Migrate database
+        env:
+          ASPNETCORE_ENVIRONMENT: Production
+        run: dotnet ef database update --no-build --connection "${{ env.CONNECTION_STRING }}" 
+        working-directory: car-racing-tournament-api
 
   backend-deploy-web:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
