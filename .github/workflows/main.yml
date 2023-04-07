@@ -40,6 +40,10 @@ jobs:
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: '6.0.x'
+      - name: Install EF Core
+        run: dotnet tool install --global dotnet-ef
+        env:
+          NUGET_XMLDOC_MODE: skip
       - name: Migrate database
         env:
           ASPNETCORE_ENVIRONMENT: Production
