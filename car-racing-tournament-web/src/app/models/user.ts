@@ -2,8 +2,9 @@ import { Permission } from "./permission";
 
 export class User {
   constructor(
-    public id: string,
     public username: string,
-    public permissions: Permission[]
+    public email: string,
+    public id?: string,
+    public permissions?: Permission[]
   ) {}
 }

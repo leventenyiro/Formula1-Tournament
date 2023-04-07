@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'app/services/auth.service';
-import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-registration',
@@ -33,21 +32,21 @@ export class RegistrationComponent implements OnInit {
 
     this.isFetching = false;
   }
-  
+
   usernamePattern() {
-    return environment.validation.nameRegex;
+    return this.authService.usernamePattern();
   }
-  
+
   emailPattern() {
-    return environment.validation.emailRegex;
+    return this.authService.emailPattern();
   }
 
   passwordPattern() {
-    return environment.validation.passwordRegex;
+    return this.authService.passwordPattern();
   }
 
   passwordErrorMsg() {
-    return environment.errorMessages.passwordFormat;
+    return this.authService.passwordErrorMsg();
   }
 
   login() {
