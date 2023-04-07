@@ -77,7 +77,7 @@ namespace car_racing_tournament_api.Services
                 Id = x.Id,
                 Username = x.Username,
                 Email = x.Email,
-                Password = needPassword ? x.Password : ""
+                Password = needPassword ? x.Password : null!
             }).FirstOrDefaultAsync();
             if (result == null)
                 return (false, null, _configuration["ErrorMessages:UserNotFound"]);
