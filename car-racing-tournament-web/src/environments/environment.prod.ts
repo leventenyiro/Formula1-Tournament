@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  backendUrl: 'https://localhost:7157/api',
+  backendUrl: 'https://car-racing-tournament-api.azurewebsites.net/api',
   errorMessages: {
     passwordFormat: "Password should be minimum eight characters, at least one uppercase letter and one number!",
   },

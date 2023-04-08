@@ -7,10 +7,8 @@ on:
     branches: [ "main" ]
 
 jobs:
-  backend:
-
+  backend-check:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -27,21 +25,96 @@ jobs:
       run: dotnet test --no-build --verbosity normal
       working-directory: car-racing-tournament-api
 
-  webapp:
-
+  backend-migrate:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: backend-check
     runs-on: ubuntu-latest
-
+    env:
+      CONNECTIONSTRING: ${{ secrets.CONNECTIONSTRING }}
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js 14.x
-      uses: actions/setup-node@v3
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '6.0.x'
+      - name: Install EF Core
+        run: dotnet tool install --global dotnet-ef
+        env:
+          NUGET_XMLDOC_MODE: skip
+      - name: Restore dependencies
+        run: dotnet restore
+        working-directory: car-racing-tournament-api
+      - name: Migrate database
+        run: dotnet ef database update --connection "${{ env.CONNECTIONSTRING }}"
+        working-directory: car-racing-tournament-api
+
+  backend-deploy:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: backend-check
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
       with:
-        node-version: 14.x
-        cache: 'npm'
-        cache-dependency-path: car-racing-tournament-web/package-lock.json
-    - run: npm ci
-      working-directory: car-racing-tournament-web
-    - run: npm run build --if-present
-      working-directory: car-racing-tournament-web
+        dotnet-version: '6.0.x'
+    - name: Restore NuGet packages
+      run: dotnet restore
+      working-directory: car-racing-tournament-api
+    - name: Publish application
+      run: dotnet publish -c Release -o publish --no-restore
+      working-directory: car-racing-tournament-api
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'car-racing-tournament-api'
+        publish-profile: ${{ secrets.PUBLISH_PROFILE_API }}
+        package: './car-racing-tournament-api/publish'
+
+  webapp-check:
+     runs-on: ubuntu-latest
+
+     steps:
+     - uses: actions/checkout@v3
+     - name: Use Node.js 14.x
+       uses: actions/setup-node@v3
+       with:
+         node-version: 14.x
+         cache: 'npm'
+         cache-dependency-path: car-racing-tournament-web/package-lock.json
+     - run: npm ci
+       working-directory: car-racing-tournament-web
+     - run: npm run build --if-present
+       working-directory: car-racing-tournament-web
     #- run: npm test
     #  working-directory: car-racing-tournament-web
+
+  webapp-deploy:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: webapp-check
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18.x'
+
+    - name: Install dependencies
+      run: npm install
+      working-directory: car-racing-tournament-web
+
+    - name: Build application
+      run: npm run build -- --prod
+      working-directory: car-racing-tournament-web
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'car-racing-tournament-web'
+        publish-profile: ${{ secrets.PUBLISH_PROFILE_WEB }}
+        package: './car-racing-tournament-web/dist/car-racing-tournament-web'
