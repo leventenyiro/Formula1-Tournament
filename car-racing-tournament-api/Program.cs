@@ -22,7 +22,8 @@ internal class Program
         builder.Services.AddControllers();
         builder.Services.AddDbContext<CarRacingTournamentDbContext>(options =>
         {
-            options.UseSqlServer(builder.Configuration["connectionString"]);
+            // options.UseSqlServer(builder.Configuration["connectionString"]);
+            options.UseMySql("Server=localhost;Uid=root;Database=car_racing_tournament;Pwd=;", new MySqlServerVersion(new Version(8, 0, 22)), options => options.EnableRetryOnFailure());
         });
 
         builder.Services.AddMvc().AddJsonOptions(options =>
@@ -91,11 +92,11 @@ internal class Program
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
+        // if (app.Environment.IsDevelopment())
+        // {
             app.UseSwagger();
             app.UseSwaggerUI();
-        }
+        // }
 
         app.UseHttpsRedirection();
 
