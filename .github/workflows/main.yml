@@ -30,7 +30,7 @@ jobs:
     needs: backend-check
     runs-on: ubuntu-latest
     env:
-      CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
+      CONNECTIONSTRING: ${{ secrets.CONNECTIONSTRING }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -46,7 +46,7 @@ jobs:
         run: dotnet restore
         working-directory: car-racing-tournament-api
       - name: Migrate database
-        run: dotnet ef database update --connection "${{ env.CONNECTION_STRING }}"
+        run: dotnet ef database update --connection "${{ env.CONNECTIONSTRING }}"
         working-directory: car-racing-tournament-api
 
   backend-deploy:
