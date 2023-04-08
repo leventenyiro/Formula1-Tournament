@@ -30,8 +30,7 @@ jobs:
     needs: backend-check
     runs-on: ubuntu-latest
     env:
-      CONNECTIONSTRING: ${{ secrets.CONNECTIONSTRING }}
-      ASPNETCORE_ENVIRONMENT: Production
+      CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -47,7 +46,7 @@ jobs:
         run: dotnet restore
         working-directory: car-racing-tournament-api
       - name: Migrate database
-        run: dotnet ef database update --connection "${{ env.CONNECTIONSTRING }}"
+        run: dotnet ef database update --connection "${{ env.CONNECTION_STRING }}"
         working-directory: car-racing-tournament-api
 
   backend-deploy:
@@ -117,5 +116,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'car-racing-tournament-web'
-        publish-profile: ${{ secrets.PUBLISH_PROFILE_API }}
+        publish-profile: ${{ secrets.PUBLISH_PROFILE_WEB }}
         package: './car-racing-tournament-web/dist/car-racing-tournament-web'
