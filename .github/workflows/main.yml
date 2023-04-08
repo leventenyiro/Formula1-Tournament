@@ -109,7 +109,7 @@ jobs:
       working-directory: car-racing-tournament-web
 
     - name: Build application
-      run: npm run build
+      run: npm run build -- --prod
       working-directory: car-racing-tournament-web
 
     - name: Deploy to Azure Web App
