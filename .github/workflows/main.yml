@@ -8,9 +8,7 @@ on:
 
 jobs:
   backend-check:
-
     runs-on: ubuntu-latest
-    
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -76,7 +74,7 @@ jobs:
         publish-profile: ${{ secrets.PUBLISH_PROFILE_API }}
         package: './car-racing-tournament-api/publish'
 
-   webapp-check:
+  webapp-check:
      runs-on: ubuntu-latest
 
      steps:
