@@ -89,38 +89,5 @@ namespace car_racing_tournament_api.Controllers
             
             return NoContent();
         }
-
-        [HttpPost("{raceId}/result"), Authorize]
-        public async Task<IActionResult> PostResult(Guid raceId, [FromBody] ResultDto resultDto)
-        {
-            var resultGetRace = await _raceService.GetRaceById(raceId);
-            if (!resultGetRace.IsSuccess)
-                return NotFound(resultGetRace.ErrorMessage);
-
-            if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetRace.Race!.SeasonId))
-                return Forbid();
-
-            var resultGetSeason = await _seasonService.GetSeasonById(resultGetRace.Race.SeasonId);
-            if (!resultGetSeason.IsSuccess)
-                return NotFound(resultGetSeason.ErrorMessage);
-
-            if (resultGetSeason.Season!.IsArchived) {
-                return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
-            }
-
-            var resultGetDriver = await _driverService.GetDriverById(resultDto.DriverId);
-            if (!resultGetDriver.IsSuccess)
-                return NotFound(resultGetDriver.ErrorMessage);    
-
-            var resultGetTeam = await _teamService.GetTeamById(resultDto.TeamId);
-            if (!resultGetTeam.IsSuccess)
-                return NotFound(resultGetTeam.ErrorMessage);     
-
-            var resultAdd = await _resultService.AddResult(resultGetRace.Race!, resultDto, resultGetDriver.Driver!, resultGetTeam.Team!);
-            if (!resultAdd.IsSuccess)
-                return BadRequest(resultAdd.ErrorMessage);
-
-            return StatusCode(StatusCodes.Status201Created);
-        }
     }
 }

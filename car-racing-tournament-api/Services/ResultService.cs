@@ -77,7 +77,6 @@ namespace car_racing_tournament_api.Services
 
             var result = _mapper.Map<Result>(resultDto);
             result.Id = Guid.NewGuid();
-            result.RaceId = race.Id;
             result.Position = resultDto.Type == ResultType.Finished ? resultDto.Position : null;
             await _carRacingTournamentDbContext.Results.AddAsync(result);
             _carRacingTournamentDbContext.Entry(driver).State = EntityState.Modified;
@@ -100,8 +99,8 @@ namespace car_racing_tournament_api.Services
             if (resultDto.Point < 0)
                 return (false, _configuration["ErrorMessages:ResultPoint"]);
 
-            if (result.DriverId != resultDto.DriverId && await _carRacingTournamentDbContext.Results.CountAsync(
-                x => x.DriverId == resultDto.DriverId && x.RaceId == race.Id) != 0)
+            if ((result.DriverId != resultDto.DriverId || result.RaceId != resultDto.RaceId) && await _carRacingTournamentDbContext.Results.CountAsync(
+                x => x.DriverId == resultDto.DriverId && x.RaceId == resultDto.RaceId) != 0)
                 return (false, _configuration["ErrorMessages:ResultExists"]);
 
             result.Type = resultDto.Type;
@@ -109,6 +108,7 @@ namespace car_racing_tournament_api.Services
             result.Point = resultDto.Point;
             result.DriverId = resultDto.DriverId;
             result.TeamId = resultDto.TeamId;
+            result.RaceId = resultDto.RaceId;
             _carRacingTournamentDbContext.Entry(driver).State = EntityState.Modified;
             _carRacingTournamentDbContext.Entry(result).State = EntityState.Modified;
             await _carRacingTournamentDbContext.SaveChangesAsync();

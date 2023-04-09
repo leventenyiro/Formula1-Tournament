@@ -313,7 +313,8 @@ namespace car_racing_tournament_api.Tests.Unit
                 Point = 18,
                 Position = 2,
                 DriverId = _result!.DriverId,
-                TeamId = (Guid)driver.ActualTeamId!
+                TeamId = (Guid)driver.ActualTeamId!,
+                RaceId = (Guid)race.Id
             };
 
             var resultUpdate = await _resultService!.UpdateResult(result, resultDto, race, driver, driver.ActualTeam!);

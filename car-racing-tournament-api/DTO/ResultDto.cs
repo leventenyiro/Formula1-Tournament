@@ -11,5 +11,6 @@ namespace car_racing_tournament_api.DTO
         public int Point { get; set; }
         public Guid DriverId { get; set; }
         public Guid TeamId { get; set; }
+        public Guid RaceId { get; set; }
     }
 }

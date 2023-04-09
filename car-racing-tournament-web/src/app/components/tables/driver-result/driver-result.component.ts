@@ -39,7 +39,7 @@ export class DriverResultComponent implements OnInit {
       data.value.position = 0;
     } else
       data.value.type = 'Finished';
-    data.value.driverId = this.driverId;    
+    data.value.driverId = this.driverId;
 
     this.seasonService.createResult(data.value).subscribe({
       error: err => {
