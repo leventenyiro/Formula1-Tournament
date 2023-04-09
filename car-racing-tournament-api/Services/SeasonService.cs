@@ -100,7 +100,7 @@ namespace car_racing_tournament_api.Services
                             Name = x.ActualTeam.Name,
                             Color = x.ActualTeam.Color
                         } : null,
-                        Results = x.Results!.Select(x => new Result
+                        Results = x.Results!.OrderBy(x => x.Race.DateTime).Select(x => new Result
                         {
                             Id = x.Id,
                             Type = x.Type,
@@ -132,7 +132,7 @@ namespace car_racing_tournament_api.Services
                             RealName = x.RealName,
                             Number = x.Number
                         }).ToList(),
-                        Results = x.Results!.Select(x => new Result
+                        Results = x.Results!.OrderBy(x => x.Race.DateTime).Select(x => new Result
                         {
                             Id = x.Id,
                             Type = x.Type,
@@ -153,12 +153,12 @@ namespace car_racing_tournament_api.Services
                             }
                         }).ToList()
                     }).ToList(),
-                    Races = x.Races!.Select(x => new Race
+                    Races = x.Races!.OrderBy(x => x.DateTime).Select(x => new Race
                     {
                         Id = x.Id,
                         Name = x.Name,
                         DateTime = x.DateTime,
-                        Results = x.Results!.Select(x => new Result
+                        Results = x.Results!.OrderBy(x => x.Race.DateTime).Select(x => new Result
                         {
                             Id = x.Id,
                             Type = x.Type,
