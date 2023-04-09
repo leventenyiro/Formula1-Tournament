@@ -46,7 +46,7 @@ jobs:
         run: dotnet restore
         working-directory: car-racing-tournament-api
       - name: Migrate database
-        run: dotnet ef database update --connection "${{ env.CONNECTIONSTRING }}"
+        run: dotnet ef database update -- --connection "${{ env.CONNECTIONSTRING }}" --environment Production
         working-directory: car-racing-tournament-api
 
   backend-deploy:
