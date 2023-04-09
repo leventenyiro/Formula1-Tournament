@@ -140,5 +140,15 @@ namespace car_racing_tournament_api.Services
             await _carRacingTournamentDbContext.SaveChangesAsync();
             return (true, null);
         }
+
+        public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteResultsByRaceId(Guid raceId)
+        {
+            var results = await _carRacingTournamentDbContext.Results
+                .Where(x => x.RaceId == raceId)
+                .ToListAsync();
+            _carRacingTournamentDbContext.Results.RemoveRange(results);
+            await _carRacingTournamentDbContext.SaveChangesAsync();
+            return (true, null);
+        }
     }
 }
