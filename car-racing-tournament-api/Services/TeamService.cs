@@ -136,6 +136,7 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteTeam(Team team)
         {
+            _carRacingTournamentDbContext.Entry(team).State = EntityState.Modified;
             _carRacingTournamentDbContext.Teams.Remove(team);
             await _carRacingTournamentDbContext.SaveChangesAsync();
 

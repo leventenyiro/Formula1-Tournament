@@ -9,5 +9,6 @@ namespace car_racing_tournament_api.Interfaces
         Task<(bool IsSuccess, string? ErrorMessage)> AddDriver(Season season, DriverDto driverDto, Team team);
         Task<(bool IsSuccess, string? ErrorMessage)> UpdateDriver(Driver driver, DriverDto driverDto, Team team);
         Task<(bool IsSuccess, string? ErrorMessage)> DeleteDriver(Driver driver);
+        Task<(bool IsSuccess, string? ErrorMessage)> SetActualTeamNullByTeamId(Guid teamId);
     }
 }

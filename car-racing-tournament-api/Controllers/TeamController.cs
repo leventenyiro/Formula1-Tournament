@@ -13,18 +13,24 @@ namespace car_racing_tournament_api.Controllers
         private IPermission _permissionService;
         private ISeason _seasonService;
         private IConfiguration _configuration;
+        private IDriver _driverService;
+        private Interfaces.IResult _resultService;
 
         public TeamController(
             ITeam teamService, 
             IPermission permissionService,
-            ISeason seasonService)
+            ISeason seasonService,
+            IDriver driverService,
+            Interfaces.IResult resultService)
         {
             _teamService = teamService;
             _permissionService = permissionService;
             _seasonService = seasonService;
+            _driverService = driverService;
+            _resultService = resultService;
             _configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
-                .Build();;
+                .Build();
         }
 
         [HttpPut("{id}"), Authorize]
@@ -69,6 +75,14 @@ namespace car_racing_tournament_api.Controllers
             if (resultGetSeason.Season!.IsArchived) {
                 return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
             }
+
+            var resultDriverNullActualTeam = await _driverService.SetActualTeamNullByTeamId(resultGet.Team.Id);
+            if (!resultDriverNullActualTeam.IsSuccess)
+                return NotFound(resultDriverNullActualTeam.ErrorMessage);
+
+            var resultDeleteResultsByTeam = await _resultService.DeleteResultsByTeamId(resultGet.Team.Id);
+            if (!resultDeleteResultsByTeam.IsSuccess)
+                return NotFound(resultDeleteResultsByTeam.ErrorMessage);
 
             var resultDelete = await _teamService.DeleteTeam(resultGet.Team);
             if (!resultDelete.IsSuccess)

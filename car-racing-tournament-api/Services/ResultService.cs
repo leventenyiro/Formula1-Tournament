@@ -18,7 +18,7 @@ namespace car_racing_tournament_api.Services
             _mapper = mapper;
             _configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
-                .Build();;
+                .Build();
         }
 
         public async Task<(bool IsSuccess, Result? Result, string? ErrorMessage)> GetResultById(Guid id)
@@ -128,6 +128,26 @@ namespace car_racing_tournament_api.Services
             {
                 return (false, _configuration["ErrorMessages:ResultNotFound"]);
             }
+            return (true, null);
+        }
+
+        public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteResultsByTeamId(Guid teamId)
+        {
+            var results = await _carRacingTournamentDbContext.Results
+                .Where(x => x.TeamId == teamId)
+                .ToListAsync();
+            _carRacingTournamentDbContext.Results.RemoveRange(results);
+            await _carRacingTournamentDbContext.SaveChangesAsync();
+            return (true, null);
+        }
+
+        public async Task<(bool IsSuccess, string? ErrorMessage)> DeleteResultsByRaceId(Guid raceId)
+        {
+            var results = await _carRacingTournamentDbContext.Results
+                .Where(x => x.RaceId == raceId)
+                .ToListAsync();
+            _carRacingTournamentDbContext.Results.RemoveRange(results);
+            await _carRacingTournamentDbContext.SaveChangesAsync();
             return (true, null);
         }
     }

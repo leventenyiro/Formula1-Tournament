@@ -79,6 +79,10 @@ namespace car_racing_tournament_api.Controllers
                 return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
             }
 
+            var resultDeleteResultsByRace = await _resultService.DeleteResultsByRaceId(resultGet.Race.Id);
+            if (!resultDeleteResultsByRace.IsSuccess)
+                return NotFound(resultDeleteResultsByRace.ErrorMessage);
+
             var result = await _raceService.DeleteRace(resultGet.Race);
             if (!result.IsSuccess)
                 return BadRequest(result.ErrorMessage);
