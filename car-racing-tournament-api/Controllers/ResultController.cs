@@ -36,6 +36,39 @@ namespace car_racing_tournament_api.Controllers
                 .Build();;
         }
 
+        [HttpPost, Authorize]
+        public async Task<IActionResult> PostResult([FromBody] ResultDto resultDto)
+        {
+            var resultGetRace = await _raceService.GetRaceById(resultDto.RaceId);
+            if (!resultGetRace.IsSuccess)
+                return NotFound(resultGetRace.ErrorMessage);
+
+            if (!await _permissionService.IsAdminModerator(new Guid(User.Identity!.Name!), resultGetRace.Race!.SeasonId))
+                return Forbid();
+
+            var resultGetSeason = await _seasonService.GetSeasonById(resultGetRace.Race.SeasonId);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
+
+            if (resultGetSeason.Season!.IsArchived) {
+                return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
+            }
+
+            var resultGetDriver = await _driverService.GetDriverById(resultDto.DriverId);
+            if (!resultGetDriver.IsSuccess)
+                return NotFound(resultGetDriver.ErrorMessage);    
+
+            var resultGetTeam = await _teamService.GetTeamById(resultDto.TeamId);
+            if (!resultGetTeam.IsSuccess)
+                return NotFound(resultGetTeam.ErrorMessage);     
+
+            var resultAdd = await _resultService.AddResult(resultGetRace.Race!, resultDto, resultGetDriver.Driver!, resultGetTeam.Team!);
+            if (!resultAdd.IsSuccess)
+                return BadRequest(resultAdd.ErrorMessage);
+
+            return StatusCode(StatusCodes.Status201Created);
+        }
+
         [HttpPut("{id}"), Authorize]
         public async Task<IActionResult> Put(Guid id, [FromBody] ResultDto resultDto)
         {

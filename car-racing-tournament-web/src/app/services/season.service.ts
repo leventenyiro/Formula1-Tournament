@@ -341,13 +341,14 @@ export class SeasonService {
     .set('Authorization', `Bearer ${bearerToken}`);
 
     return this.http.post(
-      `${environment.backendUrl}/race/${result.raceId}/result`,
+      `${environment.backendUrl}/result`,
       {
         "type": result.type,
         "position": result.position,
         "point": result.point,
         "driverId": result.driverId,
-        "teamId": result.teamId
+        "teamId": result.teamId,
+        "raceId": result.raceId
       },
       {
         headers: headers,
@@ -375,7 +376,8 @@ export class SeasonService {
         "position": result.position,
         "point": result.point,
         "driverId": result.driverId,
-        "teamId": result.teamId
+        "teamId": result.teamId,
+        "raceId": result.raceId
       },
       {
         headers: headers,
