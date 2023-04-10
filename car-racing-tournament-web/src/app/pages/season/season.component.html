@@ -126,7 +126,7 @@
                     <i class="bi bi-shield-fill"></i>
                 </div>
                 <div class="d-inline-flex me-1"
-                    [ngClass]="this.user?.username === permission.username ? 'fw-bold' : ''">
+                    [ngClass]="isLoggedIn && this.user?.username === permission.username ? 'fw-bold' : ''">
                     {{ permission.username }}
                 </div>
             </div>
