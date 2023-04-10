@@ -25,32 +25,32 @@ jobs:
       run: dotnet test --no-build --verbosity normal
       working-directory: car-racing-tournament-api
 
-  backend-migrate:
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-    needs: backend-check
-    runs-on: ubuntu-latest
-    env:
-      CONNECTIONSTRING: ${{ secrets.CONNECTIONSTRING }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: '6.0.x'
-      - name: Install EF Core
-        run: dotnet tool install --global dotnet-ef
-        env:
-          NUGET_XMLDOC_MODE: skip
-      - name: Restore dependencies
-        run: dotnet restore
-        working-directory: car-racing-tournament-api
-      - name: Add migration
-        run: dotnet ef migrations add init
-        working-directory: car-racing-tournament-api
-      - name: Update database
-        run: dotnet ef database update -- --connection "${{ env.CONNECTIONSTRING }}" --environment Production
-        working-directory: car-racing-tournament-api
+  # backend-migrate:
+  #   if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+  #   needs: backend-check
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     CONNECTIONSTRING: ${{ secrets.CONNECTIONSTRING }}
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+  #     - name: Setup .NET
+  #       uses: actions/setup-dotnet@v2
+  #       with:
+  #         dotnet-version: '6.0.x'
+  #     - name: Install EF Core
+  #       run: dotnet tool install --global dotnet-ef
+  #       env:
+  #         NUGET_XMLDOC_MODE: skip
+  #     - name: Restore dependencies
+  #       run: dotnet restore
+  #       working-directory: car-racing-tournament-api
+  #     - name: Add migration
+  #       run: dotnet ef migrations add init
+  #       working-directory: car-racing-tournament-api
+  #     - name: Update database
+  #       run: dotnet ef database update -- --connection "${{ env.CONNECTIONSTRING }}" --environment Production
+  #       working-directory: car-racing-tournament-api
 
   backend-deploy:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
