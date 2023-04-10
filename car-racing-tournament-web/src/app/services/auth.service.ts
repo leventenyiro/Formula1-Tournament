@@ -52,45 +52,25 @@ export class AuthService {
     )
   }
 
-  isSessionValid(documentCookie: string) {
-    if (!documentCookie.includes('session=') || documentCookie.split('session=').length == 1)
-      return false;
-    const bearerToken = documentCookie.split("session=")[1].split(";")[0];
-    if (!bearerToken) {
-      return false;
+  getBearerToken() {
+    if (!document.cookie.includes('session=') || document.cookie.split('session=').length == 1) {
+      this.loggedIn.emit(false);
+      return;
     }
-    let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${bearerToken}`)
-    return this.http
-    .get<Login>(
-        `${environment.backendUrl}/user`,
-        {
-            headers: headers
-        }
-    ).pipe(
-        tap(data => JSON.stringify(data)),
-        catchError((error: HttpErrorResponse) => {
-          return throwError(() => new Error(error.error));
-        })
-    ).subscribe({
-      next: data => { return true },
-      error: err => { return false }
-    })
+    const bearerToken = document.cookie.split("session=")[1].split(";")[0];
+    
+    if (!bearerToken) {
+      this.loggedIn.emit(false);
+      return;
+    }
+    return bearerToken;
   }
 
   getUser(): Observable<User> {
-    const bearerToken = document.cookie.split("session=")[1].split(";")[0];
-    if (!bearerToken) {
-      catchError((error: HttpErrorResponse) => {
-        return throwError(() => new Error(error.error));
-      })
-    }
     let headers = new HttpHeaders()
     .set('content-type', 'application/json')
     .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${bearerToken}`)
+    .set('Authorization', `Bearer ${this.getBearerToken()}`)
     return this.http
     .get<User>(
         `${environment.backendUrl}/user`,
@@ -106,11 +86,10 @@ export class AuthService {
   }
 
   updateUser(user: User) {
-    const bearerToken = document.cookie.split("session=")[1].split(";")[0];
     let headers = new HttpHeaders()
     .set('content-type', 'application/json')
     .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${bearerToken}`);
+    .set('Authorization', `Bearer ${this.getBearerToken()}`);
 
     return this.http.put(
       `${environment.backendUrl}/user`,
@@ -131,11 +110,10 @@ export class AuthService {
   }
 
   updatePassword(passwordOld: string, password: string, passwordAgain: string) {
-    const bearerToken = document.cookie.split("session=")[1].split(";")[0];
     let headers = new HttpHeaders()
     .set('content-type', 'application/json')
     .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${bearerToken}`);
+    .set('Authorization', `Bearer ${this.getBearerToken()}`);
 
     return this.http.put(
       `${environment.backendUrl}/user/password`,
@@ -157,11 +135,10 @@ export class AuthService {
   }
 
   deleteUser() {
-    const bearerToken = document.cookie.split("session=")[1].split(";")[0];
     let headers = new HttpHeaders()
     .set('content-type', 'application/json')
     .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${bearerToken}`);
+    .set('Authorization', `Bearer ${this.getBearerToken()}`);
 
     return this.http.delete(
       `${environment.backendUrl}/user`,

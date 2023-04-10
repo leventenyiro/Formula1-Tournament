@@ -14,7 +14,7 @@ export class RegistrationComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    if (this.authService.isSessionValid(document.cookie)) {
+    if (this.authService.getBearerToken() !== undefined) {
       this.router.navigate(['']);
     }
   }

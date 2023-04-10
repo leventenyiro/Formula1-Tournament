@@ -14,20 +14,14 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.loggedIn.subscribe(
-      (loggedIn: boolean) => {
-        this.isLoggedIn = loggedIn;
-      }
+      (loggedIn: boolean) => this.isLoggedIn = loggedIn
     );
-    this.isLoggedInInit();
-  }
-
-  isLoggedInInit() {
-    this.isLoggedIn = this.authService.isSessionValid(document.cookie) ? true : false;
+    this.isLoggedIn = this.authService.getBearerToken() !== undefined;
   }
 
   logout(): void {
     document.cookie = "session=";
-    this.isLoggedInInit();
+    this.isLoggedIn = this.authService.getBearerToken() !== undefined;
     this.authService.loggedIn.emit(false);
   }
 }

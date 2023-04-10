@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router, private location: Location) { }
 
   ngOnInit(): void {
-    if (this.authService.isSessionValid(document.cookie)) {
+    if (this.authService.getBearerToken() !== undefined) {
       this.router.navigate(['']);
     }
   }
