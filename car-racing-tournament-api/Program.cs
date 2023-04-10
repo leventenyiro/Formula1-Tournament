@@ -22,12 +22,12 @@ internal class Program
         builder.Services.AddControllers();
         builder.Services.AddDbContext<CarRacingTournamentDbContext>(options =>
         {
-            if (builder.Environment.IsProduction())
-                options.UseSqlServer(builder.Configuration["ConnectionString"]);
-            else
+            if (builder.Environment.IsDevelopment())
                 options.UseMySql("Server=localhost;Uid=root;Database=car_racing_tournament;Pwd=;", 
                     new MySqlServerVersion(new Version(8, 0, 22)), 
                     options => options.EnableRetryOnFailure());
+            else
+                options.UseSqlServer(builder.Configuration["ConnectionString"]);
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
 
