@@ -7,9 +7,9 @@
 
   <div class="row mx-3">
     <div *ngIf="isLoggedIn" class="col-sm-5">
-      <input type="checkbox" class="btn-check" id="btn-check-favorite" autocomplete="off"
-        [formControl]="checkBoxFavorites">
-      <label class="btn btn-outline-danger btn-sm me-2" for="btn-check-favorite" title="Favorite filter">
+      <input type="checkbox" class="btn-check btn-check-pink" id="btn-check-favorite" autocomplete="off"
+        [formControl]="checkBoxFavorites" (change)="onFilter()">
+      <label class="btn btn-outline-pink btn-sm me-2" for="btn-check-favorite" title="Favorite filter">
         <i class="bi bi-heart"></i>
       </label>
 
@@ -48,6 +48,10 @@
           <p class="description">{{ season.description }}</p>
           <p>Admin: {{ getAdminUsername(season) }}</p>
           <p>{{ getFormattedDate(season.createdAt) }}</p>
+          <div class="text-pink" [ngClass]="isLoggedIn ? 'favorite' : ''" (mouseup)="setFavorite($event, season); $event.stopPropagation()">
+            <i class="bi" [ngClass]="isFavorite(season) ? 'bi-heart-fill' : 'bi-heart'"></i>
+            {{ season.favorite }}
+          </div>
           <span *ngIf="season.isArchived" class="gold-tag">archived</span>
         </div>
       </div>

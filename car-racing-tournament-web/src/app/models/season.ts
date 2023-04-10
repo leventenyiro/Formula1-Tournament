@@ -10,6 +10,7 @@ export class Season {
     public description: string,
     public isArchived: string,
     public createdAt: Date,
+    public favorite: number,
     public permissions: Permission[],
     public teams: Team[],
     public drivers: Driver[],

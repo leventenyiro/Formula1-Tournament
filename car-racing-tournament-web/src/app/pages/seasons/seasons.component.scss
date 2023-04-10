@@ -1,6 +1,6 @@
 .season-box {
     // aspect-ratio: 1/1;
-    height: 15em;
+    height: 17em;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px;
     width: 90%;
     border-radius: 17px;
@@ -24,4 +24,27 @@
     color: #ff9500;
     border-radius: 5px;
     font-size: small;
+}
+
+$pink: #ff5c8a;
+$pink-hover: #ff0a54;
+
+.favorite {
+    transition: 0.2s;
+    max-width: 30px;
+}
+
+.favorite:hover {
+    transition: 0.2s;
+    transform: scale(1.2);
+}
+
+.btn-pink, .btn-check-pink:checked + .btn, .btn-check-pink:active + .btn, .btn:active, .btn.active, .btn.show {
+	background-color: $pink;
+    color: white;
+    border: 1px solid $pink;
+}
+
+.text-pink {
+    color: $pink-hover;
 }

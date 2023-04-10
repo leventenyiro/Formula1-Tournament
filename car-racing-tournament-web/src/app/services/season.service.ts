@@ -496,4 +496,48 @@ export class SeasonService {
       })
     )
   }
+
+  createFavorite(userId: string, seasonId: string) {
+    let headers = new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Access-Control-Allow-Origin', '*')
+    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+
+    return this.http.post(
+      `${environment.backendUrl}/favorite`,
+      {
+        'userId': userId,
+        'seasonId': seasonId
+      },
+      {
+        headers: headers,
+        responseType: 'text'
+      }
+    ).pipe(
+      tap(data => data),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
+    )
+  }
+
+  deleteFavorite(id: string) {
+    let headers = new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Access-Control-Allow-Origin', '*')
+    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+
+    return this.http.delete(
+      `${environment.backendUrl}/favorite/${id}`,
+      {
+        headers: headers,
+        responseType: 'text'
+      }
+    ).pipe(
+      tap(data => data),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
+    )
+  }
 }

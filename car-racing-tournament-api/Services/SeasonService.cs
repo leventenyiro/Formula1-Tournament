@@ -27,6 +27,7 @@ namespace car_racing_tournament_api.Services
         {
             List<SeasonOutputDto> seasons = await _carRacingTournamentDbContext.Seasons
                 .Include(x => x.Permissions)
+                .OrderByDescending(x => x.CreatedAt)
                 .Select(x => new SeasonOutputDto
                 {
                     Id = x.Id,
