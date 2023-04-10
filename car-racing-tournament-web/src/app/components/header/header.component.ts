@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { AuthService } from 'app/services/auth.service';
 
 @Component({
@@ -10,24 +9,18 @@ import { AuthService } from 'app/services/auth.service';
 export class HeaderComponent implements OnInit {
   isLoggedIn = false;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
     this.authService.loggedIn.subscribe(
-      (loggedIn: boolean) => {
-        this.isLoggedIn = loggedIn;
-      }
+      (loggedIn: boolean) => this.isLoggedIn = loggedIn
     );
-    this.isLoggedInInit();
-  }
-
-  isLoggedInInit() {
-    this.isLoggedIn = this.authService.isSessionValid(document.cookie) ? true : false;
+    this.isLoggedIn = this.authService.getBearerToken() !== undefined;
   }
 
   logout(): void {
     document.cookie = "session=";
-    this.isLoggedInInit();
+    this.isLoggedIn = this.authService.getBearerToken() !== undefined;
     this.authService.loggedIn.emit(false);
   }
 }

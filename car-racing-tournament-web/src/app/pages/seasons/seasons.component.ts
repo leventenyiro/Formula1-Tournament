@@ -44,7 +44,7 @@ export class SeasonsComponent implements OnInit {
         this.onFetchData();
       }
     );
-    this.isLoggedIn = this.authService.isSessionValid(document.cookie) ? true : false;
+    this.isLoggedIn = this.authService.getBearerToken() !== undefined;
       
     this.onFetchData();
     this.checkBoxFavorites.disable();
@@ -61,7 +61,7 @@ export class SeasonsComponent implements OnInit {
         error: () => this.isFetching = false
       });
 
-      this.seasonService.getSeasonsByUser(document.cookie).subscribe({
+      this.seasonService.getSeasonsByUser().subscribe({
         next: seasons => {
           this.fetchedMyData = seasons;
         },

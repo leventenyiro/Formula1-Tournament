@@ -48,7 +48,7 @@ export class SeasonComponent implements OnInit {
       }
     );
 
-    this.isLoggedIn = this.authService.isSessionValid(document.cookie) ? true : false;
+    this.isLoggedIn = this.authService.getBearerToken() !== undefined;
     this.isFetching = false;
 
     if (this.isLoggedIn) {
