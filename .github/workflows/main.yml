@@ -26,7 +26,8 @@ jobs:
       working-directory: car-racing-tournament-api
 
   backend-migrate:
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    # if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch'
     needs: backend-check
     runs-on: ubuntu-latest
     env:
@@ -45,7 +46,10 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
         working-directory: car-racing-tournament-api
-      - name: Migrate database
+      - name: Add migration
+        run: dotnet ef migrations add init;
+        working-directory: car-racing-tournament-api
+      - name: Update database
         run: dotnet ef database update -- --connection "${{ env.CONNECTIONSTRING }}" --environment Production
         working-directory: car-racing-tournament-api
 
