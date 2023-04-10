@@ -47,7 +47,7 @@ export class SeasonsComponent implements OnInit {
     this.isLoggedIn = this.authService.getBearerToken() !== undefined;
       
     this.onFetchData();
-    this.checkBoxFavorites.disable();
+    this.checkBoxFavorites.setValue(false);
     this.checkBoxAdmin.setValue(false);
     this.checkBoxModerator.setValue(false);
   }
@@ -96,7 +96,12 @@ export class SeasonsComponent implements OnInit {
       this.seasons.push(...this.fetchedMyData.filter(x => x.permissions.find(x => x.type === PermissionType.Admin)?.userId !== this.user?.id));
     }
 
-    if (!this.checkBoxAdmin.value && !this.checkBoxModerator.value) {
+    if (this.checkBoxFavorites.value) {      
+      const newSeasons = this.fetchedData.filter(x => this.user!.favorites!.map(x => x.seasonId).includes(x.id));
+      this.seasons.push(...newSeasons.filter(x => !this.seasons.some(s => s.id === x.id)));
+    }
+
+    if (!this.checkBoxAdmin.value && !this.checkBoxModerator.value && !this.checkBoxFavorites.value) {
       this.seasons = this.fetchedData;
     }
   }
@@ -113,6 +118,33 @@ export class SeasonsComponent implements OnInit {
     `${date.getHours().toString().padStart(2, '0')}:` +
     `${date.getMinutes().toString().padStart(2, '0')}:` +
     `${date.getSeconds().toString().padStart(2, '0')}`;
+  }
+
+  isFavorite(season: Season): boolean {
+    if (!this.isLoggedIn || this.user === undefined || this.user.favorites === undefined)
+      return false;    
+    return this.user.favorites.map(x => x.seasonId).includes(season.id);
+  }
+
+  setFavorite(event: MouseEvent, season: Season) {
+    if (this.isLoggedIn) {
+      event.stopPropagation();
+      if (this.isFavorite(season)) {
+        this.seasonService.deleteFavorite(this.user!.favorites!.find(x => x.seasonId === season.id && x.userId === this.user!.id)!.id!).subscribe({
+          next: () => this.onFetchData(),
+          error: err => {
+            this.error = err;
+          }
+        });
+      } else {
+        this.seasonService.createFavorite(this.user!.id!, season.id).subscribe({
+          next: () => this.onFetchData(),
+          error: err => {
+            this.error = err;
+          }
+        });
+      }
+    }
   }
 
   navigateSeason(id: string) {

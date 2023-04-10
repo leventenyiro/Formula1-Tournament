@@ -12,6 +12,7 @@ namespace car_racing_tournament_api.Data
         public virtual DbSet<Race> Races { get; set; } = default!;
         public virtual DbSet<Result> Results { get; set; } = default!;
         public virtual DbSet<Permission> Permissions { get; set; } = default!;
+        public virtual DbSet<Favorite> Favorites { get; set; } = default!;
 
         public CarRacingTournamentDbContext() {}
 
@@ -43,10 +44,28 @@ namespace car_racing_tournament_api.Data
                 entity.HasOne(e => e.User)
                     .WithMany(e => e.Permissions)
                     .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
                 entity.HasOne(e => e.Season)
                     .WithMany(e => e.Permissions)
+                    .HasForeignKey(e => e.SeasonId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
+
+            modelBuilder.Entity<Favorite>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.HasOne(e => e.User)
+                    .WithMany(e => e.Favorites)
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                entity.HasOne(e => e.Season)
+                    .WithMany(e => e.Favorites)
                     .HasForeignKey(e => e.SeasonId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
@@ -201,6 +220,15 @@ namespace car_racing_tournament_api.Data
                         UserId = new Guid("08db26a9-9264-4fb6-88aa-4c547e6326dc"),
                         SeasonId = new Guid("bd8cc085-2e18-4a7d-84e1-be5de33a52de"),
                         Type = PermissionType.Moderator
+                    }
+                );
+
+                modelBuilder.Entity<Favorite>().HasData(
+                    new Favorite
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = new Guid("08db26a9-840c-42ee-82c5-ceec14c2a104"),
+                        SeasonId = new Guid("bd8cc085-2e18-4a7d-84e1-be5de33a52de")
                     }
                 );
 

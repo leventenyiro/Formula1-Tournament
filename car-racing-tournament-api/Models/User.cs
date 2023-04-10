@@ -11,5 +11,6 @@ namespace car_racing_tournament_api.Models
         public string Password { get; set; } = default!;
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<Permission>? Permissions { get; set; }
+        public List<Favorite>? Favorites { get; set; }
     }
 }

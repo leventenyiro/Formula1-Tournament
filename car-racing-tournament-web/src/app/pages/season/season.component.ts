@@ -39,8 +39,6 @@ export class SeasonComponent implements OnInit {
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get("id")!;
 
-    this.onFetchData();
-
     this.isFetching = true;
     this.authService.loggedIn.subscribe(
       (loggedIn: boolean) => {
@@ -49,19 +47,20 @@ export class SeasonComponent implements OnInit {
     );
 
     this.isLoggedIn = this.authService.getBearerToken() !== undefined;
+    this.onFetchData();
     this.isFetching = false;
+  }
+
+  onFetchData(): any {
+    this.isFetching = true;
 
     if (this.isLoggedIn) {
       this.isFetching = true;
       this.authService.getUser().subscribe({
         next: user => this.user = user
       });
-      this.isFetching = false;
     }
-  }
 
-  onFetchData(): any {
-    this.isFetching = true;
     this.seasonService.getSeason(this.id).subscribe({
       next: season => this.season = season,
       error: () => this.router.navigate(['season']),
@@ -247,6 +246,28 @@ export class SeasonComponent implements OnInit {
         this.isFetching = false;
       }
     });
+  }
+
+  isFavorite(season: Season): boolean {
+    if (!this.isLoggedIn || this.user === undefined || this.user.favorites === undefined)
+      return false;
+    return this.user.favorites.map(x => x.seasonId).includes(season?.id);
+  }
+
+  setFavorite(season: Season) {
+    if (this.isLoggedIn) {      
+      if (this.isFavorite(season)) {
+        this.seasonService.deleteFavorite(this.user!.favorites!.find(x => x.seasonId === season.id && x.userId === this.user!.id)!.id!).subscribe({
+          error: err => this.error = err,
+          complete: () => this.onFetchData()
+        });
+      } else {
+        this.seasonService.createFavorite(this.user!.id!, season.id).subscribe({
+          error: err => this.error = err,
+          complete: () => this.onFetchData()
+        });
+      }
+    }
   }
 
   openModal(modal: string, id?: string) {

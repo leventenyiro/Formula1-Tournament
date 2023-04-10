@@ -51,3 +51,29 @@ h2 {
     color: white;
     border-radius: 4px;
 }
+
+$pink: #ff5c8a;
+$pink-hover: #ff0a54;
+
+.btn-pink {
+	background-color: $pink;
+    border: 1px solid $pink;
+    color: white;
+}
+
+.btn-pink:hover, .btn-pink:active {
+	background-color: $pink-hover;
+    border: 1px solid $pink-hover;
+    color: white;
+}
+
+.btn-outline-pink {
+    border: 1px solid $pink;
+    color: $pink;
+}
+
+.btn-outline-pink:hover {
+    background-color: $pink;
+    border: 1px solid $pink;
+    color: white;
+}

@@ -1,3 +1,4 @@
+import { Favorite } from "./favorite";
 import { Permission } from "./permission";
 
 export class User {
@@ -5,6 +6,7 @@ export class User {
     public username: string,
     public email: string,
     public id?: string,
-    public permissions?: Permission[]
+    public permissions?: Permission[],
+    public favorites?: Favorite[]
   ) {}
 }
