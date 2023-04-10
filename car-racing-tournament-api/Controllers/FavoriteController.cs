@@ -52,7 +52,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGet.IsSuccess)
                 return NotFound(resultGet.ErrorMessage);
 
-            if (new Guid(User.Identity!.Name!) != resultGet.Favorite.User.Id)
+            if (new Guid(User.Identity!.Name!) != resultGet.Favorite!.UserId)
                 return Forbid();
 
             var resultDelete = await _favoriteService.RemoveFavorite(resultGet.Favorite);

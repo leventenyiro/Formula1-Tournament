@@ -45,6 +45,7 @@ internal class Program
         builder.Services.AddScoped<IDriver, DriverService>();
         builder.Services.AddScoped<ITeam, TeamService>();
         builder.Services.AddScoped<IRace, RaceService>();
+        builder.Services.AddScoped<IFavorite, FavoriteService>();
         builder.Services.AddScoped<car_racing_tournament_api.Interfaces.IResult, ResultService>();
 
         builder.Services.AddAutoMapper(typeof(AutoMapperConfig));
