@@ -47,7 +47,6 @@ jobs:
         working-directory: car-racing-tournament-api
       - name: Migration
         run: |
-          dotnet ef database drop -- --connection "${{ env.CONNECTIONSTRING }}" --environment Production --force
           dotnet ef migrations add init
           dotnet ef database update -- --connection "${{ env.CONNECTIONSTRING }}" --environment Production
         working-directory: car-racing-tournament-api
