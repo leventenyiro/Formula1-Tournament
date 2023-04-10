@@ -27,7 +27,6 @@ jobs:
 
   backend-migrate:
     # if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-    if: github.event_name == 'workflow_dispatch'
     needs: backend-check
     runs-on: ubuntu-latest
     env:
