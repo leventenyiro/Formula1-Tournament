@@ -45,6 +45,8 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
         working-directory: car-racing-tournament-api
+      - name: Reset database
+        run: dotnet ef database update 0 -- --connection "${{ env.CONNECTIONSTRING }}" --environment Production;
       - name: Add migration
         run: dotnet ef migrations add init;
         working-directory: car-racing-tournament-api
