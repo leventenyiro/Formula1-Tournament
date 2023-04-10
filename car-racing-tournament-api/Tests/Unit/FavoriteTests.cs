@@ -12,7 +12,6 @@ namespace car_racing_tournament_api.Tests.Unit
         private CarRacingTournamentDbContext? _context;
         private FavoriteService? _favoriteService;
         private Models.User? _user1;
-        private Models.User? _user2;
         private Season? _season1;
         private Season? _season2;
         private Favorite? _favorite;
@@ -51,15 +50,6 @@ namespace car_racing_tournament_api.Tests.Unit
                 IsArchived = false
             };
             _context.Seasons.Add(_season2);
-
-            _user2 = new Models.User
-            {
-                Id = Guid.NewGuid(),
-                Username = "SecondUser",
-                Email = "second@user.com",
-                Password = "test"
-            };
-            _context.Users.Add(_user2);
 
             _favorite = new Favorite
             {
