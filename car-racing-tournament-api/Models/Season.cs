@@ -17,5 +17,7 @@ namespace car_racing_tournament_api.Models
         public List<Driver>? Drivers { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<Race>? Races { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<Favorite> Favorites { get; set; } = default!;
     }
 }

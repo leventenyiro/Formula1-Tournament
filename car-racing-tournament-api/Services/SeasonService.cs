@@ -34,6 +34,7 @@ namespace car_racing_tournament_api.Services
                     Description = x.Description,
                     IsArchived = x.IsArchived,
                     CreatedAt = x.CreatedAt,
+                    Favorite = x.Favorites.Count,
                     Permissions = x.Permissions.Select(x => new PermissionOutputDto
                     {
                         Id = x.Id,
@@ -81,6 +82,7 @@ namespace car_racing_tournament_api.Services
                     Description = x.Description,
                     IsArchived = x.IsArchived,
                     CreatedAt = x.CreatedAt,
+                    Favorite = x.Favorites.Count,
                     Permissions = x.Permissions.Select(x => new PermissionOutputDto
                     {
                         Id = x.Id,
