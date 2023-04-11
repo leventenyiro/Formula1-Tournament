@@ -1,4 +1,4 @@
-<h1>Create season</h1>
+<h1>{{ title }}</h1>
 <form #postForm="ngForm" (ngSubmit)="selectedSeason == undefined ? this.createSeason(postForm) : this.updateSeason(selectedSeason!.id, postForm)">
     <div class="mb-3">
         <label for="inputName" class="form-label">Name</label>

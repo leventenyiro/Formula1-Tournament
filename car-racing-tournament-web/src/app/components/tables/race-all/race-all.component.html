@@ -49,7 +49,7 @@
 </div>
 
 <app-modal type="form" *ngIf="modal === 'createRace' || modal === 'updateRace'">
-    <h1>Create</h1>
+    <h1>{{ modal === 'createRace' ? 'Add new' : 'Modify' }} race</h1>
     <form #postForm="ngForm" (ngSubmit)="selectedRace == undefined ? this.createRace(postForm) : this.updateRace(selectedRace!.id, postForm)">
         <div class="mb-3">
             <label for="inputName" class="form-label">Name</label>

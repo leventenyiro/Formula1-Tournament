@@ -43,7 +43,7 @@
 </div>
 
 <app-modal type="form" *ngIf="modal === 'createTeam' || modal === 'updateTeam'">
-    <h1>Create</h1>
+    <h1>{{ modal === 'createTeam' ? 'Add new' : 'Modify' }} team</h1>
     <form #postForm="ngForm" (ngSubmit)="selectedTeam == undefined ? this.createTeam(postForm) : this.updateTeam(selectedTeam!.id, postForm)">
         <div class="mb-3">
             <label for="inputName" class="form-label">Name</label>

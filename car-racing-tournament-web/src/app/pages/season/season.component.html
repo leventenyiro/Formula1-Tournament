@@ -144,7 +144,7 @@
 </div>
 
 <app-modal type="form" *ngIf="modal === 'updateSeason'">
-    <app-season-form [selectedSeason]="season" (onCloseModalEmitter)="closeModal()"
+    <app-season-form title="Modify season" [selectedSeason]="season" (onCloseModalEmitter)="closeModal()"
         (onFetchDataEmitter)="onFetchData()"></app-season-form>
 </app-modal>
 

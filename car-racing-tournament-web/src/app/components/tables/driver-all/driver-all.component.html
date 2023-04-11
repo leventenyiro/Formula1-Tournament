@@ -62,7 +62,7 @@
 </div>
 
 <app-modal type="form" *ngIf="modal === 'createDriver' || modal === 'updateDriver'">
-    <h1>Create</h1>
+    <h1>{{ modal === 'createDriver' ? 'Add new' : 'Modify' }} driver</h1>
     <form #postForm="ngForm" (ngSubmit)="selectedDriver == undefined ? this.createDriver(postForm) : this.updateDriver(selectedDriver!.id, postForm)">
         <div class="mb-3">
             <label for="inputName" class="form-label">Name</label>
