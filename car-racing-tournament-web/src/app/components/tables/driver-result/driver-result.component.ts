@@ -42,13 +42,13 @@ export class DriverResultComponent implements OnInit {
     data.value.driverId = this.driverId;
 
     this.seasonService.createResult(data.value).subscribe({
-      error: err => {
-        this.error = err;
+      next: () => {
+        this.closeModal();
         this.onFetchDataEmitter.emit();
       },
-      complete: () => {
-        this.onFetchDataEmitter.emit();
-        this.closeModal();
+      error: error => {
+        this.error = error
+        this.isFetching = false;
       }
     });
   }
@@ -62,13 +62,13 @@ export class DriverResultComponent implements OnInit {
     data.value.driverId = this.driverId;  
     
     this.seasonService.updateResult(id, data.value).subscribe({
-      error: err => {
-        this.error = err;
+      next: () => {
+        this.closeModal();
         this.onFetchDataEmitter.emit();
       },
-      complete: () => {
-        this.onFetchDataEmitter.emit();
-        this.closeModal();
+      error: error => {
+        this.error = error
+        this.isFetching = false;
       }
     });
   }
@@ -76,8 +76,14 @@ export class DriverResultComponent implements OnInit {
   deleteResult(id: string) {
     this.isFetching = true;
     this.seasonService.deleteResult(id).subscribe({
-      error: () => this.onFetchDataEmitter.emit(),
-      complete: () => this.onFetchDataEmitter.emit()
+      next: () => {
+        this.closeModal();
+        this.onFetchDataEmitter.emit();
+      },
+      error: error => {
+        this.error = error
+        this.isFetching = false;
+      }
     });
   }
 

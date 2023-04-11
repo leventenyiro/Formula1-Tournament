@@ -24,6 +24,7 @@ export class SeasonFormComponent implements OnInit {
   onFetchDataEmitter = new EventEmitter<undefined>();
 
   error: string = '';
+  isFetching: boolean = false;
 
   constructor(private seasonService: SeasonService) { }
 
@@ -31,27 +32,29 @@ export class SeasonFormComponent implements OnInit {
   }
 
   createSeason(data: any) {
+    this.isFetching = true;
     this.seasonService.createSeason(data.value).subscribe({
-      error: err => {
-        this.error = err;
+      next: () => {
+        this.onCloseModalEmitter.emit();
         this.onFetchDataEmitter.emit();
       },
-      complete: () => {
-        this.onFetchDataEmitter.emit();
-        this.onCloseModalEmitter.emit();
+      error: err => {
+        this.error = err
+        this.isFetching = false
       }
     });
   }
 
   updateSeason(id: string, data: any) {
+    this.isFetching = true;
     this.seasonService.updateSeason(id, data.value).subscribe({
-      error: err => {
-        this.error = err;
+      next: () => {
+        this.onCloseModalEmitter.emit();
         this.onFetchDataEmitter.emit();
       },
-      complete: () => {
-        this.onFetchDataEmitter.emit();
-        this.onCloseModalEmitter.emit();
+      error: err => {
+        this.error = err
+        this.isFetching = false
       }
     });
   }
