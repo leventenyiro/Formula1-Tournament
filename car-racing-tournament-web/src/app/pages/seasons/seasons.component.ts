@@ -38,10 +38,11 @@ export class SeasonsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.isFetching = true;
     this.authService.loggedIn.subscribe(
       (loggedIn: boolean) => {
         this.isLoggedIn = loggedIn;
-        this.onFetchData();
+        this.isFetching = false;
       }
     );
     this.isLoggedIn = this.authService.getBearerToken() !== undefined;
@@ -57,16 +58,11 @@ export class SeasonsComponent implements OnInit {
 
     if (this.isLoggedIn) {
       this.authService.getUser().subscribe({
-        next: user => this.user = user,
-        error: () => this.isFetching = false
+        next: user => this.user = user
       });
 
       this.seasonService.getSeasonsByUser().subscribe({
-        next: seasons => {
-          this.fetchedMyData = seasons;
-        },
-        error: err => this.error = err,
-        complete: () => this.isFetching = false
+        next: seasons => this.fetchedMyData = seasons
       });
     }
     
@@ -132,16 +128,12 @@ export class SeasonsComponent implements OnInit {
       if (this.isFavorite(season)) {
         this.seasonService.deleteFavorite(this.user!.favorites!.find(x => x.seasonId === season.id && x.userId === this.user!.id)!.id!).subscribe({
           next: () => this.onFetchData(),
-          error: err => {
-            this.error = err;
-          }
+          error: err => this.error = err,
         });
       } else {
         this.seasonService.createFavorite(this.user!.id!, season.id).subscribe({
-          next: () => this.onFetchData(),
-          error: err => {
-            this.error = err;
-          }
+          next: () => () => this.onFetchData(),
+          error: err => this.error = err,
         });
       }
     }

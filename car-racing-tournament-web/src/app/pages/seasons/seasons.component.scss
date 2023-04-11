@@ -39,7 +39,7 @@ $pink-hover: #ff0a54;
     transform: scale(1.2);
 }
 
-.btn-pink, .btn-check-pink:checked + .btn, .btn-check-pink:active + .btn, .btn:active, .btn.active, .btn.show {
+.btn-pink, .btn-check-pink:checked + .btn, .btn-check-pink:active + .btn {
 	background-color: $pink;
     color: white;
     border: 1px solid $pink;

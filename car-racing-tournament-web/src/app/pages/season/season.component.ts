@@ -43,12 +43,12 @@ export class SeasonComponent implements OnInit {
     this.authService.loggedIn.subscribe(
       (loggedIn: boolean) => {
         this.isLoggedIn = loggedIn;
+        this.isFetching = false;
       }
     );
-
     this.isLoggedIn = this.authService.getBearerToken() !== undefined;
+
     this.onFetchData();
-    this.isFetching = false;
   }
 
   onFetchData(): any {
@@ -188,10 +188,10 @@ export class SeasonComponent implements OnInit {
   archiveSeason() {
     this.isFetching = true;
     this.seasonService.archiveSeason(this.season!.id).subscribe({
-      error: () => this.isFetching = false,
+      error: error => this.error = error,
       complete: () => {
+        this.closeModal();
         this.onFetchData();
-        this.modal = '';
       }
     });
   }
@@ -199,10 +199,10 @@ export class SeasonComponent implements OnInit {
   deleteSeason() {
     this.isFetching = true;
     this.seasonService.deleteSeason(this.season!.id).subscribe({
-      error: () => this.isFetching = false,
+      error: error => this.error = error,
       complete: () => {
+        this.closeModal();
         this.isFetching = false;
-        this.modal = '';
         this.router.navigate(['seasons'])
       }
     });
@@ -211,11 +211,10 @@ export class SeasonComponent implements OnInit {
   deletePermission(id: string) {
     this.isFetching = true;
     this.seasonService.deletePermission(id).subscribe({
-      error: () => this.onFetchData(),
+      error: error => this.error = error,
       complete: () => {
+        this.closeModal();
         this.onFetchData();
-        this.modal = '';
-        this.selectedPermissionId = '';
       }
     });
   }
@@ -223,11 +222,10 @@ export class SeasonComponent implements OnInit {
   updatePermission(id: string) {
     this.isFetching = true;
     this.seasonService.updatePermission(id).subscribe({
-      error: () => this.onFetchData(),
+      error: error => this.error = error,
       complete: () => {
+        this.closeModal();
         this.onFetchData();
-        this.modal = '';
-        this.selectedPermissionId = '';
       }
     });
   }
@@ -235,15 +233,10 @@ export class SeasonComponent implements OnInit {
   createPermission(data: any) {
     this.isFetching = true;
     this.seasonService.createPermission(data.value.usernameEmail, this.season!.id).subscribe({
-      error: err => {
-        this.error = err;
-        this.onFetchData();
-        this.isFetching = false;
-      },
+      error: error => this.error = error,
       complete: () => {
-        this.onFetchData();
         this.closeModal();
-        this.isFetching = false;
+        this.onFetchData();
       }
     });
   }
