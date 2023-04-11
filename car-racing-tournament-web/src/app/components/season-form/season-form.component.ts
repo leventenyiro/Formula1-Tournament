@@ -10,7 +10,10 @@ import { SeasonService } from 'app/services/season.service';
 export class SeasonFormComponent implements OnInit {
   @Input()
   title?: string;
-  
+
+  @Input()
+  executeButtonText?: string;
+
   @Input()
   selectedSeason?: Season;
 

@@ -113,7 +113,9 @@
                 <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="closeModal()">Cancel</button>
             </div>
             <div class="col-6">
-                <button class="btn btn-primary btn-sm btn-block" [disabled]="!postForm.valid">Create</button>
+                <button class="btn btn-primary btn-sm btn-block" [disabled]="!postForm.valid">
+                    {{ modal === 'createResult' ? 'Add' : 'Modify' }}
+                </button>
             </div>
         </div>
     </form>
