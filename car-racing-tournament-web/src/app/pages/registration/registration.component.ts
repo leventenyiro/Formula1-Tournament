@@ -23,9 +23,7 @@ export class RegistrationComponent implements OnInit {
     this.isFetching = true
 
     this.authService.registration(data.value).subscribe({
-      next: data => {
-        this.router.navigate(['']);
-      },
+      next: () => this.router.navigate(['login']),
       error: err => this.error = err,
       complete: () => this.isFetching = false
     })
@@ -50,6 +48,6 @@ export class RegistrationComponent implements OnInit {
   }
 
   login() {
-    this.router.navigate(['/login'])
+    this.router.navigate(['login'])
   }
 }
