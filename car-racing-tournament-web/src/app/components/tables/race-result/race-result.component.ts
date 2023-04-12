@@ -37,6 +37,7 @@ export class RaceResultComponent implements OnInit {
   ngOnInit(): void { }
 
   createResult(data: any) {
+    this.isFetching = true;
     if (data.value.position === 'DNF' || data.value.position === 'DSQ') {
       data.value.type = data.value.position;
       data.value.position = 0;
@@ -47,18 +48,20 @@ export class RaceResultComponent implements OnInit {
     data.value.teamId = this.teamId.value;
 
     this.seasonService.createResult(data.value).subscribe({
-      error: err => {
-        this.error = err;
+      next: () => {
+        this.closeModal();
+        this.isFetching = false;
         this.onFetchDataEmitter.emit();
       },
-      complete: () => {
-        this.onFetchDataEmitter.emit();
-        this.closeModal();
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
       }
     });
   }
 
   updateResult(id: string, data: any) {
+    this.isFetching = true;
     if (data.value.position === 'DNF' || data.value.position === 'DSQ') {
       data.value.type = data.value.position;
       data.value.position = 0;
@@ -69,13 +72,14 @@ export class RaceResultComponent implements OnInit {
     data.value.teamId = this.teamId.value;
     
     this.seasonService.updateResult(id, data.value).subscribe({
-      error: err => {
-        this.error = err;
+      next: () => {
+        this.closeModal();
+        this.isFetching = false;
         this.onFetchDataEmitter.emit();
       },
-      complete: () => {
-        this.onFetchDataEmitter.emit();
-        this.closeModal();
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
       }
     });
   }
@@ -83,8 +87,14 @@ export class RaceResultComponent implements OnInit {
   deleteResult(id: string) {
     this.isFetching = true;
     this.seasonService.deleteResult(id).subscribe({
-      error: () => this.onFetchDataEmitter.emit(),
-      complete: () => this.onFetchDataEmitter.emit()
+      next: () => {
+        this.isFetching = false;
+        this.onFetchDataEmitter.emit()
+      },
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
+      }
     });
   }
 

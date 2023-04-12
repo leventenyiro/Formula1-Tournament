@@ -35,10 +35,11 @@ export class DriverAllComponent implements OnInit {
     this.seasonService.createDriver(data.value, this.season?.id!).subscribe({
       next: () => {
         this.closeModal();
+        this.isFetching = false;
         this.onFetchDataEmitter.emit();
       },
       error: error => {
-        this.error = error
+        this.error = error;
         this.isFetching = false;
       }
     });
@@ -49,10 +50,11 @@ export class DriverAllComponent implements OnInit {
     this.seasonService.updateDriver(id, data.value).subscribe({
       next: () => {
         this.closeModal();
+        this.isFetching = false;
         this.onFetchDataEmitter.emit();
       },
       error: error => {
-        this.error = error
+        this.error = error;
         this.isFetching = false;
       }
     });
@@ -61,7 +63,10 @@ export class DriverAllComponent implements OnInit {
   deleteDriver(id: string) {
     this.isFetching = true;
     this.seasonService.deleteDriver(id).subscribe({
-      next: () => this.onFetchDataEmitter.emit(),
+      next: () => {
+        this.isFetching = false;
+        this.onFetchDataEmitter.emit()
+      },
       error: error => {
         this.error = error;
         this.isFetching = false;
