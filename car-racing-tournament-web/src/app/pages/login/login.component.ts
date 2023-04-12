@@ -27,13 +27,14 @@ export class LoginComponent implements OnInit {
       next: (data) => {
         document.cookie = `session=${data}`;
         this.authService.loggedIn.emit(true);
+        this.isFetching = false;
         this.location.back();
       },
-      error: err => this.error = err,
-      complete: () => this.isFetching = false
+      error: error => {
+        this.error = error
+        this.isFetching = false;
+      }
     })
-
-    this.isFetching = false;
   }
 
   registration() {

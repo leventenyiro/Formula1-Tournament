@@ -15,7 +15,7 @@ import { SeasonService } from 'app/services/season.service';
 export class SeasonComponent implements OnInit {
   id!: string;
   season?: Season;
-  error = "";
+  error = '';
   isFetching = false;
   createdAt?: string;
   selectType = new FormControl('drivers');
@@ -37,7 +37,7 @@ export class SeasonComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.paramMap.get("id")!;
+    this.id = this.route.snapshot.paramMap.get('id')!;
 
     this.isFetching = true;
     this.authService.loggedIn.subscribe(
@@ -55,18 +55,22 @@ export class SeasonComponent implements OnInit {
     this.isFetching = true;
 
     if (this.isLoggedIn) {
-      this.isFetching = true;
       this.authService.getUser().subscribe({
-        next: user => this.user = user
+        next: user => this.user = user,
+        error: error => this.error = error
       });
     }
 
     this.seasonService.getSeason(this.id).subscribe({
-      next: season => this.season = season,
-      error: () => this.router.navigate(['season']),
-      complete: () => {
-        this.isFetching = false;
+      next: season => {
+        this.season = season;
         this.createdAt = this.getFormattedDate(this.season!.createdAt);
+        this.isFetching = false;
+      },
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
+        this.router.navigate(['season']);
       }
     });
   }

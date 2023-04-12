@@ -36,15 +36,11 @@
                 </div>
             </div>
         </form>
-
-        <div class="spinner-border" role="status" *ngIf="isFetching; else elseDiv">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-
-        <ng-template #elseDiv>
-            <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
-                {{error}}
-            </div>
-        </ng-template>
     </div>
 </div>
+
+<div class="alert alert-danger mt-3" role="alert" *ngIf="error">
+    {{error}}
+</div>
+
+<app-modal type="loading" *ngIf="isFetching"></app-modal>

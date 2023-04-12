@@ -24,13 +24,11 @@
                 </div>
             </div>
         </form>
-
-        <app-modal type="loading" *ngIf="isFetching; else elseDiv"></app-modal>
-
-        <ng-template #elseDiv>
-            <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
-                {{error}}
-            </div>
-        </ng-template>
     </div>
 </div>
+
+<div class="alert alert-danger mt-3" role="alert" *ngIf="error">
+    {{error}}
+</div>
+
+<app-modal type="loading" *ngIf="isFetching"></app-modal>
