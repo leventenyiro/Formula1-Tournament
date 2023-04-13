@@ -1,18 +1,9 @@
-.season-box {
-    // aspect-ratio: 1/1;
-    height: 17em;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px;
-    width: 90%;
-    border-radius: 17px;
-    transition: 0.2s;
-
-    .description {
-        height: 2em;
-    }
+.table-row {
+    transition: 0.2s
 }
 
-.season-box:hover {
-    box-shadow: rgba(100, 100, 111, 0.4) 0px 7px 29px;
+.table-row:hover {
+    box-shadow: rgba(100, 100, 111, 0.5) 0 3px 10px;
     transition: 0.2s;
     cursor: pointer;
 }
