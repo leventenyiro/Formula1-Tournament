@@ -126,14 +126,28 @@ export class SeasonsComponent implements OnInit {
     if (this.isLoggedIn) {
       event.stopPropagation();
       if (this.isFavorite(season)) {
+        this.isFetching = true;
         this.seasonService.deleteFavorite(this.user!.favorites!.find(x => x.seasonId === season.id && x.userId === this.user!.id)!.id!).subscribe({
-          next: () => this.onFetchData(),
-          error: err => this.error = err,
+          next: () => {
+            this.isFetching = false;
+            this.onFetchData()
+          },
+          error: err => {
+            this.error = err
+            this.isFetching = false;
+          }
         });
       } else {
+        this.isFetching = true;
         this.seasonService.createFavorite(this.user!.id!, season.id).subscribe({
-          next: () => () => this.onFetchData(),
-          error: err => this.error = err,
+          next: () => {
+            this.isFetching = false;
+            this.onFetchData()
+          },
+          error: err => {
+            this.error = err
+            this.isFetching = false;
+          }
         });
       }
     }

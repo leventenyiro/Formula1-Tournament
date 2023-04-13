@@ -43,9 +43,13 @@ export class SettingsComponent implements OnInit {
         this.user = user;
         this.inputUsername.setValue(user.username);
         this.inputEmail.setValue(user.email);
+        this.isFetching = false;
+      },
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
       }
     });
-    this.isFetching = false;
   }
 
   onCancel() {
@@ -78,14 +82,14 @@ export class SettingsComponent implements OnInit {
   updateUser() {
     this.isFetching = true;
     this.authService.updateUser({ username: this.inputUsername.value, email: this.inputEmail.value }).subscribe({
-      error: error => {
-        this.error = error;
-        this.isFetching = false;
-      },
-      complete: () => {
+      next: () => {
         this.isFetching = false;
         this.error = '';
         this.setEdit(false);
+      },
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
       }
     });
   }
@@ -97,17 +101,17 @@ export class SettingsComponent implements OnInit {
       this.updatePasswordForm.get('inputPassword')!.value,
       this.updatePasswordForm.get('inputPasswordAgain')!.value,
     ).subscribe({
+      next: () => {
+        this.error = '';
+        this.closeModal();
+        this.isFetching = false;
+      },
       error: error => {
         this.updatePasswordForm.get('inputPasswordOld')!.setValue('');
         this.updatePasswordForm.get('inputPassword')!.setValue('');
         this.updatePasswordForm.get('inputPasswordAgain')!.setValue('');
         
         this.error = error;
-        this.isFetching = false;
-      },
-      complete: () => {
-        this.error = '';
-        this.closeModal();
         this.isFetching = false;
       }
     });
@@ -116,13 +120,16 @@ export class SettingsComponent implements OnInit {
   deleteUser() {
     this.isFetching = true;
     this.authService.deleteUser().subscribe({
-      error: () => this.isFetching = false,
-      complete: () => {
+      next: () => {
         this.isFetching = false;
         this.modal = '';
         this.authService.loggedIn.emit(false);
         document.cookie = "session=";
         this.router.navigate(['seasons']);
+      },
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
       }
     });
   }

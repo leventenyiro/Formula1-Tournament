@@ -39,15 +39,7 @@ export class SeasonComponent implements OnInit {
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')!;
 
-    this.isFetching = true;
-    this.authService.loggedIn.subscribe(
-      (loggedIn: boolean) => {
-        this.isLoggedIn = loggedIn;
-        this.isFetching = false;
-      }
-    );
-    this.isLoggedIn = this.authService.getBearerToken() !== undefined;
-
+    this.isLoggedIn = this.authService.getBearerToken() !== undefined;      
     this.onFetchData();
   }
 
@@ -192,10 +184,14 @@ export class SeasonComponent implements OnInit {
   archiveSeason() {
     this.isFetching = true;
     this.seasonService.archiveSeason(this.season!.id).subscribe({
-      error: error => this.error = error,
-      complete: () => {
+      next: () => {
         this.closeModal();
+        this.isFetching = false;
         this.onFetchData();
+      },
+      error: error => {
+        this.error = error,
+        this.isFetching = false;
       }
     });
   }
@@ -203,11 +199,14 @@ export class SeasonComponent implements OnInit {
   deleteSeason() {
     this.isFetching = true;
     this.seasonService.deleteSeason(this.season!.id).subscribe({
-      error: error => this.error = error,
-      complete: () => {
+      next: () => {
         this.closeModal();
         this.isFetching = false;
         this.router.navigate(['seasons'])
+      },
+      error: error => {
+        this.error = error,
+        this.isFetching = false;
       }
     });
   }
@@ -215,10 +214,14 @@ export class SeasonComponent implements OnInit {
   deletePermission(id: string) {
     this.isFetching = true;
     this.seasonService.deletePermission(id).subscribe({
-      error: error => this.error = error,
-      complete: () => {
+      next: () => {
         this.closeModal();
+        this.isFetching = false;
         this.onFetchData();
+      },
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
       }
     });
   }
@@ -226,10 +229,14 @@ export class SeasonComponent implements OnInit {
   updatePermission(id: string) {
     this.isFetching = true;
     this.seasonService.updatePermission(id).subscribe({
-      error: error => this.error = error,
-      complete: () => {
+      next: () => {
         this.closeModal();
+        this.isFetching = false;
         this.onFetchData();
+      },
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
       }
     });
   }
@@ -237,10 +244,14 @@ export class SeasonComponent implements OnInit {
   createPermission(data: any) {
     this.isFetching = true;
     this.seasonService.createPermission(data.value.usernameEmail, this.season!.id).subscribe({
-      error: error => this.error = error,
-      complete: () => {
+      next: () => {
         this.closeModal();
+        this.isFetching = false;
         this.onFetchData();
+      },
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
       }
     });
   }
@@ -254,14 +265,27 @@ export class SeasonComponent implements OnInit {
   setFavorite(season: Season) {
     if (this.isLoggedIn) {      
       if (this.isFavorite(season)) {
+        this.isFetching = true;
         this.seasonService.deleteFavorite(this.user!.favorites!.find(x => x.seasonId === season.id && x.userId === this.user!.id)!.id!).subscribe({
-          error: err => this.error = err,
-          complete: () => this.onFetchData()
+          next: () => {
+            this.isFetching = false;
+            this.onFetchData();
+          },
+          error: err => {
+            this.error = err;
+            this.isFetching = false;
+          }
         });
       } else {
         this.seasonService.createFavorite(this.user!.id!, season.id).subscribe({
-          error: err => this.error = err,
-          complete: () => this.onFetchData()
+          next: () => {
+            this.isFetching = false;
+            this.onFetchData();
+          },
+          error: err => {
+            this.error = err;
+            this.isFetching = false;
+          }
         });
       }
     }
