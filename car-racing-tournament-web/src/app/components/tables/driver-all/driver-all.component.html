@@ -61,6 +61,10 @@
     </div>
 </div>
 
+<div class="d-flex justify-content-center mt-3" *ngIf="driverAll?.length === 0">
+    <h2>We didn't find any driver here</h2>
+</div>
+
 <app-modal type="form" *ngIf="modal === 'createDriver' || modal === 'updateDriver'">
     <h1>{{ modal === 'createDriver' ? 'Add new' : 'Modify' }} driver</h1>
     <form #postForm="ngForm" (ngSubmit)="selectedDriver == undefined ? this.createDriver(postForm) : this.updateDriver(selectedDriver!.id, postForm)">

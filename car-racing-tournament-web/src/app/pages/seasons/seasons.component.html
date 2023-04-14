@@ -57,6 +57,10 @@
                 {{ season.favorite }}
             </div>
         </div>
+
+        <div class="d-flex justify-content-center mt-3" *ngIf="seasons?.length === 0">
+            <h2>We didn't find any seasons here</h2>
+        </div>
     </div>
 
     <app-modal type="form" *ngIf="modal">

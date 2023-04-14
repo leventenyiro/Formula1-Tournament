@@ -42,6 +42,10 @@
     </div>
 </div>
 
+<div class="d-flex justify-content-center mt-3" *ngIf="teamAll?.length === 0">
+    <h2>We didn't find any team here</h2>
+</div>
+
 <app-modal type="form" *ngIf="modal === 'createTeam' || modal === 'updateTeam'">
     <h1>{{ modal === 'createTeam' ? 'Add new' : 'Modify' }} team</h1>
     <form #postForm="ngForm" (ngSubmit)="selectedTeam == undefined ? this.createTeam(postForm) : this.updateTeam(selectedTeam!.id, postForm)">

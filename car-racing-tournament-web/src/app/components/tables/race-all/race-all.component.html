@@ -48,6 +48,10 @@
     </div>
 </div>
 
+<div class="d-flex justify-content-center mt-3" *ngIf="raceAll?.length === 0">
+    <h2>We didn't find any race here</h2>
+</div>
+
 <app-modal type="form" *ngIf="modal === 'createRace' || modal === 'updateRace'">
     <h1>{{ modal === 'createRace' ? 'Add new' : 'Modify' }} race</h1>
     <form #postForm="ngForm" (ngSubmit)="selectedRace == undefined ? this.createRace(postForm) : this.updateRace(selectedRace!.id, postForm)">

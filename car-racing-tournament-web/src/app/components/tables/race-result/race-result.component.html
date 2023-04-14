@@ -71,6 +71,10 @@
     </div>
 </div>
 
+<div class="d-flex justify-content-center mt-3" *ngIf="raceResults?.length === 0">
+    <h2>Nobody earn any results here</h2>
+</div>
+
 <app-modal type="form" *ngIf="modal === 'createResult' || modal === 'updateResult'">
     <h1>{{ modal === 'createResult' ? 'Add new' : 'Modify' }} result</h1>
     <form #postForm="ngForm" (ngSubmit)="selectedResult == undefined ? this.createResult(postForm) : this.updateResult(selectedResult!.id, postForm)">
