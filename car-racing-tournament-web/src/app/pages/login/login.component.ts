@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  onLogin(data: any) {
+  onLogin() {
     this.isFetching = true
 
     this.authService.login(

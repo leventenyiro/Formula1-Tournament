@@ -2,34 +2,41 @@
     <h1>Create new profile</h1>
 
     <div>
-        <form #postForm="ngForm" (ngSubmit)="onRegistration(postForm)">
+        <form (ngSubmit)="onRegistration()">
             <div class="mb-3">
                 <label for="inputUsername" class="form-label">Username</label>
-                <input required type="text" class="form-control" id="inputUsername" ngModel name="username" #username="ngModel" [class.is-invalid]="!username.valid && username.touched" [pattern]="usernamePattern()">
+                <input required type="text" class="form-control" id="inputUsername" name="username"
+                    [formControl]="inputUsername" [class.is-invalid]="!inputUsername.valid && inputUsername.touched"
+                    [pattern]="usernamePattern()">
                 <div class="invalid-feedback">Invalid username</div>
             </div>
 
             <div class="mb-3">
                 <label for="inputEmail" class="form-label">Email address</label>
-                <input required type="text" class="form-control" id="inputEmail" ngModel name="email" #email="ngModel" [class.is-invalid]="!email.valid && email.touched" [pattern]="emailPattern()">
+                <input required type="text" class="form-control" id="inputEmail" name="email" [formControl]="inputEmail"
+                    [class.is-invalid]="!inputEmail.valid && inputEmail.touched" [pattern]="emailPattern()">
                 <div class="invalid-feedback">Invalid email address</div>
             </div>
-    
+
             <div class="mb-3">
                 <label for="inputPassword" class="form-label">Password</label>
-                <input required multiple type="password" class="form-control" id="inputPassword" ngModel name="password" #password="ngModel" [class.is-invalid]="!password.valid && password.touched" [pattern]="passwordPattern()">
+                <input required multiple type="password" class="form-control" id="inputPassword" name="password"
+                    [formControl]="inputPassword" [class.is-invalid]="!inputPassword.valid && inputPassword.touched"
+                    [pattern]="passwordPattern()">
                 <div class="invalid-feedback">{{ passwordErrorMsg() }}</div>
             </div>
 
             <div class="mb-3">
                 <label for="inputPasswordAgain" class="form-label">Password again</label>
-                <input required multiple type="password" class="form-control" id="inputPasswordAgain" ngModel name="passwordAgain" #passwordAgain="ngModel" [class.is-invalid]="passwordAgain.touched && password.value !== passwordAgain.value">
+                <input required multiple type="password" class="form-control" id="inputPasswordAgain"
+                    name="passwordAgain" [formControl]="inputPasswordAgain"
+                    [class.is-invalid]="inputPasswordAgain.touched && inputPassword.value !== inputPasswordAgain.value">
                 <div class="invalid-feedback">Passwords aren't pass</div>
             </div>
-    
+
             <div class="row">
                 <div class="col-4">
-                    <button class="btn btn-primary" [disabled]="!postForm.valid">Registration</button>
+                    <button class="btn btn-primary">Registration</button>
                 </div>
                 <div class="col-8 text-end">
                     <button (mouseup)="login()" class="btn btn-link">Do you already have an account?</button>
@@ -39,7 +46,7 @@
     </div>
 </div>
 
-<div class="alert alert-danger mt-3" role="alert" *ngIf="error">
+<div class="alert alert-danger mt-3 mx-5" role="alert" *ngIf="error">
     {{error}}
 </div>
 
