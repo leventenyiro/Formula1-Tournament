@@ -70,9 +70,13 @@ export class SeasonsComponent implements OnInit {
       next: seasons => {
         this.fetchedData = seasons;
         this.onFilter();
+        this.onSearch();
+        this.isFetching = false;
       },
-      error: err => this.error = err,
-      complete: () => this.isFetching = false
+      error: err => {
+        this.error = err;
+        this.isFetching = false;
+      }
     });
   }
 
@@ -100,6 +104,8 @@ export class SeasonsComponent implements OnInit {
     if (!this.checkBoxAdmin.value && !this.checkBoxModerator.value && !this.checkBoxFavorites.value) {
       this.seasons = this.fetchedData;
     }
+
+    this.onSearch();
   }
 
   getAdminUsername(season: Season) {
