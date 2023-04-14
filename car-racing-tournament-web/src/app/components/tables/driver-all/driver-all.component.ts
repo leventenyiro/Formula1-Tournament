@@ -18,6 +18,9 @@ export class DriverAllComponent implements OnInit {
   @Input()
   driverAll?: any[];
 
+  @Input()
+  hasPermission: boolean = false;
+
   @Output()
   onFetchDataEmitter = new EventEmitter<undefined>();
 
