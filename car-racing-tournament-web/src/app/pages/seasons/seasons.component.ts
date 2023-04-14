@@ -113,13 +113,9 @@ export class SeasonsComponent implements OnInit {
   }
 
   getFormattedDate(dateStr: Date) {
-    const date = new Date(dateStr);
-    return `${date.getFullYear()}-` +
-    `${(Number(date.getMonth()) + 1).toString().padStart(2, '0')}-` +
-    `${date.getDate().toString().padStart(2, '0')} ` +
-    `${date.getHours().toString().padStart(2, '0')}:` +
-    `${date.getMinutes().toString().padStart(2, '0')}:` +
-    `${date.getSeconds().toString().padStart(2, '0')}`;
+    console.log(this.seasonService.getFormattedDate(dateStr, true));
+    
+    return this.seasonService.getFormattedDate(dateStr, true);
   }
 
   isFavorite(season: Season): boolean {

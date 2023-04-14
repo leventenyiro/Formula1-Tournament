@@ -56,7 +56,7 @@ export class SeasonComponent implements OnInit {
     this.seasonService.getSeason(this.id).subscribe({
       next: season => {
         this.season = season;
-        this.createdAt = this.getFormattedDate(this.season!.createdAt);
+        this.createdAt = this.seasonService.getFormattedDate(this.season!.createdAt, true);
         this.isFetching = false;
       },
       error: error => {
@@ -65,16 +65,6 @@ export class SeasonComponent implements OnInit {
         this.router.navigate(['season']);
       }
     });
-  }
-
-  getFormattedDate(dateStr: any) {
-    const date = new Date(dateStr);
-    return `${date.getFullYear()}-` +
-    `${(Number(date.getMonth()) + 1).toString().padStart(2, '0')}-` +
-    `${date.getDate().toString().padStart(2, '0')} ` +
-    `${date.getHours().toString().padStart(2, '0')}:` +
-    `${date.getMinutes().toString().padStart(2, '0')}:` +
-    `${date.getSeconds().toString().padStart(2, '0')}`;
   }
 
   getUserPermission() {    
@@ -116,7 +106,7 @@ export class SeasonComponent implements OnInit {
         race: {
           id: x.race.id,
           name: x.race.name,
-          dateTime: this.getFormattedDate(x.race.dateTime)
+          dateTime: this.seasonService.getFormattedDate(x.race.dateTime, false)
         },
         team: x.team,
         position: x.type.toString() === 'Finished' ? x.position : x.type.toString(),
@@ -143,7 +133,7 @@ export class SeasonComponent implements OnInit {
         const { id, name, dateTime } = result.race;
         const existingRace = sum[id];
         if (!existingRace) {
-          let formattedDateTime = this.getFormattedDate(dateTime);
+          let formattedDateTime = this.seasonService.getFormattedDate(dateTime, false);
           sum[id] = { id, race: {name, dateTime: formattedDateTime}, point: result.point };
         } else {
           existingRace.point += result.point;
@@ -160,7 +150,7 @@ export class SeasonComponent implements OnInit {
       return {
         id: x.id,
         name: x.name,
-        dateTime: this.getFormattedDate(x.dateTime),
+        dateTime: this.seasonService.getFormattedDate(x.dateTime, false),
         winner: {
           name: winnerResult?.driver.name,
           realName: winnerResult?.driver.realName,
