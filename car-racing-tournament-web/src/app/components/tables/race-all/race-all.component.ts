@@ -10,13 +10,13 @@ import { SeasonService } from 'app/services/season.service';
 })
 export class RaceAllComponent implements OnInit {
   @Input()
-  isLoggedIn!: boolean;
-
-  @Input()
   season!: Season;
 
   @Input()
   raceAll?: any[];
+
+  @Input()
+  hasPermission: boolean = false;
 
   @Output()
   onFetchDataEmitter = new EventEmitter<undefined>();

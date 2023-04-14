@@ -10,9 +10,6 @@ import { SeasonService } from 'app/services/season.service';
 })
 export class DriverResultComponent implements OnInit {
   @Input()
-  isLoggedIn!: boolean;
-
-  @Input()
   season!: Season;
 
   @Input()
@@ -20,6 +17,9 @@ export class DriverResultComponent implements OnInit {
 
   @Input()
   driverResults?: any[];
+
+  @Input()
+  hasPermission: boolean = false;
 
   @Output()
   onFetchDataEmitter = new EventEmitter<undefined>();

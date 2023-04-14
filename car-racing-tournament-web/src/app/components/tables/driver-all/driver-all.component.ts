@@ -10,9 +10,6 @@ import { SeasonService } from 'app/services/season.service';
 })
 export class DriverAllComponent implements OnInit {
   @Input()
-  isLoggedIn!: boolean;
-
-  @Input()
   season!: Season;
 
   @Input()

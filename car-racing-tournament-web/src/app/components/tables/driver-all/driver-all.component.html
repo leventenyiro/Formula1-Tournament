@@ -17,7 +17,7 @@
     <div class="col">
         <p>Points</p>
     </div>
-    <div *ngIf="this.isLoggedIn && hasPermission && !season?.isArchived" class="col">
+    <div *ngIf="hasPermission && !season?.isArchived" class="col">
         <button class="btn btn-success btn-sm" (mouseup)="openModal('createDriver')">Add driver</button>
     </div>
 </div>
@@ -41,7 +41,7 @@
     <div class="col">
         <p>{{ driver.point }}</p>
     </div>
-    <div *ngIf="this.isLoggedIn && hasPermission && !season.isArchived" class="col">
+    <div *ngIf="hasPermission && !season.isArchived" class="col">
         <button class="btn btn-primary btn-sm me-2" (mouseup)="openModal('updateDriver', driver)">
             <i class="bi bi-pen"></i>
         </button>

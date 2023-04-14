@@ -81,6 +81,15 @@ export class SeasonComponent implements OnInit {
     return this.season?.permissions.find(x => x.userId === this.user?.id);
   }
 
+  hasPermission() {
+    this.authService.loggedIn.subscribe(
+      (loggedIn: boolean) => {
+        this.isLoggedIn = loggedIn;
+      }
+    );
+    return this.isLoggedIn && (this.getUserPermission()?.type === 0 || this.getUserPermission()?.type === 1);
+  }
+
   getDriverAll() {
     return this.season?.drivers.map(x => ({
       id: x.id,

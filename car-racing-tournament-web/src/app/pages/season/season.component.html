@@ -34,18 +34,18 @@
         <div [ngSwitch]="selectType.value" class="row">
             <div *ngSwitchCase="'drivers'">
                 <div *ngIf="selectValue.value === 'all'; else elseDiv">
-                    <app-driver-all [isLoggedIn]="isLoggedIn" [season]="season!" [driverAll]="getDriverAll()"
+                    <app-driver-all [season]="season!" [driverAll]="getDriverAll()" [hasPermission]="hasPermission()"
                         (onFetchDataEmitter)="onFetchData()"></app-driver-all>
                 </div>
                 <ng-template #elseDiv>
-                    <app-driver-result [isLoggedIn]="isLoggedIn" [season]="season!"
-                        [driverResults]="getDriverById(selectValue.value)" [driverId]="selectValue.value"
+                    <app-driver-result [season]="season!" [driverResults]="getDriverById(selectValue.value)"
+                        [driverId]="selectValue.value" [hasPermission]="hasPermission()"
                         (onFetchDataEmitter)="onFetchData()"></app-driver-result>
                 </ng-template>
             </div>
             <div *ngSwitchCase="'teams'">
                 <div *ngIf="selectValue.value === 'all'; else elseDiv">
-                    <app-team-all [isLoggedIn]="isLoggedIn" [season]="season!" [teamAll]="getTeamAll()"
+                    <app-team-all [season]="season!" [teamAll]="getTeamAll()" [hasPermission]="hasPermission()"
                         (onFetchDataEmitter)="onFetchData()"></app-team-all>
                 </div>
                 <ng-template #elseDiv>
@@ -54,12 +54,12 @@
             </div>
             <div *ngSwitchCase="'races'">
                 <div *ngIf="selectValue.value === 'all'; else elseDiv">
-                    <app-race-all [isLoggedIn]="isLoggedIn" [season]="season!" [raceAll]="getRaceAll()"
+                    <app-race-all [season]="season!" [raceAll]="getRaceAll()" [hasPermission]="hasPermission()"
                         (onFetchDataEmitter)="onFetchData()"></app-race-all>
                 </div>
                 <ng-template #elseDiv>
-                    <app-race-result [isLoggedIn]="isLoggedIn" [season]="season!"
-                        [raceResults]="getRaceById(selectValue.value)" [raceId]="selectValue.value"
+                    <app-race-result [season]="season!" [raceResults]="getRaceById(selectValue.value)"
+                        [raceId]="selectValue.value" [hasPermission]="hasPermission()"
                         (onFetchDataEmitter)="onFetchData()"></app-race-result>
                 </ng-template>
             </div>
@@ -142,8 +142,8 @@
 </div>
 
 <app-modal type="form" *ngIf="modal === 'updateSeason'">
-    <app-season-form title="Modify season" executeButtonText="Modify" [selectedSeason]="season" (onCloseModalEmitter)="closeModal()"
-        (onFetchDataEmitter)="onFetchData()"></app-season-form>
+    <app-season-form title="Modify season" executeButtonText="Modify" [selectedSeason]="season"
+        (onCloseModalEmitter)="closeModal()" (onFetchDataEmitter)="onFetchData()"></app-season-form>
 </app-modal>
 
 <app-modal type="form" *ngIf="modal === 'createPermission'">
