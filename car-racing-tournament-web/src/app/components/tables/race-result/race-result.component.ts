@@ -38,11 +38,11 @@ export class RaceResultComponent implements OnInit {
 
   createResult(data: any) {
     this.isFetching = true;
-    if (data.value.position === 'DNF' || data.value.position === 'DSQ') {
-      data.value.type = data.value.position;
-      data.value.position = 0;
-    } else
-      data.value.type = 'Finished';
+
+    const convertedResult = this.seasonService.resultConverter(data.value);
+    data.value.type = convertedResult.type;
+    data.value.position = convertedResult.position;
+
     data.value.raceId = this.raceId;
     data.value.driverId = this.driverId.value;
     data.value.teamId = this.teamId.value;
@@ -62,11 +62,11 @@ export class RaceResultComponent implements OnInit {
 
   updateResult(id: string, data: any) {
     this.isFetching = true;
-    if (data.value.position === 'DNF' || data.value.position === 'DSQ') {
-      data.value.type = data.value.position;
-      data.value.position = 0;
-    } else
-      data.value.type = 'Finished';
+
+    const convertedResult = this.seasonService.resultConverter(data.value);
+    data.value.type = convertedResult.type;
+    data.value.position = convertedResult.position;
+    
     data.value.raceId = this.raceId;
     data.value.driverId = this.driverId.value;
     data.value.teamId = this.teamId.value;

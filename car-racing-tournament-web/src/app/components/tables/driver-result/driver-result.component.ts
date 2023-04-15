@@ -34,11 +34,11 @@ export class DriverResultComponent implements OnInit {
   ngOnInit(): void { }
 
   createResult(data: any) {
-    if (data.value.position === 'DNF' || data.value.position === 'DSQ') {
-      data.value.type = data.value.position;
-      data.value.position = 0;
-    } else
-      data.value.type = 'Finished';
+    this.isFetching = true;
+
+    const convertedResult = this.seasonService.resultConverter(data.value);
+    data.value.type = convertedResult.type;
+    data.value.position = convertedResult.position;
     data.value.driverId = this.driverId;
 
     this.seasonService.createResult(data.value).subscribe({
@@ -55,11 +55,11 @@ export class DriverResultComponent implements OnInit {
   }
 
   updateResult(id: string, data: any) {
-    if (data.value.position === 'DNF' || data.value.position === 'DSQ') {
-      data.value.type = data.value.position;
-      data.value.position = 0;
-    } else
-      data.value.type = 'Finished';
+    this.isFetching = true;
+
+    const convertedResult = this.seasonService.resultConverter(data.value);
+    data.value.type = convertedResult.type;
+    data.value.position = convertedResult.position;
     data.value.driverId = this.driverId;  
     
     this.seasonService.updateResult(id, data.value).subscribe({

@@ -113,8 +113,6 @@ export class SeasonsComponent implements OnInit {
   }
 
   getFormattedDate(dateStr: Date) {
-    console.log(this.seasonService.getFormattedDate(dateStr, true));
-    
     return this.seasonService.getFormattedDate(dateStr, true);
   }
 
