@@ -6,7 +6,6 @@ on:
 jobs:
   database-migration:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-    needs: backend-check
     runs-on: ubuntu-latest
     env:
       CONNECTIONSTRING: ${{ secrets.CONNECTIONSTRING }}
