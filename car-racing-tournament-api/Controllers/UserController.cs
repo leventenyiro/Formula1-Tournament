@@ -116,6 +116,10 @@ namespace car_racing_tournament_api.Controllers
                     return NotFound(resultDeleteSeason.ErrorMessage);
             }
 
+            resultGetUser = await _userService.GetUserById(new Guid(User.Identity!.Name!));
+            if (!resultGetUser.IsSuccess)
+                return NotFound(resultGetUser.ErrorMessage);  
+
             var resultDeleteUser = await _userService.DeleteUser(resultGetUser.User!);
             if (!resultDeleteUser.IsSuccess)
                 return NotFound(resultDeleteUser.ErrorMessage);
