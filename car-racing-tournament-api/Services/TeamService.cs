@@ -81,7 +81,7 @@ namespace car_racing_tournament_api.Services
             {
                 Id = Guid.NewGuid(),
                 Name = teamDto.Name,
-                Season = await _carRacingTournamentDbContext.Seasons.Where(e => e.Id == season.Id).FirstAsync(),
+                SeasonId = season.Id,
             };
             try
             {
