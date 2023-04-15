@@ -56,6 +56,9 @@
                 <i class="bi" [ngClass]="isFavorite(season) ? 'bi-heart-fill' : 'bi-heart'"></i>
                 {{ season.favorite }}
             </div>
+            <div class="col">
+                <button class="btn btn-primary btn-sm">Explore</button>
+            </div>
         </div>
 
         <div class="d-flex justify-content-center mt-3" *ngIf="seasons?.length === 0">
