@@ -1,10 +1,11 @@
-name: CI
+name: Build-Deploy
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   backend-check:
@@ -24,33 +25,6 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
       working-directory: car-racing-tournament-api
-
-  # backend-migrate:
-  #   if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-  #   needs: backend-check
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     CONNECTIONSTRING: ${{ secrets.CONNECTIONSTRING }}
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v2
-  #     - name: Setup .NET
-  #       uses: actions/setup-dotnet@v2
-  #       with:
-  #         dotnet-version: '6.0.x'
-  #     - name: Install EF Core
-  #       run: dotnet tool install --global dotnet-ef
-  #       env:
-  #         NUGET_XMLDOC_MODE: skip
-  #     - name: Restore dependencies
-  #       run: dotnet restore
-  #       working-directory: car-racing-tournament-api
-  #     - name: Add migration
-  #       run: dotnet ef migrations add init
-  #       working-directory: car-racing-tournament-api
-  #     - name: Update database
-  #       run: dotnet ef database update -- --connection "${{ env.CONNECTIONSTRING }}" --environment Production
-  #       working-directory: car-racing-tournament-api
 
   backend-deploy:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
@@ -78,7 +52,6 @@ jobs:
 
   webapp-check:
      runs-on: ubuntu-latest
-
      steps:
      - uses: actions/checkout@v3
      - name: Use Node.js 14.x
@@ -101,20 +74,16 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-
     - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
         node-version: '18.x'
-
     - name: Install dependencies
       run: npm install
       working-directory: car-racing-tournament-web
-
     - name: Build application
       run: npm run build -- --prod
       working-directory: car-racing-tournament-web
-
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
