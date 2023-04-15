@@ -92,7 +92,18 @@ internal class Program
         builder.Services.AddInMemoryRateLimiting();
         builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
 
-        builder.Services.AddCors();
+        string deployedWebapplication = builder.Configuration["DeployedWebapplication"];
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("MyPolicy", builder =>
+            {
+                builder.WithOrigins(deployedWebapplication, "http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+            });
+        });
 
         var app = builder.Build();
 
@@ -114,7 +125,8 @@ internal class Program
         // RateLimiter
         app.UseIpRateLimiting();
 
-        app.UseCors(x => x.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true).AllowCredentials());
+        // app.UseCors(x => x.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true).AllowCredentials());
+        app.UseCors("MyPolicy");
 
         app.Run();
     }
