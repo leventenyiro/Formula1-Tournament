@@ -44,9 +44,7 @@
 
 <app-modal type="form" *ngIf="modal === 'updatePassword'">
     <h1>Change password</h1>
-
     <form [formGroup]="updatePasswordForm" (ngSubmit)="updatePassword()">
-
         <div class="mb-3">
             <label for="inputPasswordOld" class="form-label">Old password</label>
             <input required multiple type="password" class="form-control" id="inputPasswordOld" formControlName="inputPasswordOld"

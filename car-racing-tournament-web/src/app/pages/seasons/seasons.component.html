@@ -1,63 +1,72 @@
 <app-modal type="loading" *ngIf="isFetching"></app-modal>
 
 <div class="container">
-  <div class="row mt-4">
-    <h1 class="mx-4">Seasons</h1>
-  </div>
-
-  <div class="row mx-3">
-    <div *ngIf="isLoggedIn" class="col-sm-5">
-      <input type="checkbox" class="btn-check btn-check-pink" id="btn-check-favorite" autocomplete="off"
-        [formControl]="checkBoxFavorites" (change)="onFilter()">
-      <label class="btn btn-outline-pink btn-sm me-2" for="btn-check-favorite" title="Favorite filter">
-        <i class="bi bi-heart"></i>
-      </label>
-
-      <input type="checkbox" class="btn-check" id="btn-check-admin" autocomplete="off" [formControl]="checkBoxAdmin"
-        (change)="onFilter()">
-      <label class="btn btn-outline-primary btn-sm me-2" for="btn-check-admin">
-        Admin
-      </label>
-
-      <input type="checkbox" class="btn-check" id="btn-check-moderator" autocomplete="off"
-        [formControl]="checkBoxModerator" (change)="onFilter()">
-      <label class="btn btn-outline-primary btn-sm me-2" for="btn-check-moderator">
-        Moderator
-      </label>
-    </div>
-    <div class="col-sm-7 d-flex">
-      <div class="input-group input-group-sm me-2">
-        <span class="input-group-text">
-          <i class="bi bi-search"></i>
-        </span>
-        <input type="text" class="form-control" id="name" [formControl]="search" placeholder="Start typing to filter..."
-          (keyup)="onSearch()">
-      </div>
-      <button class="btn btn-outline-primary btn-sm me-2" (mouseup)="onFetchData()" title="Refresh">
-        <i class="bi bi-arrow-clockwise"></i>
-      </button>
-      <button *ngIf="isLoggedIn" class="btn btn-sm btn-outline-success" (mouseup)="setModal(true)" title="Create season">
-        <i class="bi bi-plus-lg"></i>
-      </button>
+    <div class="row mt-4">
+        <h1 class="mx-4">Seasons</h1>
     </div>
 
-    <div class="row mt-5">
-      <div class="col-md-4 mb-5" *ngFor="let season of seasons">
-        <div class="season-box mx-auto text-left p-3" (mouseup)="navigateSeason(season.id)">
-          <h2>{{ season.name }}</h2>
-          <p class="description">{{ season.description }}</p>
-          <p>Admin: {{ getAdminUsername(season) }}</p>
-          <p>{{ getFormattedDate(season.createdAt) }}</p>
-          <div class="text-pink" [ngClass]="isLoggedIn ? 'favorite' : ''" (mouseup)="setFavorite($event, season); $event.stopPropagation()">
-            <i class="bi" [ngClass]="isFavorite(season) ? 'bi-heart-fill' : 'bi-heart'"></i>
-            {{ season.favorite }}
-          </div>
-          <span *ngIf="season.isArchived" class="gold-tag">archived</span>
+    <div class="row mx-3">
+        <div *ngIf="isLoggedIn" class="col-sm-5">
+            <input type="checkbox" class="btn-check btn-check-pink" id="btn-check-favorite" autocomplete="off"
+                [formControl]="checkBoxFavorites" (change)="onFilter()">
+            <label class="btn btn-outline-pink btn-sm me-2" for="btn-check-favorite" title="Favorite filter">
+                <i class="bi bi-heart"></i>
+            </label>
+
+            <input type="checkbox" class="btn-check" id="btn-check-admin" autocomplete="off"
+                [formControl]="checkBoxAdmin" (change)="onFilter()">
+            <label class="btn btn-outline-primary btn-sm me-2" for="btn-check-admin">
+                Admin
+            </label>
+
+            <input type="checkbox" class="btn-check" id="btn-check-moderator" autocomplete="off"
+                [formControl]="checkBoxModerator" (change)="onFilter()">
+            <label class="btn btn-outline-primary btn-sm me-2" for="btn-check-moderator">
+                Moderator
+            </label>
         </div>
-      </div>
-    </div>
-  </div>
+        <div class="col-sm-7 d-flex mb-4">
+            <div class="input-group input-group-sm me-2">
+                <span class="input-group-text">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="text" class="form-control" id="name" [formControl]="search"
+                    placeholder="Start typing to filter..." (keyup)="onSearch()">
+            </div>
+            <button class="btn btn-outline-primary btn-sm me-2" (mouseup)="onFetchData()" title="Refresh">
+                <i class="bi bi-arrow-clockwise"></i>
+            </button>
+            <button *ngIf="isLoggedIn" class="btn btn-sm btn-outline-success" (mouseup)="setModal(true)"
+                title="Create season">
+                <i class="bi bi-plus-lg"></i>
+            </button>
+        </div>
 
-  <app-modal type="form" *ngIf="modal">
-    <app-season-form (onCloseModalEmitter)="setModal(false)" (onFetchDataEmitter)="onFetchData()"></app-season-form>
-  </app-modal>
+        <div class="table-row mb-3 py-3" *ngFor="let season of seasons" (mouseup)="navigateSeason(season.id)">
+            <div class="col">
+                <h2>{{ season.name }}<span *ngIf="season.isArchived" class="gold-tag ms-2">archived</span></h2>
+            </div>
+            <div class="col">
+                <p>{{ getFormattedDate(season.createdAt) }}</p>
+            </div>
+            <div class="col">
+                <p>Made by {{ getAdminUsername(season) }}</p>
+            </div>
+            <div class="col text-pink me-5" [ngClass]="isLoggedIn ? 'favorite' : ''" (mouseup)="setFavorite($event, season); $event.stopPropagation()">
+                <i class="bi" [ngClass]="isFavorite(season) ? 'bi-heart-fill' : 'bi-heart'"></i>
+                {{ season.favorite }}
+            </div>
+            <div class="col">
+                <button class="btn btn-primary btn-sm">Explore</button>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center mt-3" *ngIf="seasons?.length === 0">
+            <h2>We didn't find any seasons here</h2>
+        </div>
+    </div>
+
+    <app-modal type="form" *ngIf="modal">
+        <app-season-form title="Create new season" executeButtonText="Add" (onCloseModalEmitter)="setModal(false)"
+            (onFetchDataEmitter)="onFetchData()"></app-season-form>
+    </app-modal>

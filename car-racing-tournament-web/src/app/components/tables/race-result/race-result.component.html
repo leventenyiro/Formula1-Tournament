@@ -20,8 +20,8 @@
     <div class="col">
         <p>Points</p>
     </div>
-    <div *ngIf="this.isLoggedIn && !season.isArchived" class="col">
-        <button *ngIf="this.isLoggedIn" class="btn btn-success btn-sm"
+    <div *ngIf="hasPermission && !season.isArchived" class="col">
+        <button class="btn btn-success btn-sm"
             (mouseup)="openModal('createResult')">Add result</button>
     </div>
 </div>
@@ -52,7 +52,7 @@
     <div class="col">
         <p>{{ result.point }}</p>
     </div>
-    <div *ngIf="this.isLoggedIn && !season.isArchived" class="col">
+    <div *ngIf="hasPermission && !season.isArchived" class="col">
         <button class="btn btn-primary btn-sm me-2" (mouseup)="openModal('updateResult', result)">
             <i class="bi bi-pen"></i>
         </button>
@@ -71,8 +71,12 @@
     </div>
 </div>
 
+<div class="d-flex justify-content-center mt-3" *ngIf="raceResults?.length === 0">
+    <h2>Nobody earn any results here</h2>
+</div>
+
 <app-modal type="form" *ngIf="modal === 'createResult' || modal === 'updateResult'">
-    <h1>Create</h1>
+    <h1>{{ modal === 'createResult' ? 'Add new' : 'Modify' }} result</h1>
     <form #postForm="ngForm" (ngSubmit)="selectedResult == undefined ? this.createResult(postForm) : this.updateResult(selectedResult!.id, postForm)">
         <div class="mb-3">
             <label for="inputDriverId" class="form-label">Driver</label>
@@ -113,7 +117,9 @@
                 <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="closeModal()">Cancel</button>
             </div>
             <div class="col-6">
-                <button class="btn btn-primary btn-sm btn-block" [disabled]="!postForm.valid">Create</button>
+                <button class="btn btn-primary btn-sm btn-block" [disabled]="!postForm.valid">
+                    {{ modal === 'createResult' ? 'Add' : 'Modify' }}
+                </button>
             </div>
         </div>
     </form>
@@ -121,3 +127,5 @@
         {{error}}
     </div>
 </app-modal>
+
+<app-modal type="loading" *ngIf="isFetching"></app-modal>

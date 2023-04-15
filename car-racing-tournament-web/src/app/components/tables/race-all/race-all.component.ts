@@ -10,13 +10,13 @@ import { SeasonService } from 'app/services/season.service';
 })
 export class RaceAllComponent implements OnInit {
   @Input()
-  isLoggedIn!: boolean;
-
-  @Input()
   season!: Season;
 
   @Input()
   raceAll?: any[];
+
+  @Input()
+  hasPermission: boolean = false;
 
   @Output()
   onFetchDataEmitter = new EventEmitter<undefined>();
@@ -24,45 +24,57 @@ export class RaceAllComponent implements OnInit {
   error: string = '';
   modal: string = '';
   selectedRace?: Race;
+  isFetching: boolean = false;
 
   constructor(private seasonService: SeasonService) { }
 
   ngOnInit(): void { }
 
   createRace(data: any) {
+    this.isFetching = true;
     data.value.dateTime = `${data.value.date}T${data.value.time}`;
     
     this.seasonService.createRace(data.value, this.season?.id!).subscribe({
-      error: err => {
-        this.error = err;
+      next: () => {
+        this.closeModal();
+        this.isFetching = false;
         this.onFetchDataEmitter.emit();
       },
-      complete: () => {
-        this.onFetchDataEmitter.emit();
-        this.closeModal();
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
       }
     });
   }
 
   updateRace(id: string, data: any) {
+    this.isFetching = true;
     data.value.dateTime = `${data.value.date}T${data.value.time}`;
 
     this.seasonService.updateRace(id, data.value).subscribe({
-      error: err => {
-        this.error = err;
+      next: () => {
+        this.closeModal();
+        this.isFetching = false;
         this.onFetchDataEmitter.emit();
       },
-      complete: () => {
-        this.onFetchDataEmitter.emit();
-        this.closeModal();
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
       }
     });
   }
 
   deleteRace(id: string) {
+    this.isFetching = true;
     this.seasonService.deleteRace(id).subscribe({
-      error: () => this.onFetchDataEmitter.emit(),
-      complete: () => this.onFetchDataEmitter.emit()
+      next: () => {
+        this.isFetching = false;
+        this.onFetchDataEmitter.emit()
+      },
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
+      }
     });
   }
 

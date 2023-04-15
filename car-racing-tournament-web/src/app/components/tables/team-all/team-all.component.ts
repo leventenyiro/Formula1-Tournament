@@ -10,13 +10,13 @@ import { SeasonService } from 'app/services/season.service';
 })
 export class TeamAllComponent implements OnInit {
   @Input()
-  isLoggedIn!: boolean;
-
-  @Input()
   season!: Season;
 
   @Input()
   teamAll?: any[];
+
+  @Input()
+  hasPermission: boolean = false;
 
   @Output()
   onFetchDataEmitter = new EventEmitter<undefined>();
@@ -24,6 +24,7 @@ export class TeamAllComponent implements OnInit {
   error: string = '';
   modal: string = '';
   selectedTeam?: Team;
+  isFetching: boolean = false;
 
   constructor(private seasonService: SeasonService) { }
 
@@ -31,35 +32,46 @@ export class TeamAllComponent implements OnInit {
   }
 
   createTeam(data: any) {
+    this.isFetching = true;
     this.seasonService.createTeam(data.value, this.season?.id!).subscribe({
-      error: err => {
-        this.error = err;
+      next: () => {
+        this.closeModal();
+        this.isFetching = false;
         this.onFetchDataEmitter.emit();
       },
-      complete: () => {
-        this.onFetchDataEmitter.emit();
-        this.closeModal();
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
       }
     });
   }
 
   updateTeam(id: string, data: any) {
+    this.isFetching = true;
     this.seasonService.updateTeam(id, data.value).subscribe({
-      error: err => {
-        this.error = err;
+      next: () => {
+        this.closeModal();
+        this.isFetching = false;
         this.onFetchDataEmitter.emit();
       },
-      complete: () => {
-        this.onFetchDataEmitter.emit();
-        this.closeModal();
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
       }
     });
   }
 
   deleteTeam(id: string) {
+    this.isFetching = true;
     this.seasonService.deleteTeam(id).subscribe({
-      error: () => this.onFetchDataEmitter.emit(),
-      complete: () => this.onFetchDataEmitter.emit()
+      next: () => {
+        this.isFetching = false;
+        this.onFetchDataEmitter.emit()
+      },
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
+      }
     });
   }
 

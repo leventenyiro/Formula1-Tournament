@@ -8,7 +8,7 @@
     <div class="col">
         <p>Points</p>
     </div>
-    <div *ngIf="this.isLoggedIn && !season.isArchived" class="col">
+    <div *ngIf="hasPermission && !season.isArchived" class="col">
         <button class="btn btn-success btn-sm" (mouseup)="openModal('createTeam')">Add team</button>
     </div>
 </div>
@@ -23,7 +23,7 @@
     <div class="col">
         <p>{{ team.point }}</p>
     </div>
-    <div *ngIf="this.isLoggedIn && !season.isArchived" class="col">
+    <div *ngIf="hasPermission && !season.isArchived" class="col">
         <button class="btn btn-primary btn-sm me-2" (mouseup)="openModal('updateTeam', team)">
             <i class="bi bi-pen"></i>
         </button>
@@ -42,8 +42,12 @@
     </div>
 </div>
 
+<div class="d-flex justify-content-center mt-3" *ngIf="teamAll?.length === 0">
+    <h2>We didn't find any team here</h2>
+</div>
+
 <app-modal type="form" *ngIf="modal === 'createTeam' || modal === 'updateTeam'">
-    <h1>Create</h1>
+    <h1>{{ modal === 'createTeam' ? 'Add new' : 'Modify' }} team</h1>
     <form #postForm="ngForm" (ngSubmit)="selectedTeam == undefined ? this.createTeam(postForm) : this.updateTeam(selectedTeam!.id, postForm)">
         <div class="mb-3">
             <label for="inputName" class="form-label">Name</label>
@@ -59,7 +63,9 @@
                 <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="closeModal()">Cancel</button>
             </div>
             <div class="col-6">
-                <button class="btn btn-primary btn-sm btn-block" [disabled]="!postForm.valid">Create</button>
+                <button class="btn btn-primary btn-sm btn-block" [disabled]="!postForm.valid">
+                    {{ modal === 'createTeam' ? 'Add' : 'Modify' }}
+                </button>
             </div>
         </div>
     </form>
@@ -67,3 +73,5 @@
         {{error}}
     </div>
 </app-modal>
+
+<app-modal type="loading" *ngIf="isFetching"></app-modal>

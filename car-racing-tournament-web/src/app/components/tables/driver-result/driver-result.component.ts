@@ -10,9 +10,6 @@ import { SeasonService } from 'app/services/season.service';
 })
 export class DriverResultComponent implements OnInit {
   @Input()
-  isLoggedIn!: boolean;
-
-  @Input()
   season!: Season;
 
   @Input()
@@ -20,6 +17,9 @@ export class DriverResultComponent implements OnInit {
 
   @Input()
   driverResults?: any[];
+
+  @Input()
+  hasPermission: boolean = false;
 
   @Output()
   onFetchDataEmitter = new EventEmitter<undefined>();
@@ -34,41 +34,43 @@ export class DriverResultComponent implements OnInit {
   ngOnInit(): void { }
 
   createResult(data: any) {
-    if (data.value.position === 'DNF' || data.value.position === 'DSQ') {
-      data.value.type = data.value.position;
-      data.value.position = 0;
-    } else
-      data.value.type = 'Finished';
+    this.isFetching = true;
+
+    const convertedResult = this.seasonService.resultConverter(data.value);
+    data.value.type = convertedResult.type;
+    data.value.position = convertedResult.position;
     data.value.driverId = this.driverId;
 
     this.seasonService.createResult(data.value).subscribe({
-      error: err => {
-        this.error = err;
+      next: () => {
+        this.closeModal();
+        this.isFetching = false;
         this.onFetchDataEmitter.emit();
       },
-      complete: () => {
-        this.onFetchDataEmitter.emit();
-        this.closeModal();
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
       }
     });
   }
 
   updateResult(id: string, data: any) {
-    if (data.value.position === 'DNF' || data.value.position === 'DSQ') {
-      data.value.type = data.value.position;
-      data.value.position = 0;
-    } else
-      data.value.type = 'Finished';
+    this.isFetching = true;
+
+    const convertedResult = this.seasonService.resultConverter(data.value);
+    data.value.type = convertedResult.type;
+    data.value.position = convertedResult.position;
     data.value.driverId = this.driverId;  
     
     this.seasonService.updateResult(id, data.value).subscribe({
-      error: err => {
-        this.error = err;
+      next: () => {
+        this.closeModal();
+        this.isFetching = false;
         this.onFetchDataEmitter.emit();
       },
-      complete: () => {
-        this.onFetchDataEmitter.emit();
-        this.closeModal();
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
       }
     });
   }
@@ -76,8 +78,14 @@ export class DriverResultComponent implements OnInit {
   deleteResult(id: string) {
     this.isFetching = true;
     this.seasonService.deleteResult(id).subscribe({
-      error: () => this.onFetchDataEmitter.emit(),
-      complete: () => this.onFetchDataEmitter.emit()
+      next: () => {
+        this.isFetching = false;
+        this.onFetchDataEmitter.emit()
+      },
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
+      }
     });
   }
 

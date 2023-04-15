@@ -20,3 +20,7 @@
         <p>{{ result.point }}</p>
     </div>
 </div>
+
+<div class="d-flex justify-content-center mt-3" *ngIf="teamResults?.length === 0">
+    <h2>This team hasn't any results yet</h2>
+</div>

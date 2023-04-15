@@ -540,4 +540,24 @@ export class SeasonService {
       })
     )
   }
+
+  getFormattedDate(dateStr: Date, needSeconds: boolean) {
+    const date = new Date(dateStr);
+    return `${date.getFullYear()}-` +
+    `${(Number(date.getMonth()) + 1).toString().padStart(2, '0')}-` +
+    `${date.getDate().toString().padStart(2, '0')} ` +
+    `${date.getHours().toString().padStart(2, '0')}:` +
+    `${date.getMinutes().toString().padStart(2, '0')}` +
+    `${needSeconds ? ':' + date.getSeconds().toString().padStart(2, '0') : ''}`;
+  }
+
+  resultConverter(data: any): any {
+    if (data.position === 'DNF' || data.position === 'DSQ') {
+      data.type = data.position;
+      data.position = 0;
+    } else
+      data.type = 'Finished';
+
+    return data;
+  }
 }

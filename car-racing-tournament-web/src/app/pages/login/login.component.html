@@ -2,35 +2,34 @@
     <h1>Login</h1>
 
     <div>
-        <form #postForm="ngForm" (ngSubmit)="onLogin(postForm)">
+        <form (ngSubmit)="onLogin()">
             <div class="mb-3">
                 <label for="inputUsernameEmail" class="form-label">Username or email</label>
-                <input required type="email" class="form-control" id="inputUsernameEmail" ngModel name="usernameEmail" #usernameEmail="ngModel" [class.is-invalid]="!usernameEmail.valid && usernameEmail.touched">
+                <input required type="email" class="form-control" id="inputUsernameEmail" name="usernameEmail" [formControl]="inputUsernameEmail" [class.is-invalid]="!inputUsernameEmail.valid && inputUsernameEmail.touched">
                 <div class="invalid-feedback">Username or email is required</div>
             </div>
     
             <div class="mb-3">
                 <label for="inputPassword" class="form-label">Password</label>
-                <input required type="password" class="form-control" id="inputPassword" ngModel name="password" #password="ngModel" [class.is-invalid]="!password.valid && password.touched">
+                <input required type="password" class="form-control" id="inputPassword" name="password" 
+                [formControl]="inputPassword" [class.is-invalid]="!inputPassword.valid && inputPassword.touched">
                 <div class="invalid-feedback">Password is required</div>
             </div>
     
             <div class="row">
                 <div class="col-5">
-                    <button class="btn btn-primary" [disabled]="!postForm.valid">Login</button>
+                    <button class="btn btn-primary">Login</button>
                 </div>
                 <div class="col-7 text-end">
                     <button (mouseup)="registration()" class="btn btn-link">Don't you have an account?</button>
                 </div>
             </div>
         </form>
-
-        <app-modal type="loading" *ngIf="isFetching; else elseDiv"></app-modal>
-
-        <ng-template #elseDiv>
-            <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
-                {{error}}
-            </div>
-        </ng-template>
     </div>
 </div>
+
+<div class="alert alert-danger mt-3 mx-5" role="alert" *ngIf="error">
+    {{error}}
+</div>
+
+<app-modal type="loading" *ngIf="isFetching"></app-modal>

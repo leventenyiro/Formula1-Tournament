@@ -38,10 +38,11 @@ export class SeasonsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.isFetching = true;
     this.authService.loggedIn.subscribe(
       (loggedIn: boolean) => {
         this.isLoggedIn = loggedIn;
-        this.onFetchData();
+        this.isFetching = false;
       }
     );
     this.isLoggedIn = this.authService.getBearerToken() !== undefined;
@@ -57,16 +58,11 @@ export class SeasonsComponent implements OnInit {
 
     if (this.isLoggedIn) {
       this.authService.getUser().subscribe({
-        next: user => this.user = user,
-        error: () => this.isFetching = false
+        next: user => this.user = user
       });
 
       this.seasonService.getSeasonsByUser().subscribe({
-        next: seasons => {
-          this.fetchedMyData = seasons;
-        },
-        error: err => this.error = err,
-        complete: () => this.isFetching = false
+        next: seasons => this.fetchedMyData = seasons
       });
     }
     
@@ -74,9 +70,13 @@ export class SeasonsComponent implements OnInit {
       next: seasons => {
         this.fetchedData = seasons;
         this.onFilter();
+        this.onSearch();
+        this.isFetching = false;
       },
-      error: err => this.error = err,
-      complete: () => this.isFetching = false
+      error: err => {
+        this.error = err;
+        this.isFetching = false;
+      }
     });
   }
 
@@ -104,6 +104,8 @@ export class SeasonsComponent implements OnInit {
     if (!this.checkBoxAdmin.value && !this.checkBoxModerator.value && !this.checkBoxFavorites.value) {
       this.seasons = this.fetchedData;
     }
+
+    this.onSearch();
   }
 
   getAdminUsername(season: Season) {
@@ -111,13 +113,7 @@ export class SeasonsComponent implements OnInit {
   }
 
   getFormattedDate(dateStr: Date) {
-    const date = new Date(dateStr);
-    return `${date.getFullYear()}-` +
-    `${(Number(date.getMonth()) + 1).toString().padStart(2, '0')}-` +
-    `${date.getDate().toString().padStart(2, '0')} ` +
-    `${date.getHours().toString().padStart(2, '0')}:` +
-    `${date.getMinutes().toString().padStart(2, '0')}:` +
-    `${date.getSeconds().toString().padStart(2, '0')}`;
+    return this.seasonService.getFormattedDate(dateStr, true);
   }
 
   isFavorite(season: Season): boolean {
@@ -130,17 +126,27 @@ export class SeasonsComponent implements OnInit {
     if (this.isLoggedIn) {
       event.stopPropagation();
       if (this.isFavorite(season)) {
+        this.isFetching = true;
         this.seasonService.deleteFavorite(this.user!.favorites!.find(x => x.seasonId === season.id && x.userId === this.user!.id)!.id!).subscribe({
-          next: () => this.onFetchData(),
+          next: () => {
+            this.isFetching = false;
+            this.onFetchData()
+          },
           error: err => {
-            this.error = err;
+            this.error = err
+            this.isFetching = false;
           }
         });
       } else {
+        this.isFetching = true;
         this.seasonService.createFavorite(this.user!.id!, season.id).subscribe({
-          next: () => this.onFetchData(),
+          next: () => {
+            this.isFetching = false;
+            this.onFetchData()
+          },
           error: err => {
-            this.error = err;
+            this.error = err
+            this.isFetching = false;
           }
         });
       }

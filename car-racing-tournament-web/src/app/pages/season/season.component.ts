@@ -15,7 +15,7 @@ import { SeasonService } from 'app/services/season.service';
 export class SeasonComponent implements OnInit {
   id!: string;
   season?: Season;
-  error = "";
+  error = '';
   isFetching = false;
   createdAt?: string;
   selectType = new FormControl('drivers');
@@ -37,52 +37,47 @@ export class SeasonComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.paramMap.get("id")!;
+    this.id = this.route.snapshot.paramMap.get('id')!;
 
-    this.isFetching = true;
-    this.authService.loggedIn.subscribe(
-      (loggedIn: boolean) => {
-        this.isLoggedIn = loggedIn;
-      }
-    );
-
-    this.isLoggedIn = this.authService.getBearerToken() !== undefined;
+    this.isLoggedIn = this.authService.getBearerToken() !== undefined;      
     this.onFetchData();
-    this.isFetching = false;
   }
 
   onFetchData(): any {
     this.isFetching = true;
 
     if (this.isLoggedIn) {
-      this.isFetching = true;
       this.authService.getUser().subscribe({
-        next: user => this.user = user
+        next: user => this.user = user,
+        error: error => this.error = error
       });
     }
 
     this.seasonService.getSeason(this.id).subscribe({
-      next: season => this.season = season,
-      error: () => this.router.navigate(['season']),
-      complete: () => {
+      next: season => {
+        this.season = season;
+        this.createdAt = this.seasonService.getFormattedDate(this.season!.createdAt, true);
         this.isFetching = false;
-        this.createdAt = this.getFormattedDate(this.season!.createdAt);
+      },
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
+        this.router.navigate(['season']);
       }
     });
   }
 
-  getFormattedDate(dateStr: any) {
-    const date = new Date(dateStr);
-    return `${date.getFullYear()}-` +
-    `${(Number(date.getMonth()) + 1).toString().padStart(2, '0')}-` +
-    `${date.getDate().toString().padStart(2, '0')} ` +
-    `${date.getHours().toString().padStart(2, '0')}:` +
-    `${date.getMinutes().toString().padStart(2, '0')}:` +
-    `${date.getSeconds().toString().padStart(2, '0')}`;
-  }
-
   getUserPermission() {    
     return this.season?.permissions.find(x => x.userId === this.user?.id);
+  }
+
+  hasPermission() {
+    this.authService.loggedIn.subscribe(
+      (loggedIn: boolean) => {
+        this.isLoggedIn = loggedIn;
+      }
+    );
+    return this.isLoggedIn && (this.getUserPermission()?.type === 0 || this.getUserPermission()?.type === 1);
   }
 
   getDriverAll() {
@@ -111,7 +106,7 @@ export class SeasonComponent implements OnInit {
         race: {
           id: x.race.id,
           name: x.race.name,
-          dateTime: this.getFormattedDate(x.race.dateTime)
+          dateTime: this.seasonService.getFormattedDate(x.race.dateTime, false)
         },
         team: x.team,
         position: x.type.toString() === 'Finished' ? x.position : x.type.toString(),
@@ -138,7 +133,7 @@ export class SeasonComponent implements OnInit {
         const { id, name, dateTime } = result.race;
         const existingRace = sum[id];
         if (!existingRace) {
-          let formattedDateTime = this.getFormattedDate(dateTime);
+          let formattedDateTime = this.seasonService.getFormattedDate(dateTime, false);
           sum[id] = { id, race: {name, dateTime: formattedDateTime}, point: result.point };
         } else {
           existingRace.point += result.point;
@@ -155,7 +150,7 @@ export class SeasonComponent implements OnInit {
       return {
         id: x.id,
         name: x.name,
-        dateTime: this.getFormattedDate(x.dateTime),
+        dateTime: this.seasonService.getFormattedDate(x.dateTime, false),
         winner: {
           name: winnerResult?.driver.name,
           realName: winnerResult?.driver.realName,
@@ -188,10 +183,14 @@ export class SeasonComponent implements OnInit {
   archiveSeason() {
     this.isFetching = true;
     this.seasonService.archiveSeason(this.season!.id).subscribe({
-      error: () => this.isFetching = false,
-      complete: () => {
+      next: () => {
+        this.closeModal();
+        this.isFetching = false;
         this.onFetchData();
-        this.modal = '';
+      },
+      error: error => {
+        this.error = error,
+        this.isFetching = false;
       }
     });
   }
@@ -199,11 +198,14 @@ export class SeasonComponent implements OnInit {
   deleteSeason() {
     this.isFetching = true;
     this.seasonService.deleteSeason(this.season!.id).subscribe({
-      error: () => this.isFetching = false,
-      complete: () => {
+      next: () => {
+        this.closeModal();
         this.isFetching = false;
-        this.modal = '';
         this.router.navigate(['seasons'])
+      },
+      error: error => {
+        this.error = error,
+        this.isFetching = false;
       }
     });
   }
@@ -211,11 +213,14 @@ export class SeasonComponent implements OnInit {
   deletePermission(id: string) {
     this.isFetching = true;
     this.seasonService.deletePermission(id).subscribe({
-      error: () => this.onFetchData(),
-      complete: () => {
+      next: () => {
+        this.closeModal();
+        this.isFetching = false;
         this.onFetchData();
-        this.modal = '';
-        this.selectedPermissionId = '';
+      },
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
       }
     });
   }
@@ -223,11 +228,14 @@ export class SeasonComponent implements OnInit {
   updatePermission(id: string) {
     this.isFetching = true;
     this.seasonService.updatePermission(id).subscribe({
-      error: () => this.onFetchData(),
-      complete: () => {
+      next: () => {
+        this.closeModal();
+        this.isFetching = false;
         this.onFetchData();
-        this.modal = '';
-        this.selectedPermissionId = '';
+      },
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
       }
     });
   }
@@ -235,14 +243,13 @@ export class SeasonComponent implements OnInit {
   createPermission(data: any) {
     this.isFetching = true;
     this.seasonService.createPermission(data.value.usernameEmail, this.season!.id).subscribe({
-      error: err => {
-        this.error = err;
-        this.onFetchData();
-        this.isFetching = false;
-      },
-      complete: () => {
-        this.onFetchData();
+      next: () => {
         this.closeModal();
+        this.isFetching = false;
+        this.onFetchData();
+      },
+      error: error => {
+        this.error = error;
         this.isFetching = false;
       }
     });
@@ -257,14 +264,27 @@ export class SeasonComponent implements OnInit {
   setFavorite(season: Season) {
     if (this.isLoggedIn) {      
       if (this.isFavorite(season)) {
+        this.isFetching = true;
         this.seasonService.deleteFavorite(this.user!.favorites!.find(x => x.seasonId === season.id && x.userId === this.user!.id)!.id!).subscribe({
-          error: err => this.error = err,
-          complete: () => this.onFetchData()
+          next: () => {
+            this.isFetching = false;
+            this.onFetchData();
+          },
+          error: err => {
+            this.error = err;
+            this.isFetching = false;
+          }
         });
       } else {
         this.seasonService.createFavorite(this.user!.id!, season.id).subscribe({
-          error: err => this.error = err,
-          complete: () => this.onFetchData()
+          next: () => {
+            this.isFetching = false;
+            this.onFetchData();
+          },
+          error: err => {
+            this.error = err;
+            this.isFetching = false;
+          }
         });
       }
     }

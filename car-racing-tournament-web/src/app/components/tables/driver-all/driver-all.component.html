@@ -17,7 +17,7 @@
     <div class="col">
         <p>Points</p>
     </div>
-    <div *ngIf="this.isLoggedIn && !season?.isArchived" class="col">
+    <div *ngIf="hasPermission && !season?.isArchived" class="col">
         <button class="btn btn-success btn-sm" (mouseup)="openModal('createDriver')">Add driver</button>
     </div>
 </div>
@@ -41,7 +41,7 @@
     <div class="col">
         <p>{{ driver.point }}</p>
     </div>
-    <div *ngIf="this.isLoggedIn && !season.isArchived" class="col">
+    <div *ngIf="hasPermission && !season.isArchived" class="col">
         <button class="btn btn-primary btn-sm me-2" (mouseup)="openModal('updateDriver', driver)">
             <i class="bi bi-pen"></i>
         </button>
@@ -61,8 +61,12 @@
     </div>
 </div>
 
+<div class="d-flex justify-content-center mt-3" *ngIf="driverAll?.length === 0">
+    <h2>We didn't find any driver here</h2>
+</div>
+
 <app-modal type="form" *ngIf="modal === 'createDriver' || modal === 'updateDriver'">
-    <h1>Create</h1>
+    <h1>{{ modal === 'createDriver' ? 'Add new' : 'Modify' }} driver</h1>
     <form #postForm="ngForm" (ngSubmit)="selectedDriver == undefined ? this.createDriver(postForm) : this.updateDriver(selectedDriver!.id, postForm)">
         <div class="mb-3">
             <label for="inputName" class="form-label">Name</label>
@@ -95,7 +99,9 @@
                 <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="closeModal()">Cancel</button>
             </div>
             <div class="col-6">
-                <button class="btn btn-primary btn-sm btn-block" [disabled]="!postForm.valid">Create</button>
+                <button class="btn btn-primary btn-sm btn-block" [disabled]="!postForm.valid">
+                    {{ modal === 'createDriver' ? 'Add' : 'Modify' }}
+                </button>
             </div>
         </div>
     </form>
@@ -103,3 +109,5 @@
         {{error}}
     </div>
 </app-modal>
+
+<app-modal type="loading" *ngIf="isFetching"></app-modal>

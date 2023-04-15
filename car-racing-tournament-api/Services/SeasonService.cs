@@ -203,6 +203,7 @@ namespace car_racing_tournament_api.Services
             List<SeasonOutputDto> seasons = await _carRacingTournamentDbContext.Seasons
                 .Where(x => permissions.Contains(x.Id))
                 .Include(x => x.Permissions)
+                .OrderByDescending(x => x.CreatedAt)
                 .Select(x => new SeasonOutputDto
                 {
                     Id = x.Id,
@@ -210,6 +211,7 @@ namespace car_racing_tournament_api.Services
                     Description = x.Description,
                     IsArchived = x.IsArchived,
                     CreatedAt = x.CreatedAt,
+                    Favorite = x.Favorites.Count,
                     Permissions = x.Permissions.Select(x => new PermissionOutputDto
                     {
                         Id = x.Id,

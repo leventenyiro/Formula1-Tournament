@@ -10,13 +10,13 @@ import { SeasonService } from 'app/services/season.service';
 })
 export class DriverAllComponent implements OnInit {
   @Input()
-  isLoggedIn!: boolean;
-
-  @Input()
   season!: Season;
 
   @Input()
   driverAll?: any[];
+
+  @Input()
+  hasPermission: boolean = false;
 
   @Output()
   onFetchDataEmitter = new EventEmitter<undefined>();
@@ -24,41 +24,53 @@ export class DriverAllComponent implements OnInit {
   error: string = '';
   modal: string = '';
   selectedDriver?: Driver;
+  isFetching: boolean = false;
 
   constructor(private seasonService: SeasonService) { }
 
   ngOnInit(): void { }
 
-  createDriver(data: any) {    
+  createDriver(data: any) {   
+    this.isFetching = true; 
     this.seasonService.createDriver(data.value, this.season?.id!).subscribe({
-      error: err => {
-        this.error = err;
+      next: () => {
+        this.closeModal();
+        this.isFetching = false;
         this.onFetchDataEmitter.emit();
       },
-      complete: () => {
-        this.onFetchDataEmitter.emit();
-        this.closeModal();
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
       }
     });
   }
 
   updateDriver(id: string, data: any) {
+    this.isFetching = true;
     this.seasonService.updateDriver(id, data.value).subscribe({
-      error: err => {
-        this.error = err;
+      next: () => {
+        this.closeModal();
+        this.isFetching = false;
         this.onFetchDataEmitter.emit();
       },
-      complete: () => {
-        this.onFetchDataEmitter.emit();
-        this.closeModal();
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
       }
     });
   }
 
   deleteDriver(id: string) {
+    this.isFetching = true;
     this.seasonService.deleteDriver(id).subscribe({
-      error: () => this.onFetchDataEmitter.emit(),
-      complete: () => this.onFetchDataEmitter.emit()
+      next: () => {
+        this.isFetching = false;
+        this.onFetchDataEmitter.emit()
+      },
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
+      }
     });
   }
 

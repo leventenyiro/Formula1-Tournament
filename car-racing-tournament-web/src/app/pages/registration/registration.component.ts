@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'app/services/auth.service';
 
@@ -10,6 +11,10 @@ import { AuthService } from 'app/services/auth.service';
 export class RegistrationComponent implements OnInit {
   isFetching = false;
   error = "";
+  inputUsername = new FormControl('');
+  inputEmail = new FormControl('');
+  inputPassword = new FormControl('');
+  inputPasswordAgain = new FormControl('');
 
   constructor(private authService: AuthService, private router: Router) { }
 
@@ -19,15 +24,25 @@ export class RegistrationComponent implements OnInit {
     }
   }
 
-  onRegistration(data: any) {
+  onRegistration() {
     this.isFetching = true
 
-    this.authService.registration(data.value).subscribe({
-      next: data => {
-        this.router.navigate(['']);
+    this.authService.registration({
+      'username': this.inputUsername.value,
+      'email': this.inputEmail.value,
+      'password': this.inputPassword.value,
+      'passwordAgain': this.inputPasswordAgain.value,
+    }).subscribe({
+      next: () => {
+        this.isFetching = false;
+        this.router.navigate(['login'])
       },
-      error: err => this.error = err,
-      complete: () => this.isFetching = false
+      error: err => {
+        this.error = err
+        this.inputPassword.setValue('');
+        this.inputPasswordAgain.setValue('');
+        this.isFetching = false;
+      }
     })
 
     this.isFetching = false;
@@ -50,6 +65,6 @@ export class RegistrationComponent implements OnInit {
   }
 
   login() {
-    this.router.navigate(['/login'])
+    this.router.navigate(['login'])
   }
 }
