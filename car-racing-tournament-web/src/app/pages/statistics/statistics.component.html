@@ -64,7 +64,7 @@
         <div class="row">
             <div class="col-md dashboard-box dashboard-left-box">
                 <h2>Seasons</h2>
-                <div *ngFor="let season of statistics.seasonStatistics" class="row d-flex align-items-center">
+                <div *ngFor="let season of statistics.seasonStatistics" class="row d-flex align-items-center mb-2">
                     <div class="col-4">{{ season.name }}</div>
                     <div class="col-1">{{ season.position }}</div>
                     <div class="col-7">
@@ -78,8 +78,8 @@
             </div>
             <div class="col-md dashboard-box dashboard-right-box">
                 <h2>Positions</h2>
-                <div *ngFor="let position of statistics.positionStatistics" class="row d-flex align-items-center">
-                    <div class="col-4">{{ position.position }}</div>
+                <div *ngFor="let position of statistics.positionStatistics" class="row d-flex align-items-center mb-2">
+                    <div class="col-4"><span [ngClass]="position.position =='DSQ' ? 'dsq-tag' : ''">{{ position.position }}</span></div>
                     <div class="col-1">{{ position.number }}</div>
                     <div class="col-7">
                         <div class="progress" role="progressbar">

@@ -84,4 +84,8 @@ export class DriverAllComponent implements OnInit {
     this.error = '';
     this.selectedDriver = undefined;
   }
+
+  openStatistics(name: string) {
+    window.location.href = `statistics?name=${name}`;
+  }
 }

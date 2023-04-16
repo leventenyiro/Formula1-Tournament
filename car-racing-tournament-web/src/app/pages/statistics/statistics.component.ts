@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Statistics } from 'app/models/statistics';
 import { SeasonService } from 'app/services/season.service';
 
@@ -15,12 +16,16 @@ export class StatisticsComponent implements OnInit {
   isFetching?: boolean = false;
   noData?: boolean = false;
 
-  constructor(private seasonService: SeasonService) { }
+  constructor(
+    private seasonService: SeasonService, 
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
-    // debug
-    this.inputSearch.setValue('Hamilton');
-    this.onSearch();
+    if (this.route.snapshot.queryParamMap.get('name')) {
+      this.inputSearch.setValue(this.route.snapshot.queryParamMap.get('name'));
+      this.onSearch();
+    }
   }
 
   onSearch(): void {
@@ -28,6 +33,7 @@ export class StatisticsComponent implements OnInit {
     this.isFetching = true;
     this.driverName = '';
     this.statistics = undefined;
+    window.history.pushState("Statistics", "Car Racing Tournament", `statistics?name=${this.inputSearch.value}`);
 
     this.seasonService.getStatistics(this.inputSearch.value).subscribe({
       next: data => {
@@ -39,7 +45,7 @@ export class StatisticsComponent implements OnInit {
         this.noData = true;
         this.isFetching = false;
       }
-    })
+    });
   }
 
   calculatePercentage(part: number, full: number): string {
