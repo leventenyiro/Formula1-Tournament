@@ -40,6 +40,7 @@ export class RaceResultComponent implements OnInit {
     this.isFetching = true;
 
     const convertedResult = this.seasonService.resultConverter(data.value);
+    
     data.value.type = convertedResult.type;
     data.value.position = convertedResult.position;
 
@@ -106,9 +107,7 @@ export class RaceResultComponent implements OnInit {
       this.season!.drivers[0].id : 
       this.selectedResult.driver.id);
 
-    const actualTeamId = this.season.drivers.find(x => x.id === this.driverId.value)?.actualTeam?.id;
-    if (actualTeamId !== undefined)
-      this.teamId.setValue(actualTeamId);
+    this.setTeamId();
   }
 
   closeModal() {
@@ -129,5 +128,7 @@ export class RaceResultComponent implements OnInit {
     const actualTeamId = this.season.drivers.find(x => x.id === this.driverId.value)?.actualTeam?.id;
     if (actualTeamId !== undefined)
       this.teamId.setValue(actualTeamId);
+    else
+      this.teamId.setValue(this.season.teams[0].id);
   }
 }

@@ -40,10 +40,10 @@
         <p>{{ result.point }}</p>
     </div>
     <div *ngIf="hasPermission && !season.isArchived" class="col">
-        <button class="btn btn-primary btn-sm me-2" (mouseup)="openModal('updateResult', result)">
+        <button class="btn btn-primary btn-sm me-2" (mouseup)="openModal('updateResult', result)" title="Modify">
             <i class="bi bi-pen"></i>
         </button>
-        <button class="btn btn-danger btn-sm" (mouseup)="openModal('deleteResult', result)">
+        <button class="btn btn-danger btn-sm" (mouseup)="openModal('deleteResult', result)" title="Delete">
             <i class="bi bi-trash3"></i>
         </button>
 

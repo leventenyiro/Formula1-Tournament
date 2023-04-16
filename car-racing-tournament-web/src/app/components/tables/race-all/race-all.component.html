@@ -30,10 +30,10 @@
         <p>{{ race.winner.team.name }}</p>
     </div>
     <div *ngIf="hasPermission && !season.isArchived" class="col">
-        <button class="btn btn-primary btn-sm me-2" (mouseup)="openModal('updateRace', race)">
+        <button class="btn btn-primary btn-sm me-2" (mouseup)="openModal('updateRace', race)" title="Modify">
             <i class="bi bi-pen"></i>
         </button>
-        <button class="btn btn-danger btn-sm" (mouseup)="openModal('deleteRace', race)">
+        <button class="btn btn-danger btn-sm" (mouseup)="openModal('deleteRace', race)" title="Delete">
             <i class="bi bi-trash3"></i>
         </button>
 

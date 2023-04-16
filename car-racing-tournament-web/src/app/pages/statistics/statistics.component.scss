@@ -1,0 +1,16 @@
+.dashboard-box {
+    border: 1px solid #00000020;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+@media only screen and (min-width: 768px) {
+    .dashboard-left-box {
+        margin-right: 10px;
+    }
+    
+    .dashboard-right-box {
+        margin-left: 10px;
+    }
+}
