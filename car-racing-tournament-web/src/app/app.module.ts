@@ -20,6 +20,7 @@ import { RaceResultComponent } from './components/tables/race-result/race-result
 import { SeasonFormComponent } from './components/season-form/season-form.component';
 import { VerifyFormComponent } from './components/verify-form/verify-form.component';
 import { SettingsComponent } from './pages/settings/settings.component';
+import { StatisticsComponent } from './pages/statistics/statistics.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { SettingsComponent } from './pages/settings/settings.component';
     RaceResultComponent,
     SeasonFormComponent,
     VerifyFormComponent,
-    SettingsComponent
+    SettingsComponent,
+    StatisticsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,51 @@
+<div class="container">
+    <div class="row mt-4">
+        <h1>Statistics</h1>
+    </div>
+
+    <div class="row">
+        <div class="d-flex mb-4 mt-2">
+            <div class="me-2">
+                <input type="text" class="form-control form-control-sm" id="name" [formControl]="inputSearch"
+                    placeholder="Start typing to filter..." (keyup.enter)="onSearch()">
+            </div>
+            <button class="btn btn-outline-primary btn-sm me-2" (mousedown)="onSearch()" title="Search">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+    </div>
+    <div *ngIf="noData" class="d-flex justify-content-center">
+        <h2>This driver doesn't exists!</h2>
+    </div>
+    <div *ngIf="statistics">
+        <h2>{{ driverName }}</h2>
+        <div class="col-md-8 row box">
+            <div class="col-5">
+                <div>Number of wins:</div>
+                <div>Number of podiums:</div>
+                <div>Number of champion:</div>
+                <div>Number of races:</div>
+            </div>
+            <div class="col-1">
+                <div>{{ statistics!.numberOfWin }} ({{calculatePercentage(statistics.numberOfWin!, statistics.numberOfRace!)}} %)</div>
+                <div>{{ statistics!.numberOfPodium }} ({{calculatePercentage(statistics.numberOfPodium!, statistics.numberOfRace!)}} %)</div>
+                <div>{{ statistics!.numberOfChampion }} ({{calculatePercentage(statistics.numberOfChampion!, statistics.seasonStatistics?.length!)}} %)</div>
+                <div>{{ statistics!.numberOfRace }}</div>
+            </div>
+            <div class="col-4">
+                <div class="progress" role="progressbar">
+                    <div class="progress-bar" [style.width.%]="calculatePercentage(statistics.numberOfWin!, statistics.numberOfRace!)"></div>
+                </div>
+                <div class="progress" role="progressbar">
+                    <div class="progress-bar" [style.width.%]="calculatePercentage(statistics.numberOfPodium!, statistics.numberOfRace!)"></div>
+                </div>
+                <div class="progress" role="progressbar">
+                    <div class="progress-bar" [style.width.%]="calculatePercentage(statistics.numberOfChampion!, statistics.seasonStatistics?.length!)"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+
+<app-modal type="loading" *ngIf="isFetching"></app-modal>

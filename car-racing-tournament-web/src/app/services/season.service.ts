@@ -8,6 +8,7 @@ import { Result } from 'app/models/result';
 import { Team } from 'app/models/team';
 import { Race } from 'app/models/race';
 import { AuthService } from './auth.service';
+import { Statistics } from 'app/models/statistics';
 
 @Injectable({
   providedIn: 'root'
@@ -20,41 +21,41 @@ export class SeasonService {
     let headers = new HttpHeaders().set('content-type', 'application/json').set('Access-Control-Allow-Origin', '*')
     return this.http.get<Season[]>(
       `${environment.backendUrl}/season`,
-        {
-            headers: headers
-        }
+      {
+        headers: headers
+      }
     ).pipe(
-        tap(data => JSON.stringify(data)),
-        catchError((error: HttpErrorResponse) => {
-          return throwError(() => new Error(error.error));
-        })
+      tap(data => JSON.stringify(data)),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
     )
   }
 
   getSeasonsByUser(): Observable<Season[]> {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.get<Season[]>(
       `${environment.backendUrl}/season/user`,
-        {
-            headers: headers
-        }
+      {
+        headers: headers
+      }
     ).pipe(
-        tap(data => JSON.stringify(data)),
-        catchError((error: HttpErrorResponse) => {
-          return throwError(() => new Error(error.error));
-        })
+      tap(data => JSON.stringify(data)),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
     )
   }
 
   createSeason(season: Season) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.post(
       `${environment.backendUrl}/season`,
@@ -76,9 +77,9 @@ export class SeasonService {
 
   updateSeason(id: string, season: Season) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.put(
       `${environment.backendUrl}/season/${id}`,
@@ -100,9 +101,9 @@ export class SeasonService {
 
   archiveSeason(id: string) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.put(
       `${environment.backendUrl}/season/${id}/archive`,
@@ -121,9 +122,9 @@ export class SeasonService {
 
   deleteSeason(id: string) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.delete(
       `${environment.backendUrl}/season/${id}`,
@@ -140,26 +141,26 @@ export class SeasonService {
 
   getSeason(id: string) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
     return this.http.get<Season>(
       `${environment.backendUrl}/season/${id}`,
-        {
-            headers: headers
-        }
+      {
+        headers: headers
+      }
     ).pipe(
-        tap(data => JSON.stringify(data)),
-        catchError((error: HttpErrorResponse) => {
-          return throwError(() => new Error(error.error));
-        })
+      tap(data => JSON.stringify(data)),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
     )
   }
 
   deleteDriver(id: string) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.delete(
       `${environment.backendUrl}/driver/${id}`,
@@ -176,9 +177,9 @@ export class SeasonService {
 
   deleteResult(id: string) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.delete(
       `${environment.backendUrl}/result/${id}`,
@@ -195,9 +196,9 @@ export class SeasonService {
 
   deleteTeam(id: string) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.delete(
       `${environment.backendUrl}/team/${id}`,
@@ -214,9 +215,9 @@ export class SeasonService {
 
   deleteRace(id: string) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.delete(
       `${environment.backendUrl}/race/${id}`,
@@ -233,9 +234,9 @@ export class SeasonService {
 
   deletePermission(id: string) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.delete(
       `${environment.backendUrl}/permission/${id}`,
@@ -252,12 +253,13 @@ export class SeasonService {
 
   updatePermission(id: string) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.put(
-      `${environment.backendUrl}/permission/${id}`, null,
+      `${environment.backendUrl}/permission/${id}`,
+      null,
       {
         headers: headers
       }
@@ -271,9 +273,9 @@ export class SeasonService {
 
   createDriver(driver: Driver, seasonId: string) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.post(
       `${environment.backendUrl}/season/${seasonId}/driver`,
@@ -297,9 +299,9 @@ export class SeasonService {
 
   updateDriver(id: string, driver: Driver) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.put(
       `${environment.backendUrl}/driver/${id}`,
@@ -323,9 +325,9 @@ export class SeasonService {
 
   createResult(result: Result) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.post(
       `${environment.backendUrl}/result`,
@@ -351,10 +353,10 @@ export class SeasonService {
 
   updateResult(id: string, result: Result) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);  
-    
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+
     return this.http.put(
       `${environment.backendUrl}/result/${id}`,
       {
@@ -379,9 +381,9 @@ export class SeasonService {
 
   createTeam(team: Team, seasonId: string) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.post(
       `${environment.backendUrl}/season/${seasonId}/team`,
@@ -403,9 +405,9 @@ export class SeasonService {
 
   updateTeam(id: string, team: Team) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.put(
       `${environment.backendUrl}/team/${id}`,
@@ -427,9 +429,9 @@ export class SeasonService {
 
   createRace(race: Race, seasonId: string) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.post(
       `${environment.backendUrl}/season/${seasonId}/race`,
@@ -451,9 +453,9 @@ export class SeasonService {
 
   updateRace(id: string, race: Race) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.put(
       `${environment.backendUrl}/race/${id}`,
@@ -478,10 +480,10 @@ export class SeasonService {
       .set('content-type', 'application/x-www-form-urlencoded')
       .set('Access-Control-Allow-Origin', '*')
       .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
-  
+
     const params = new URLSearchParams();
     params.set('usernameEmail', usernameEmail);
-  
+
     return this.http.post(
       `${environment.backendUrl}/season/${seasonId}/permission`,
       params.toString(),
@@ -499,9 +501,9 @@ export class SeasonService {
 
   createFavorite(userId: string, seasonId: string) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.post(
       `${environment.backendUrl}/favorite`,
@@ -523,9 +525,9 @@ export class SeasonService {
 
   deleteFavorite(id: string) {
     let headers = new HttpHeaders()
-    .set('content-type', 'application/json')
-    .set('Access-Control-Allow-Origin', '*')
-    .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*')
+      .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.delete(
       `${environment.backendUrl}/favorite/${id}`,
@@ -541,14 +543,32 @@ export class SeasonService {
     )
   }
 
+  getStatistics(name: string): Observable<Statistics> {
+    let headers = new HttpHeaders()
+      .set('content-type', 'application/x-www-form-urlencoded')
+      .set('Access-Control-Allow-Origin', '*');
+
+    return this.http.get<Statistics>(
+      `${environment.backendUrl}/driver/statistics/${name}`,
+      {
+        headers: headers
+      }
+    ).pipe(
+      tap(data => JSON.stringify(data)),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
+    )
+  }
+
   getFormattedDate(dateStr: Date, needSeconds: boolean) {
     const date = new Date(dateStr);
     return `${date.getFullYear()}-` +
-    `${(Number(date.getMonth()) + 1).toString().padStart(2, '0')}-` +
-    `${date.getDate().toString().padStart(2, '0')} ` +
-    `${date.getHours().toString().padStart(2, '0')}:` +
-    `${date.getMinutes().toString().padStart(2, '0')}` +
-    `${needSeconds ? ':' + date.getSeconds().toString().padStart(2, '0') : ''}`;
+      `${(Number(date.getMonth()) + 1).toString().padStart(2, '0')}-` +
+      `${date.getDate().toString().padStart(2, '0')} ` +
+      `${date.getHours().toString().padStart(2, '0')}:` +
+      `${date.getMinutes().toString().padStart(2, '0')}` +
+      `${needSeconds ? ':' + date.getSeconds().toString().padStart(2, '0') : ''}`;
   }
 
   resultConverter(data: any): any {
