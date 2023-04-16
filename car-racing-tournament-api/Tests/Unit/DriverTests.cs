@@ -436,5 +436,21 @@ namespace car_racing_tournament_api.Tests.Unit
 
             Assert.IsEmpty(_context.Drivers);
         }
+
+        [Test]
+        public async Task StatisticsSuccess() {
+            var result = await _driverService!.GetStatistics(_driver!.Name);
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNull(result.ErrorMessage);
+        }
+
+        [Test]
+        public async Task StatisticsNotFound() {
+            var result = await _driverService!.GetStatistics("something");
+            Assert.IsFalse(result.IsSuccess);
+            Assert.IsNotNull(result.ErrorMessage);
+            Assert.IsNull(result.DriverStatistics);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:DriverNotFound"]);
+        }
     }
 }

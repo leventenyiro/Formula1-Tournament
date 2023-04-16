@@ -91,5 +91,14 @@ namespace car_racing_tournament_api.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("statistics/{name}")]
+        public async Task<IActionResult> Statistics(string name) {
+            var result = await _driverService.GetStatistics(name);
+            if (!result.IsSuccess)
+                return NotFound(result.ErrorMessage);
+
+            return Ok(result.DriverStatistics);
+        }
     }
 }

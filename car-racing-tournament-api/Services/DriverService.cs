@@ -135,5 +135,66 @@ namespace car_racing_tournament_api.Services
             await _carRacingTournamentDbContext.SaveChangesAsync();
             return (true, null);
         }
+
+        public async Task<(bool IsSuccess, Statistics? DriverStatistics, string? ErrorMessage)> GetStatistics(string name)
+        {
+            var driver = await _carRacingTournamentDbContext.Drivers.Where(x => x.Name == name)
+                .Include(x => x.Results!).ThenInclude(x => x.Team)
+                .Include(x => x.Season)
+                .ToListAsync();
+            if (driver.Count == 0)
+                return (false, null, _configuration["ErrorMessages:DriverNotFound"]);
+
+            int numberOfChampion = driver.Count(d => _carRacingTournamentDbContext
+                .Seasons
+                .Where(x => x.Id == d.Season.Id && d.Season.IsArchived == true)
+                .Include(x => x.Drivers)!.ThenInclude(x => x.Results)
+                .FirstOrDefaultAsync()?.Result?.Drivers?
+                .Select(x => new {
+                    Id = x.Id,
+                    SumPoint = x.Results?.Sum(x => x.Point)
+                })
+                .OrderByDescending(x => x.SumPoint)
+                .FirstOrDefault()?.Id == d.Id
+            );
+
+            List<SeasonStatistics> seasonStatistics = driver
+                .Select(x => new SeasonStatistics {
+                    Id = x.Season.Id,
+                    Name = x.Season.Name,
+                    Position = x.Season.Drivers?.Select(x => new {
+                            Id = x.Id,
+                            SumPoint = x.Results?.Sum(x => x.Point)
+                        })
+                        .OrderByDescending(x => x.SumPoint)
+                        .Select((x, i) => new {
+                            Id = x.Id,
+                            Position = i + 1
+                        })
+                        .FirstOrDefault(d => d.Id == x.Id)?.Position
+                }).ToList();
+
+            List<PositionStatistics> positionStatistics = driver
+                .SelectMany(x => x.Results!)
+                .GroupBy(x => x.Position == null ? x.Type.ToString() : x.Position.Value.ToString())
+                .Select(x => new PositionStatistics {
+                    Position = x.Key,
+                    Number = x.Count()
+                })
+                .OrderBy(x => x.Position)
+                .ToList();
+
+            var driverStat = new Statistics {
+                NumberOfRace = driver.SelectMany(x => x.Results!).Count(),
+                NumberOfWin = driver.SelectMany(x => x.Results!).Where(x => x.Position == 1).Count(),
+                NumberOfPodium = driver.SelectMany(x => x.Results!).Where(x => x.Position >= 1 && x.Position <= 3).Count(),
+                NumberOfChampion = numberOfChampion,
+                SumPoint = driver.SelectMany(x => x.Results!).Sum(x => x.Point),
+                SeasonStatistics = seasonStatistics,
+                PositionStatistics = positionStatistics
+            };
+
+            return (true, driverStat, null);
+        }
     }
 }
