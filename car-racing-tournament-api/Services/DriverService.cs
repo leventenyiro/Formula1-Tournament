@@ -138,8 +138,8 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, Statistics? DriverStatistics, string? ErrorMessage)> GetStatistics(string name)
         {
-            var driverObj = await _carRacingTournamentDbContext.Drivers.Where(x => string.Equals(x.Name, name, StringComparison.Ordinal)).Select(x => x.Name).FirstOrDefaultAsync();
-            var driver = await _carRacingTournamentDbContext.Drivers.Where(x => string.Equals(x.Name, name, StringComparison.Ordinal))
+            var driverObj = await _carRacingTournamentDbContext.Drivers.Where(x => x.Name == name).Select(x => x.Name).FirstOrDefaultAsync();
+            var driver = await _carRacingTournamentDbContext.Drivers.Where(x => x.Name == name)
                 .Include(x => x.Results!).ThenInclude(x => x.Team)
                 .Include(x => x.Season)
                 .Include(x => x.ActualTeam)
