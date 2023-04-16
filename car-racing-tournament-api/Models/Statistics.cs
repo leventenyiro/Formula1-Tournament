@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 namespace car_racing_tournament_api.Models
 {
     public class Statistics {
+        public string? Name { get; set; }
         public int? NumberOfRace { get; set; }
         public int? NumberOfWin { get; set; }
         public int? NumberOfPodium { get; set; }
@@ -15,6 +16,8 @@ namespace car_racing_tournament_api.Models
     public class SeasonStatistics {
         public Guid Id { get; set; }
         public string? Name { get; set; }
+        public string? Color { get; set; }
+        public DateTime CreatedAt { get; set; }
         public int? Position { get; set; }
     }
 

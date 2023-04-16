@@ -27,6 +27,7 @@ export class StatisticsComponent implements OnInit {
     this.noData = false;
     this.isFetching = true;
     this.driverName = '';
+    this.statistics = undefined;
 
     this.seasonService.getStatistics(this.inputSearch.value).subscribe({
       next: data => {
@@ -43,5 +44,13 @@ export class StatisticsComponent implements OnInit {
 
   calculatePercentage(part: number, full: number): string {
     return (part / full * 100).toFixed(1);
+  }
+
+  seasonMax(): number {
+    return this.statistics?.seasonStatistics?.reduce((max, stat) => Math.max(max, stat.position ?? 0), 0) ?? 0;        
+  }
+
+  positionMax(): number {
+    return this.statistics?.positionStatistics?.reduce((max, stat) => Math.max(max, stat.number ?? 0), 0) ?? 0;        
   }
 }

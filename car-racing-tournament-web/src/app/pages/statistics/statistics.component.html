@@ -18,33 +18,80 @@
         <h2>This driver doesn't exists!</h2>
     </div>
     <div *ngIf="statistics">
-        <h2>{{ driverName }}</h2>
-        <div class="col-md-8 row box">
-            <div class="col-5">
-                <div>Number of wins:</div>
-                <div>Number of podiums:</div>
-                <div>Number of champion:</div>
-                <div>Number of races:</div>
-            </div>
-            <div class="col-1">
-                <div>{{ statistics!.numberOfWin }} ({{calculatePercentage(statistics.numberOfWin!, statistics.numberOfRace!)}} %)</div>
-                <div>{{ statistics!.numberOfPodium }} ({{calculatePercentage(statistics.numberOfPodium!, statistics.numberOfRace!)}} %)</div>
-                <div>{{ statistics!.numberOfChampion }} ({{calculatePercentage(statistics.numberOfChampion!, statistics.seasonStatistics?.length!)}} %)</div>
-                <div>{{ statistics!.numberOfRace }}</div>
-            </div>
-            <div class="col-4">
-                <div class="progress" role="progressbar">
-                    <div class="progress-bar" [style.width.%]="calculatePercentage(statistics.numberOfWin!, statistics.numberOfRace!)"></div>
+        <h2 class="mb-3">{{ driverName }}</h2>
+        <div class="row dashboard-box">
+            <div class="row d-flex align-items-center mb-2">
+                <div class="col-3">Wins:</div>
+                <div class="col-3">{{ statistics!.numberOfWin }} ({{calculatePercentage(statistics.numberOfWin!, statistics.numberOfRace!)}} %)</div>
+                <div class="col-6">
+                    <div class="progress" role="progressbar">
+                        <div class="progress-bar" [style.width.%]="calculatePercentage(statistics.numberOfWin!, statistics.numberOfRace!)"></div>
+                    </div>
                 </div>
-                <div class="progress" role="progressbar">
-                    <div class="progress-bar" [style.width.%]="calculatePercentage(statistics.numberOfPodium!, statistics.numberOfRace!)"></div>
+            </div>
+
+            <div class="row d-flex align-items-center mb-2">
+                <div class="col-3">Podiums:</div>
+                <div class="col-3">{{ statistics!.numberOfPodium }} ({{calculatePercentage(statistics.numberOfPodium!, statistics.numberOfRace!)}} %)</div>
+                <div class="col-6">
+                    <div class="progress" role="progressbar">
+                        <div class="progress-bar" [style.width.%]="calculatePercentage(statistics.numberOfPodium!, statistics.numberOfRace!)"></div>
+                    </div>
                 </div>
-                <div class="progress" role="progressbar">
-                    <div class="progress-bar" [style.width.%]="calculatePercentage(statistics.numberOfChampion!, statistics.seasonStatistics?.length!)"></div>
+            </div>
+
+            <div class="row d-flex align-items-center mb-2">
+                <div class="col-3">Champions:</div>
+                <div class="col-3">{{ statistics!.numberOfChampion }} ({{calculatePercentage(statistics.numberOfChampion!, statistics.seasonStatistics?.length!)}} %)</div>
+                <div class="col-6">
+                    <div class="progress" role="progressbar">
+                        <div class="progress-bar" [style.width.%]="calculatePercentage(statistics.numberOfChampion!, statistics.seasonStatistics?.length!)"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row d-flex align-items-center mb-2">
+                <div class="col-3">Points:</div>
+                <div class="col-9">{{ statistics.sumPoint }} (avg. {{ (statistics.sumPoint! / statistics.numberOfRace!).toFixed(1) }} per race)</div>
+            </div>
+
+            <div class="row d-flex align-items-center mb-2">
+                <div class="col-3">Races:</div>
+                <div class="col-2">{{ statistics!.numberOfRace }}</div>
+                <div class="col-6"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md dashboard-box dashboard-left-box">
+                <h2>Seasons</h2>
+                <div *ngFor="let season of statistics.seasonStatistics" class="row d-flex align-items-center">
+                    <div class="col-4">{{ season.name }}</div>
+                    <div class="col-1">{{ season.position }}</div>
+                    <div class="col-7">
+                        <div class="progress" role="progressbar">
+                            <div class="progress-bar" 
+                                [style.width.%]="calculatePercentage(season.position!, seasonMax())"
+                                [style.background-color]="season.color"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md dashboard-box dashboard-right-box">
+                <h2>Positions</h2>
+                <div *ngFor="let position of statistics.positionStatistics" class="row d-flex align-items-center">
+                    <div class="col-4">{{ position.position }}</div>
+                    <div class="col-1">{{ position.number }}</div>
+                    <div class="col-7">
+                        <div class="progress" role="progressbar">
+                            <div class="progress-bar" 
+                                [style.width.%]="calculatePercentage(position.number!, positionMax())"
+                                style="background-color: crimson;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4"></div>
+
     </div>
 </div>
 

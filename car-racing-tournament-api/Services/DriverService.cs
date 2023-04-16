@@ -138,10 +138,13 @@ namespace car_racing_tournament_api.Services
 
         public async Task<(bool IsSuccess, Statistics? DriverStatistics, string? ErrorMessage)> GetStatistics(string name)
         {
-            var driver = await _carRacingTournamentDbContext.Drivers.Where(x => x.Name == name)
+            var driverObj = await _carRacingTournamentDbContext.Drivers.Where(x => string.Equals(x.Name, name, StringComparison.CurrentCulture)).Select(x => x.Name).FirstOrDefaultAsync();
+            var driver = await _carRacingTournamentDbContext.Drivers.Where(x => string.Equals(x.Name, name, StringComparison.CurrentCulture))
                 .Include(x => x.Results!).ThenInclude(x => x.Team)
                 .Include(x => x.Season)
+                .Include(x => x.ActualTeam)
                 .ToListAsync();
+
             if (driver.Count == 0)
                 return (false, null, _configuration["ErrorMessages:DriverNotFound"]);
 
@@ -158,10 +161,12 @@ namespace car_racing_tournament_api.Services
                 .FirstOrDefault()?.Id == d.Id
             );
 
-            List<SeasonStatistics> seasonStatistics = driver
+            List<SeasonStatistics> seasonStatistics = driver   
                 .Select(x => new SeasonStatistics {
                     Id = x.Season.Id,
                     Name = x.Season.Name,
+                    Color = x.ActualTeam?.Color ?? "#000000",
+                    CreatedAt = x.Season.CreatedAt,
                     Position = x.Season.Drivers?.Select(x => new {
                             Id = x.Id,
                             SumPoint = x.Results?.Sum(x => x.Point)
@@ -172,7 +177,9 @@ namespace car_racing_tournament_api.Services
                             Position = i + 1
                         })
                         .FirstOrDefault(d => d.Id == x.Id)?.Position
-                }).ToList();
+                })
+                .OrderBy(x => x.CreatedAt)
+                .ToList();
 
             List<PositionStatistics> positionStatistics = driver
                 .SelectMany(x => x.Results!)
@@ -185,6 +192,7 @@ namespace car_racing_tournament_api.Services
                 .ToList();
 
             var driverStat = new Statistics {
+                Name = driverObj,
                 NumberOfRace = driver.SelectMany(x => x.Results!).Count(),
                 NumberOfWin = driver.SelectMany(x => x.Results!).Where(x => x.Position == 1).Count(),
                 NumberOfPodium = driver.SelectMany(x => x.Results!).Where(x => x.Position >= 1 && x.Position <= 3).Count(),
