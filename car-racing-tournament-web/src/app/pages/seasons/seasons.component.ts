@@ -99,7 +99,7 @@ export class SeasonsComponent implements OnInit {
     }
 
     if (this.search.value !== '') {
-      this.seasons = this.seasons.filter(x => x.name.startsWith(this.search.value));
+      this.seasons = this.seasons.filter(x => x.name.toLowerCase().includes(this.search.value.toLowerCase()));
     }
   }
 
