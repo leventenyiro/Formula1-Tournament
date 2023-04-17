@@ -70,7 +70,6 @@ export class SeasonsComponent implements OnInit {
       next: seasons => {
         this.fetchedData = seasons;
         this.onFilter();
-        this.onSearch();
         this.isFetching = false;
       },
       error: err => {
@@ -80,12 +79,6 @@ export class SeasonsComponent implements OnInit {
     });
   }
 
-  onSearch() {
-    this.seasons = this.search.value !== '' ?
-      this.seasons.filter(x => x.name.startsWith(this.search.value)) :
-      this.seasons = this.fetchedData;
-  }
-  
   onFilter() {
     this.seasons = [];
     if (this.checkBoxAdmin.value) {
@@ -105,7 +98,9 @@ export class SeasonsComponent implements OnInit {
       this.seasons = this.fetchedData;
     }
 
-    this.onSearch();
+    if (this.search.value !== '') {
+      this.seasons = this.seasons.filter(x => x.name.startsWith(this.search.value));
+    }
   }
 
   getAdminUsername(season: Season) {
