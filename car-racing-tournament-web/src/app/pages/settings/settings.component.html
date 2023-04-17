@@ -36,10 +36,6 @@
             </div>
         </div>
     </ng-template>
-
-    <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
-        {{error}}
-    </div>
 </div>
 
 <app-modal type="form" *ngIf="modal === 'updatePassword'">
@@ -77,13 +73,11 @@
             </div>
         </div>
     </form>
-
-    <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
-        {{error}}
-    </div>
 </app-modal>
 
 <app-modal type="form" *ngIf="modal === 'deleteUser'">
     <app-verify-form title='Delete your profile' executeButtonText="Delete" (executionEmitter)="deleteUser()"
         (closeModalEmitter)="closeModal()"></app-verify-form>
 </app-modal>
+
+<app-modal type="error" *ngIf="error" [text]="error" (onCloseModalEmitter)="closeModal()"></app-modal>

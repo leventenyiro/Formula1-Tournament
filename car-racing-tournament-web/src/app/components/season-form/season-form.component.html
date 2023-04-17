@@ -22,8 +22,6 @@
     </div>
 </form>
 
-<div class="alert alert-danger mt-3" role="alert" *ngIf="error">
-    {{error}}
-</div>
+<app-modal type="error" *ngIf="error" [text]="error" (onCloseModalEmitter)="closeModal()"></app-modal>
 
 <app-modal type="loading" *ngIf="isFetching"></app-modal>

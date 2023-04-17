@@ -5,12 +5,14 @@
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
-        <!-- <div class="alert alert-danger" role="alert" *ngIf="error">
-            {{error}}
-        </div> -->
-        <div class="row" *ngIf="type === 'error'">
-            <div class="col-2 bg-danger font-light">
-                <i class="bi bi-exclamation-lg"></i>
+        <div class="row d-flex align-items-center" *ngIf="type === 'error' || type === 'success'">
+            <div class="col-2 modal-icon" [ngClass]="type === 'error' ? 'bg-danger error-icon' : 'bg-success'">
+                <i *ngIf="type === 'error'" class="bi bi-exclamation-lg"></i>
+                <i *ngIf="type === 'success'" class="bi bi-check2"></i>
+            </div>
+            <div class="col-9 info-text">{{ text! }}</div>
+            <div class="col-1">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (mouseup)="onCloseModalEmitter.emit()"></button>
             </div>
         </div>
         <div class="row" *ngIf="type === 'form'">

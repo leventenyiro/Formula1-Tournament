@@ -10,7 +10,8 @@ import { AuthService } from 'app/services/auth.service';
 })
 export class RegistrationComponent implements OnInit {
   isFetching = false;
-  error = "";
+  error = '';
+  success = '';
   inputUsername = new FormControl('');
   inputEmail = new FormControl('');
   inputPassword = new FormControl('');
@@ -35,7 +36,7 @@ export class RegistrationComponent implements OnInit {
     }).subscribe({
       next: () => {
         this.isFetching = false;
-        this.router.navigate(['login'])
+        this.success = 'Success! You created an account. Log in!';
       },
       error: err => {
         this.error = err
@@ -65,6 +66,11 @@ export class RegistrationComponent implements OnInit {
   }
 
   login() {
+    this.success = '';
     this.router.navigate(['login'])
+  }
+
+  closeModal() {
+    this.error = '';
   }
 }

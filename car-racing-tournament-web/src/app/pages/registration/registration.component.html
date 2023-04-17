@@ -46,8 +46,8 @@
     </div>
 </div>
 
-<div class="alert alert-danger mt-3 mx-5" role="alert" *ngIf="error">
-    {{error}}
-</div>
+<app-modal type="error" *ngIf="error" [text]="error" (onCloseModalEmitter)="closeModal()"></app-modal>
+
+<app-modal type="success" *ngIf="success" [text]="success" (onCloseModalEmitter)="login()"></app-modal>
 
 <app-modal type="loading" *ngIf="isFetching"></app-modal>
