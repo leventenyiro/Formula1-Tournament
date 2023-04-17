@@ -6,6 +6,7 @@ import { RegistrationComponent } from './pages/registration/registration.compone
 import { SeasonComponent } from './pages/season/season.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { StatisticsComponent } from './pages/statistics/statistics.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 const routes: Routes = [
   { path: 'seasons', component: SeasonsComponent },
@@ -14,7 +15,7 @@ const routes: Routes = [
   { path: 'registration', component: RegistrationComponent },
   { path: 'season/:id', component: SeasonComponent },
   { path: 'statistics', component: StatisticsComponent },
-  { path: '**', redirectTo: 'seasons', pathMatch: 'full' }
+  { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({

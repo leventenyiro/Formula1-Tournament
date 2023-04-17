@@ -21,6 +21,7 @@ import { SeasonFormComponent } from './components/season-form/season-form.compon
 import { VerifyFormComponent } from './components/verify-form/verify-form.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { StatisticsComponent } from './pages/statistics/statistics.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { StatisticsComponent } from './pages/statistics/statistics.component';
     SeasonFormComponent,
     VerifyFormComponent,
     SettingsComponent,
-    StatisticsComponent
+    StatisticsComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
