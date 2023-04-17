@@ -47,4 +47,8 @@ export class LoginComponent implements OnInit {
   registration() {
     this.router.navigate(['registration']);
   }
+
+  closeModal() {
+    this.error = '';
+  }
 }

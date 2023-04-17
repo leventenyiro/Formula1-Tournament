@@ -166,10 +166,6 @@
             </div>
         </div>
     </form>
-
-    <div class="alert alert-danger mt-3" role="alert" *ngIf="error">
-        {{error}}
-    </div>
 </app-modal>
 
 <app-modal type="form" *ngIf="modal === 'deleteSeason'">
@@ -183,3 +179,6 @@
 </app-modal>
 
 <app-modal type="loading" *ngIf="isFetching"></app-modal>
+
+<app-modal type="error" *ngIf="error" [text]="error" (onCloseModalEmitter)="closeModal()"></app-modal>
+<!-- <app-modal type="success" *ngIf="success" [text]="success" (onCloseModalEmitter)="closeModal()"></app-modal> -->
