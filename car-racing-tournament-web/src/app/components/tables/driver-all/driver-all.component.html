@@ -1,4 +1,4 @@
-<div class="header-row">
+<div class="row">
     <div class="col">
         <p>Position</p>
     </div>
@@ -21,27 +21,27 @@
         <button *ngIf="hasPermission && !season?.isArchived" class="btn btn-success btn-sm" (mouseup)="openModal('createDriver')">Add driver</button>
     </div>
 </div>
-<div class="table-row mb-3" *ngFor="let driver of driverAll; index as i;">
-    <div class="col team-color" [ngStyle]="{'background-color': driver.actualTeam.color}"></div>
-    <div class="col">
-        <p>{{ i + 1 }}</p>
+<div class="row box mb-3" *ngFor="let driver of driverAll; index as i;">
+    <div class="col d-flex align-items-center">
+        <div class="col team-color" [ngStyle]="{'background-color': driver.actualTeam.color}"></div>
+        <div>{{ i + 1 }}</div>
     </div>
-    <div class="col">
-        <p>{{ driver.name }}</p>
+    <div class="col d-flex align-items-center">
+        {{ driver.name }}
     </div>
-    <div class="col d-none d-lg-block">
-        <p>{{ driver.realName }}</p>
+    <div class="col d-flex align-items-center d-none d-lg-block">
+        {{ driver.realName }}
     </div>
-    <div class="col d-none d-lg-block">
-        <p>{{ driver.number }}</p>
+    <div class="col d-flex align-items-center d-none d-lg-block">
+        {{ driver.number }}
     </div>
-    <div class="col">
-        <p>{{ driver.actualTeam.name }}</p>
+    <div class="col d-flex align-items-center">
+        {{ driver.actualTeam.name }}
     </div>
-    <div class="col">
-        <p>{{ driver.point }}</p>
+    <div class="col d-flex align-items-center">
+        {{ driver.point }}
     </div>
-    <div class="col">
+    <div class="col d-flex align-items-center">
         <button class="btn btn-primary btn-sm me-1" (mouseup)="openStatistics(driver.name)" title="Statistics">
             <i class="bi bi-bar-chart-fill"></i>
         </button>
