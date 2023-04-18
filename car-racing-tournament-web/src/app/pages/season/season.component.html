@@ -1,143 +1,145 @@
-<div class="row" #elseDiv>
-    <div class="col-sm-10 row pt-3 ps-5">
-        <div class="col-sm-6">
-            <h1>{{ season?.name }}
-                <span *ngIf="season?.isArchived" class="gold-tag">archived</span>
-            </h1>
-            <p>Created on {{ this.createdAt }}</p>
-            <button class="btn btn-primary btn-sm" (mouseup)="onFetchData()">Refresh</button>
-        </div>
-        <div class="col-sm-6">
-            <select class="form-select" [formControl]="selectType">
-                <option value="drivers">Drivers</option>
-                <option value="teams">Teams</option>
-                <option value="races">Races</option>
-            </select>
-
-            <select class="form-select mt-3" [formControl]="selectValue">
-                <option value="all" [selected]="true">All</option>
-
-                <ng-template [ngIf]="selectType.value === 'drivers'">
-                    <option *ngFor="let option of season?.drivers" [value]="option.id">{{ option.name }}</option>
-                </ng-template>
-
-                <ng-template [ngIf]="selectType.value === 'teams'">
-                    <option *ngFor="let option of season?.teams" [value]="option.id">{{ option.name }}</option>
-                </ng-template>
-
-                <ng-template [ngIf]="selectType.value === 'races'">
-                    <option *ngFor="let option of season?.races" [value]="option.id">{{ option.name }}</option>
-                </ng-template>
-            </select>
-        </div>
-
-        <div [ngSwitch]="selectType.value" class="row">
-            <div *ngSwitchCase="'drivers'">
-                <div *ngIf="selectValue.value === 'all'; else elseDiv">
-                    <app-driver-all [season]="season!" [driverAll]="getDriverAll()" [hasPermission]="hasPermission()"
-                        (onFetchDataEmitter)="onFetchData()"></app-driver-all>
-                </div>
-                <ng-template #elseDiv>
-                    <app-driver-result [season]="season!" [driverResults]="getDriverById(selectValue.value)"
-                        [driverId]="selectValue.value" [hasPermission]="hasPermission()"
-                        (onFetchDataEmitter)="onFetchData()"></app-driver-result>
-                </ng-template>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-10 row pt-3">
+            <div class="col-sm-6">
+                <h1>{{ season?.name }}
+                    <span *ngIf="season?.isArchived" class="gold-tag">archived</span>
+                </h1>
+                <p>Created on {{ this.createdAt }}</p>
+                <button class="btn btn-primary btn-sm" (mouseup)="onFetchData()">Refresh</button>
             </div>
-            <div *ngSwitchCase="'teams'">
-                <div *ngIf="selectValue.value === 'all'; else elseDiv">
-                    <app-team-all [season]="season!" [teamAll]="getTeamAll()" [hasPermission]="hasPermission()"
-                        (onFetchDataEmitter)="onFetchData()"></app-team-all>
-                </div>
-                <ng-template #elseDiv>
-                    <app-team-result [teamResults]="getTeamById(selectValue.value)"></app-team-result>
-                </ng-template>
+            <div class="col-sm-6">
+                <select class="form-select" [formControl]="selectType">
+                    <option value="drivers">Drivers</option>
+                    <option value="teams">Teams</option>
+                    <option value="races">Races</option>
+                </select>
+    
+                <select class="form-select mt-3" [formControl]="selectValue">
+                    <option value="all" [selected]="true">All</option>
+    
+                    <ng-template [ngIf]="selectType.value === 'drivers'">
+                        <option *ngFor="let option of season?.drivers" [value]="option.id">{{ option.name }}</option>
+                    </ng-template>
+    
+                    <ng-template [ngIf]="selectType.value === 'teams'">
+                        <option *ngFor="let option of season?.teams" [value]="option.id">{{ option.name }}</option>
+                    </ng-template>
+    
+                    <ng-template [ngIf]="selectType.value === 'races'">
+                        <option *ngFor="let option of season?.races" [value]="option.id">{{ option.name }}</option>
+                    </ng-template>
+                </select>
             </div>
-            <div *ngSwitchCase="'races'">
-                <div *ngIf="selectValue.value === 'all'; else elseDiv">
-                    <app-race-all [season]="season!" [raceAll]="getRaceAll()" [hasPermission]="hasPermission()"
-                        (onFetchDataEmitter)="onFetchData()"></app-race-all>
+    
+            <div [ngSwitch]="selectType.value">
+                <div *ngSwitchCase="'drivers'">
+                    <div *ngIf="selectValue.value === 'all'; else elseDiv">
+                        <app-driver-all [season]="season!" [driverAll]="getDriverAll()" [hasPermission]="hasPermission()"
+                            (onFetchDataEmitter)="onFetchData()"></app-driver-all>
+                    </div>
+                    <ng-template #elseDiv>
+                        <app-driver-result [season]="season!" [driverResults]="getDriverById(selectValue.value)"
+                            [driverId]="selectValue.value" [hasPermission]="hasPermission()"
+                            (onFetchDataEmitter)="onFetchData()"></app-driver-result>
+                    </ng-template>
                 </div>
-                <ng-template #elseDiv>
-                    <app-race-result [season]="season!" [raceResults]="getRaceById(selectValue.value)"
-                        [raceId]="selectValue.value" [hasPermission]="hasPermission()"
-                        (onFetchDataEmitter)="onFetchData()"></app-race-result>
-                </ng-template>
+                <div *ngSwitchCase="'teams'">
+                    <div *ngIf="selectValue.value === 'all'; else elseDiv">
+                        <app-team-all [season]="season!" [teamAll]="getTeamAll()" [hasPermission]="hasPermission()"
+                            (onFetchDataEmitter)="onFetchData()"></app-team-all>
+                    </div>
+                    <ng-template #elseDiv>
+                        <app-team-result [teamResults]="getTeamById(selectValue.value)"></app-team-result>
+                    </ng-template>
+                </div>
+                <div *ngSwitchCase="'races'">
+                    <div *ngIf="selectValue.value === 'all'; else elseDiv">
+                        <app-race-all [season]="season!" [raceAll]="getRaceAll()" [hasPermission]="hasPermission()"
+                            (onFetchDataEmitter)="onFetchData()"></app-race-all>
+                    </div>
+                    <ng-template #elseDiv>
+                        <app-race-result [season]="season!" [raceResults]="getRaceById(selectValue.value)"
+                            [raceId]="selectValue.value" [hasPermission]="hasPermission()"
+                            (onFetchDataEmitter)="onFetchData()"></app-race-result>
+                    </ng-template>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-sm-2">
-        <div class="d-grid gap-2 mt-3">
-            <button class="btn btn-sm btn-block" [ngClass]="isFavorite(season!) ? 'btn-pink' : 'btn-outline-pink'"
-                (mouseup)="setFavorite(season!)">
-                <i class="bi" [ngClass]="isFavorite(season!) ? 'bi-heart-fill' : 'bi-heart'"></i>
-                {{ season?.favorite }}
-            </button>
-        </div>
-        <div *ngIf="this.isLoggedIn && getUserPermission()?.type === 1" class="d-grid gap-2 mt-2">
-            <button class="btn btn-outline-primary btn-sm btn-block" (mouseup)="openModal('updateSeason')"
-                *ngIf="!season!.isArchived">Edit</button>
-
-            <button class="btn btn-outline-primary btn-sm btn-block"
-                (mouseup)="!season!.isArchived ? openModal('archiveSeason') : archiveSeason()">{{ season!.isArchived ?
-                'Unarchive' : 'Archive' }}</button>
-
-            <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="openModal('deleteSeason')"
-                *ngIf="!season!.isArchived">Delete</button>
-
+        <div class="col-lg-2">
+            <div class="d-grid mt-3">
+                <button class="btn btn-sm btn-block" [ngClass]="isFavorite(season!) ? 'btn-pink' : 'btn-outline-pink'"
+                    (mouseup)="setFavorite(season!)">
+                    <i class="bi" [ngClass]="isFavorite(season!) ? 'bi-heart-fill' : 'bi-heart'"></i>
+                    {{ season?.favorite }}
+                </button>
+            </div>
+            <div *ngIf="this.isLoggedIn && getUserPermission()?.type === 1" class="d-grid gap-2 mt-2">
+                <button class="btn btn-outline-primary btn-sm btn-block" (mouseup)="openModal('updateSeason')"
+                    *ngIf="!season!.isArchived">Edit</button>
+    
+                <button class="btn btn-outline-primary btn-sm btn-block"
+                    (mouseup)="!season!.isArchived ? openModal('archiveSeason') : archiveSeason()">{{ season!.isArchived ?
+                    'Unarchive' : 'Archive' }}</button>
+    
+                <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="openModal('deleteSeason')"
+                    *ngIf="!season!.isArchived">Delete</button>
+    
+                <hr>
+            </div>
+    
+            <h2>Moderators</h2>
+            <div class="d-grid">
+                <button *ngIf="this.isLoggedIn && getUserPermission()?.type === 1 && !season!.isArchived"
+                    class="btn btn-outline-primary btn-sm btn-block" (mouseup)="openModal('createPermission')">
+                    Add moderator
+                </button>
+            </div>
+    
+            <div *ngFor="let permission of getPermissions()" class="my-2">
+                <div>
+                    <button
+                        *ngIf="this.isLoggedIn && getUserPermission()?.type === 1 && permission.type === 0 && !season!.isArchived"
+                        class="btn btn-danger btn-sm d-inline-flex me-1"
+                        (mouseup)="openModal('deletePermission', permission.id)">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+    
+                    <app-modal type="form" *ngIf="modal === 'deletePermission' && selectedPermissionId === permission.id">
+                        <app-verify-form title='Kick "{{ permission.username }}" moderator' executeButtonText="Kick"
+                            (executionEmitter)="deletePermission(permission.id)"
+                            (closeModalEmitter)="closeModal()"></app-verify-form>
+                    </app-modal>
+    
+                    <button
+                        *ngIf="this.isLoggedIn && getUserPermission()?.type === 1 && permission.type === 0 && !season!.isArchived"
+                        class="btn btn-primary btn-sm d-inline-flex me-1"
+                        (mouseup)="openModal('updatePermission', permission.id)">
+                        <i class="bi bi-chevron-up"></i>
+                    </button>
+    
+                    <app-modal type="form" *ngIf="modal === 'updatePermission' && selectedPermissionId === permission.id">
+                        <app-verify-form title='Promote "{{ permission.username }}" moderator'
+                            subtext="You will lose your admin rights!" executeButtonText="Promote"
+                            (executionEmitter)="updatePermission(permission.id)"
+                            (closeModalEmitter)="closeModal()"></app-verify-form>
+                    </app-modal>
+    
+                    <div *ngIf="permission.type === 1" class="btn btn-warning btn-sm d-inline-flex me-1 disabled">
+                        <i class="bi bi-shield-fill"></i>
+                    </div>
+                    <div class="d-inline-flex me-1"
+                        [ngClass]="isLoggedIn && this.user?.username === permission.username ? 'fw-bold' : ''">
+                        {{ permission.username }}
+                    </div>
+                </div>
+            </div>
+    
             <hr>
+    
+            <h2>Description</h2>
+            <p>{{ season?.description }}</p>
         </div>
-
-        <h2>Moderators</h2>
-        <div class="d-grid">
-            <button *ngIf="this.isLoggedIn && getUserPermission()?.type === 1 && !season!.isArchived"
-                class="btn btn-outline-primary btn-sm btn-block" (mouseup)="openModal('createPermission')">
-                Add moderator
-            </button>
-        </div>
-
-        <div *ngFor="let permission of getPermissions()" class="my-2">
-            <div>
-                <button
-                    *ngIf="this.isLoggedIn && getUserPermission()?.type === 1 && permission.type === 0 && !season!.isArchived"
-                    class="btn btn-danger btn-sm d-inline-flex me-1"
-                    (mouseup)="openModal('deletePermission', permission.id)">
-                    <i class="bi bi-x-lg"></i>
-                </button>
-
-                <app-modal type="form" *ngIf="modal === 'deletePermission' && selectedPermissionId === permission.id">
-                    <app-verify-form title='Kick "{{ permission.username }}" moderator' executeButtonText="Kick"
-                        (executionEmitter)="deletePermission(permission.id)"
-                        (closeModalEmitter)="closeModal()"></app-verify-form>
-                </app-modal>
-
-                <button
-                    *ngIf="this.isLoggedIn && getUserPermission()?.type === 1 && permission.type === 0 && !season!.isArchived"
-                    class="btn btn-primary btn-sm d-inline-flex me-1"
-                    (mouseup)="openModal('updatePermission', permission.id)">
-                    <i class="bi bi-chevron-up"></i>
-                </button>
-
-                <app-modal type="form" *ngIf="modal === 'updatePermission' && selectedPermissionId === permission.id">
-                    <app-verify-form title='Promote "{{ permission.username }}" moderator'
-                        subtext="You will lose your admin rights!" executeButtonText="Promote"
-                        (executionEmitter)="updatePermission(permission.id)"
-                        (closeModalEmitter)="closeModal()"></app-verify-form>
-                </app-modal>
-
-                <div *ngIf="permission.type === 1" class="btn btn-warning btn-sm d-inline-flex me-1 disabled">
-                    <i class="bi bi-shield-fill"></i>
-                </div>
-                <div class="d-inline-flex me-1"
-                    [ngClass]="isLoggedIn && this.user?.username === permission.username ? 'fw-bold' : ''">
-                    {{ permission.username }}
-                </div>
-            </div>
-        </div>
-
-        <hr>
-
-        <h2>Description</h2>
-        <p>{{ season?.description }}</p>
     </div>
 </div>
 
