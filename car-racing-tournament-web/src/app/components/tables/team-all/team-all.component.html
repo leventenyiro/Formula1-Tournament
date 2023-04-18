@@ -1,35 +1,35 @@
-<div class="header-row">
-    <div class="col">
-        <p>Position</p>
-    </div>
-    <div class="col">
-        <p>Race</p>
-    </div>
-    <div class="col">
-        <p>Points</p>
-    </div>
+<div class="row my-3 d-flex align-items-center">
+    <div class="col">Position</div>
+    <div class="col">Race</div>
+    <div class="col">Points</div>
     <div *ngIf="hasPermission && !season.isArchived" class="col">
         <button class="btn btn-success btn-sm" (mouseup)="openModal('createTeam')">Add team</button>
     </div>
 </div>
-<div class="table-row mb-3" *ngFor="let team of teamAll; index as i;">
-    <div class="col team-color" [ngStyle]="{'background-color': team.color}"></div>
-    <div class="col">
-        <p>{{ i + 1 }}</p>
+<div class="row row-box mb-3 d-flex align-items-center" *ngFor="let team of teamAll; index as i;">
+    <div class="col d-flex align-items-center">
+        <div class="col team-color" [ngStyle]="{'background-color': team.color}"></div>
+        {{ i + 1 }}
     </div>
     <div class="col">
-        <p>{{ team.name }}</p>
+        {{ team.name }}
     </div>
     <div class="col">
-        <p>{{ team.point }}</p>
+        {{ team.point }}
     </div>
     <div *ngIf="hasPermission && !season.isArchived" class="col">
-        <button class="btn btn-primary btn-sm me-2" (mouseup)="openModal('updateTeam', team)" title="Modify">
-            <i class="bi bi-pen"></i>
-        </button>
-        <button class="btn btn-danger btn-sm" (mouseup)="openModal('deleteTeam', team)" title="Delete">
-            <i class="bi bi-trash3"></i>
-        </button>
+        <div class="row">
+            <div class="col-sm-6 my-1">
+                <button class="btn btn-primary btn-sm me-2" (mouseup)="openModal('updateTeam', team)" title="Modify">
+                    <i class="bi bi-pen"></i>
+                </button>
+            </div>
+            <div class="col-sm-6 my-1">
+                <button class="btn btn-danger btn-sm" (mouseup)="openModal('deleteTeam', team)" title="Delete">
+                    <i class="bi bi-trash3"></i>
+                </button>
+            </div>
+        </div>
 
         <app-modal type="form" *ngIf="modal === 'deleteTeam' && selectedTeam!.id === team.id">
             <app-verify-form

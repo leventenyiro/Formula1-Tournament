@@ -1,23 +1,17 @@
-<div class="header-row">
-    <div class="col">
-        <p>Race</p>
-    </div>
-    <div class="col">
-        <p>Date</p>
-    </div>
-    <div class="col">
-        <p>Points</p>
-    </div>
+<div class="row my-3 d-flex align-items-center">
+    <div class="col">Race</div>
+    <div class="col">Date</div>
+    <div class="col">Points</div>
 </div>
-<div class="table-row mb-3" *ngFor="let result of teamResults">
+<div class="row row-box mb-3 d-flex align-items-center" *ngFor="let result of teamResults">
     <div class="col">
-        <p>{{ result.race.name }}</p>
+        {{ result.race.name }}
     </div>
     <div class="col">
-        <p>{{ result.race.dateTime }}</p>
+        {{ result.race.dateTime }}
     </div>
     <div class="col">
-        <p>{{ result.point }}</p>
+        {{ result.point }}
     </div>
 </div>
 

@@ -6,7 +6,7 @@
                     <span *ngIf="season?.isArchived" class="gold-tag">archived</span>
                 </h1>
                 <p>Created on {{ this.createdAt }}</p>
-                <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center mb-3">
                     <button class="btn btn-primary btn-sm" (mouseup)="onFetchData()">Refresh</button>
                     <div class="text-pink me-5 ms-5 d-flex align-items-center" [ngClass]="isLoggedIn ? 'favorite' : ''" (mouseup)="setFavorite(season!)">
                         <i class="bi me-2" [ngClass]="isFavorite(season!) ? 'bi-heart-fill' : 'bi-heart'"></i>
@@ -38,7 +38,7 @@
                 </select>
             </div>
     
-            <div [ngSwitch]="selectType.value">
+            <div [ngSwitch]="selectType.value" class="mx-1">
                 <div *ngSwitchCase="'drivers'">
                     <div *ngIf="selectValue.value === 'all'; else elseDiv">
                         <app-driver-all [season]="season!" [driverAll]="getDriverAll()" [hasPermission]="hasPermission()"

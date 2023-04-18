@@ -1,35 +1,35 @@
-<div class="row my-3 mx-1">
-    <div class="col d-flex align-items-center">Position</div>
-    <div class="col d-flex align-items-center">Name</div>
-    <div class="col d-none d-lg-flex align-items-center">Real Name</div>
-    <div class="col d-none d-lg-flex align-items-center">Number</div>
-    <div class="col d-flex align-items-center">Team</div>
-    <div class="col d-flex align-items-center">Points</div>
-    <div class="col d-flex align-items-center">
+<div class="row my-3 d-flex align-items-center">
+    <div class="col">Position</div>
+    <div class="col">Name</div>
+    <div class="col d-none d-lg-flex">Real Name</div>
+    <div class="col d-none d-lg-flex">Number</div>
+    <div class="col">Team</div>
+    <div class="col">Points</div>
+    <div class="col">
         <button *ngIf="hasPermission && !season?.isArchived" class="btn btn-success btn-sm" (mouseup)="openModal('createDriver')">Add driver</button>
     </div>
 </div>
-<div class="row row-box mb-3 mx-1" *ngFor="let driver of driverAll; index as i;">
+<div class="row row-box mb-3 d-flex align-items-center" *ngFor="let driver of driverAll; index as i;">
     <div class="col d-flex align-items-center">
         <div class="col team-color" [ngStyle]="{'background-color': driver.actualTeam.color}"></div>
         <div>{{ i + 1 }}</div>
     </div>
-    <div class="col d-flex align-items-center">
+    <div class="col">
         {{ driver.name }}
     </div>
-    <div class="col align-items-center d-none d-lg-flex">
+    <div class="col d-none d-lg-flex">
         {{ driver.realName }}
     </div>
-    <div class="col align-items-center d-none d-lg-flex">
+    <div class="col d-none d-lg-flex">
         {{ driver.number }}
     </div>
-    <div class="col d-flex align-items-center">
+    <div class="col">
         {{ driver.actualTeam.name }}
     </div>
-    <div class="col d-flex align-items-center">
+    <div class="col">
         {{ driver.point }}
     </div>
-    <div class="col d-flex align-items-center">
+    <div class="col">
         <div class="row">
             <div class="col-sm-4">
                 <button class="btn btn-primary btn-sm my-1" (mouseup)="openStatistics(driver.name)" title="Statistics">
