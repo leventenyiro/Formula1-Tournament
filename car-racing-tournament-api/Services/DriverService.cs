@@ -139,11 +139,20 @@ namespace car_racing_tournament_api.Services
         public async Task<(bool IsSuccess, Statistics? DriverStatistics, string? ErrorMessage)> GetStatistics(string name)
         {
             var driverObj = await _carRacingTournamentDbContext.Drivers.Where(x => x.Name == name).Select(x => x.Name).FirstOrDefaultAsync();
-            var driver = await _carRacingTournamentDbContext.Drivers.Where(x => EF.Functions.Collate(x.Name, "SQL_Latin1_General_CP1_CS_AS") == name)
-                .Include(x => x.Results!).ThenInclude(x => x.Team)
-                .Include(x => x.Season)
-                .Include(x => x.ActualTeam)
-                .ToListAsync();
+            var driver = new List<Driver>();
+            if (!bool.Parse(_configuration["Development"])) {
+                driver = await _carRacingTournamentDbContext.Drivers.Where(x => EF.Functions.Collate(x.Name, "SQL_Latin1_General_CP1_CS_AS") == name)
+                    .Include(x => x.Results!).ThenInclude(x => x.Team)
+                    .Include(x => x.Season)
+                    .Include(x => x.ActualTeam)
+                    .ToListAsync();
+            } else {
+                driver = await _carRacingTournamentDbContext.Drivers.Where(x => x.Name == name)
+                    .Include(x => x.Results!).ThenInclude(x => x.Team)
+                    .Include(x => x.Season)
+                    .Include(x => x.ActualTeam)
+                    .ToListAsync();
+            }
 
             if (driver.Count == 0)
                 return (false, null, _configuration["ErrorMessages:DriverNotFound"]);

@@ -22,15 +22,17 @@ internal class Program
         builder.Services.AddControllers();
         builder.Services.AddDbContext<CarRacingTournamentDbContext>(options =>
         {
-            /*options.UseMySql("Server=localhost;Uid=root;Database=car_racing_tournament;Pwd=;", 
-                new MySqlServerVersion(new Version(8, 0, 22)), 
-                options => {
-                    options.EnableRetryOnFailure();
-                    options.EnableStringComparisonTranslations();
-                });*/
-            
-            options.UseSqlServer(builder.Configuration["ConnectionString"]);
-            options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            if (bool.Parse(builder.Configuration.GetSection("Development").Value)) {
+                options.UseMySql("Server=localhost;Uid=root;Database=car_racing_tournament;Pwd=;", 
+                    new MySqlServerVersion(new Version(8, 0, 22)), 
+                    options => {
+                        options.EnableRetryOnFailure();
+                        options.EnableStringComparisonTranslations();
+                    });
+            } else {
+                options.UseSqlServer(builder.Configuration["ConnectionString"]);
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            }
         });
 
         builder.Services.AddMvc().AddJsonOptions(options =>
