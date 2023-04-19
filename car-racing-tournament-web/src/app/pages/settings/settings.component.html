@@ -45,7 +45,7 @@
             <label for="inputPasswordOld" class="form-label">Old password</label>
             <input required multiple type="password" class="form-control" id="inputPasswordOld" formControlName="inputPasswordOld"
                 name="password" [class.is-invalid]="!updatePasswordForm.get('inputPasswordOld')!.valid && updatePasswordForm.get('inputPasswordOld')!.touched">
-            <div class="invalid-feedback">Old password is required</div>
+            <div class="invalid-feedback">Old password is required!</div>
         </div>
     
         <div class="mb-3">
@@ -61,7 +61,7 @@
             <input required multiple type="password" class="form-control" id="inputPasswordAgain"
                 formControlName="inputPasswordAgain" name="passwordAgain"
                 [class.is-invalid]="updatePasswordForm.get('inputPasswordAgain')!.touched && updatePasswordForm.get('inputPassword')!.value !== updatePasswordForm.get('inputPasswordAgain')!.value">
-            <div class="invalid-feedback">Passwords aren't pass</div>
+            <div class="invalid-feedback">Passwords are mismatched!</div>
         </div>
     
         <div class="row d-flex">
