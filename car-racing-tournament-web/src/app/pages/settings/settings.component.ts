@@ -29,15 +29,7 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.isFetching = true;
-
-    this.authService.loggedIn.subscribe(
-      (loggedIn: boolean) => {
-        if (!loggedIn) {
-          this.router.navigate(['']);
-        }
-      }
-    );
-
+    this.authService.checkIfLoggedIn(true);
     this.authService.getUser().subscribe({
       next: user => {
         this.user = user;
@@ -60,6 +52,7 @@ export class SettingsComponent implements OnInit {
   }
 
   setEdit(edit: boolean) {
+    this.authService.checkIfLoggedIn(true);
     this.edit = edit;
   }
 
@@ -81,6 +74,7 @@ export class SettingsComponent implements OnInit {
 
   updateUser() {
     this.isFetching = true;
+    this.authService.checkIfLoggedIn(true);
     this.authService.updateUser({ username: this.inputUsername.value, email: this.inputEmail.value }).subscribe({
       next: () => {
         this.isFetching = false;
@@ -96,6 +90,7 @@ export class SettingsComponent implements OnInit {
 
   updatePassword() {
     this.isFetching = true;
+    this.authService.checkIfLoggedIn(true);
     this.authService.updatePassword(
       this.updatePasswordForm.get('inputPasswordOld')!.value,
       this.updatePasswordForm.get('inputPassword')!.value,
@@ -119,12 +114,13 @@ export class SettingsComponent implements OnInit {
 
   deleteUser() {
     this.isFetching = true;
+    this.authService.checkIfLoggedIn(true);
     this.authService.deleteUser().subscribe({
       next: () => {
         this.isFetching = false;
         this.modal = '';
-        this.authService.loggedIn.emit(false);
         document.cookie = "session=";
+        this.authService.loggedIn.emit(false);
         this.router.navigate(['seasons']);
       },
       error: error => {
