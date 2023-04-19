@@ -15,7 +15,9 @@ const routes: Routes = [
   { path: 'registration', component: RegistrationComponent },
   { path: 'season/:id', component: SeasonComponent },
   { path: 'statistics', component: StatisticsComponent },
-  { path: '**', component: NotFoundComponent }
+  { path: 'notfound', component: NotFoundComponent },
+  { path: '', redirectTo: 'seasons', pathMatch: 'full' },
+  { path: '**', redirectTo: 'notfound', pathMatch: 'full' }
 ];
 
 @NgModule({

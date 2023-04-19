@@ -1,16 +1,18 @@
 <app-modal type="loading" *ngIf="isFetching"></app-modal>
 
-<div class="container">
+<div class="container-fluid">
     <div class="row mt-4">
-        <h1 class="mx-4">Seasons</h1>
+        <div class="col">
+            <h1>Seasons</h1>
+        </div>
     </div>
 
-    <div class="row mx-3">
-        <div *ngIf="isLoggedIn" class="col-sm-5">
-            <input type="checkbox" class="btn-check btn-check-pink" id="btn-check-favorite" autocomplete="off"
-                [formControl]="checkBoxFavorites" (change)="onFilter()">
-            <label class="btn btn-outline-pink btn-sm me-2" for="btn-check-favorite" title="Favorite filter">
-                <i class="bi bi-heart"></i>
+    <div class="row">
+        <div *ngIf="isLoggedIn" class="col-md-5 col-sm-5 mb-2">
+            <input type="checkbox" class="btn-check d-flex align-items-center" id="btn-check-favorite"
+                autocomplete="off" [formControl]="checkBoxFavorites" (change)="onFilter()">
+            <label class="btn btn-outline-danger btn-sm me-2" for="btn-check-favorite" title="Favorite filter">
+                <i class="bi bi-heart align-middle"></i>
             </label>
 
             <input type="checkbox" class="btn-check" id="btn-check-admin" autocomplete="off"
@@ -25,7 +27,7 @@
                 Moderator
             </label>
         </div>
-        <div class="col-sm-7 d-flex mb-4">
+        <div class="col-md-5 offset-md-2 col-sm-7 d-flex mb-4">
             <div class="input-group input-group-sm me-2">
                 <span class="input-group-text">
                     <i class="bi bi-search"></i>
@@ -34,39 +36,45 @@
                     placeholder="Start typing to filter..." (keyup)="onFilter()">
             </div>
             <button class="btn btn-outline-primary btn-sm me-2" (mouseup)="onFetchData()" title="Refresh">
-                <i class="bi bi-arrow-clockwise"></i>
+                <i class="bi bi-arrow-clockwise align-middle"></i>
             </button>
             <button *ngIf="isLoggedIn" class="btn btn-sm btn-outline-success" (mouseup)="setModal(true)"
                 title="Create season">
-                <i class="bi bi-plus-lg"></i>
+                <i class="bi bi-plus-lg align-middle"></i>
             </button>
-        </div>
-
-        <div class="table-row mb-3 py-3" *ngFor="let season of seasons" (mouseup)="navigateSeason(season.id)">
-            <div class="col">
-                <h2>{{ season.name }}<span *ngIf="season.isArchived" class="gold-tag ms-2">archived</span></h2>
-            </div>
-            <div class="col">
-                <p>{{ getFormattedDate(season.createdAt) }}</p>
-            </div>
-            <div class="col">
-                <p>Made by {{ getAdminUsername(season) }}</p>
-            </div>
-            <div class="col text-pink me-5" [ngClass]="isLoggedIn ? 'favorite' : ''" (mouseup)="setFavorite($event, season); $event.stopPropagation()">
-                <i class="bi" [ngClass]="isFavorite(season) ? 'bi-heart-fill' : 'bi-heart'"></i>
-                {{ season.favorite }}
-            </div>
-            <div class="col">
-                <button class="btn btn-primary btn-sm">Explore</button>
-            </div>
-        </div>
-
-        <div class="d-flex justify-content-center mt-3" *ngIf="seasons?.length === 0">
-            <h2>We didn't find any seasons here</h2>
         </div>
     </div>
 
-    <app-modal type="form" *ngIf="modal">
-        <app-season-form title="Create new season" executeButtonText="Add" (onCloseModalEmitter)="setModal(false)"
-            (onFetchDataEmitter)="onFetchData()"></app-season-form>
-    </app-modal>
+    <div class="container-fluid">
+        <div class="row row-box mb-3 d-flex align-items-center" *ngFor="let season of seasons"
+            (mouseup)="navigateSeason(season.id)">
+            <div class="col d-flex align-items-center text-center">
+                <h2 class="my-auto">{{ season.name }}<span *ngIf="season.isArchived"
+                        class="gold-tag ms-2">archived</span></h2>
+            </div>
+            <div class="col d-none d-md-flex">
+                {{ getFormattedDate(season.createdAt) }}
+            </div>
+            <div class="col d-none d-md-flex">
+                Made by {{ getAdminUsername(season) }}
+            </div>
+            <div class="col text-pink me-5 d-flex align-items-center" [ngClass]="isLoggedIn ? 'favorite' : ''"
+                (mouseup)="setFavorite($event, season); $event.stopPropagation()">
+                <i class="bi me-2" [ngClass]="isFavorite(season) ? 'bi-heart-fill' : 'bi-heart'"></i>
+                {{ season.favorite }}
+            </div>
+            <div class="col d-none d-md-flex ms-5">
+                <button class="btn btn-primary btn-sm">Explore</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center mt-5" *ngIf="!isFetching && seasons?.length === 0">
+        <h2>We didn't find any seasons here</h2>
+    </div>
+</div>
+
+<app-modal type="form" *ngIf="modal">
+    <app-season-form title="Create new season" executeButtonText="Add" (onCloseModalEmitter)="setModal(false)"
+        (onFetchDataEmitter)="onFetchData()"></app-season-form>
+</app-modal>

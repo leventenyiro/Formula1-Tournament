@@ -1,41 +1,39 @@
-<div class="header-row">
-    <div class="col">
-        <p>Race</p>
-    </div>
-    <div class="col">
-        <p>Date</p>
-    </div>
-    <div class="col">
-        <p>Winner</p>
-    </div>
-    <div class="col">
-        <p>Team</p>
-    </div>
+<div class="row row-header my-3 d-flex align-items-center">
+    <div class="col">Race</div>
+    <div class="col d-none d-md-block">Date</div>
+    <div class="col">Winner</div>
+    <div class="col">Team</div>
     <div *ngIf="hasPermission && !season.isArchived" class="col">
         <button class="btn btn-success btn-sm" (mouseup)="openModal('createRace')">Add race</button>
     </div>
 </div>
-<div class="table-row mb-3" *ngFor="let race of raceAll">
-    <div class="col team-color" [ngStyle]="{'background-color': race.winner.team.color}"></div>
-    <div class="col">
-        <p>{{ race.name }}</p>
+<div class="row row-box mb-3 d-flex align-items-center" *ngFor="let race of raceAll">
+    <div class="col d-flex align-items-center">
+        <div class="col team-color" [ngStyle]="{'background-color': race.winner.team.color}"></div>
+        {{ race.name }}
+    </div>
+    <div class="col d-none d-md-block">
+        {{ race.dateTime }}
     </div>
     <div class="col">
-        <p>{{ race.dateTime }}</p>
+        {{ race.winner.name }}
     </div>
     <div class="col">
-        <p>{{ race.winner.name }}</p>
-    </div>
-    <div class="col">
-        <p>{{ race.winner.team.name }}</p>
+        {{ race.winner.team.name }}
     </div>
     <div *ngIf="hasPermission && !season.isArchived" class="col">
-        <button class="btn btn-primary btn-sm me-2" (mouseup)="openModal('updateRace', race)" title="Modify">
-            <i class="bi bi-pen"></i>
-        </button>
-        <button class="btn btn-danger btn-sm" (mouseup)="openModal('deleteRace', race)" title="Delete">
-            <i class="bi bi-trash3"></i>
-        </button>
+        <div class="row">
+            <div class="col-sm-6 my-1">
+                <button class="btn btn-primary btn-sm me-2" (mouseup)="openModal('updateRace', race)" title="Modify">
+                    <i class="bi bi-pen"></i>
+                </button>
+            </div>
+            <div class="col-sm-6 my-1">
+                <button class="btn btn-danger btn-sm" (mouseup)="openModal('deleteRace', race)" title="Delete">
+                    <i class="bi bi-trash3"></i>
+                </button>
+            </div>
+        </div>
 
         <app-modal type="form" *ngIf="modal === 'deleteRace' && selectedRace!.id === race.id">
             <app-verify-form
@@ -48,7 +46,7 @@
     </div>
 </div>
 
-<div class="d-flex justify-content-center mt-3" *ngIf="raceAll?.length === 0">
+<div class="d-flex justify-content-center mt-5" *ngIf="raceAll?.length === 0">
     <h2>We didn't find any race here</h2>
 </div>
 

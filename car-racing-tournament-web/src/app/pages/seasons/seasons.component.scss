@@ -1,8 +1,8 @@
-.table-row {
+.row-box {
     transition: 0.2s
 }
 
-.table-row:hover {
+.row-box:hover {
     box-shadow: rgba(100, 100, 111, 0.5) 0 3px 10px;
     transition: 0.2s;
     cursor: pointer;
@@ -15,27 +15,4 @@
     color: #ff9500;
     border-radius: 5px;
     font-size: small;
-}
-
-$pink: #ff5c8a;
-$pink-hover: #ff0a54;
-
-.favorite {
-    transition: 0.2s;
-    max-width: 30px;
-}
-
-.favorite:hover {
-    transition: 0.2s;
-    transform: scale(1.2);
-}
-
-.btn-pink, .btn-check-pink:checked + .btn, .btn-check-pink:active + .btn {
-	background-color: $pink;
-    color: white;
-    border: 1px solid $pink;
-}
-
-.text-pink {
-    color: $pink-hover;
 }

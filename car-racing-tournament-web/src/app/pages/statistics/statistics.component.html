@@ -1,29 +1,32 @@
-<div class="container">
+<div class="container-fluid">
     <div class="row mt-4">
-        <h1>Statistics</h1>
+        <div class="col">
+            <h1>Statistics</h1>
+        </div>
     </div>
 
     <div class="row">
-        <div class="d-flex mb-4 mt-2">
-            <div class="me-2">
+        <div class="col-sm-6 col-md-5 col-lg-4 d-flex mb-4 mt-2">
+            <div class="me-2 w-100">
                 <input type="text" class="form-control form-control-sm" id="name" [formControl]="inputSearch"
-                    placeholder="Start typing to filter..." (keyup.enter)="onSearch()">
+                    placeholder="Driver's name" (keyup.enter)="onSearch()">
             </div>
             <button class="btn btn-outline-primary btn-sm me-2" (mousedown)="onSearch()" title="Search">
                 <i class="bi bi-search"></i>
             </button>
         </div>
     </div>
-    <div *ngIf="noData" class="d-flex justify-content-center">
+    <div *ngIf="!isFetching && statistics == undefined" class="d-flex justify-content-center">
         <h2>This driver doesn't exists!</h2>
     </div>
-    <div *ngIf="statistics">
-        <h2 class="mb-3">{{ driverName }}</h2>
+
+    <h2 class="mb-3">{{ driverName }}</h2>
+    <div *ngIf="statistics" class="container-fluid">
         <div class="row dashboard-box">
             <div class="row d-flex align-items-center mb-2">
-                <div class="col-3">Wins:</div>
-                <div class="col-3">{{ statistics!.numberOfWin }} ({{calculatePercentage(statistics.numberOfWin!, statistics.numberOfRace!)}} %)</div>
-                <div class="col-6">
+                <div class="col-sm-3">Wins:</div>
+                <div class="col-sm-3">{{ statistics!.numberOfWin }} ({{calculatePercentage(statistics.numberOfWin!, statistics.numberOfRace!)}} %)</div>
+                <div class="col-sm-6">
                     <div class="progress" role="progressbar">
                         <div class="progress-bar" [style.width.%]="calculatePercentage(statistics.numberOfWin!, statistics.numberOfRace!)"></div>
                     </div>
@@ -31,9 +34,9 @@
             </div>
 
             <div class="row d-flex align-items-center mb-2">
-                <div class="col-3">Podiums:</div>
-                <div class="col-3">{{ statistics!.numberOfPodium }} ({{calculatePercentage(statistics.numberOfPodium!, statistics.numberOfRace!)}} %)</div>
-                <div class="col-6">
+                <div class="col-sm-3">Podiums:</div>
+                <div class="col-sm-3">{{ statistics!.numberOfPodium }} ({{calculatePercentage(statistics.numberOfPodium!, statistics.numberOfRace!)}} %)</div>
+                <div class="col-sm-6">
                     <div class="progress" role="progressbar">
                         <div class="progress-bar" [style.width.%]="calculatePercentage(statistics.numberOfPodium!, statistics.numberOfRace!)"></div>
                     </div>
@@ -41,9 +44,9 @@
             </div>
 
             <div class="row d-flex align-items-center mb-2">
-                <div class="col-3">Champions:</div>
-                <div class="col-3">{{ statistics!.numberOfChampion }} ({{calculatePercentage(statistics.numberOfChampion!, statistics.seasonStatistics?.length!)}} %)</div>
-                <div class="col-6">
+                <div class="col-sm-3">Champions:</div>
+                <div class="col-sm-3">{{ statistics!.numberOfChampion }} ({{calculatePercentage(statistics.numberOfChampion!, statistics.seasonStatistics?.length!)}} %)</div>
+                <div class="col-sm-6">
                     <div class="progress" role="progressbar">
                         <div class="progress-bar" [style.width.%]="calculatePercentage(statistics.numberOfChampion!, statistics.seasonStatistics?.length!)"></div>
                     </div>
@@ -51,14 +54,14 @@
             </div>
 
             <div class="row d-flex align-items-center mb-2">
-                <div class="col-3">Points:</div>
-                <div class="col-9">{{ statistics.sumPoint }} (avg. {{ (statistics.sumPoint! / statistics.numberOfRace!).toFixed(1) }} per race)</div>
+                <div class="col-sm-3">Points:</div>
+                <div class="col-sm-9">{{ statistics.sumPoint }} (avg. {{ (statistics.sumPoint! / statistics.numberOfRace!).toFixed(1) }} per race)</div>
             </div>
 
             <div class="row d-flex align-items-center mb-2">
-                <div class="col-3">Races:</div>
-                <div class="col-2">{{ statistics!.numberOfRace }}</div>
-                <div class="col-6"></div>
+                <div class="col-sm-3">Races:</div>
+                <div class="col-sm-2">{{ statistics!.numberOfRace }}</div>
+                <div class="col-sm-6"></div>
             </div>
         </div>
         <div class="row">

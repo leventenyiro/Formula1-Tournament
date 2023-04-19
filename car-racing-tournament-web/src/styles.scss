@@ -18,34 +18,20 @@ h2 {
     font-size: x-large;
 }
 
-.header-row {
-    display: flex;
+.row-box {
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     padding: 10px;
-    align-items: center;
+}
+
+.row-header {
     color: gray;
     font-size: small;
 }
 
-.table-row {
-    display: flex;
-    border-radius: 8px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    padding: 10px;
-    align-items: center;
-}
-
-.col {
-    flex-grow: 1;
-    text-align: left;
-
-    * {
-        margin: 0;
-    }
-}
-
 .team-color {
     height: 3.5vh;
-    max-width: 10px;
+    max-width: 0.7rem;
     border-radius: 2px;
     margin-right: 10px;
 }
@@ -60,25 +46,18 @@ h2 {
 $pink: #ff5c8a;
 $pink-hover: #ff0a54;
 
-.btn-pink {
-	background-color: $pink;
-    border: 1px solid $pink;
-    color: white;
+.favorite {
+    transition: 0.2s;
+    max-width: 30px;
 }
 
-.btn-pink:hover, .btn-pink:active {
-	background-color: $pink-hover;
-    border: 1px solid $pink-hover;
-    color: white;
+.favorite:hover {
+    transition: 0.2s;
+    transform: scale(1.2);
+    cursor: pointer;
 }
 
-.btn-outline-pink {
-    border: 1px solid $pink;
-    color: $pink;
-}
-
-.btn-outline-pink:hover {
-    background-color: $pink;
-    border: 1px solid $pink;
-    color: white;
+.text-pink {
+    color: $pink-hover;
+    font-size: larger;
 }

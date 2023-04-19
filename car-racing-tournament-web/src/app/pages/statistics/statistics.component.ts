@@ -14,7 +14,6 @@ export class StatisticsComponent implements OnInit {
   statistics?: Statistics;
   driverName?: string;
   isFetching?: boolean = false;
-  noData?: boolean = false;
 
   constructor(
     private seasonService: SeasonService, 
@@ -29,7 +28,6 @@ export class StatisticsComponent implements OnInit {
   }
 
   onSearch(): void {
-    this.noData = false;
     this.isFetching = true;
     this.driverName = '';
     this.statistics = undefined;
@@ -38,11 +36,11 @@ export class StatisticsComponent implements OnInit {
     this.seasonService.getStatistics(this.inputSearch.value).subscribe({
       next: data => {
         this.statistics = data;
-        this.driverName = this.inputSearch.value;
+        this.driverName = data.name;
+        this.inputSearch.setValue('');
         this.isFetching = false;
       },
       error: () => {
-        this.noData = true;
         this.isFetching = false;
       }
     });
