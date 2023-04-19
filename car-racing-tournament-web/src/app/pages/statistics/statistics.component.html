@@ -1,13 +1,15 @@
-<div class="container">
+<div class="container-fluid">
     <div class="row mt-4">
-        <h1>Statistics</h1>
+        <div class="col">
+            <h1>Statistics</h1>
+        </div>
     </div>
 
     <div class="row">
-        <div class="d-flex mb-4 mt-2">
-            <div class="me-2">
+        <div class="col-sm-6 col-md-5 col-lg-4 d-flex mb-4 mt-2">
+            <div class="me-2 w-100">
                 <input type="text" class="form-control form-control-sm" id="name" [formControl]="inputSearch"
-                    placeholder="Start typing to filter..." (keyup.enter)="onSearch()">
+                    placeholder="Driver's name" (keyup.enter)="onSearch()">
             </div>
             <button class="btn btn-outline-primary btn-sm me-2" (mousedown)="onSearch()" title="Search">
                 <i class="bi bi-search"></i>
