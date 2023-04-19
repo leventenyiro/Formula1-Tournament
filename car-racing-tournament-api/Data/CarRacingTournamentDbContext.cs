@@ -13,13 +13,21 @@ namespace car_racing_tournament_api.Data
         public virtual DbSet<Result> Results { get; set; } = default!;
         public virtual DbSet<Permission> Permissions { get; set; } = default!;
         public virtual DbSet<Favorite> Favorites { get; set; } = default!;
+        private IConfiguration _configuration;
 
-        public CarRacingTournamentDbContext() {}
+        public CarRacingTournamentDbContext() {
+            _configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        }
 
-        public CarRacingTournamentDbContext(DbContextOptions<CarRacingTournamentDbContext> options) : base(options) {}
+        public CarRacingTournamentDbContext(DbContextOptions<CarRacingTournamentDbContext> options) : base(options) {
+            _configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            if (bool.Parse(_configuration["Development"]))
+                modelBuilder.UseCollation("utf8_bin");
+
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -177,7 +185,7 @@ namespace car_racing_tournament_api.Data
             });
 
             // Database seed
-            if (bool.Parse(new ConfigurationBuilder().AddJsonFile("appsettings.json").Build()["DatabaseSeed"]))
+            if (bool.Parse(_configuration["DatabaseSeed"]))
             {
                 modelBuilder.Entity<Season>().HasData(
                     new Season {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Statistics } from 'app/models/statistics';
 import { SeasonService } from 'app/services/season.service';
 
@@ -14,6 +14,7 @@ export class StatisticsComponent implements OnInit {
   statistics?: Statistics;
   driverName?: string;
   isFetching?: boolean = false;
+  noData: boolean = false;
 
   constructor(
     private seasonService: SeasonService, 
@@ -38,9 +39,11 @@ export class StatisticsComponent implements OnInit {
         this.statistics = data;
         this.driverName = data.name;
         this.inputSearch.setValue('');
+        this.noData = false;
         this.isFetching = false;
       },
       error: () => {
+        this.noData = true;
         this.isFetching = false;
       }
     });

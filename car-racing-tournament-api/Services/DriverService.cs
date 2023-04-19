@@ -139,11 +139,20 @@ namespace car_racing_tournament_api.Services
         public async Task<(bool IsSuccess, Statistics? DriverStatistics, string? ErrorMessage)> GetStatistics(string name)
         {
             var driverObj = await _carRacingTournamentDbContext.Drivers.Where(x => x.Name == name).Select(x => x.Name).FirstOrDefaultAsync();
-            var driver = await _carRacingTournamentDbContext.Drivers.Where(x => x.Name == name)
-                .Include(x => x.Results!).ThenInclude(x => x.Team)
-                .Include(x => x.Season)
-                .Include(x => x.ActualTeam)
-                .ToListAsync();
+            var driver = new List<Driver>();
+            if (!bool.Parse(_configuration["Development"])) {
+                driver = await _carRacingTournamentDbContext.Drivers.Where(x => EF.Functions.Collate(x.Name, "SQL_Latin1_General_CP1_CS_AS") == name)
+                    .Include(x => x.Results!).ThenInclude(x => x.Team)
+                    .Include(x => x.Season)
+                    .Include(x => x.ActualTeam)
+                    .ToListAsync();
+            } else {
+                driver = await _carRacingTournamentDbContext.Drivers.Where(x => x.Name == name)
+                    .Include(x => x.Results!).ThenInclude(x => x.Team)
+                    .Include(x => x.Season)
+                    .Include(x => x.ActualTeam)
+                    .ToListAsync();
+            }
 
             if (driver.Count == 0)
                 return (false, null, _configuration["ErrorMessages:DriverNotFound"]);
@@ -161,22 +170,13 @@ namespace car_racing_tournament_api.Services
                 .FirstOrDefault()?.Id == d.Id
             );
 
-            List<SeasonStatistics> seasonStatistics = driver   
+            List<SeasonStatistics> seasonStatistics = driver
                 .Select(x => new SeasonStatistics {
                     Id = x.Season.Id,
                     Name = x.Season.Name,
                     Color = x.ActualTeam?.Color ?? "#000000",
                     CreatedAt = x.Season.CreatedAt,
-                    Position = x.Season.Drivers?.Select(x => new {
-                            Id = x.Id,
-                            SumPoint = x.Results?.Sum(x => x.Point)
-                        })
-                        .OrderByDescending(x => x.SumPoint)
-                        .Select((x, i) => new {
-                            Id = x.Id,
-                            Position = i + 1
-                        })
-                        .FirstOrDefault(d => d.Id == x.Id)?.Position
+                    Position = getDriverPositionInSeason(x.Season.Id, x)
                 })
                 .OrderBy(x => x.CreatedAt)
                 .ToList();
@@ -188,7 +188,7 @@ namespace car_racing_tournament_api.Services
                     Position = x.Key,
                     Number = x.Count()
                 })
-                .OrderBy(x => x.Position)
+                .OrderBy(x => x.Position, new CustomPositionComparer()!)
                 .ToList();
 
             var driverStat = new Statistics {
@@ -203,6 +203,45 @@ namespace car_racing_tournament_api.Services
             };
 
             return (true, driverStat, null);
+        }
+
+        private int getDriverPositionInSeason(Guid seasonId, Driver driver) {
+            var season = _carRacingTournamentDbContext
+                .Seasons
+                .Where(x => x.Id == seasonId)
+                .Include(x => x.Drivers)!.ThenInclude(x => x.Results)
+                .FirstOrDefaultAsync()
+                .Result;
+
+            var sumPointsDrivers = season!.Drivers!
+                .Select((x, i) => new {
+                    DriverId = x.Id,
+                    SumPoint = x.Results!.Sum(x => x.Point)
+                })
+                .OrderByDescending(x => x.SumPoint);
+
+            return sumPointsDrivers
+                .ToList()
+                .IndexOf(
+                    sumPointsDrivers
+                    .Where(x => x.DriverId == driver.Id)
+                    .FirstOrDefault()!
+                ) + 1;
+        }
+    }
+}
+public class CustomPositionComparer : IComparer<string>
+{
+    public int Compare(string? x, string? y)
+    {
+        int xInt, yInt;
+        if (int.TryParse(x, out xInt) && int.TryParse(y, out yInt))
+        {
+            return xInt.CompareTo(yInt);
+        }
+        else
+        {
+            return string.Compare(x, y, StringComparison.Ordinal);
         }
     }
 }

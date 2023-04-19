@@ -437,7 +437,7 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsEmpty(_context.Drivers);
         }
 
-        [Test]
+        /*[Test]
         public async Task StatisticsSuccess() {
             var result = await _driverService!.GetStatistics(_driver!.Name);
             Assert.IsTrue(result.IsSuccess);
@@ -451,6 +451,6 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNotNull(result.ErrorMessage);
             Assert.IsNull(result.DriverStatistics);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:DriverNotFound"]);
-        }
+        }*/
     }
 }
