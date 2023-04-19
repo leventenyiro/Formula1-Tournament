@@ -39,6 +39,7 @@ export class StatisticsComponent implements OnInit {
       next: data => {
         this.statistics = data;
         this.driverName = this.inputSearch.value;
+        this.inputSearch.setValue('');
         this.isFetching = false;
       },
       error: () => {
