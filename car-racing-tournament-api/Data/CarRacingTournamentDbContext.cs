@@ -20,6 +20,8 @@ namespace car_racing_tournament_api.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.UseCollation("SQL_Latin1_General_CP1_CS_AS");
+
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(e => e.Id);
