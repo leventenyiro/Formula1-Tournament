@@ -22,15 +22,18 @@ h2 {
     border-radius: 8px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     padding: 10px;
+    font-size: small;
 }
 
 .row-header {
+    padding: 10px;
     color: gray;
     font-size: small;
 }
 
 .team-color {
     height: 3.5vh;
+    min-width: 0.7rem;
     max-width: 0.7rem;
     border-radius: 2px;
     margin-right: 10px;

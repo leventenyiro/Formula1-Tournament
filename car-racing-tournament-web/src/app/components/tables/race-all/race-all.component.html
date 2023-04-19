@@ -1,27 +1,32 @@
 <div class="row row-header my-3 d-flex align-items-center">
-    <div class="col">Race</div>
-    <div class="col d-none d-md-block">Date</div>
-    <div class="col">Winner</div>
-    <div class="col">Team</div>
-    <div *ngIf="hasPermission && !season.isArchived" class="col">
+    <div class="col-2">Race</div>
+    <div class="col-lg-3 d-none d-lg-block">Date</div>
+    <div class="col-3">Winner</div>
+    <div class="col-4 col-lg-2">Team</div>
+    <div *ngIf="hasPermission && !season.isArchived" class="col-3 col-lg-2">
         <button class="btn btn-success btn-sm" (mouseup)="openModal('createRace')">Add race</button>
     </div>
 </div>
 <div class="row row-box mb-3 d-flex align-items-center" *ngFor="let race of raceAll">
-    <div class="col d-flex align-items-center">
-        <div class="col team-color" [ngStyle]="{'background-color': race.winner.team.color}"></div>
-        {{ race.name }}
+    <div class="col-2 d-flex align-items-center">
+        <div class="team-color" [ngStyle]="{'background-color': race.winner.team.color}"></div>
+        <div class="d-none d-lg-flex">
+            {{ race.name }}
+        </div>
+        <div class="d-lg-none">
+            {{ race.name.substring(0, 3).toUpperCase() }}
+        </div>
     </div>
-    <div class="col d-none d-md-block">
+    <div class="col-lg-3 d-none d-lg-block">
         {{ race.dateTime }}
     </div>
-    <div class="col">
+    <div class="col-3">
         {{ race.winner.name }}
     </div>
-    <div class="col">
+    <div class="col-4 col-lg-2">
         {{ race.winner.team.name }}
     </div>
-    <div *ngIf="hasPermission && !season.isArchived" class="col">
+    <div *ngIf="hasPermission && !season.isArchived" class="col-3 col-lg-2">
         <div class="row">
             <div class="col-sm-6 my-1">
                 <button class="btn btn-primary btn-sm me-2" (mouseup)="openModal('updateRace', race)" title="Modify">
