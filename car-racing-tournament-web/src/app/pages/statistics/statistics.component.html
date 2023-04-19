@@ -16,7 +16,7 @@
             </button>
         </div>
     </div>
-    <div *ngIf="noData" class="d-flex justify-content-center">
+    <div *ngIf="!isFetching && statistics == undefined" class="d-flex justify-content-center">
         <h2>This driver doesn't exists!</h2>
     </div>
 

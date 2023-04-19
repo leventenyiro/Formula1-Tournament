@@ -8,7 +8,7 @@
     </div>
 
     <div class="row">
-        <div *ngIf="isLoggedIn" class="col-md-5 mb-2">
+        <div *ngIf="isLoggedIn" class="col-md-5 col-sm-5 mb-2">
             <input type="checkbox" class="btn-check d-flex align-items-center" id="btn-check-favorite"
                 autocomplete="off" [formControl]="checkBoxFavorites" (change)="onFilter()">
             <label class="btn btn-outline-danger btn-sm me-2" for="btn-check-favorite" title="Favorite filter">
@@ -27,7 +27,7 @@
                 Moderator
             </label>
         </div>
-        <div class="col-md-7 d-flex mb-4">
+        <div class="col-md-5 offset-md-2 col-sm-7 d-flex mb-4">
             <div class="input-group input-group-sm me-2">
                 <span class="input-group-text">
                     <i class="bi bi-search"></i>
@@ -69,7 +69,7 @@
         </div>
     </div>
 
-    <div class="d-flex justify-content-center mt-5" *ngIf="seasons?.length === 0">
+    <div class="d-flex justify-content-center mt-5" *ngIf="!isFetching && seasons?.length === 0">
         <h2>We didn't find any seasons here</h2>
     </div>
 </div>

@@ -40,7 +40,7 @@
                 </div>
             </div>
             
-            <div [ngSwitch]="selectType.value" class="container-fluid mb-5">
+            <div *ngIf="!isFetching" [ngSwitch]="selectType.value" class="container-fluid mb-5">
                 <div *ngSwitchCase="'drivers'">
                     <div *ngIf="selectValue.value === 'all'; else elseDiv">
                         <app-driver-all [season]="season!" [driverAll]="getDriverAll()" [hasPermission]="hasPermission()"
@@ -202,4 +202,3 @@
 <app-modal type="loading" *ngIf="isFetching"></app-modal>
 
 <app-modal type="error" *ngIf="error" [text]="error" (onCloseModalEmitter)="closeModal()"></app-modal>
-<!-- <app-modal type="success" *ngIf="success" [text]="success" (onCloseModalEmitter)="closeModal()"></app-modal> -->
