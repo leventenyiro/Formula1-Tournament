@@ -8,14 +8,14 @@
                 <input required type="text" class="form-control" id="inputUsername" name="username"
                     [formControl]="inputUsername" [class.is-invalid]="!inputUsername.valid && inputUsername.touched"
                     [pattern]="usernamePattern()">
-                <div class="invalid-feedback">Invalid username</div>
+                <div class="invalid-feedback">Invalid username!</div>
             </div>
 
             <div class="mb-3">
                 <label for="inputEmail" class="form-label">Email address</label>
                 <input required type="text" class="form-control" id="inputEmail" name="email" [formControl]="inputEmail"
                     [class.is-invalid]="!inputEmail.valid && inputEmail.touched" [pattern]="emailPattern()">
-                <div class="invalid-feedback">Invalid email address</div>
+                <div class="invalid-feedback">Invalid email address!</div>
             </div>
 
             <div class="mb-3">
@@ -31,7 +31,7 @@
                 <input required multiple type="password" class="form-control" id="inputPasswordAgain"
                     name="passwordAgain" [formControl]="inputPasswordAgain"
                     [class.is-invalid]="inputPasswordAgain.touched && inputPassword.value !== inputPasswordAgain.value">
-                <div class="invalid-feedback">Passwords aren't pass</div>
+                <div class="invalid-feedback">Passwords are mismatched!</div>
             </div>
 
             <div class="row">
