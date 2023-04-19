@@ -27,7 +27,7 @@
                 Moderator
             </label>
         </div>
-        <div class="col-md-5 offset-md-2 col-sm-7 d-flex mb-4">
+        <div class="col-md-5 col-sm-7 d-flex mb-4" [ngClass]="isLoggedIn ? 'offset-md-2' : ''">
             <div class="input-group input-group-sm me-2">
                 <span class="input-group-text">
                     <i class="bi bi-search"></i>
@@ -46,24 +46,22 @@
     </div>
 
     <div class="container-fluid">
-        <div class="row row-box mb-3 d-flex align-items-center" *ngFor="let season of seasons"
-            (mouseup)="navigateSeason(season.id)">
-            <div class="col d-flex align-items-center text-center">
-                <h2 class="my-auto">{{ season.name }}<span *ngIf="season.isArchived"
-                        class="gold-tag ms-2">archived</span></h2>
+        <div class="row row-box mb-3 d-flex align-items-center" *ngFor="let season of seasons" (mouseup)="navigateSeason(season.id)">
+            <div class="col-10 col-md-4 d-flex align-items-center fw-semibold">
+                {{ season.name }}<span *ngIf="season.isArchived" class="gold-tag ms-2">archived</span>
             </div>
-            <div class="col d-none d-md-flex">
+            <div class="col-md-3 d-none d-md-flex">
                 {{ getFormattedDate(season.createdAt) }}
             </div>
-            <div class="col d-none d-md-flex">
+            <div class="col-md-2 d-none d-md-flex">
                 Made by {{ getAdminUsername(season) }}
             </div>
-            <div class="col text-pink me-5 d-flex align-items-center" [ngClass]="isLoggedIn ? 'favorite' : ''"
-                (mouseup)="setFavorite($event, season); $event.stopPropagation()">
+            <div class="col-2 col-md-1 d-flex align-items-center text-pink" [ngClass]="isLoggedIn ? 'favorite' : ''"
+            (mouseup)="setFavorite($event, season); $event.stopPropagation()">
                 <i class="bi me-2" [ngClass]="isFavorite(season) ? 'bi-heart-fill' : 'bi-heart'"></i>
                 {{ season.favorite }}
             </div>
-            <div class="col d-none d-md-flex ms-5">
+            <div class="col-md-2 d-none d-md-flex">
                 <button class="btn btn-primary btn-sm">Explore</button>
             </div>
         </div>
