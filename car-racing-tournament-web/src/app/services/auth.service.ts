@@ -5,6 +5,7 @@ import { User } from 'app/models/user';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Login } from '../models/login';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ import { Login } from '../models/login';
 export class AuthService {
   loggedIn = new EventEmitter<boolean>();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   login(login: Login) {
     return this.http
@@ -52,16 +53,15 @@ export class AuthService {
     )
   }
 
-  getBearerToken() {
+  getBearerToken() {    
     if (!document.cookie.includes('session=') || document.cookie.split('session=').length == 1) {
-      this.loggedIn.emit(false);
-      return;
+      // this.loggedIn.emit(false);
+      return undefined;
     }
     const bearerToken = document.cookie.split("session=")[1].split(";")[0];
     
     if (!bearerToken) {
-      this.loggedIn.emit(false);
-      return;
+      return undefined;
     }
     return bearerToken;
   }
@@ -167,5 +167,12 @@ export class AuthService {
 
   passwordErrorMsg() {
     return environment.errorMessages.passwordFormat;
+  }
+
+  checkIfLoggedIn(navigate?: boolean) {
+    if (this.getBearerToken() === undefined) {
+      this.loggedIn.emit(false);
+      if (navigate) this.router.navigate(['']);
+    }
   }
 }

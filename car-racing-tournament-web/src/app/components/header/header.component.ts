@@ -16,6 +16,8 @@ export class HeaderComponent implements OnInit {
       (loggedIn: boolean) => this.isLoggedIn = loggedIn
     );
     this.isLoggedIn = this.authService.getBearerToken() !== undefined;
+    if (this.isLoggedIn === false)
+      this.logout()
   }
 
   logout(): void {
