@@ -1,16 +1,16 @@
 <div class="row row-header my-3 d-flex align-items-center">
-    <div class="col">Race</div>
-    <div class="col">Date</div>
-    <div class="col">Points</div>
+    <div class="col-3">Race</div>
+    <div class="col-7">Date</div>
+    <div class="col-2">Points</div>
 </div>
 <div class="row row-box mb-3 d-flex align-items-center" *ngFor="let result of teamResults">
-    <div class="col">
+    <div class="col-3">
         {{ result.race.name }}
     </div>
-    <div class="col">
+    <div class="col-7">
         {{ result.race.dateTime }}
     </div>
-    <div class="col">
+    <div class="col-2">
         {{ result.point }}
     </div>
 </div>
