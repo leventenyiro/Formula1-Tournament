@@ -165,7 +165,6 @@ export class SeasonComponent implements OnInit {
 
   getRaceById(id: string) {
     return this.season?.races.find(x => x.id === id)?.results
-    .sort((a: any, b: any) => b.point - a.point)
     .map(x => ({
       id: x.id,
       driver: x.driver,
@@ -174,6 +173,25 @@ export class SeasonComponent implements OnInit {
       type: x.type.toString(),
       point: x.point
     }))
+    .sort((a: any, b: any) => {
+      const posA = this.getPositionValue(a.position);
+      const posB = this.getPositionValue(b.position);
+      if (posA === posB) {
+        return a.id - b.id;
+      }
+      return posA - posB;
+    });
+  }
+
+  getPositionValue(position: any): number {
+    switch (position) {
+      case 'DNF':
+        return 100;
+      case 'DSQ':
+        return 101;
+      default:
+        return parseInt(position);
+    }
   }
 
   getPermissions() {
