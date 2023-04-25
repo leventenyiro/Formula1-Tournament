@@ -50,7 +50,7 @@ export class StatisticsComponent implements OnInit {
   }
 
   calculatePercentage(part: number, full: number): string {
-    return (part / full * 100).toFixed(1);
+    return full !== 0 ? (part / full * 100).toFixed(1) : '0';
   }
 
   positionMax(): number {
