@@ -53,10 +53,6 @@ export class StatisticsComponent implements OnInit {
     return (part / full * 100).toFixed(1);
   }
 
-  seasonMax(): number {
-    return this.statistics?.seasonStatistics?.reduce((max, stat) => Math.max(max, stat.position ?? 0), 0) ?? 0;        
-  }
-
   positionMax(): number {
     return this.statistics?.positionStatistics?.reduce((max, stat) => Math.max(max, stat.number ?? 0), 0) ?? 0;        
   }
