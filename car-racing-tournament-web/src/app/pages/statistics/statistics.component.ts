@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Statistics } from 'app/models/statistics';
 import { SeasonService } from 'app/services/season.service';
 
@@ -18,7 +18,8 @@ export class StatisticsComponent implements OnInit {
 
   constructor(
     private seasonService: SeasonService, 
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -32,7 +33,13 @@ export class StatisticsComponent implements OnInit {
     this.isFetching = true;
     this.driverName = '';
     this.statistics = undefined;
-    window.history.pushState("Statistics", "Car Racing Tournament", `statistics?name=${this.inputSearch.value}`);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        name: this.inputSearch.value
+      },
+      queryParamsHandling: 'merge'
+    });
 
     this.seasonService.getStatistics(this.inputSearch.value).subscribe({
       next: data => {
