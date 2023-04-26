@@ -572,7 +572,7 @@ export class SeasonService {
   }
 
   resultConverter(data: any): any {
-    if (data.position === 'DNF' || data.position === 'DSQ') {
+    if (data.position === 'DNF' || data.position === 'DSQ' || data.position === 'DNS') {
       data.type = data.position;
       data.position = 0;
     } else
