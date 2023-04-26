@@ -210,8 +210,10 @@ export class SeasonComponent implements OnInit {
     switch (position) {
       case 'DNF':
         return 100;
-      case 'DSQ':
+      case 'DNS':
         return 101;
+      case 'DSQ':
+        return 102;
       default:
         return parseInt(position);
     }
