@@ -38,7 +38,11 @@ export class RaceResultComponent implements OnInit {
 
   createResult(data: any) {
     this.isFetching = true;
-
+    if (data.value.point === null) {
+      this.error = 'Result point is missing!';
+      this.isFetching = false;
+      return;
+    }
     const convertedResult = this.seasonService.resultConverter(data.value);
     
     data.value.type = convertedResult.type;
@@ -63,7 +67,11 @@ export class RaceResultComponent implements OnInit {
 
   updateResult(id: string, data: any) {
     this.isFetching = true;
-
+    if (data.value.point === null) {
+      this.error = 'Result point is missing!';
+      this.isFetching = false;
+      return;
+    }
     const convertedResult = this.seasonService.resultConverter(data.value);
     data.value.type = convertedResult.type;
     data.value.position = convertedResult.position;
