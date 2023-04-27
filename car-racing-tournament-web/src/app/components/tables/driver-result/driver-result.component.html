@@ -64,13 +64,18 @@
 <app-modal type="form" *ngIf="modal === 'createResult' || modal === 'updateResult'">
     <h1>{{ modal === 'createResult' ? 'Add new' : 'Modify' }} result</h1>
     <form #postForm="ngForm" (ngSubmit)="selectedResult == undefined ? this.createResult(postForm) : this.updateResult(selectedResult!.id, postForm)">
-        <div class="mb-3">
-            <label for="inputTeamId" class="form-label">Team</label>
-            <select name="teamId" id="inputTeamId" class="form-select" [ngModel]="selectedResult === undefined ? (getDriverActualTeam() === undefined ? season!.teams[0].id : getDriverActualTeam()) : selectedResult.team.id" #teamId="ngModel">
-                <option *ngFor="let team of season?.teams" [value]="team.id">
-                    {{ team.name }}                                                
-                </option>
-            </select>
+        <div class="mb-3 row">
+            <div class="col-1">
+                <div class="team-color" [ngStyle]="{'background-color': selectedTeam.team.color}"></div>
+            </div>
+            <div class="col-11">
+                <label for="inputTeamId" class="form-label">Team</label>
+                <select name="teamId" id="inputTeamId" class="form-select" [ngModel]="selectedResult === undefined ? (getDriverActualTeam() === undefined ? season!.teams[0].id : getDriverActualTeam()) : selectedResult.team.id" #teamId="ngModel" [formControl]="">
+                    <option *ngFor="let team of season?.teams" [value]="team.id">
+                        {{ team.name }}                                                
+                    </option>
+                </select>
+            </div>
         </div>
 
         <div class="mb-3">
