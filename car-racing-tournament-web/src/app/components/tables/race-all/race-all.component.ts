@@ -105,4 +105,8 @@ export class RaceAllComponent implements OnInit {
   getCurrentTime() {
     return this.getLocalTimeFromISO().split('T')[1].substring(0, 5);
   }
+
+  removeError() {
+    this.error = '';
+  }
 }

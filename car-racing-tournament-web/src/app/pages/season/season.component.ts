@@ -345,4 +345,8 @@ export class SeasonComponent implements OnInit {
     this.error = '';
     this.selectedPermissionId = '';    
   }
+
+  removeError() {
+    this.error = '';
+  }
 }

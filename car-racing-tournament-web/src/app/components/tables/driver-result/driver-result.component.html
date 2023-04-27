@@ -63,45 +63,48 @@
 
 <app-modal type="form" *ngIf="modal === 'createResult' || modal === 'updateResult'">
     <h1>{{ modal === 'createResult' ? 'Add new' : 'Modify' }} result</h1>
-    <form #postForm="ngForm" (ngSubmit)="selectedResult == undefined ? this.createResult(postForm) : this.updateResult(selectedResult!.id, postForm)">
-        <div class="mb-3 row">
-            <div class="col-1">
-                <div class="team-color" [ngStyle]="{'background-color': selectedTeam.team.color}"></div>
-            </div>
-            <div class="col-11">
-                <label for="inputTeamId" class="form-label">Team</label>
-                <select name="teamId" id="inputTeamId" class="form-select" [ngModel]="selectedResult === undefined ? (getDriverActualTeam() === undefined ? season!.teams[0].id : getDriverActualTeam()) : selectedResult.team.id" #teamId="ngModel" [formControl]="">
-                    <option *ngFor="let team of season?.teams" [value]="team.id">
-                        {{ team.name }}                                                
-                    </option>
-                </select>
+    <form #postForm="ngForm" (ngSubmit)="selectedResult == undefined ? this.createResult() : this.updateResult(selectedResult!.id)">
+        <div class="mb-3">
+            <label for="inputTeamId" class="form-label">Team</label>
+            <div class="row d-flex align-items-center">
+                <div class="col-1">
+                    <div class="team-color" [ngStyle]="{'background-color': actualTeamColor()}"></div>
+                </div>
+                <div class="col-11">
+                    <select name="teamId" id="inputTeamId" class="form-select" [formControl]="inputTeamId">
+                        <option *ngFor="let team of season?.teams" [value]="team.id">
+                            {{ team.name }}       
+                        </option>
+                    </select>
+                </div>
             </div>
         </div>
 
         <div class="mb-3">
             <label for="inputRaceId" class="form-label">Race</label>
-            <select name="raceId" id="inputRaceId" class="form-select" [ngModel]="selectedResult === undefined ? season!.races[0].id : selectedResult.race.id" #raceId="ngModel">
+            <select name="raceId" id="inputRaceId" class="form-select" [formControl]="inputRaceId">
                 <option *ngFor="let race of season?.races" [value]="race.id">
-                    {{ race.name }}                                                
+                    {{ race.name }}
                 </option>
             </select>
         </div>
 
         <div class="mb-3">
             <label for="inputPosition" class="form-label">Position</label>
-            <select name="position" id="inputPosition" class="form-select" [ngModel]="selectedResult === undefined ? 1 : (selectedResult.type.toString() === 'Finished' ? selectedResult.position : selectedResult.type)" #position="ngModel">
+            <select name="position" id="inputPosition" class="form-select" [formControl]="inputPosition">
                 <option value="DNS">DNS</option>
                 <option value="DNF">DNF</option>
                 <option value="DSQ">DSQ</option>
                 <option *ngFor="let position of availablePositions()" [value]="position">
-                    {{ position }}                                                
+                    {{ position }}
                 </option>
             </select>
         </div>
 
         <div class="mb-3">
             <label for="inputPoint" class="form-label">Point</label>
-            <input type="number" required min="0" class="form-control" id="inputPoint" [ngModel]="selectedResult === undefined ? 0 : selectedResult.point" name="point" #point="ngModel" [class.is-invalid]="!point.valid && point.touched">
+            <input type="number" required min="0" class="form-control" id="inputPoint" name="point" [formControl]="inputPoint" [class.is-invalid]="!inputPoint.valid && inputPoint.touched">
+            <div class="invalid-feedback">Point is required</div>
         </div>
 
         <div class="row d-flex">
@@ -109,7 +112,7 @@
                 <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="closeModal()">Cancel</button>
             </div>
             <div class="col-6">
-                <button class="btn btn-primary btn-sm btn-block" [disabled]="!postForm.valid">
+                <button class="btn btn-primary btn-sm btn-block">
                     {{ modal === 'createResult' ? 'Add' : 'Modify' }}
                 </button>
             </div>
@@ -119,4 +122,4 @@
 
 <app-modal type="loading" *ngIf="isFetching"></app-modal>
 
-<app-modal type="error" *ngIf="error" [text]="error" (onCloseModalEmitter)="closeModal()"></app-modal>
+<app-modal type="error" *ngIf="error" [text]="error" (onCloseModalEmitter)="removeError()"></app-modal>

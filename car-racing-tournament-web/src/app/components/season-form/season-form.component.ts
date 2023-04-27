@@ -62,4 +62,8 @@ export class SeasonFormComponent implements OnInit {
   closeModal() {
     this.onCloseModalEmitter.emit();
   }
+
+  removeError() {
+    this.error = '';
+  }
 }

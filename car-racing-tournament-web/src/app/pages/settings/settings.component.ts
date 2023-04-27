@@ -138,4 +138,8 @@ export class SettingsComponent implements OnInit {
     this.error = '';
     this.modal = '';
   }
+
+  removeError() {
+    this.error = '';
+  }
 }

@@ -69,7 +69,7 @@
                 <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="closeModal()">Cancel</button>
             </div>
             <div class="col-6">
-                <button class="btn btn-primary btn-sm btn-block" [disabled]="!updatePasswordForm.valid">Confirm</button>
+                <button class="btn btn-primary btn-sm btn-block">Confirm</button>
             </div>
         </div>
     </form>
@@ -80,4 +80,4 @@
         (closeModalEmitter)="closeModal()"></app-verify-form>
 </app-modal>
 
-<app-modal type="error" *ngIf="error" [text]="error" (onCloseModalEmitter)="closeModal()"></app-modal>
+<app-modal type="error" *ngIf="error" [text]="error" (onCloseModalEmitter)="removeError()"></app-modal>
