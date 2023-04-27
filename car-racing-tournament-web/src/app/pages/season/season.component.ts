@@ -285,6 +285,11 @@ export class SeasonComponent implements OnInit {
 
   createPermission(data: any) {
     this.isFetching = true;
+    if (data.value.usernameEmail === '') {
+      this.error = 'Username or e-mail is missing!';
+      this.isFetching = false;
+      return;
+    }
     this.seasonService.createPermission(data.value.usernameEmail, this.season!.id).subscribe({
       next: () => {
         this.closeModal();

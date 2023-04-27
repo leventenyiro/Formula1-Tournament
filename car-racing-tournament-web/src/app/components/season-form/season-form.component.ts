@@ -33,6 +33,11 @@ export class SeasonFormComponent implements OnInit {
 
   createSeason(data: any) {
     this.isFetching = true;
+    if (data.value.name === '') {
+      this.error = 'Season name is missing!';
+      this.isFetching = false;
+      return;
+    }
     this.seasonService.createSeason(data.value).subscribe({
       next: () => {
         this.onCloseModalEmitter.emit();
@@ -47,6 +52,11 @@ export class SeasonFormComponent implements OnInit {
 
   updateSeason(id: string, data: any) {
     this.isFetching = true;
+    if (data.value.name === '') {
+      this.error = 'Season name is missing!';
+      this.isFetching = false;
+      return;
+    }
     this.seasonService.updateSeason(id, data.value).subscribe({
       next: () => {
         this.onCloseModalEmitter.emit();

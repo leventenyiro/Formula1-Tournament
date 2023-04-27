@@ -33,6 +33,11 @@ export class TeamAllComponent implements OnInit {
 
   createTeam(data: any) {
     this.isFetching = true;
+    if (data.value.name === null) {
+      this.error = 'Team name is missing!';
+      this.isFetching = false;
+      return;
+    }
     this.seasonService.createTeam(data.value, this.season?.id!).subscribe({
       next: () => {
         this.closeModal();
@@ -48,6 +53,11 @@ export class TeamAllComponent implements OnInit {
 
   updateTeam(id: string, data: any) {
     this.isFetching = true;
+    if (data.value.name === null) {
+      this.error = 'Team name is missing!';
+      this.isFetching = false;
+      return;
+    }
     this.seasonService.updateTeam(id, data.value).subscribe({
       next: () => {
         this.closeModal();

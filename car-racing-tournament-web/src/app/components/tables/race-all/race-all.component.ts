@@ -32,7 +32,18 @@ export class RaceAllComponent implements OnInit {
 
   createRace(data: any) {
     this.isFetching = true;
-    data.value.dateTime = this.toISOTime(new Date(`${data.value.date}T${data.value.time}`));
+    if (data.value.name === null) {
+      this.error = 'Race name is missing!';
+      this.isFetching = false;
+      return;
+    }
+    try {
+      data.value.dateTime = this.toISOTime(new Date(`${data.value.date}T${data.value.time}`));
+    } catch {
+      this.error = 'Race date is invalid!';
+      this.isFetching = false;
+      return;
+    }
     
     this.seasonService.createRace(data.value, this.season?.id!).subscribe({
       next: () => {
@@ -49,7 +60,18 @@ export class RaceAllComponent implements OnInit {
 
   updateRace(id: string, data: any) {
     this.isFetching = true;
-    data.value.dateTime = this.toISOTime(new Date(`${data.value.date}T${data.value.time}`));
+    if (data.value.name === '') {
+      this.error = 'Race name is missing!';
+      this.isFetching = false;
+      return;
+    }
+    try {
+      data.value.dateTime = this.toISOTime(new Date(`${data.value.date}T${data.value.time}`));
+    } catch {
+      this.error = 'Race date is invalid!';
+      this.isFetching = false;
+      return;
+    }
 
     this.seasonService.updateRace(id, data.value).subscribe({
       next: () => {

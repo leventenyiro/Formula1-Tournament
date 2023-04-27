@@ -38,6 +38,16 @@ export class DriverAllComponent implements OnInit {
 
   createDriver() {   
     this.isFetching = true; 
+    if (this.inputName.value === '') {
+      this.error = 'Driver name is missing!';
+      this.isFetching = false;
+      return;
+    }
+    if (this.inputNumber.value === '') {
+      this.error = 'Driver number is missing!';
+      this.isFetching = false;
+      return;
+    }
     const data = {
       'name': this.inputName.value,
       'realName': this.inputRealName.value,
@@ -59,6 +69,16 @@ export class DriverAllComponent implements OnInit {
 
   updateDriver(id: string) {
     this.isFetching = true;
+    if (this.inputName.value === '') {
+      this.error = 'Driver name is missing!';
+      this.isFetching = false;
+      return;
+    }
+    if (this.inputNumber.value === '') {
+      this.error = 'Driver number is missing!';
+      this.isFetching = false;
+      return;
+    }
     const data = {
       'name': this.inputName.value,
       'realName': this.inputRealName.value,

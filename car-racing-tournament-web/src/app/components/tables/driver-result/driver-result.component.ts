@@ -45,7 +45,11 @@ export class DriverResultComponent implements OnInit {
 
   createResult() {
     this.isFetching = true;
-
+    if (this.inputPoint.value === null) {
+      this.error = 'Result point is missing!';
+      this.isFetching = false;
+      return;
+    }
     const data = {
       'teamId': this.inputTeamId.value,
       'raceId': this.inputRaceId.value,
@@ -73,7 +77,11 @@ export class DriverResultComponent implements OnInit {
 
   updateResult(id: string) {
     this.isFetching = true;
-
+    if (this.inputPoint.value === null) {
+      this.error = 'Result point is missing!';
+      this.isFetching = false;
+      return;
+    }
     const data = {
       'teamId': this.inputTeamId.value,
       'raceId': this.inputRaceId.value,
