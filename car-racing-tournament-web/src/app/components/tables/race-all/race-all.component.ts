@@ -32,7 +32,7 @@ export class RaceAllComponent implements OnInit {
 
   createRace(data: any) {
     this.isFetching = true;
-    data.value.dateTime = `${data.value.date}T${data.value.time}`;
+    data.value.dateTime = this.toISOTime(new Date(`${data.value.date}T${data.value.time}`));
     
     this.seasonService.createRace(data.value, this.season?.id!).subscribe({
       next: () => {
@@ -49,7 +49,7 @@ export class RaceAllComponent implements OnInit {
 
   updateRace(id: string, data: any) {
     this.isFetching = true;
-    data.value.dateTime = `${data.value.date}T${data.value.time}`;
+    data.value.dateTime = this.toISOTime(new Date(`${data.value.date}T${data.value.time}`));
 
     this.seasonService.updateRace(id, data.value).subscribe({
       next: () => {
@@ -89,11 +89,20 @@ export class RaceAllComponent implements OnInit {
     this.selectedRace = undefined;
   }
 
-  getCurrentDate() {    
-    return new Date().toISOString().split('T')[0];
+  getLocalTimeFromISO() {
+    var timeZoneOffset = (new Date()).getTimezoneOffset() * 60000;
+    return (new Date(Date.now() - timeZoneOffset)).toISOString().slice(0, -1);
+  }
+
+  toISOTime(date: Date) {
+    return (new Date(date.getTime())).toISOString().slice(0, -1);
+  }
+
+  getCurrentDate() {
+    return this.getLocalTimeFromISO().split('T')[0];
   }
 
   getCurrentTime() {
-    return new Date().toISOString().split('T')[1].substring(0, 5);
+    return this.getLocalTimeFromISO().split('T')[1].substring(0, 5);
   }
 }
