@@ -90,6 +90,11 @@ export class DriverResultComponent implements OnInit {
   }
 
   openModal(modal: string, selectedResult?: Result) {
+    if (modal === 'createResult' && (this.season.teams.length === 0 || this.season.races.length === 0)) {
+      this.error = 'There are not available teams or races!'
+      return;
+    }
+    
     this.modal = modal;    
     this.selectedResult = selectedResult;
   }
