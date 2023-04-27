@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Result } from 'app/models/result';
 import { Season } from 'app/models/season';
 import { SeasonService } from 'app/services/season.service';
@@ -29,19 +30,35 @@ export class DriverResultComponent implements OnInit {
   modal: string = '';
   selectedResult?: Result;
 
+  inputTeamId = new FormControl('');
+  inputRaceId = new FormControl('');
+  inputPosition = new FormControl('');
+  inputPoint = new FormControl(0);
+
   constructor(private seasonService: SeasonService) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.inputTeamId.setValue(this.getDriverActualTeam() === undefined ? this.season!.teams[0].id : this.getDriverActualTeam());
+    this.inputRaceId.setValue(this.season!.races[0].id);
+    this.inputPosition.setValue(this.selectedResult === undefined ? 1 : (this.selectedResult.type.toString() === 'Finished' ? this.selectedResult.position : this.selectedResult.type));
+  }
 
-  createResult(data: any) {
+  createResult() {
     this.isFetching = true;
 
-    const convertedResult = this.seasonService.resultConverter(data.value);
-    data.value.type = convertedResult.type;
-    data.value.position = convertedResult.position;
-    data.value.driverId = this.driverId;
+    const data = {
+      'teamId': this.inputTeamId.value,
+      'raceId': this.inputRaceId.value,
+      'position': this.inputPosition.value,
+      'point': this.inputPoint.value,
+    } as Result
 
-    this.seasonService.createResult(data.value).subscribe({
+    const convertedResult = this.seasonService.resultConverter(data);
+    data.type = convertedResult.type;
+    data.position = convertedResult.position;
+    data.driverId = this.driverId;
+
+    this.seasonService.createResult(data).subscribe({
       next: () => {
         this.closeModal();
         this.isFetching = false;
@@ -54,15 +71,22 @@ export class DriverResultComponent implements OnInit {
     });
   }
 
-  updateResult(id: string, data: any) {
+  updateResult(id: string) {
     this.isFetching = true;
 
-    const convertedResult = this.seasonService.resultConverter(data.value);
-    data.value.type = convertedResult.type;
-    data.value.position = convertedResult.position;
-    data.value.driverId = this.driverId;  
+    const data = {
+      'teamId': this.inputTeamId.value,
+      'raceId': this.inputRaceId.value,
+      'position': this.inputPosition.value,
+      'point': this.inputPoint.value,
+    } as Result
+
+    const convertedResult = this.seasonService.resultConverter(data);
+    data.type = convertedResult.type;
+    data.position = convertedResult.position;
+    data.driverId = this.driverId;  
     
-    this.seasonService.updateResult(id, data.value).subscribe({
+    this.seasonService.updateResult(id, data).subscribe({
       next: () => {
         this.closeModal();
         this.isFetching = false;
@@ -96,7 +120,13 @@ export class DriverResultComponent implements OnInit {
     }
     
     this.modal = modal;    
-    this.selectedResult = selectedResult;
+    if (selectedResult) {
+      this.selectedResult = selectedResult;
+      this.inputTeamId.setValue(this.selectedResult.team.id);
+      this.inputRaceId.setValue(this.selectedResult.race.id);
+      this.inputPosition.setValue(this.selectedResult.position);
+      this.inputPoint.setValue(this.selectedResult.point);
+    }
   }
 
   closeModal() {
@@ -115,5 +145,13 @@ export class DriverResultComponent implements OnInit {
 
   getDriverActualTeam() {
     return this.season.drivers.find(x => x.id === this.driverId)?.actualTeam?.id;
+  }
+
+  actualTeamColor() {
+    return this.season.teams.find(x => x.id === this.inputTeamId.value)?.color;
+  }
+
+  removeError() {
+    this.error = '';
   }
 }

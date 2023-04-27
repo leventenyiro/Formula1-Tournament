@@ -46,7 +46,7 @@
     </div>
 </div>
 
-<app-modal type="error" *ngIf="error" [text]="error" (onCloseModalEmitter)="closeModal()"></app-modal>
+<app-modal type="error" *ngIf="error" [text]="error" (onCloseModalEmitter)="removeError()"></app-modal>
 
 <app-modal type="success" *ngIf="success" [text]="success" (onCloseModalEmitter)="login()"></app-modal>
 
