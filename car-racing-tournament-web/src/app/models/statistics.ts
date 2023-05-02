@@ -14,9 +14,9 @@ export class Statistics {
 export class SeasonStatistics {
   constructor(
     public name?: string,
-    public color?: string,
-    public position?: number,
-    public countDriver?: number
+    public teamName?: string,
+    public teamColor?: string,
+    public position?: number
   ) {}
 }
 
