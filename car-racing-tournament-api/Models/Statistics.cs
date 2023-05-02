@@ -15,10 +15,10 @@ namespace car_racing_tournament_api.Models
 
     public class SeasonStatistics {
         public string? Name { get; set; }
-        public string? Color { get; set; }
+        public string? TeamName { get; set; }
+        public string? TeamColor { get; set; }
         public DateTime CreatedAt { get; set; }
         public int? Position { get; set; }
-        public int? CountDriver { get; set; }
     }
 
     public class PositionStatistics {
