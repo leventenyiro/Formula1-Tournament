@@ -104,20 +104,29 @@ export class SeasonComponent implements OnInit {
   }
 
   getDriverAll() {
-    return this.season?.drivers.map(x => ({
-      id: x.id,
-      name: x.name,
-      realName: x.realName,
-      number: x.number,
-      actualTeam: {
-        id: x.actualTeam?.id,
-        name: x.actualTeam?.name,
-        color: x.actualTeam?.color,
-      },
-      point: x.results.length === 0
-        ? 0
-        : x.results.map(x => x.point).reduce((sum, current) => sum + current)
-    })).sort((a: any, b: any) => b.point - a.point);
+    
+    return this.season?.drivers.map(driver => {
+      const actualTeam = this.season?.teams.find(team => team.id === driver.actualTeamId);
+
+      const results = this.season?.races
+        .map(race => race.results.find(result => result.driverId === driver.id))!
+        .filter(x => x !== undefined);
+
+      return ({
+        id: driver.id,
+        name: driver.name,
+        realName: driver.realName,
+        number: driver.number,
+        actualTeam: {
+          id: actualTeam?.id,
+          name: actualTeam?.name,
+          color: actualTeam?.color,
+        },
+        point: results!.length === 0
+          ? 0
+          : results!.map(result => result!.point).reduce((sum, current) => sum + current)
+      })
+    }).sort((a: any, b: any) => b.point - a.point);
   }
 
   getDriverById(id: string) {

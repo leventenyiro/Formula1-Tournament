@@ -16,7 +16,7 @@ namespace car_racing_tournament_api.Models
         public Guid? ActualTeamId { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public Guid SeasonId { get; set; }
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public List<Result>? Results { get; set; }
     }
 }
