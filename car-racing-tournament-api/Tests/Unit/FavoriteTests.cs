@@ -85,7 +85,7 @@ namespace car_racing_tournament_api.Tests.Unit
         [Test]
         public async Task AddFavoriteSuccess()
         {
-            var result = await _favoriteService!.AddFavorite(_user1!, _season2!);
+            var result = await _favoriteService!.AddFavorite(_user1!.Id, _season2!);
             Assert.IsTrue(result.IsSuccess);
             Assert.IsNull(result.ErrorMessage);
             Assert.AreEqual(_context!.Favorites.Count(), 2);
@@ -93,7 +93,7 @@ namespace car_racing_tournament_api.Tests.Unit
 
         [Test]
         public async Task AddPermissionExists() {
-            var result = await _favoriteService!.AddFavorite(_user1!, _season1!);
+            var result = await _favoriteService!.AddFavorite(_user1!.Id, _season1!);
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:FavoriteExists"]);
         }
