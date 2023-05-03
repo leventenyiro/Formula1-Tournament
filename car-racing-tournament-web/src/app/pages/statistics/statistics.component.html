@@ -68,19 +68,17 @@
             <div class="col-md dashboard-box dashboard-left-box">
                 <h2>Seasons</h2>
                 <div class="row row-header">
-                    <div class="col-4">Season</div>
-                    <div class="col-4">Position</div>
+                    <div class="col-7">Season</div>
+                    <div class="col-3 d-sm-flex d-none">Team</div>
+                    <div class="col-2">Position</div>
                 </div>
                 <div *ngFor="let season of statistics.seasonStatistics" class="row d-flex align-items-center mb-2">
-                    <div class="col-4">{{ season.name }}</div>
-                    <div class="col-1">{{ season.position }}</div>
-                    <div class="col-7">
-                        <div class="progress" role="progressbar">
-                            <div class="progress-bar" 
-                                [style.width.%]="calculatePercentage(season.position!, season.countDriver!)"
-                                [style.background-color]="season.color"></div>
-                        </div>
+                    <div class="col-7 d-flex align-items-center">
+                        <div class="team-color" [ngStyle]="{'background-color': season.teamColor}"></div>
+                        <div>{{ season.name }}</div>
                     </div>
+                    <div class="col-3 d-sm-flex d-none">{{ season.teamName }}</div>
+                    <div class="col-2">{{ season.position }}</div>
                 </div>
             </div>
             <div class="col-md dashboard-box dashboard-right-box">

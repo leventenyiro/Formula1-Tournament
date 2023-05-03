@@ -122,7 +122,7 @@ export class SeasonsComponent implements OnInit {
       event.stopPropagation();
       if (this.isFavorite(season)) {
         this.isFetching = true;
-        this.seasonService.deleteFavorite(this.user!.favorites!.find(x => x.seasonId === season.id && x.userId === this.user!.id)!.id!).subscribe({
+        this.seasonService.deleteFavorite(this.user!.favorites!.find(x => x.seasonId === season.id)!.id!).subscribe({
           next: () => {
             this.isFetching = false;
             this.onFetchData()
@@ -134,7 +134,7 @@ export class SeasonsComponent implements OnInit {
         });
       } else {
         this.isFetching = true;
-        this.seasonService.createFavorite(this.user!.id!, season.id).subscribe({
+        this.seasonService.createFavorite(season.id).subscribe({
           next: () => {
             this.isFetching = false;
             this.onFetchData()

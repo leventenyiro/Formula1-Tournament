@@ -8,6 +8,5 @@ export class Favorite {
     public season: Season,
     public seasonId: string,
     public userId: string,
-    public username?: string,
   ) {}
 }
