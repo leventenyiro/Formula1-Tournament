@@ -28,15 +28,15 @@ namespace car_racing_tournament_api.Services
             return (true, favorite, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> AddFavorite(User user, Season season)
+        public async Task<(bool IsSuccess, string? ErrorMessage)> AddFavorite(Guid userId, Season season)
         {
-            if (await _carRacingTournamentDbContext.Favorites.CountAsync(x => x.UserId == user.Id && x.SeasonId == season.Id) != 0)
+            if (await _carRacingTournamentDbContext.Favorites.CountAsync(x => x.UserId == userId && x.SeasonId == season.Id) != 0)
                 return (false, _configuration["ErrorMessages:FavoriteExists"]);
 
             await _carRacingTournamentDbContext.Favorites.AddAsync(new Favorite
             {
                 Id = Guid.NewGuid(),
-                UserId = user.Id,
+                UserId = userId,
                 SeasonId = season.Id
             });
             await _carRacingTournamentDbContext.SaveChangesAsync();

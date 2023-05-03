@@ -499,18 +499,15 @@ export class SeasonService {
     )
   }
 
-  createFavorite(userId: string, seasonId: string) {
+  createFavorite(seasonId: string) {
     let headers = new HttpHeaders()
       .set('content-type', 'application/json')
       .set('Access-Control-Allow-Origin', '*')
       .set('Authorization', `Bearer ${this.authService.getBearerToken()}`);
 
     return this.http.post(
-      `${environment.backendUrl}/favorite`,
-      {
-        'userId': userId,
-        'seasonId': seasonId
-      },
+      `${environment.backendUrl}/favorite/${seasonId}`,
+      null,
       {
         headers: headers,
         responseType: 'text'
