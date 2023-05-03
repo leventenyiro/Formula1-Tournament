@@ -71,31 +71,39 @@
 
 <app-modal type="form" *ngIf="modal === 'createDriver' || modal === 'updateDriver'">
     <h1>{{ modal === 'createDriver' ? 'Add new' : 'Modify' }} driver</h1>
-    <form #postForm="ngForm" (ngSubmit)="selectedDriver == undefined ? this.createDriver(postForm) : this.updateDriver(selectedDriver!.id, postForm)">
+    <form (ngSubmit)="selectedDriver == undefined ? this.createDriver() : this.updateDriver(selectedDriver!.id)">
         <div class="mb-3">
             <label for="inputName" class="form-label">Name</label>
-            <input required type="text" class="form-control" id="inputName" [ngModel]="selectedDriver?.name" name="name" #name="ngModel" [class.is-invalid]="!name.valid && name.touched" [class.is-valid]="name.valid">
+            <input required type="text" class="form-control" id="inputName" [formControl]="inputName" name="name" [class.is-invalid]="!inputName.valid && inputName.touched">
             <div class="invalid-feedback">Name is required</div>
         </div>
 
         <div class="mb-3">
             <label for="inputRealName" class="form-label">Real Name</label>
-            <input type="text" class="form-control" id="inputRealName" [ngModel]="selectedDriver?.realName" name="realName" #realName="ngModel">
+            <input type="text" class="form-control" id="inputRealName" [formControl]="inputRealName" name="realName">
         </div>
 
         <div class="mb-3">
             <label for="inputNumber" class="form-label">Number</label>
-            <input type="number" required min="1" max="99" class="form-control" id="inputNumber" [ngModel]="selectedDriver === undefined ? 1 : selectedDriver.number" name="number" #number="ngModel" [class.is-invalid]="!number.valid && number.touched">
+            <input type="number" required min="1" max="99" class="form-control" id="inputNumber" name="number" [formControl]="inputNumber" [class.is-invalid]="!inputNumber.valid && inputNumber.touched">
+            <div class="invalid-feedback">Number is required</div>
         </div>
 
         <div class="mb-3">
             <label for="inputActualTeamId" class="form-label">Actual Team</label>
-            <select name="actualTeamId" id="inputActualTeamId" class="form-select" [ngModel]="selectedDriver?.actualTeam?.id === undefined ? null : selectedDriver?.actualTeam?.id" #actualTeamId="ngModel">
-                <option [ngValue]="null">None</option>
-                <option *ngFor="let option of season?.teams" [value]="option.id">
-                    {{ option.name }}
-                </option>
-            </select>
+            <div class="row d-flex align-items-center">
+                <div class="col-1">
+                    <div class="team-color" [ngStyle]="{'background-color': actualTeamColor()}"></div>
+                </div>
+                <div class="col-11">
+                    <select name="actualTeamId" id="inputActualTeamId" class="form-select" [value]="selectedDriver?.actualTeam?.id === undefined ? null : selectedDriver?.actualTeam?.id" [formControl]="inputActualTeamId">
+                        <option [ngValue]="null">None</option>
+                        <option *ngFor="let option of season?.teams" [value]="option.id">
+                            {{ option.name }}
+                        </option>
+                    </select>
+                </div>
+            </div>
         </div>
 
         <div class="row d-flex">
@@ -103,7 +111,7 @@
                 <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="closeModal()">Cancel</button>
             </div>
             <div class="col-6">
-                <button class="btn btn-primary btn-sm btn-block" [disabled]="!postForm.valid">
+                <button class="btn btn-primary btn-sm btn-block">
                     {{ modal === 'createDriver' ? 'Add' : 'Modify' }}
                 </button>
             </div>
@@ -113,4 +121,4 @@
 
 <app-modal type="loading" *ngIf="isFetching"></app-modal>
 
-<app-modal type="error" *ngIf="error" [text]="error" (onCloseModalEmitter)="closeModal()"></app-modal>
+<app-modal type="error" *ngIf="error" [text]="error" (onCloseModalEmitter)="removeError()"></app-modal>

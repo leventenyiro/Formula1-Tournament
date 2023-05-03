@@ -13,10 +13,10 @@ export class Statistics {
 
 export class SeasonStatistics {
   constructor(
-    public id?: string,
     public name?: string,
     public color?: string,
-    public position?: number
+    public position?: number,
+    public countDriver?: number
   ) {}
 }
 

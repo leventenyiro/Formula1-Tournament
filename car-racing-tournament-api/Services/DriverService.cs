@@ -172,11 +172,11 @@ namespace car_racing_tournament_api.Services
 
             List<SeasonStatistics> seasonStatistics = driver
                 .Select(x => new SeasonStatistics {
-                    Id = x.Season.Id,
                     Name = x.Season.Name,
                     Color = x.ActualTeam?.Color ?? "#000000",
                     CreatedAt = x.Season.CreatedAt,
-                    Position = getDriverPositionInSeason(x.Season.Id, x)
+                    Position = getDriverPositionInSeason(x.Season.Id, x),
+                    CountDriver = x.Season.Drivers!.Count
                 })
                 .OrderBy(x => x.CreatedAt)
                 .ToList();

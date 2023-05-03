@@ -85,4 +85,8 @@ export class TeamAllComponent implements OnInit {
     this.error = '';
     this.selectedTeam = undefined;
   }
+
+  removeError() {
+    this.error = '';
+  }
 }

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Driver } from 'app/models/driver';
 import { Season } from 'app/models/season';
 import { SeasonService } from 'app/services/season.service';
@@ -26,13 +27,24 @@ export class DriverAllComponent implements OnInit {
   selectedDriver?: Driver;
   isFetching: boolean = false;
 
+  inputName = new FormControl('');
+  inputRealName = new FormControl('');
+  inputNumber = new FormControl(1);
+  inputActualTeamId = new FormControl(null);
+
   constructor(private seasonService: SeasonService) { }
 
   ngOnInit(): void { }
 
-  createDriver(data: any) {   
+  createDriver() {   
     this.isFetching = true; 
-    this.seasonService.createDriver(data.value, this.season?.id!).subscribe({
+    const data = {
+      'name': this.inputName.value,
+      'realName': this.inputRealName.value,
+      'number': this.inputNumber.value,
+      'actualTeamId': this.inputActualTeamId.value,
+    } as Driver;
+    this.seasonService.createDriver(data, this.season?.id!).subscribe({
       next: () => {
         this.closeModal();
         this.isFetching = false;
@@ -45,9 +57,15 @@ export class DriverAllComponent implements OnInit {
     });
   }
 
-  updateDriver(id: string, data: any) {
+  updateDriver(id: string) {
     this.isFetching = true;
-    this.seasonService.updateDriver(id, data.value).subscribe({
+    const data = {
+      'name': this.inputName.value,
+      'realName': this.inputRealName.value,
+      'number': this.inputNumber.value,
+      'actualTeamId': this.inputActualTeamId.value,
+    } as Driver;
+    this.seasonService.updateDriver(id, data).subscribe({
       next: () => {
         this.closeModal();
         this.isFetching = false;
@@ -75,8 +93,14 @@ export class DriverAllComponent implements OnInit {
   }
 
   openModal(modal: string, selectedDriver?: Driver) {
-    this.modal = modal;    
-    this.selectedDriver = selectedDriver;
+    this.modal = modal;
+    if (selectedDriver) {
+      this.selectedDriver = selectedDriver;
+      this.inputName.setValue(selectedDriver?.name);
+      this.inputRealName.setValue(selectedDriver?.realName);
+      this.inputNumber.setValue(selectedDriver?.number);
+      this.inputActualTeamId.setValue(selectedDriver?.actualTeam?.id === undefined ? null : selectedDriver?.actualTeam?.id);
+    }
   }
 
   closeModal() {
@@ -87,5 +111,13 @@ export class DriverAllComponent implements OnInit {
 
   openStatistics(name: string) {
     window.location.href = `statistics?name=${name}`;
+  }
+
+  actualTeamColor() {
+    return this.season.teams.find(x => x.id === this.inputActualTeamId.value)?.color;
+  }
+
+  removeError() {
+    this.error = '';
   }
 }

@@ -41,6 +41,18 @@ export class SeasonComponent implements OnInit {
 
     this.isLoggedIn = this.authService.getBearerToken() !== undefined;      
     this.onFetchData();
+
+    if (this.route.snapshot.queryParamMap.get('type')) {
+      this.selectType.setValue(this.route.snapshot.queryParamMap.get('type'));
+      
+      if (this.route.snapshot.queryParamMap.get('value')) {
+        try {
+          this.selectValue.setValue(this.route.snapshot.queryParamMap.get('value'));
+        } catch {}
+      }
+    } else {
+      this.onChange();
+    }
   }
 
   onFetchData(): any {
@@ -64,6 +76,17 @@ export class SeasonComponent implements OnInit {
         this.isFetching = false;
         this.router.navigate(['season']);
       }
+    });
+  }
+
+  onChange() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        type: this.selectType.value,
+        value: this.selectValue.value
+      },
+      queryParamsHandling: 'merge'
     });
   }
 
@@ -187,8 +210,10 @@ export class SeasonComponent implements OnInit {
     switch (position) {
       case 'DNF':
         return 100;
-      case 'DSQ':
+      case 'DNS':
         return 101;
+      case 'DSQ':
+        return 102;
       default:
         return parseInt(position);
     }
@@ -319,5 +344,9 @@ export class SeasonComponent implements OnInit {
     this.modal = '';
     this.error = '';
     this.selectedPermissionId = '';    
+  }
+
+  removeError() {
+    this.error = '';
   }
 }

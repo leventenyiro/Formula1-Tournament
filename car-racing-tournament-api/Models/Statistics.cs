@@ -14,11 +14,11 @@ namespace car_racing_tournament_api.Models
     }
 
     public class SeasonStatistics {
-        public Guid Id { get; set; }
         public string? Name { get; set; }
         public string? Color { get; set; }
         public DateTime CreatedAt { get; set; }
         public int? Position { get; set; }
+        public int? CountDriver { get; set; }
     }
 
     public class PositionStatistics {

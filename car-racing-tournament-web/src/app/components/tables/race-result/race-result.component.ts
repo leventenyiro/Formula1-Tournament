@@ -29,8 +29,8 @@ export class RaceResultComponent implements OnInit {
   error: string = '';
   modal: string = '';
   selectedResult?: Result;
-  teamId = new FormControl('');
-  driverId = new FormControl('');
+  inputTeamId = new FormControl('');
+  inputDriverId = new FormControl('');
 
   constructor(private seasonService: SeasonService) { }
 
@@ -45,8 +45,8 @@ export class RaceResultComponent implements OnInit {
     data.value.position = convertedResult.position;
 
     data.value.raceId = this.raceId;
-    data.value.driverId = this.driverId.value;
-    data.value.teamId = this.teamId.value;
+    data.value.driverId = this.inputDriverId.value;
+    data.value.teamId = this.inputTeamId.value;
 
     this.seasonService.createResult(data.value).subscribe({
       next: () => {
@@ -69,8 +69,8 @@ export class RaceResultComponent implements OnInit {
     data.value.position = convertedResult.position;
     
     data.value.raceId = this.raceId;
-    data.value.driverId = this.driverId.value;
-    data.value.teamId = this.teamId.value;
+    data.value.driverId = this.inputDriverId.value;
+    data.value.teamId = this.inputTeamId.value;
     
     this.seasonService.updateResult(id, data.value).subscribe({
       next: () => {
@@ -100,10 +100,15 @@ export class RaceResultComponent implements OnInit {
   }
 
   openModal(modal: string, selectedResult?: Result) {
+    if (modal === 'createResult' && (this.season.drivers.length === 0 || this.season.teams.length === 0)) {
+      this.error = 'There are not available drivers or teams!'
+      return;
+    }
+    
     this.modal = modal;
     this.selectedResult = selectedResult;
 
-    this.driverId.setValue(this.selectedResult === undefined ? 
+    this.inputDriverId.setValue(this.selectedResult === undefined ? 
       this.season!.drivers[0].id : 
       this.selectedResult.driver.id);
 
@@ -125,10 +130,18 @@ export class RaceResultComponent implements OnInit {
   }
 
   setTeamId() {
-    const actualTeamId = this.season.drivers.find(x => x.id === this.driverId.value)?.actualTeam?.id;
+    const actualTeamId = this.season.drivers.find(x => x.id === this.inputDriverId.value)?.actualTeam?.id;
     if (actualTeamId !== undefined)
-      this.teamId.setValue(actualTeamId);
+      this.inputTeamId.setValue(actualTeamId);
     else
-      this.teamId.setValue(this.season.teams[0].id);
+      this.inputTeamId.setValue(this.season.teams[0].id);
+  }
+
+  actualTeamColor() {
+    return this.season.teams.find(x => x.id === this.inputTeamId.value)?.color;
+  }
+
+  removeError() {
+    this.error = '';
   }
 }

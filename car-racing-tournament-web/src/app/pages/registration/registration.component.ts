@@ -70,7 +70,7 @@ export class RegistrationComponent implements OnInit {
     this.router.navigate(['login'])
   }
 
-  closeModal() {
+  removeError() {
     this.error = '';
   }
 }

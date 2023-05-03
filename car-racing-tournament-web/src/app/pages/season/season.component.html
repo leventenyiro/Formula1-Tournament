@@ -16,13 +16,13 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <select class="form-select" [formControl]="selectType">
+                    <select class="form-select" [formControl]="selectType" (change)="onChange()">
                         <option value="drivers">Drivers</option>
                         <option value="teams">Teams</option>
                         <option value="races">Races</option>
                     </select>
         
-                    <select class="form-select mt-3" [formControl]="selectValue">
+                    <select class="form-select mt-3" [formControl]="selectValue" (change)="onChange()">
                         <option value="all" [selected]="true">All</option>
         
                         <ng-template [ngIf]="selectType.value === 'drivers'">
@@ -183,7 +183,7 @@
                 <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="closeModal()">Cancel</button>
             </div>
             <div class="col-6">
-                <button class="btn btn-primary btn-sm btn-block" [disabled]="!postForm.valid">Add</button>
+                <button class="btn btn-primary btn-sm btn-block">Add</button>
             </div>
         </div>
     </form>
@@ -201,4 +201,4 @@
 
 <app-modal type="loading" *ngIf="isFetching"></app-modal>
 
-<app-modal type="error" *ngIf="error" [text]="error" (onCloseModalEmitter)="closeModal()"></app-modal>
+<app-modal type="error" *ngIf="error" [text]="error" (onCloseModalEmitter)="removeError()"></app-modal>

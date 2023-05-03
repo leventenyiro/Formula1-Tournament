@@ -350,9 +350,9 @@ namespace car_racing_tournament_api.Data
                     new Result
                     {
                         Id = Guid.NewGuid(),
-                        Type = ResultType.Finished,
-                        Position = 2,
-                        Point = 18,
+                        Type = ResultType.DNS,
+                        Position = null,
+                        Point = 0,
                         DriverId = new Guid("8c3d9760-861a-4697-bb35-64c299acdae6"),
                         TeamId = new Guid("bb0f78a2-c96e-4995-b84c-a68c9c5105dc"),
                         RaceId = new Guid("cd04e3bd-f0bb-4376-878b-7cd07b53f342")

@@ -1,6 +1,6 @@
 <div class="row row-header my-3 d-flex align-items-center">
     <div class="col-2">Pos</div>
-    <div class="col-4">Race</div>
+    <div class="col-4">Name</div>
     <div class="col-3">Points</div>
     <div *ngIf="hasPermission && !season.isArchived" class="col-3">
         <button class="btn btn-success btn-sm" (mouseup)="openModal('createTeam')">Add team</button>
@@ -63,7 +63,7 @@
                 <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="closeModal()">Cancel</button>
             </div>
             <div class="col-6">
-                <button class="btn btn-primary btn-sm btn-block" [disabled]="!postForm.valid">
+                <button class="btn btn-primary btn-sm btn-block">
                     {{ modal === 'createTeam' ? 'Add' : 'Modify' }}
                 </button>
             </div>
@@ -73,4 +73,4 @@
 
 <app-modal type="loading" *ngIf="isFetching"></app-modal>
 
-<app-modal type="error" *ngIf="error" [text]="error" (onCloseModalEmitter)="closeModal()"></app-modal>
+<app-modal type="error" *ngIf="error" [text]="error" (onCloseModalEmitter)="removeError()"></app-modal>

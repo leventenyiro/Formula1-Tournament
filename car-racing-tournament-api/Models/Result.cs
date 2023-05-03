@@ -26,6 +26,7 @@ namespace car_racing_tournament_api.Models
     public enum ResultType
     {
         Finished,
+        DNS,
         DNF,
         DSQ
     }

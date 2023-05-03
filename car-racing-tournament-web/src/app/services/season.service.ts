@@ -563,16 +563,18 @@ export class SeasonService {
 
   getFormattedDate(dateStr: Date, needSeconds: boolean) {
     const date = new Date(dateStr);
-    return `${date.getFullYear()}-` +
-      `${(Number(date.getMonth()) + 1).toString().padStart(2, '0')}-` +
-      `${date.getDate().toString().padStart(2, '0')} ` +
-      `${date.getHours().toString().padStart(2, '0')}:` +
-      `${date.getMinutes().toString().padStart(2, '0')}` +
-      `${needSeconds ? ':' + date.getSeconds().toString().padStart(2, '0') : ''}`;
+    const timeZoneOffset = date.getTimezoneOffset() * 60000;
+    const localDate = new Date(date.getTime() - timeZoneOffset);
+    return `${localDate.getFullYear()}-` +
+      `${(Number(localDate.getMonth()) + 1).toString().padStart(2, '0')}-` +
+      `${localDate.getDate().toString().padStart(2, '0')} ` +
+      `${localDate.getHours().toString().padStart(2, '0')}:` +
+      `${localDate.getMinutes().toString().padStart(2, '0')}` +
+      `${needSeconds ? ':' + localDate.getSeconds().toString().padStart(2, '0') : ''}`;
   }
 
   resultConverter(data: any): any {
-    if (data.position === 'DNF' || data.position === 'DSQ') {
+    if (data.position === 'DNF' || data.position === 'DSQ' || data.position === 'DNS') {
       data.type = data.position;
       data.position = 0;
     } else
