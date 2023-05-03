@@ -13,7 +13,7 @@ namespace car_racing_tournament_api.Models
         public Guid SeasonId { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<Driver>? Drivers { get; set; }
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public List<Result>? Results { get; set; }
     }
 }

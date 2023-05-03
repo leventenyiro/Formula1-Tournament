@@ -149,7 +149,12 @@ export class SeasonsComponent implements OnInit {
   }
 
   navigateSeason(id: string) {
-    this.router.navigate([`season/${id}`]);
+    this.router.navigate([`season/${id}`], {
+      queryParams: {
+        'type': 'drivers',
+        'value': 'all'
+      }
+    });
   }
 
   setModal(modal: boolean) {
