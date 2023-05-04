@@ -1,8 +1,8 @@
 <div class="row row-header my-3 d-flex align-items-center">
     <div class="col-2">Pos</div>
-    <div class="col-4">Name</div>
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-5' : 'col-7'">Name</div>
     <div class="col-3">Points</div>
-    <div *ngIf="hasPermission && !season.isArchived" class="col-3">
+    <div *ngIf="hasPermission && !season.isArchived" class="col-2">
         <button class="btn btn-success btn-sm" (mouseup)="openModal('createTeam')">Add team</button>
     </div>
 </div>
@@ -11,13 +11,13 @@
         <div class="col team-color" [ngStyle]="{'background-color': team.color}"></div>
         {{ i + 1 }}
     </div>
-    <div class="col-4">
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-5' : 'col-7'">
         {{ team.name }}
     </div>
     <div class="col-3">
         {{ team.point }}
     </div>
-    <div *ngIf="hasPermission && !season.isArchived" class="col-3">
+    <div *ngIf="hasPermission && !season.isArchived" class="col-2">
         <div class="row">
             <div class="col-sm-6 my-1">
                 <button class="btn btn-primary btn-sm me-2" (mouseup)="openModal('updateTeam', team)" title="Modify">
