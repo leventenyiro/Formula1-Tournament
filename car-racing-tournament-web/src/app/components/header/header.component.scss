@@ -1,6 +1,6 @@
 nav {
-    backdrop-filter: contrast(120%);
-
+    backdrop-filter: blur(5px) contrast(1.4);
+    
     .navbar-brand {
         font-weight: 700;
     }

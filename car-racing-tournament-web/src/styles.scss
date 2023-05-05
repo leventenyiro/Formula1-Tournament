@@ -30,8 +30,7 @@ h2 {
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     padding: 10px;
     font-size: small;
-    backdrop-filter: contrast(120%);
-
+    backdrop-filter: blur(5px) contrast(1.4);
 }
 
 .row-header {

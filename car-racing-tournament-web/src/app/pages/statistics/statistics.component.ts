@@ -20,19 +20,20 @@ export class StatisticsComponent implements OnInit {
     private seasonService: SeasonService, 
     private route: ActivatedRoute,
     private router: Router
-  ) { }
-
-  ngOnInit(): void {
+  ) {
     if (this.route.snapshot.queryParamMap.get('name')) {
       this.inputSearch.setValue(this.route.snapshot.queryParamMap.get('name'));
       this.onSearch();
     }
   }
 
+  ngOnInit(): void { }
+
   onSearch(): void {
     this.isFetching = true;
     this.driverName = '';
     this.statistics = undefined;
+    
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
