@@ -1,6 +1,6 @@
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-10 pt-3">
+    <div class="row pt-3">
+        <div class="col-lg-9 col-xl-10">
             <div class="row">
                 <div class="col-sm-6">
                     <h1>{{ season?.name }}
@@ -74,7 +74,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-2">
+        <div class="col-lg-3 col-xl-2">
             <div *ngIf="this.isLoggedIn && getUserPermission()?.type === 1" class="d-none d-lg-grid gap-2 mt-2">
                 <button class="btn btn-outline-primary btn-sm btn-block" (mouseup)="openModal('updateSeason')"
                     *ngIf="!season!.isArchived">Edit</button>
