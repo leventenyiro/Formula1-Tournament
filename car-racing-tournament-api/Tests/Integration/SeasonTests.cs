@@ -248,8 +248,6 @@ namespace car_racing_tournament_api.Tests.Integration
         public async Task PutSeasonNotFound() {
             SetAuthentication(_userId);
 
-            _season!.IsArchived = true;
-
             var result = await _seasonController!.Put(Guid.NewGuid(), new SeasonUpdateDto {
                 Name = "test",
                 Description = "adsad"
@@ -302,8 +300,6 @@ namespace car_racing_tournament_api.Tests.Integration
         [Test]
         public async Task DeleteSeasonNotFound() {
             SetAuthentication(_userId);
-
-            _season!.IsArchived = true;
 
             var result = await _seasonController!.Delete(Guid.NewGuid());
 
