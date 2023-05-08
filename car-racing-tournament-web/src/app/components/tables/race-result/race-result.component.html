@@ -108,7 +108,7 @@
 
         <div class="mb-3">
             <label for="inputPoint" class="form-label">Point</label>
-            <input type="number" required min="0" class="form-control" id="inputPoint" [ngModel]="selectedResult === undefined ? 0 : selectedResult.point" name="point" #point="ngModel" [class.is-invalid]="!point.valid && point.touched">
+            <input type="number" required min="0" step="0.5" class="form-control" id="inputPoint" [ngModel]="selectedResult === undefined ? 0 : selectedResult.point" name="point" #point="ngModel" [class.is-invalid]="!point.valid && point.touched">
             <div class="invalid-feedback">Point is required</div>
         </div>
 

@@ -125,7 +125,7 @@ namespace car_racing_tournament_api.Tests.Unit
             var driver = _context!.Drivers.Where(x => x.Number == 2).FirstOrDefaultAsync().Result;
             var resultDto = new ResultDto
             {
-                Point = 18,
+                Point = 18.5,
                 Position = 2,
                 DriverId = driver!.Id,
                 TeamId = (Guid)driver.ActualTeamId!
@@ -214,6 +214,24 @@ namespace car_racing_tournament_api.Tests.Unit
         }
 
         [Test]
+        public async Task AddResultNotHalfPoint()
+        {
+            var driver = _context!.Drivers.Where(x => x.Number == 2).FirstOrDefaultAsync().Result;
+            var resultDto = new ResultDto
+            {
+                Point = 1.4,
+                Position = 2,
+                DriverId = driver!.Id,
+                TeamId = (Guid)driver.ActualTeamId!
+            };
+            
+            var result = await _resultService!.AddResult(_context.Races.First(), resultDto, driver, driver.ActualTeam!);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:ResultPointNotHalf"]);
+            Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
+        }
+
+        [Test]
         public async Task AddResultWithAnotherSeason()
         {
             var anotherSeasonId = Guid.NewGuid();
@@ -262,7 +280,7 @@ namespace car_racing_tournament_api.Tests.Unit
             var driver = _context!.Drivers.Where(x => x.Number == 1).FirstOrDefaultAsync().Result;
             var resultDto = new ResultDto
             {
-                Point = 18,
+                Point = 18.5,
                 Position = 2,
                 DriverId = driver!.Id,
                 TeamId = (Guid)driver.ActualTeamId!
@@ -361,6 +379,24 @@ namespace car_racing_tournament_api.Tests.Unit
             var result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.First(), driver, driver.ActualTeam!);
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:ResultPoint"]);
+            Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
+        }
+
+        [Test]
+        public async Task UpdateResultNotHalfPoint()
+        {
+            var driver = _context!.Drivers.Where(x => x.Number == 2).FirstOrDefaultAsync().Result;
+            var resultDto = new ResultDto
+            {
+                Point = 1.4,
+                Position = 2,
+                DriverId = driver!.Id,
+                TeamId = (Guid)driver.ActualTeamId!
+            };
+            
+            var result = await _resultService!.UpdateResult(_result!, resultDto, _context.Races.First(), driver, driver.ActualTeam!);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:ResultPointNotHalf"]);
             Assert.AreEqual(_context!.Results.ToListAsync().Result.Count, 1);
         }
 
