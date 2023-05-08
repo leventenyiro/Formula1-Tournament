@@ -115,8 +115,6 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.IsNull(result.ErrorMessage);
             Assert.AreEqual(result.Seasons!.Count, 1);
 
-            //Assert.AreEqual(result.Seasons?.First().Teams.Count, 1); IT WILL BE IMPLEMENTED
-
             SeasonOutputDto season = result.Seasons![0];
             Assert.AreEqual(season.Id, _context!.Seasons.First().Id);
             Assert.AreEqual(season.Name, _context!.Seasons.First().Name);

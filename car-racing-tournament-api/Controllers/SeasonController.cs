@@ -124,6 +124,10 @@ namespace car_racing_tournament_api.Controllers
             if (!await _permissionService.IsAdmin(new Guid(User.Identity!.Name!), id))
                 return Forbid();
 
+            if (resultGetSeason.Season!.IsArchived) {
+                return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
+            }
+
             var resultDelete = await _seasonService.DeleteSeason(resultGetSeason.Season!);
             if (!resultDelete.IsSuccess)
                 return BadRequest(resultDelete.ErrorMessage);
@@ -142,7 +146,7 @@ namespace car_racing_tournament_api.Controllers
         }
 
         [HttpPost("{seasonId}/permission"), Authorize]
-        public async Task<IActionResult> Post(Guid seasonId, [FromForm] string usernameEmail)
+        public async Task<IActionResult> PostPermission(Guid seasonId, [FromForm] string usernameEmail)
         {
             var resultGetSeason = await _seasonService.GetSeasonById(seasonId);
             if (!resultGetSeason.IsSuccess)
@@ -154,6 +158,10 @@ namespace car_racing_tournament_api.Controllers
 
             if (!await _permissionService.IsAdmin(new Guid(User.Identity!.Name!), seasonId))
                 return Forbid();
+
+            if (resultGetSeason.Season!.IsArchived) {
+                return BadRequest(_configuration["ErrorMessages:SeasonArchived"]);
+            }
 
             var resultAdd = await _permissionService.AddPermission(resultGetUser.User!, resultGetSeason.Season!, PermissionType.Moderator);
             if (!resultAdd.IsSuccess)
