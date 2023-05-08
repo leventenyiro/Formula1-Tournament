@@ -19,7 +19,7 @@ namespace car_racing_tournament_api.Tests.Unit
         private IConfiguration? _configuration;
 
         [SetUp]
-        public void Init()
+    public void Init()
         {
             var options = new DbContextOptionsBuilder<CarRacingTournamentDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
@@ -136,6 +136,15 @@ namespace car_racing_tournament_api.Tests.Unit
             Assert.AreEqual(season.Name, _context!.Seasons.First().Name);
             Assert.AreEqual(season.Description, _context!.Seasons.First().Description);
             Assert.AreEqual(season.IsArchived, _context!.Seasons.First().IsArchived);
+        }
+
+        [Test]
+        public async Task GetSeasonByIdNotFound()
+        {
+            var result = await _seasonService!.GetSeasonById(Guid.NewGuid());
+            Assert.IsFalse(result.IsSuccess);
+            Assert.IsNotNull(result.ErrorMessage);
+            Assert.IsNull(result.Season);
         }
 
         [Test]
