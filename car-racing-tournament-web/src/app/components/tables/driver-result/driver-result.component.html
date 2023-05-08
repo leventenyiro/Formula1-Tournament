@@ -1,15 +1,15 @@
 <div class="row row-header my-3 d-flex align-items-center">
-    <div class="col-2">Race</div>
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-3' : 'col-3 col-lg-4'">Race</div>
     <div class="col-lg-3 d-none d-lg-flex">Date</div>
-    <div class="col-3 col-lg-2">Team</div>
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-3 col-lg-2' : 'col-5 col-lg-3'">Team</div>
     <div class="col-2 col-lg-1">Pos</div>
     <div class="col-2 col-lg-1">Points</div>
-    <div *ngIf="hasPermission && !season.isArchived" class="col-3 col-lg-2">
+    <div *ngIf="hasPermission && !season.isArchived" class="col-2">
         <button class="btn btn-success btn-sm" (mouseup)="openModal('createResult')">Add result</button>
     </div>
 </div>
 <div class="row row-box mb-3 d-flex align-items-center" *ngFor="let result of driverResults">
-    <div class="col-2 d-flex align-items-center">
+    <div class="d-flex align-items-center" [ngClass]="hasPermission && !season.isArchived ? 'col-3' : 'col-3 col-lg-4'">
         <div class="team-color" [ngStyle]="{'background-color': result.team.color}"></div>
         <div class="d-none d-lg-flex">
             {{ result.race.name }}
@@ -21,7 +21,7 @@
     <div class="col-lg-3 d-none d-lg-flex">
         {{ result.race.dateTime }}
     </div>
-    <div class="col-3 col-lg-2">
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-3 col-lg-2' : 'col-5 col-lg-3'">
         {{ result.team.name }}
     </div>
     <div class="col-2 col-lg-1">
@@ -32,7 +32,7 @@
     <div class="col-2 col-lg-1">
         {{ result.point }}
     </div>
-    <div *ngIf="hasPermission && !season.isArchived" class="col-3 col-lg-2">
+    <div *ngIf="hasPermission && !season.isArchived" class="col-2">
         <div class="row">
             <div class="col-sm-6 my-1">
                 <button class="btn btn-primary btn-sm" (mouseup)="openModal('updateResult', result)" title="Modify">
