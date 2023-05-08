@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Result } from 'app/models/result';
 import { Season } from 'app/models/season';
@@ -37,10 +37,14 @@ export class DriverResultComponent implements OnInit {
 
   constructor(private seasonService: SeasonService) { }
 
-  ngOnInit(): void {
-    this.inputTeamId.setValue(this.getDriverActualTeam() === undefined ? this.season!.teams[0].id : this.getDriverActualTeam());
-    this.inputRaceId.setValue(this.season!.races[0].id);
-    this.inputPosition.setValue(this.selectedResult === undefined ? 1 : (this.selectedResult.type.toString() === 'Finished' ? this.selectedResult.position : this.selectedResult.type));
+  ngOnInit(): void { }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['driverId']) {
+      this.inputTeamId.setValue(this.getDriverActualTeam() === undefined ? this.season!.teams[0].id : this.getDriverActualTeam());
+      this.inputRaceId.setValue(this.season!.races[0].id);
+      this.inputPosition.setValue(this.selectedResult === undefined ? 1 : (this.selectedResult.type.toString() === 'Finished' ? this.selectedResult.position : this.selectedResult.type));
+    }
   }
 
   createResult() {
@@ -152,7 +156,7 @@ export class DriverResultComponent implements OnInit {
   }
 
   getDriverActualTeam() {
-    return this.season.drivers.find(x => x.id === this.driverId)?.actualTeam?.id;
+    return this.season.drivers.find(x => x.id === this.driverId)?.actualTeamId;
   }
 
   actualTeamColor() {

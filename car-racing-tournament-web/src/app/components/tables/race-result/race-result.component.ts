@@ -138,7 +138,7 @@ export class RaceResultComponent implements OnInit {
   }
 
   setTeamId() {
-    const actualTeamId = this.season.drivers.find(x => x.id === this.inputDriverId.value)?.actualTeam?.id;
+    const actualTeamId = this.season.drivers.find(x => x.id === this.inputDriverId.value)?.actualTeamId;
     if (actualTeamId !== undefined)
       this.inputTeamId.setValue(actualTeamId);
     else
