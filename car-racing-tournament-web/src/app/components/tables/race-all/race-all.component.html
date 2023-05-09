@@ -83,6 +83,7 @@
 
 <app-modal type="form" *ngIf="modal === 'deleteRace'">
     <app-verify-form
+        class="text-center"
         title='Delete "{{ selectedRace!.name }}" race'
         executeButtonText="Delete"
         (executionEmitter)="deleteRace(selectedRace!.id)"

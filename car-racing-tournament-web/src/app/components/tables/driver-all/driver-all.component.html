@@ -111,6 +111,7 @@
 
 <app-modal type="form" *ngIf="modal === 'deleteDriver'">
     <app-verify-form
+        class="text-center"
         title='Delete "{{ selectedDriver!.name }}" driver'
         subtext="It will remove all results of the driver!"
         executeButtonText="Delete"
