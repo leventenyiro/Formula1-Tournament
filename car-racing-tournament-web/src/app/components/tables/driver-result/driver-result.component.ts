@@ -135,7 +135,7 @@ export class DriverResultComponent implements OnInit {
     this.modal = modal;    
     if (selectedResult) {
       this.selectedResult = selectedResult;
-      if (modal === 'updateDriver') {
+      if (modal === 'updateResult') {
         this.inputTeamId.setValue(this.selectedResult.team.id);
         this.inputRaceId.setValue(this.selectedResult.race.id);
         this.inputPosition.setValue(this.selectedResult.position);
