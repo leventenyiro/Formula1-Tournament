@@ -52,16 +52,6 @@
                 </button>
             </div>
         </div>
-
-        <app-modal type="form" *ngIf="modal === 'deleteDriver' && selectedDriver!.id === driver.id">
-            <app-verify-form
-                title='Delete "{{ driver.name }}" driver'
-                subtext="It will remove all results of the driver!"
-                executeButtonText="Delete"
-                (executionEmitter)="deleteDriver(driver.id)"
-                (closeModalEmitter)="closeModal()"
-            ></app-verify-form>
-        </app-modal>
     </div>
 </div>
 
@@ -117,6 +107,17 @@
             </div>
         </div>
     </form>
+</app-modal>
+
+<app-modal type="form" *ngIf="modal === 'deleteDriver'">
+    <app-verify-form
+        class="text-center"
+        title='Delete "{{ selectedDriver!.name }}" driver'
+        subtext="It will remove all results of the driver!"
+        executeButtonText="Delete"
+        (executionEmitter)="deleteDriver(selectedDriver!.id)"
+        (closeModalEmitter)="closeModal()"
+    ></app-verify-form>
 </app-modal>
 
 <app-modal type="loading" *ngIf="isFetching"></app-modal>

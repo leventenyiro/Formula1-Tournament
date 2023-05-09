@@ -75,6 +75,7 @@ export class TeamAllComponent implements OnInit {
     this.isFetching = true;
     this.seasonService.deleteTeam(id).subscribe({
       next: () => {
+        this.closeModal();
         this.isFetching = false;
         this.onFetchDataEmitter.emit()
       },

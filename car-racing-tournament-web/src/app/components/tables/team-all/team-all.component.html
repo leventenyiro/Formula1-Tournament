@@ -30,15 +30,6 @@
                 </button>
             </div>
         </div>
-
-        <app-modal type="form" *ngIf="modal === 'deleteTeam' && selectedTeam!.id === team.id">
-            <app-verify-form
-                title='Delete "{{ team.name }}" team'
-                executeButtonText="Delete"
-                (executionEmitter)="deleteTeam(team.id)"
-                (closeModalEmitter)="closeModal()"
-            ></app-verify-form>
-        </app-modal>
     </div>
 </div>
 
@@ -71,6 +62,16 @@
             </div>
         </div>
     </form>
+</app-modal>
+
+<app-modal type="form" *ngIf="modal === 'deleteTeam'">
+    <app-verify-form
+        class="text-center"
+        title='Delete "{{ selectedTeam!.name }}" team'
+        executeButtonText="Delete"
+        (executionEmitter)="deleteTeam(selectedTeam!.id)"
+        (closeModalEmitter)="closeModal()"
+    ></app-verify-form>
 </app-modal>
 
 <app-modal type="loading" *ngIf="isFetching"></app-modal>

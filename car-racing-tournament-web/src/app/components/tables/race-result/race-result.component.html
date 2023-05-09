@@ -50,15 +50,6 @@
                 </button>
             </div>
         </div>
-
-        <app-modal type="form" *ngIf="modal === 'deleteResult' && selectedResult!.id === result.id">
-            <app-verify-form
-                title='Delete this result'
-                executeButtonText="Delete"
-                (executionEmitter)="deleteResult(result.id)"
-                (closeModalEmitter)="closeModal()"
-            ></app-verify-form>
-        </app-modal>
     </div>
 </div>
 
@@ -123,6 +114,16 @@
             </div>
         </div>
     </form>
+</app-modal>
+
+<app-modal type="form" *ngIf="modal === 'deleteResult'">
+    <app-verify-form
+        class="text-center"
+        title='Delete this result'
+        executeButtonText="Delete"
+        (executionEmitter)="deleteResult(selectedResult!.id)"
+        (closeModalEmitter)="closeModal()"
+    ></app-verify-form>
 </app-modal>
 
 <app-modal type="loading" *ngIf="isFetching"></app-modal>

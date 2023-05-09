@@ -115,6 +115,7 @@ export class DriverResultComponent implements OnInit {
     this.isFetching = true;
     this.seasonService.deleteResult(id).subscribe({
       next: () => {
+        this.closeModal();
         this.isFetching = false;
         this.onFetchDataEmitter.emit()
       },
@@ -134,10 +135,12 @@ export class DriverResultComponent implements OnInit {
     this.modal = modal;    
     if (selectedResult) {
       this.selectedResult = selectedResult;
-      this.inputTeamId.setValue(this.selectedResult.team.id);
-      this.inputRaceId.setValue(this.selectedResult.race.id);
-      this.inputPosition.setValue(this.selectedResult.position);
-      this.inputPoint.setValue(this.selectedResult.point);
+      if (modal === 'updateDriver') {
+        this.inputTeamId.setValue(this.selectedResult.team.id);
+        this.inputRaceId.setValue(this.selectedResult.race.id);
+        this.inputPosition.setValue(this.selectedResult.position);
+        this.inputPoint.setValue(this.selectedResult.point);
+      }
     }
   }
 
