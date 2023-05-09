@@ -14,15 +14,16 @@ using System.Security.Claims;
 namespace car_racing_tournament_api.Tests.Integration
 {
     [TestFixture]
-    public class DriverTests
+    public class TeamTests
     {
-        private DriverController? _driverController;
+        private TeamController? _teamController;
         private CarRacingTournamentDbContext? _context;
-        private Driver? _driver;
+        private Team? _team;
         private SeasonService? _seasonService;
         private PermissionService? _permissionService;
         private DriverService? _driverService;
         private TeamService? _teamService;
+        private ResultService? _resultService;
         private IConfiguration? _configuration;
         private Guid _anotherUserId;
         private Guid _moderatorUserId;
@@ -68,7 +69,7 @@ namespace car_racing_tournament_api.Tests.Integration
                 }
             };
 
-            Team team = new Team
+            _team = new Team
             {
                 Id = Guid.NewGuid(),
                 Name = "First Team",
@@ -76,17 +77,7 @@ namespace car_racing_tournament_api.Tests.Integration
                 Season = season
             };
 
-            _driver = new Driver
-            {
-                Id = Guid.NewGuid(),
-                Name = "FirstDriver",
-                Number = 1,
-                RealName = "First driver",
-                ActualTeam = team,
-                Season = season
-            };
-
-            _context.Drivers.Add(_driver);
+            _context.Teams.Add(_team!);
             _context.SaveChanges();
 
             var mockMapper = new MapperConfiguration(cfg =>
@@ -103,12 +94,14 @@ namespace car_racing_tournament_api.Tests.Integration
             _permissionService = new PermissionService(_context);
             _driverService = new DriverService(_context, mapper);
             _teamService = new TeamService(_context);
+            _resultService = new ResultService(_context, mapper);
 
-            _driverController = new DriverController(
-                _driverService,
-                _permissionService,
+            _teamController = new TeamController(
                 _teamService,
-                _seasonService
+                _permissionService,
+                _seasonService,
+                _driverService,
+                _resultService
             );
         }
 
@@ -122,101 +115,74 @@ namespace car_racing_tournament_api.Tests.Integration
             }
             httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
 
-            _driverController!.ControllerContext.HttpContext = httpContext;
+            _teamController!.ControllerContext.HttpContext = httpContext;
         }
 
         [Test]
-        public async Task PutDriverAnotherUser() {
+        public async Task PutTeamAnotherUser() {
             SetAuthentication(_anotherUserId);
 
-            var result = await _driverController!.Put(_driver!.Id, new DriverDto {
+            var result = await _teamController!.Put(_team!.Id, new TeamDto {
                 Name = "testDriver123",
-                RealName = "",
-                Number = 23,
-                ActualTeamId = null
+                Color = "#abcdef"
             });
 
             Assert.That(result, Is.TypeOf<ForbidResult>());
         }
 
         [Test]
-        public async Task PutDriverNotFound() {
+        public async Task PutTeamNotFound() {
             SetAuthentication(_moderatorUserId);
 
-            var result = await _driverController!.Put(Guid.NewGuid(), new DriverDto {
+            var result = await _teamController!.Put(Guid.NewGuid(), new TeamDto {
                 Name = "testDriver123",
-                RealName = "",
-                Number = 23,
-                ActualTeamId = null
+                Color = "#abcdef"
             });
 
             Assert.That(result, Is.TypeOf<NotFoundObjectResult>());
         }
 
         [Test]
-        public async Task PutDriverTeamNotFound() {
+        public async Task PutTeamSeasonArchived() {
             SetAuthentication(_moderatorUserId);
 
-            var result = await _driverController!.Put(_driver!.Id, new DriverDto {
+            _team!.Season!.IsArchived = true;
+
+            var result = await _teamController!.Put(_team!.Id, new TeamDto {
                 Name = "testDriver123",
-                RealName = "",
-                Number = 23,
-                ActualTeamId = Guid.NewGuid()
-            });
-
-            Assert.That(result, Is.TypeOf<NotFoundObjectResult>());
-        }
-
-        [Test]
-        public async Task PutDriverSeasonArchived() {
-            SetAuthentication(_moderatorUserId);
-
-            _driver!.Season!.IsArchived = true;
-
-            var result = await _driverController!.Put(_driver!.Id, new DriverDto {
-                Name = "testDriver123",
-                RealName = "",
-                Number = 23,
-                ActualTeamId = null
+                Color = "#abcdef"
             });
 
             Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
         }
 
         [Test]
-        public async Task DeleteDriverAnotherUser() {
+        public async Task DeleteTeamAnotherUser() {
             SetAuthentication(_anotherUserId);
 
-            var result = await _driverController!.Delete(_driver!.Id);
+            var result = await _teamController!.Delete(_team!.Id);
 
             Assert.That(result, Is.TypeOf<ForbidResult>());
         }
 
         [Test]
-        public async Task DeleteDriverNotFound() {
+        public async Task DeleteTeamNotFound() {
             SetAuthentication(_moderatorUserId);
 
-            var result = await _driverController!.Delete(Guid.NewGuid());
+            var result = await _teamController!.Delete(Guid.NewGuid());
 
             Assert.That(result, Is.TypeOf<NotFoundObjectResult>());
         }
 
         [Test]
-        public async Task DeleteSeasonArchived() {
+        public async Task DeleteTeamArchived() {
             SetAuthentication(_moderatorUserId);
 
-            _driver!.Season!.IsArchived = true;
+            _team!.Season!.IsArchived = true;
 
-            var result = await _driverController!.Delete(_driver!.Id);
+            var result = await _teamController!.Delete(_team!.Id);
 
             Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
-        }
-
-        [Test]
-        public async Task GetStatistics() {
-            var result = await _driverController!.Statistics("FirstDriver");
-
-            Assert.That(result, Is.TypeOf<OkObjectResult>());
         }
     }
 }
