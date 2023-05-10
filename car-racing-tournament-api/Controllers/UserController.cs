@@ -24,7 +24,7 @@ namespace car_racing_tournament_api.Controllers
             _seasonService = seasonService;
             _configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
-                .Build();;
+                .Build();
         }
 
         [HttpPost("login")]

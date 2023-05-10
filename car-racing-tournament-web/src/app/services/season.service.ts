@@ -507,7 +507,6 @@ export class SeasonService {
 
     return this.http.post(
       `${environment.backendUrl}/favorite/${seasonId}`,
-      null,
       {
         headers: headers,
         responseType: 'text'
