@@ -20,7 +20,6 @@ namespace car_racing_tournament_api.Tests.Integration
         private CarRacingTournamentDbContext? _context;
         private User? _user;
         private IConfiguration? _configuration;
-        private Guid _user1Id;
         private Guid _user2Id;
 
         [SetUp]

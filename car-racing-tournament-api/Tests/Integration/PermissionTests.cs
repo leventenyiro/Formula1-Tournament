@@ -17,7 +17,6 @@ namespace car_racing_tournament_api.Tests.Integration
     {
         private PermissionController? _permissionController;
         private CarRacingTournamentDbContext? _context;
-        private Permission? _permission;
         private IConfiguration? _configuration;
         private Guid _adminUserId;
         private Guid _anotherUserId;
