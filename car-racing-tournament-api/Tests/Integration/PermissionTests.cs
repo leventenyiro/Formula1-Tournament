@@ -118,76 +118,52 @@ namespace car_racing_tournament_api.Tests.Integration
         }
 
         [Test]
+        public async Task UpgradePermissionSuccess() {
+            SetAuthentication(_adminUserId);
+
+            var result = await _permissionController!.UpgradePermission(_context!.Permissions.Where(x => x.Type == PermissionType.Moderator).First().Id);
+
+            Assert.That(result, Is.TypeOf<NoContentResult>());
+        }
+
+        [Test]
         public async Task UpgradePermissionNotFound()
         {
-            SetAuthentication(_anotherUserId);
-        }
+            SetAuthentication(_adminUserId);
 
-        [Test]
-        public async Task PutRaceAnotherUser() {
-            SetAuthentication(_anotherUserId);
-
-            var result = await _raceController!.Put(_race!.Id, new RaceDto {
-                Name = "NewRace",
-                DateTime = DateTime.Now
-            });
-
-            Assert.That(result, Is.TypeOf<ForbidResult>());
-        }
-
-        [Test]
-        public async Task PutRaceNotFound() {
-            SetAuthentication(_moderatorUserId);
-
-            var result = await _raceController!.Put(Guid.NewGuid(), new RaceDto {
-                Name = "NewRace",
-                DateTime = DateTime.Now
-            });
+            var result = await _permissionController!.UpgradePermission(Guid.NewGuid());
 
             Assert.That(result, Is.TypeOf<NotFoundObjectResult>());
         }
 
         [Test]
-        public async Task PutRaceSeasonArchived() {
+        public async Task UpgradePermissionForbid()
+        {
             SetAuthentication(_moderatorUserId);
 
-            _race!.Season!.IsArchived = true;
-
-            var result = await _raceController!.Put(_race!.Id, new RaceDto {
-                Name = "NewRace",
-                DateTime = DateTime.Now
-            });
-
-            Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
-        }
-
-        [Test]
-        public async Task DeleteRaceAnotherUser() {
-            SetAuthentication(_anotherUserId);
-
-            var result = await _raceController!.Delete(_race!.Id);
+            var result = await _permissionController!.UpgradePermission(_context!.Permissions.Where(x => x.Type == PermissionType.Moderator).First().Id);
 
             Assert.That(result, Is.TypeOf<ForbidResult>());
         }
 
         [Test]
-        public async Task DeleteRaceNotFound() {
-            SetAuthentication(_moderatorUserId);
+        public async Task DeletePermissionNotFound()
+        {
+            SetAuthentication(_adminUserId);
 
-            var result = await _raceController!.Delete(Guid.NewGuid());
+            var result = await _permissionController!.Delete(Guid.NewGuid());
 
             Assert.That(result, Is.TypeOf<NotFoundObjectResult>());
         }
 
         [Test]
-        public async Task DeleteRaceArchived() {
+        public async Task DeletePermissionForbid()
+        {
             SetAuthentication(_moderatorUserId);
 
-            _race!.Season!.IsArchived = true;
+            var result = await _permissionController!.Delete(_context!.Permissions.Where(x => x.Type == PermissionType.Admin).First().Id);
 
-            var result = await _raceController!.Delete(_race!.Id);
-
-            Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
+            Assert.That(result, Is.TypeOf<ForbidResult>());
         }
     }
 }
