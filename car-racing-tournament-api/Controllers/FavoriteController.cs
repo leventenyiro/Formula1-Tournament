@@ -35,7 +35,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetSeason.IsSuccess)
                 return NotFound(resultGetSeason.ErrorMessage);
 
-            var resultAdd = await _favoriteService.AddFavorite(resultGetUser.User!, resultGetSeason.Season!);
+            var resultAdd = await _favoriteService.AddFavorite(resultGetUser.User!.Id, resultGetSeason.Season!);
             if (!resultAdd.IsSuccess)
                 return BadRequest(resultAdd.ErrorMessage);
 
