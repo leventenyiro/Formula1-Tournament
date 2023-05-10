@@ -147,6 +147,16 @@ namespace car_racing_tournament_api.Tests.Integration
         }
 
         [Test]
+        public async Task DeletePermissionSuccess()
+        {
+            SetAuthentication(_adminUserId);
+
+            var result = await _permissionController!.Delete(_context!.Permissions.Where(x => x.Type == PermissionType.Moderator).First().Id);
+
+            Assert.That(result, Is.TypeOf<NoContentResult>());
+        }
+
+        [Test]
         public async Task DeletePermissionNotFound()
         {
             SetAuthentication(_adminUserId);
