@@ -26,7 +26,6 @@ export class SeasonsComponent implements OnInit {
   modal: boolean = false;
   user?: User;
 
-  // filters
   checkBoxFavorites = new FormControl('');
   checkBoxAdmin = new FormControl('');
   checkBoxModerator = new FormControl('');
@@ -125,7 +124,8 @@ export class SeasonsComponent implements OnInit {
         this.seasonService.deleteFavorite(this.user!.favorites!.find(x => x.seasonId === season.id)!.id!).subscribe({
           next: () => {
             this.isFetching = false;
-            this.onFetchData()
+            this.onFetchData();
+            this.onFetchData();
           },
           error: err => {
             this.error = err
@@ -137,7 +137,8 @@ export class SeasonsComponent implements OnInit {
         this.seasonService.createFavorite(season.id).subscribe({
           next: () => {
             this.isFetching = false;
-            this.onFetchData()
+            this.onFetchData();
+            this.onFetchData();
           },
           error: err => {
             this.error = err

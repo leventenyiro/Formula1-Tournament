@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd car-racing-tournament-api;
+cd ../car-racing-tournament-api;
 if [[ $1 = init ]]
 then
     echo $1;

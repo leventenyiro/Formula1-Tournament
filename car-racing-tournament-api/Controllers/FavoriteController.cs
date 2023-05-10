@@ -21,17 +21,21 @@ namespace car_racing_tournament_api.Controllers
             _userService = userService;
             _configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
-                .Build();;
+                .Build();
         }
 
         [HttpPost("{seasonId}"), Authorize]
         public async Task<IActionResult> Post(Guid seasonId)
         {
+            var resultGetUser = await _userService.GetUserById(new Guid(User.Identity!.Name!));
+            if (!resultGetUser.IsSuccess)
+                return NotFound(resultGetUser.ErrorMessage);
+
             var resultGetSeason = await _seasonService.GetSeasonById(seasonId);
             if (!resultGetSeason.IsSuccess)
                 return NotFound(resultGetSeason.ErrorMessage);
 
-            var resultAdd = await _favoriteService.AddFavorite(new Guid(User.Identity!.Name!), resultGetSeason.Season!);
+            var resultAdd = await _favoriteService.AddFavorite(resultGetUser.User!.Id, resultGetSeason.Season!);
             if (!resultAdd.IsSuccess)
                 return BadRequest(resultAdd.ErrorMessage);
 

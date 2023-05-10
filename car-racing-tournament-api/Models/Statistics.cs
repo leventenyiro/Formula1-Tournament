@@ -8,7 +8,7 @@ namespace car_racing_tournament_api.Models
         public int? NumberOfWin { get; set; }
         public int? NumberOfPodium { get; set; }
         public int? NumberOfChampion { get; set; }
-        public int? SumPoint { get; set; }
+        public double? SumPoint { get; set; }
         public List<SeasonStatistics>? SeasonStatistics { get; set; }
         public List<PositionStatistics>? PositionStatistics { get; set; }
     }

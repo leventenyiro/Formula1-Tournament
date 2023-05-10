@@ -1,11 +1,11 @@
 <div class="modal" [ngClass]="type === 'loading' ? 'modal-loading' : ''">
     <div class="modal-content">
-        <div class="spinner" *ngIf="type === 'loading'">
+        <div class="spinner text-center" *ngIf="type === 'loading'">
             <div class="spinner-border" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
-        <div class="row d-flex align-items-center" *ngIf="type === 'error' || type === 'success'">
+        <div class="row d-flex align-items-center text-center" *ngIf="type === 'error' || type === 'success'">
             <div class="col-2 modal-icon" [ngClass]="type === 'error' ? 'bg-danger error-icon' : 'bg-success'">
                 <i *ngIf="type === 'error'" class="bi bi-exclamation-lg"></i>
                 <i *ngIf="type === 'success'" class="bi bi-check2"></i>

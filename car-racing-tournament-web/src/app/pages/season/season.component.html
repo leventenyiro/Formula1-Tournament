@@ -1,6 +1,6 @@
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-10 pt-3">
+    <div class="row pt-3">
+        <div class="col-lg-9 col-xl-10">
             <div class="row">
                 <div class="col-sm-6">
                     <h1>{{ season?.name }}
@@ -74,7 +74,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-2">
+        <div class="col-lg-3 col-xl-2">
             <div *ngIf="this.isLoggedIn && getUserPermission()?.type === 1" class="d-none d-lg-grid gap-2 mt-2">
                 <button class="btn btn-outline-primary btn-sm btn-block" (mouseup)="openModal('updateSeason')"
                     *ngIf="!season!.isArchived">Edit</button>
@@ -125,7 +125,8 @@
                     </button>
     
                     <app-modal type="form" *ngIf="modal === 'deletePermission' && selectedPermissionId === permission.id">
-                        <app-verify-form title='Kick "{{ permission.username }}" moderator' executeButtonText="Kick"
+                        <app-verify-form
+        class="text-center" title='Kick "{{ permission.username }}" moderator' executeButtonText="Kick"
                             (executionEmitter)="deletePermission(permission.id)"
                             (closeModalEmitter)="closeModal()"></app-verify-form>
                     </app-modal>
@@ -138,7 +139,8 @@
                     </button>
     
                     <app-modal type="form" *ngIf="modal === 'updatePermission' && selectedPermissionId === permission.id">
-                        <app-verify-form title='Promote "{{ permission.username }}" moderator'
+                        <app-verify-form
+        class="text-center" title='Promote "{{ permission.username }}" moderator'
                             subtext="You will lose your admin rights!" executeButtonText="Promote"
                             (executionEmitter)="updatePermission(permission.id)"
                             (closeModalEmitter)="closeModal()"></app-verify-form>
@@ -178,7 +180,7 @@
             <div class="invalid-feedback">Username or E-mail is required</div>
         </div>
 
-        <div class="row d-flex">
+        <div class="row d-flex text-center">
             <div class="col-6">
                 <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="closeModal()">Cancel</button>
             </div>
@@ -190,12 +192,14 @@
 </app-modal>
 
 <app-modal type="form" *ngIf="modal === 'deleteSeason'">
-    <app-verify-form title='Delete "{{ season?.name }}" season' executeButtonText="Delete"
+    <app-verify-form
+        class="text-center" title='Delete "{{ season?.name }}" season' executeButtonText="Delete"
         (executionEmitter)="deleteSeason()" (closeModalEmitter)="closeModal()"></app-verify-form>
 </app-modal>
 
 <app-modal type="form" *ngIf="modal === 'archiveSeason'">
-    <app-verify-form title='Archive "{{ season?.name }}" season' executeButtonText="Archive"
+    <app-verify-form
+        class="text-center" title='Archive "{{ season?.name }}" season' executeButtonText="Archive"
         (executionEmitter)="archiveSeason()" (closeModalEmitter)="closeModal()"></app-verify-form>
 </app-modal>
 

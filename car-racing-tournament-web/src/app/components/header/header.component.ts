@@ -25,4 +25,11 @@ export class HeaderComponent implements OnInit {
     this.isLoggedIn = this.authService.getBearerToken() !== undefined;
     this.authService.loggedIn.emit(false);
   }
+
+  collapseNavbar() {
+    const navbarToggler = document.querySelector('.navbar-toggler');
+    const navbarCollapse = document.querySelector('.navbar-collapse');
+    navbarToggler!.classList.remove('show');
+    navbarCollapse!.classList.remove('show');
+  }
 }

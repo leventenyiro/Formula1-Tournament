@@ -29,6 +29,15 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.isFetching = true;
+    
+    this.authService.loggedIn.subscribe(
+      (loggedIn: boolean) => {
+        if (!loggedIn) {
+          this.router.navigate(['']);
+        }
+      }
+    );
+
     this.authService.checkIfLoggedIn(true);
     this.authService.getUser().subscribe({
       next: user => {

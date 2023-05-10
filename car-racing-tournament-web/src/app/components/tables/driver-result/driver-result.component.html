@@ -1,15 +1,15 @@
 <div class="row row-header my-3 d-flex align-items-center">
-    <div class="col-2">Race</div>
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-3' : 'col-3 col-lg-4'">Race</div>
     <div class="col-lg-3 d-none d-lg-flex">Date</div>
-    <div class="col-3 col-lg-2">Team</div>
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-3 col-lg-2' : 'col-5 col-lg-3'">Team</div>
     <div class="col-2 col-lg-1">Pos</div>
     <div class="col-2 col-lg-1">Points</div>
-    <div *ngIf="hasPermission && !season.isArchived" class="col-3 col-lg-2">
+    <div *ngIf="hasPermission && !season.isArchived" class="col-2">
         <button class="btn btn-success btn-sm" (mouseup)="openModal('createResult')">Add result</button>
     </div>
 </div>
 <div class="row row-box mb-3 d-flex align-items-center" *ngFor="let result of driverResults">
-    <div class="col-2 d-flex align-items-center">
+    <div class="d-flex align-items-center" [ngClass]="hasPermission && !season.isArchived ? 'col-3' : 'col-3 col-lg-4'">
         <div class="team-color" [ngStyle]="{'background-color': result.team.color}"></div>
         <div class="d-none d-lg-flex">
             {{ result.race.name }}
@@ -21,7 +21,7 @@
     <div class="col-lg-3 d-none d-lg-flex">
         {{ result.race.dateTime }}
     </div>
-    <div class="col-3 col-lg-2">
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-3 col-lg-2' : 'col-5 col-lg-3'">
         {{ result.team.name }}
     </div>
     <div class="col-2 col-lg-1">
@@ -32,7 +32,7 @@
     <div class="col-2 col-lg-1">
         {{ result.point }}
     </div>
-    <div *ngIf="hasPermission && !season.isArchived" class="col-3 col-lg-2">
+    <div *ngIf="hasPermission && !season.isArchived" class="col-2">
         <div class="row">
             <div class="col-sm-6 my-1">
                 <button class="btn btn-primary btn-sm" (mouseup)="openModal('updateResult', result)" title="Modify">
@@ -45,15 +45,6 @@
                 </button>
             </div>
         </div>
-
-        <app-modal type="form" *ngIf="modal === 'deleteResult' && selectedResult!.id === result.id">
-            <app-verify-form
-                title='Delete this result'
-                executeButtonText="Delete"
-                (executionEmitter)="deleteResult(result.id)"
-                (closeModalEmitter)="closeModal()"
-            ></app-verify-form>
-        </app-modal>
     </div>
 </div>
 
@@ -103,11 +94,11 @@
 
         <div class="mb-3">
             <label for="inputPoint" class="form-label">Point</label>
-            <input type="number" required min="0" class="form-control" id="inputPoint" name="point" [formControl]="inputPoint" [class.is-invalid]="!inputPoint.valid && inputPoint.touched">
+            <input type="number" required min="0" step="0.5" class="form-control" id="inputPoint" name="point" [formControl]="inputPoint" [class.is-invalid]="!inputPoint.valid && inputPoint.touched">
             <div class="invalid-feedback">Point is required</div>
         </div>
 
-        <div class="row d-flex">
+        <div class="row d-flex text-center">
             <div class="col-6">
                 <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="closeModal()">Cancel</button>
             </div>
@@ -118,6 +109,16 @@
             </div>
         </div>
     </form>
+</app-modal>
+
+<app-modal type="form" *ngIf="modal === 'deleteResult'">
+    <app-verify-form
+        class="text-center"
+        title='Delete this result'
+        executeButtonText="Delete"
+        (executionEmitter)="deleteResult(selectedResult!.id)"
+        (closeModalEmitter)="closeModal()"
+    ></app-verify-form>
 </app-modal>
 
 <app-modal type="loading" *ngIf="isFetching"></app-modal>

@@ -1,4 +1,12 @@
 nav {
-    background-color: white;
-    border-bottom: 1px solid rgb(234, 234, 234);
+    backdrop-filter: blur(5px) contrast(1.4);
+    
+    .navbar-brand {
+        font-weight: 700;
+    }
+}
+
+.navbar-toggler {
+    border: 0px !important;
+    box-shadow: none !important;
 }
