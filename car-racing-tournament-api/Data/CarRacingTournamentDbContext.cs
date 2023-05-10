@@ -193,7 +193,14 @@ namespace car_racing_tournament_api.Data
                         CreatedAt = DateTime.Parse("2021-03-28T14:00:00"),
                         Name = "Formula 1 2021",
                         Description = "This is the results of 2021 Formula 1 season",
-                        IsArchived = true,
+                        IsArchived = true
+                    },
+                    new Season {
+                        Id = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee"),
+                        CreatedAt = DateTime.Parse("2022-03-20T15:00:00"),
+                        Name = "Formula 1 2022",
+                        Description = "This is the results of 2022 Formula 1 season",
+                        IsArchived = false
                     }
                 );
 
@@ -217,17 +224,24 @@ namespace car_racing_tournament_api.Data
                 modelBuilder.Entity<Permission>().HasData(
                     new Permission
                     {
-                        Id = new Guid("7779214e-8f1b-4181-8ab7-c1fad97f4765"),
+                        Id = Guid.NewGuid(),
                         UserId = new Guid("08db26a9-840c-42ee-82c5-ceec14c2a104"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1"),
                         Type = PermissionType.Admin
                     },
                     new Permission
                     {
-                        Id = new Guid("d1ae948b-4b54-47db-9028-07fe9084b7ff"),
+                        Id = Guid.NewGuid(),
                         UserId = new Guid("08db26a9-9264-4fb6-88aa-4c547e6326dc"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1"),
                         Type = PermissionType.Moderator
+                    },
+                    new Permission
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = new Guid("08db26a9-840c-42ee-82c5-ceec14c2a104"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee"),
+                        Type = PermissionType.Admin
                     }
                 );
 
@@ -415,6 +429,181 @@ namespace car_racing_tournament_api.Data
                         Name = "Abu Dhabi",
                         DateTime = DateTime.Parse("2021-12-12T13:00:00"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083"),
+                        Name = "Bahrein",
+                        DateTime = DateTime.Parse("2022-03-20T15:00:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712"),
+                        Name = "Szaúd Arábia",
+                        DateTime = DateTime.Parse("2022-03-27T16:30:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58"),
+                        Name = "Ausztrália",
+                        DateTime = DateTime.Parse("2022-04-10T05:00:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82"),
+                        Name = "Emilia -Romagna sprint",
+                        DateTime = DateTime.Parse("2022-04-22T13:30:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa"),
+                        Name = "Emilia-Romagna",
+                        DateTime = DateTime.Parse("2022-04-23T12:00:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822"),
+                        Name = "Miami",
+                        DateTime = DateTime.Parse("2022-05-08T19:30:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450"),
+                        Name = "Spanyol",
+                        DateTime = DateTime.Parse("2022-05-22T13:00:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1"),
+                        Name = "Monaco",
+                        DateTime = DateTime.Parse("2022-05-29T13:00:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("e144d809-4fe8-46c0-89de-3ac6f907c506"),
+                        Name = "Azerbajdzsán",
+                        DateTime = DateTime.Parse("2022-06-12T11:00:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543"),
+                        Name = "Kanada",
+                        DateTime = DateTime.Parse("2022-06-19T18:00:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872"),
+                        Name = "Brit",
+                        DateTime = DateTime.Parse("2022-07-03T14:00:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("49172116-db53-45e1-b43c-de99be1148c6"),
+                        Name = "Ausztria sprint",
+                        DateTime = DateTime.Parse("2022-07-09T14:30:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b"),
+                        Name = "Ausztria",
+                        DateTime = DateTime.Parse("2022-07-10T13:00:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b"),
+                        Name = "Francia",
+                        DateTime = DateTime.Parse("2022-07-24T13:00:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e"),
+                        Name = "Magyar",
+                        DateTime = DateTime.Parse("2022-07-31T13:00:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("32b35aff-f243-4b23-b096-cc51938bc523"),
+                        Name = "Belgium",
+                        DateTime = DateTime.Parse("2022-08-28T13:00:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9"),
+                        Name = "Hollandia",
+                        DateTime = DateTime.Parse("2022-09-04T13:00:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc"),
+                        Name = "Olasz",
+                        DateTime = DateTime.Parse("2022-09-11T13:00:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb"),
+                        Name = "Szingapúr",
+                        DateTime = DateTime.Parse("2022-10-02T13:00:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc"),
+                        Name = "Japán",
+                        DateTime = DateTime.Parse("2022-10-09T05:00:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a"),
+                        Name = "USA",
+                        DateTime = DateTime.Parse("2022-10-23T19:00:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43"),
+                        Name = "Mexikó",
+                        DateTime = DateTime.Parse("2022-10-30T19:00:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("e39be72c-720c-4679-a260-7346d05fce99"),
+                        Name = "Brazil sprint",
+                        DateTime = DateTime.Parse("2022-11-12T19:30:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2"),
+                        Name = "Brazil",
+                        DateTime = DateTime.Parse("2022-11-13T18:00:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Race
+                    {
+                        Id = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae"),
+                        Name = "Abu Dhabi",
+                        DateTime = DateTime.Parse("2022-11-20T13:00:00"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
                     }
                 );
 
@@ -488,6 +677,76 @@ namespace car_racing_tournament_api.Data
                         Name = "Alfa Romeo",
                         Color = "#860404",
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
+                    },
+                    new Team
+                    {
+                        Id = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        Name = "AlphaTauri",
+                        Color = "#481692",
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Team
+                    {
+                        Id = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        Name = "Aston Martin",
+                        Color = "#22D337",
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Team
+                    {
+                        Id = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        Name = "Ferrari",
+                        Color = "#E10909",
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Team
+                    {
+                        Id = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        Name = "Williams",
+                        Color = "#636CEE",
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Team
+                    {
+                        Id = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        Name = "Mercedes",
+                        Color = "#CBC8D0",
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Team
+                    {
+                        Id = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        Name = "Red Bull",
+                        Color = "#563D7C",
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Team
+                    {
+                        Id = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        Name = "Haas",
+                        Color = "#FFFFFF",
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Team
+                    {
+                        Id = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        Name = "Alpine",
+                        Color = "#3E4BF9",
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Team
+                    {
+                        Id = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        Name = "Alfa Romeo",
+                        Color = "#750000",
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Team
+                    {
+                        Id = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        Name = "Mclaren",
+                        Color = "#C1A806",
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
                     }
                 );
 
@@ -680,6 +939,204 @@ namespace car_racing_tournament_api.Data
                         Number = 88,
                         ActualTeamId = new Guid("4e5bf09f-8c78-4fd7-a78e-d851e2e93b35"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        Name = "Schumacher",
+                        RealName = "Mick Schumacher",
+                        Number = 47,
+                        ActualTeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        Name = "Vettel",
+                        RealName = "Sebastian Vettel",
+                        Number = 5,
+                        ActualTeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        Name = "Latifi",
+                        RealName = "Nicholas Latifi",
+                        Number = 6,
+                        ActualTeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        Name = "Norris",
+                        RealName = "Lando Norris",
+                        Number = 4,
+                        ActualTeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("1a24df46-4adb-4fe4-8685-3e15b87c5706"),
+                        Name = "Hülkenberg",
+                        RealName = "Nico Hülkenberg",
+                        Number = 27,
+                        ActualTeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        Name = "Gasly",
+                        RealName = "Pierre Gasly",
+                        Number = 10,
+                        ActualTeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        Name = "Ocon",
+                        RealName = "Esteban Ocon",
+                        Number = 31,
+                        ActualTeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        Name = "Verstappen",
+                        RealName = "Max Verstappen",
+                        Number = 1,
+                        ActualTeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        Name = "Bottas",
+                        RealName = "Valtteri Bottas",
+                        Number = 77,
+                        ActualTeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        Name = "Sainz",
+                        RealName = "Carlos Sainz",
+                        Number = 55,
+                        ActualTeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        Name = "Stroll",
+                        RealName = "Lance Stroll",
+                        Number = 18,
+                        ActualTeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        Name = "Hamilton",
+                        RealName = "Lewis Hamilton",
+                        Number = 44,
+                        ActualTeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        Name = "Russell",
+                        RealName = "George Russell",
+                        Number = 63,
+                        ActualTeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        Name = "Tsunoda",
+                        RealName = "Yuki Tsunoda",
+                        Number = 22,
+                        ActualTeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("b74e2b6d-5516-4132-b50b-a9ca7ed83502"),
+                        Name = "De",
+                        RealName = "Nyck De Vries",
+                        Number = 45,
+                        ActualTeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        Name = "Pérez",
+                        RealName = "Sergio Pérez",
+                        Number = 11,
+                        ActualTeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        Name = "Zhou",
+                        RealName = "Guanyu Zhou",
+                        Number = 24,
+                        ActualTeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        Name = "Alonso",
+                        RealName = "Fernando Alonso",
+                        Number = 14,
+                        ActualTeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        Name = "Ricciardo",
+                        RealName = "Daniel Ricciardo",
+                        Number = 3,
+                        ActualTeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        Name = "Leclerc",
+                        RealName = "Charles Leclerc",
+                        Number = 16,
+                        ActualTeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        Name = "Albon",
+                        RealName = "Alexander Albon",
+                        Number = 23,
+                        ActualTeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
+                    },
+                    new Driver
+                    {
+                        Id = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        Name = "Magnussen",
+                        RealName = "Kevin Magnussen",
+                        Number = 20,
+                        ActualTeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
                     }
                 );
 
@@ -5683,6 +6140,4996 @@ namespace car_racing_tournament_api.Data
                         DriverId = new Guid("d9f51506-2c85-40a5-b82b-d99ca48fe87f"),
                         TeamId = new Guid("25211f1c-b53e-4776-83c1-503ea35764d2"),
                         RaceId = new Guid("a3648fb1-2144-4cbb-af55-65cc6a42020d")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5c10305b-aa67-4122-9cb9-00992ebdb950"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a6997dd9-5ccc-4daa-9f77-1afae5c5c534"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 26,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("8e205363-db51-493a-81a1-2522820a22a8"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("4de09fb2-b489-432f-bb2b-3662bc09b206"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5cc02d1f-fc36-45f5-b100-4d46b9c491f8"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("83eea44a-ab0c-4dd6-9e17-50e5997617e4"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("0e090908-17cf-4f72-b67d-5ed256dd056d"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("963c1ea1-7931-4e66-84be-5ef2fc0d46fa"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 18,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("43c66ad4-b2bb-4992-865a-64db1c7c5695"),
+                        Type = ResultType.Finished,
+                        Position = 17,
+                        Point = 0,
+                        DriverId = new Guid("1a24df46-4adb-4fe4-8685-3e15b87c5706"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("8c2bca4a-4cbb-475a-871c-7c6644de3696"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 12,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("65a03032-e840-436a-a4d3-8bc03c70a634"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 10,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("3dd6be93-0b93-40e3-9bb7-9bda2c39767a"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("bff8dc6e-cf24-42fa-b961-ae655ade6313"),
+                        Type = ResultType.Finished,
+                        Position = 16,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("409ffb20-95e3-4abf-85b3-af00cf4d5507"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("3577046e-9cee-4b35-90d0-af60f7123cd2"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 8,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("ec40fd9a-207b-44bd-a24e-b26d86dab320"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("b54f566b-2921-467f-b818-d0d0d0bd464a"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("3964d147-a436-40e6-a313-d4f95d4fc802"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("fe75abda-cd3c-4906-bfb8-e49e8d8c01a8"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("bd8435ab-fa95-4733-9a56-e8067b00071b"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("12b4ae87-8798-4d47-b89f-8265a8003083")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("d5f3882e-95e7-42f9-97bf-050c69efe444"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 12,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("250684ab-a9bf-4b3e-8c17-0f97ff6ff3a0"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 8,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("11e5a706-11c8-44ae-89da-1344abbe1bce"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 19,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("b0d81e8c-414a-46cb-8f78-14cef635c16e"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("66d6b8ba-894a-4114-aaa8-2aada84d959b"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("1a24df46-4adb-4fe4-8685-3e15b87c5706"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5b128787-1b51-4997-bd28-32e6db9e8ba7"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("786de524-7fb0-4038-b57f-379803ad8ab0"),
+                        Type = ResultType.DNS,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("cc106bbf-00da-4839-b3d8-66285e0950e9"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a43dafcd-9578-4ea3-aa1c-760c5d3c0ad0"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a7f2c379-d1bc-48b7-9d9b-77a422b8744f"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("4c5d6931-8eac-4e7e-b2ef-80d9e3bd70f9"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 1,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("811dcaee-9f7d-47b7-a46f-891fd6ba7368"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 10,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("00474a55-2eed-4b8a-a8f5-97edf098daa5"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("23afe2b0-fc8b-41f1-98bd-a469f63a056d"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("be7e7895-cd39-4fb8-bad0-bdad6dcf6800"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("612ae09a-826f-4917-8c8c-be4cbdd82f01"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c9b71f12-5fe0-4d4f-a7fa-cf4982450621"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("0927c8a1-a91b-40a8-a175-e357f8a79a85"),
+                        Type = ResultType.DNS,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("34c958dc-d919-467e-b988-e55ac5438d47"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 25,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("70c2cce2-8e79-42be-85c9-f10a61c53410"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("3090a6c6-aa9d-468f-acb9-b571c5440712")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("23d88ff8-d77f-4dbe-8431-1f07657f775b"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("9017ad25-ce81-4960-81ca-2182ecdfaab5"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 8,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("fb18836f-9170-4ff4-8f7c-23810aa1e369"),
+                        Type = ResultType.Finished,
+                        Position = 17,
+                        Point = 0,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("1c141c87-2d62-4aed-82e7-23bcb18f6c37"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("cb3b576c-8f17-41d0-9f6e-426588452d9e"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("934d8394-fdbe-4754-bac3-5424256dbb11"),
+                        Type = ResultType.Finished,
+                        Position = 16,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("68055d89-de14-46d6-bd39-5fbb440eb707"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("cc9a5aac-3fe9-445a-887f-665e97a37c6d"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("38e4cc88-0356-4804-9bf2-6a568552c056"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("dc3bd5d5-2fa9-4555-b5e8-70267306aa6c"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 26,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("3b96083f-edd7-448d-a14c-723ee94f7d61"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 18,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("4211c831-b03e-42c6-9a6d-7591efed4efd"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("6f1235bf-7bac-4c33-a4ec-7f398d956a3f"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("243627d1-5a01-43bf-8c3d-affc94e3dec4"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("d978f1d9-d2c5-485d-ac93-b31e43e38e21"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("b04e5883-814d-4199-9629-bda4f6ebf470"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 12,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("aa75fc0e-ee2b-458d-9a74-c5c57872125c"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 10,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5dd1ee60-dcf9-4535-94c6-c6a0f78b7360"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a6186ad5-134e-47c9-aa91-d4765c7e4448"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("8d83ded8-2ac3-41bc-9f0b-e297dedada95"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("d51d6b37-dcd2-4ee9-b292-d8e0d0588c58")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c92a0d58-8c54-4ead-a91d-06a411c6e1bf"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("7dedcc53-03e3-4ffd-9e7c-123d106ceb98"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 6,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("f60fcd47-3e69-4a6e-a9f1-1b1d11af8d5f"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 2,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("4542b93a-9483-440e-9525-2177b7a9799d"),
+                        Type = ResultType.Finished,
+                        Position = 19,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("11f57fec-2ef0-4327-ab70-2221d2203b2a"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 3,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("b410d948-bccc-4632-85de-276d93de3351"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("31f29e98-6fc5-4125-ae61-4d830d0f988b"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 4,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5883f213-79b6-4b20-b2b8-60a9cfa6a4ad"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 0,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("b3214e8a-c747-4645-827b-65fca84223c7"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 5,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a92c2896-63bd-4d5f-8245-92552a53d42c"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 8,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c5021b4b-6572-4304-b423-9b3f17ca274f"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("8c2a517c-000e-4ec4-a63a-a1fbe0e4f12e"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("bde9456a-b0ac-4453-8b6f-ae59c49bc8df"),
+                        Type = ResultType.Finished,
+                        Position = 16,
+                        Point = 0,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("328d7fbb-f49a-4a18-a86f-aee8e67c8344"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 1,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("9e8174c0-8ef4-4712-9bf3-b1f5a4081c26"),
+                        Type = ResultType.Finished,
+                        Position = 17,
+                        Point = 0,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("bfeacab2-7f2f-4e03-8a7e-ba58175ad847"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 7,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("d8a1bfd6-36c9-4421-bccd-c83f91d1714c"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("b4372790-d58b-4894-a726-d08cfeb2c111"),
+                        Type = ResultType.Finished,
+                        Position = 18,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("860037d5-4d3e-48c2-a726-d1cfcf138d70"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("4b67e598-3857-4deb-b284-db19b8a967f2"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("0ea38874-b69d-4cc9-8f91-29267d27ec82")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("be0a651f-0393-45b7-8a16-3430579a2b07"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("ec9293f1-61a5-4156-b9be-3ef3f93c777e"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("d729b688-66d2-4905-8bc2-3f021522f1a9"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("739c9a98-bb39-4d37-90aa-4de83052c4cc"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 10,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c1309824-31e0-4fbd-9218-68e8be02bda3"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("ec00ae37-5005-4d0a-bb4e-6fbf67cfa974"),
+                        Type = ResultType.Finished,
+                        Position = 17,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("19f7d124-6e6e-442f-9b2d-78a52200602c"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("75338704-6d13-47fc-9359-7f293a2781e2"),
+                        Type = ResultType.Finished,
+                        Position = 16,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("6e310e71-ebf3-4b86-baa6-98ab387a229d"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("b700baf0-adc8-42f4-bd46-b9824ec9c559"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("16538db5-4019-4211-b5a8-c35cf3b5adf1"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("d501154a-a607-4f95-a733-c3869dfb3669"),
+                        Type = ResultType.Finished,
+                        Position = 18,
+                        Point = 0,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("015d376e-876f-4886-8c93-c447a250e06a"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("ee0ee0d4-e889-4998-a825-c669aaeaed03"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 26,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("1df0afea-7152-428e-a802-d073aff1cb4c"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("630f2dcb-eb3c-4162-b05a-e05805bc649d"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 12,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("f97fb9f9-f9fa-4402-b934-e2a463858329"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 18,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("93a71eb3-7725-4c32-a8d9-e7998c3b0122"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("bd92d232-51ec-4214-a5eb-ebbe9b277663"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("91c3212a-9401-421f-92d3-f0d0e6bbf4ec"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 8,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("ecf46e84-3520-41bf-883e-5b31d68052fa")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("ee405307-d009-42e4-941c-070d23b94905"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("99d74194-1ef5-42e6-a09a-0ddcc7d739ca"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("67390e65-9fe6-4077-9a8f-10e321331e73"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("13ec3cb4-6f1b-498d-9549-151a7260b4e5"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 26,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("09ad514d-3ff0-4545-8299-182bef14ed04"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("58c6f550-1d9a-42b5-8643-48f16486806d"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a999787b-7e1a-495a-a616-65ba29e0b906"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("21a9e26b-15c1-4567-8764-7d7bb0ab86cb"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("509b7c0a-4e68-4984-8e20-844e3681ff23"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c9e01c36-bf7a-44db-ad85-849c9b7fa91c"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a525d228-0105-40a4-b15b-95c4e47f9a5a"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 12,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("4142e8fb-57ee-40b1-9483-98f4a64634f3"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5aaa2042-f535-40b5-9ca3-a8411f01d307"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a927a31b-f31a-4b6c-b17f-ad077b77dd56"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 10,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("6f7c721e-05f5-4815-83ea-b29a231f46ef"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("72689a17-23fd-43dd-ad26-d42cac119601"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 18,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("7180e4e1-266f-4b0a-939c-d8827ac3ac06"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 8,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("48a23500-badd-4805-a100-e57ae51b9ca4"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("aa6fc468-4bd6-4678-8516-f58839d038da"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("da9834ce-fa07-4c87-a458-f75ed9398021"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("2c74f398-7d0c-475b-b994-c62f98ac0822")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("f5f63226-a817-4dcd-ae61-1703742cd71f"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 19,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5391170f-b1c2-4958-9098-18563759ee2e"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 25,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("d66b41be-3f11-44f0-ad3e-28dd37611f8d"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("9a33e877-8fc4-4ef9-aa12-39cf9a03ae0b"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 12,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("383049b3-7c5a-46cb-be79-451fe3fafde4"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 8,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("49ee8c5e-efbc-4993-a6c5-4d24aca87241"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c28e82d6-ddab-42eb-97e1-4d340cedb021"),
+                        Type = ResultType.Finished,
+                        Position = 18,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("ea382546-df61-43b3-9c21-572faf282456"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("3bdc566f-dd3f-4027-a713-5f4a5f05c8c1"),
+                        Type = ResultType.Finished,
+                        Position = 16,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("aa08d360-77f2-423a-8c57-6b94cf5a79e5"),
+                        Type = ResultType.Finished,
+                        Position = 17,
+                        Point = 0,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("0072683f-7aec-406c-8f62-6f466ab0ca4a"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("05877fe2-230a-42df-bcda-71b43cfc03e0"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("98fc1bd6-766f-4b1f-8ff7-79f5f2b0e20c"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("98dc8530-07ea-482c-9eb8-9e973b7344c8"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("8ccda4a2-2dea-4de4-a2a7-a6facf88f290"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("3ceee99c-5f9b-4552-b94b-cfe707e9fd39"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 10,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("db00a445-ff47-4cc3-afb4-d728195ce69b"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("ba4035cf-9504-4586-8ca0-d758d7e543a1"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("18f87ab0-b0f0-4f3f-a7c6-d7e6427d1d4a"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("f27f659b-e716-4327-a28c-dc1c655eb81e"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("fcbc5f86-18e4-4fbf-8720-1c655138d450")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("30c19b29-2e11-4302-82be-13c59216a2c7"),
+                        Type = ResultType.Finished,
+                        Position = 17,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("70648bc5-e23b-430e-a053-2cce30ef7df6"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("ca1c6dac-940b-475b-bac9-449f11e97d04"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("9710dbf2-1d19-478f-9a61-59aafccb869b"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a3499f8c-787b-41ea-966d-647ab62ea01a"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 18,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("d26af6df-e4d4-474b-9a05-654ffca9a03a"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("490e4718-905b-4ff5-a02c-6b88e47139cc"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 9,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("d2bd759b-d10e-47a9-92d3-7638ad9570e6"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("dfbc5df8-a1d9-4977-a363-7e88e12158e7"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("30ec562f-27b8-4ec7-8519-904604245bbc"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("6080132f-5840-440d-854f-9556f2bef748"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 25,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("236d7885-a818-487d-b3cc-a4c1a45a96ee"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("86f1ac30-b787-4b92-8360-a7a749ca6313"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 12,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("54db36e6-468c-4577-a50c-c16161af84b0"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5565c84f-3393-43a1-87e2-c3b90e4f3435"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 10,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("654330f1-9b5b-4626-9c8f-d0a1f9e1f977"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("bf984a63-563d-4dc3-9a8a-d5cecb502cec"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("832bb117-e939-4a4c-9737-fade4a889a40"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("4914afdb-c060-47fd-94c8-fd220fcc01b0"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("e77a88ae-1c7e-4230-91ce-ff8d438e02b1"),
+                        Type = ResultType.Finished,
+                        Position = 16,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("f0a50f67-d85e-4525-9b99-5b4aa2ed4fd1")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("634c774a-86b0-479e-998d-0a1992350ae8"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("e144d809-4fe8-46c0-89de-3ac6f907c506")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("cfe57662-e80e-4be6-abb1-100b48f29d5a"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("e144d809-4fe8-46c0-89de-3ac6f907c506")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("457cde65-98e2-4443-804a-13a1019f433a"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("e144d809-4fe8-46c0-89de-3ac6f907c506")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("dfb31996-8c96-4795-927c-15f52b7e63f1"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("e144d809-4fe8-46c0-89de-3ac6f907c506")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("b63b5810-20f9-4a52-ab78-16b4cb468108"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 25,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("e144d809-4fe8-46c0-89de-3ac6f907c506")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a8b45083-2175-4f84-9e04-1bb44703a218"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("e144d809-4fe8-46c0-89de-3ac6f907c506")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("35600175-70b6-4bf3-bdbe-1cb9c820ad98"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("e144d809-4fe8-46c0-89de-3ac6f907c506")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5f6d19ec-9c1b-44c5-b5cc-2317f0da5bae"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("e144d809-4fe8-46c0-89de-3ac6f907c506")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a804d630-5706-410a-954e-2a31aa313b02"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 8,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("e144d809-4fe8-46c0-89de-3ac6f907c506")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("93616780-922d-4974-ba6c-89c6c997303d"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("e144d809-4fe8-46c0-89de-3ac6f907c506")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("b0749070-4275-4a43-8b2e-b9bd1c4eb0ae"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 10,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("e144d809-4fe8-46c0-89de-3ac6f907c506")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("011b8e3d-fba4-4eab-b4b0-bdbb7d6807ce"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("e144d809-4fe8-46c0-89de-3ac6f907c506")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("f4c707c8-cf4b-421b-922d-cb5d74aa4740"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("e144d809-4fe8-46c0-89de-3ac6f907c506")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a8ef8ee7-d978-4f45-9299-d684a6779b4d"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("e144d809-4fe8-46c0-89de-3ac6f907c506")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c747765d-347e-4ee0-a2bc-dfe2d4411a95"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("e144d809-4fe8-46c0-89de-3ac6f907c506")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("92229a4a-b897-4ded-8504-e395091a4a8b"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("e144d809-4fe8-46c0-89de-3ac6f907c506")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("d6cd7f8e-67a2-4953-a6a5-e741da7846f6"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 19,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("e144d809-4fe8-46c0-89de-3ac6f907c506")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5c117094-c08d-48f5-95e5-f391433c4ee9"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("e144d809-4fe8-46c0-89de-3ac6f907c506")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("69bc3f4e-3db5-4439-82d8-f57e261b7db5"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 12,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("e144d809-4fe8-46c0-89de-3ac6f907c506")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("2dfb1fd2-15ad-47a5-8655-1c012cd82b01"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c9f9e295-d3bd-4fb6-b978-1c3fc144abd7"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a46497ff-6bc6-4017-812e-273b9b3cfca5"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 8,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("ad242320-7c5f-4d88-bb86-4027a9fab984"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 25,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("96f60e58-4441-4ba1-a7b6-45122b5b178e"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("dbc4e82c-65ea-43af-8f24-46ac0b57db21"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("7bba75a4-0bae-4db5-be8a-48cda0323fb3"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("f498bf87-d241-4932-a5b5-4b6405c5274d"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 10,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("95de1f54-3610-472c-856f-5be0cecd1d37"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a9ac1ea8-6f30-41ad-a854-77619b28c075"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("9005c7a8-a0d6-4fc2-826a-7b2bede97059"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 12,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("b96806da-c754-42a5-9ffe-997745810344"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 19,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("e22f5d21-a52e-465a-909a-a7f28740ca00"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5f53a56e-8ae8-4877-a42d-af07ef36cbb8"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("6303816b-f3ad-45b7-8c01-b41081fe326b"),
+                        Type = ResultType.Finished,
+                        Position = 16,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("2731e886-212e-4e4d-bf8f-c325a56138e3"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("3bbb25d7-7757-4bbb-8424-d7670fac56d0"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("be1c8b77-934d-4483-b28e-d8bc2f442f84"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("6cf3d9f4-96d7-4e55-99e7-da33190c4514"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a56bdb71-7925-476b-b8f8-f8d3a93b4580"),
+                        Type = ResultType.Finished,
+                        Position = 17,
+                        Point = 0,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("333c7116-cc70-43be-9024-5c96f9d8e543")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c812dad0-a6c0-4a2d-92f6-07704739decd"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 8,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5a22141c-80f3-44c3-afd5-16f217310b5f"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 18,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("045a26cb-c52f-4f14-8bfa-19e819da85b2"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a0d25378-b11c-40da-9dbe-1eba21a05a3d"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("be8c1837-8f12-4358-b6f7-45806dbf595c"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("795a0a23-d6a5-41de-8215-4f035f401a3f"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 10,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("d3e2a782-81a8-4e23-8736-58e2e57693a7"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a12b1f93-2024-4f7f-a0ad-5e24d408f9e3"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("21262cd8-a4c3-4579-bdf1-62270edb02e2"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("0821efe1-6291-490e-bcab-6333dc55cae8"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 25,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("b4942c14-bcff-4e11-b782-71b4e0d505ad"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("28cdd403-dc6e-4211-bed6-786f87b84050"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 16,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("6398f59c-1c31-4b16-b786-7a3c8d86af41"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("b2a0caf6-7784-4968-94ff-83d80193e943"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("9e3967c2-1621-49c3-b12b-8564d15dad11"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("72ddd297-5220-4919-abfc-a865460e9071"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("96c0c344-bf42-4278-b55d-b447e6660efe"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("e781c66e-a26c-40da-a7ab-bd059e3cf5b2"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("d24a43cc-2567-40bb-9ab9-cbeec76aae47"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("2337e26b-907d-435a-85d2-ff2cf85db762"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 12,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("6b9a1f8c-3427-4315-aa22-86e17c987872")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("1adb1569-3f2a-4676-9157-0454575fb2b3"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("49172116-db53-45e1-b43c-de99be1148c6")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("053c0946-c8ba-4737-a980-19868697fe5c"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 4,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("49172116-db53-45e1-b43c-de99be1148c6")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("cd903c26-988b-4028-99d8-259613769bb8"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 5,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("49172116-db53-45e1-b43c-de99be1148c6")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("f4f7092c-00d1-460b-a435-2c9e533eb95e"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("49172116-db53-45e1-b43c-de99be1148c6")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("6382bf39-ceef-4189-971a-2deaf3ac21a2"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 7,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("49172116-db53-45e1-b43c-de99be1148c6")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("93b35d76-0897-4ffb-8df9-5b046dd7575b"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("49172116-db53-45e1-b43c-de99be1148c6")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("b2ecb94e-ec3f-413a-bd39-660d1df23672"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("49172116-db53-45e1-b43c-de99be1148c6")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("54f7efc7-765d-4aa4-83ef-6750893570b9"),
+                        Type = ResultType.DNS,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("49172116-db53-45e1-b43c-de99be1148c6")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("246d42f4-29aa-420d-955d-6d6f87e92d0f"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("49172116-db53-45e1-b43c-de99be1148c6")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("40cd3e3d-1c66-4928-8589-70ed68568205"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("49172116-db53-45e1-b43c-de99be1148c6")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("decd9e48-0014-41c3-a8b8-770f9693363a"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 1,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("49172116-db53-45e1-b43c-de99be1148c6")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c5206461-a136-474e-9b56-9b3915d239fd"),
+                        Type = ResultType.Finished,
+                        Position = 16,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("49172116-db53-45e1-b43c-de99be1148c6")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("0d108fa3-7739-4942-b677-9f92ab566aa5"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 0,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("49172116-db53-45e1-b43c-de99be1148c6")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5c693ca9-874e-42f0-a245-a72e8b1e5bbf"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 2,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("49172116-db53-45e1-b43c-de99be1148c6")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("d0cc57ce-4507-4c9b-b68d-ada32ae5f1ca"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 6,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("49172116-db53-45e1-b43c-de99be1148c6")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c6aa2b46-0825-49b6-9520-b9164d4b9c5c"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 8,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("49172116-db53-45e1-b43c-de99be1148c6")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("789e58a4-161c-42f8-83a8-c2d194356ebc"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 3,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("49172116-db53-45e1-b43c-de99be1148c6")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("ecb0ea51-2375-41b1-8c86-c6e1aca3be19"),
+                        Type = ResultType.Finished,
+                        Position = 17,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("49172116-db53-45e1-b43c-de99be1148c6")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("84f3f2a5-55bf-473a-b0f8-ca367a88bf14"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("49172116-db53-45e1-b43c-de99be1148c6")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("e0badbf4-61a1-4dea-bc96-e2f3877450a5"),
+                        Type = ResultType.Finished,
+                        Position = 18,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("49172116-db53-45e1-b43c-de99be1148c6")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c1df4cc8-247c-4158-a291-04035967d848"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 8,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c72b2e25-757c-4c53-ac50-0c86f238e171"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a6d21714-3aa7-41d5-8a66-169fa6547688"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 12,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("38b02f68-6863-40e4-b90d-3cf267cace40"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 25,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5701a9d0-3115-428e-9f0b-456ef5707d59"),
+                        Type = ResultType.Finished,
+                        Position = 16,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("2a5fd9e1-30ad-4905-a44b-457c51983693"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("17e5c9d7-dd8d-4846-b33a-51c2c751c9bd"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5a39fa71-f573-4299-a49e-538124f5e984"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 19,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("1cb3b63e-c066-4701-8891-7531c3ad2b98"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("051d97a7-f93f-4645-889f-764d5f34fb44"),
+                        Type = ResultType.Finished,
+                        Position = 17,
+                        Point = 0,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("6c674a60-8b19-4d4b-9cdc-77bce5dd15b9"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("fb44fe1c-e809-4ac1-8cac-94b7f2b952c3"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("f4bb4b07-ecf5-443f-87a9-9ccc838e1550"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("9f686dcd-5628-4739-bb7a-a3fe6b3d5439"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("1b05dc93-bac7-4927-aee7-a427ea11a106"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5d6341ec-75f1-4193-a157-eea9262ebf87"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("fdf22823-aba2-4d66-b06e-f7dfed45d8f7"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 10,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("f6e840e5-f19b-4c53-b607-f94456cb5478"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("e1c898a6-0d67-4de1-9fe7-f982f396f71b"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a6686b42-cd3d-4290-b958-fe4f24eae74f"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("29a7707c-cb45-4dbd-9379-ca82b8a9fd5b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("e0dd3ac1-b8af-4459-885f-13c1913d09e2"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("b45c4a4d-6a71-4900-9130-193bdfafb79b"),
+                        Type = ResultType.Finished,
+                        Position = 16,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("6d6bc5c5-7785-4d91-abe0-1e99f693d527"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("bba187eb-8266-4886-b583-24e248969079"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("99746520-4323-4f99-b093-277f6054c2a5"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("9fa355b4-363f-4d65-b326-4473a28a10a1"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 18,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("21f7cf92-e8e2-4701-8128-655cd6228359"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 25,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("21f90833-e39b-4383-9b95-6f17683066d6"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("dafd3fa5-636e-412b-9b5d-6f69712d9d95"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("bdaffc95-8f01-4534-9c49-7731a3a12ba0"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 11,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("aa73bc95-1efa-4795-9c84-81750259af76"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("9e8b495e-b2a3-4201-b819-9f7e635501a5"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("99cde804-3de4-4c26-aed4-bcbf2ca030ce"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("78ce52ee-fad6-420e-8d7b-bed5038ef739"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("98a77688-a415-4042-acd0-cf2d86a1a6d1"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("312cd730-bc79-4abb-8892-d5736f1966c0"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 8,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("fed20079-fc49-464a-807a-da86e58a58dd"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 12,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c825f06e-a63e-45a9-9dc3-ddfad5dd0145"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("be665f1b-2ff2-468f-b84b-ec869996f05f"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5584a5e4-980a-44a1-9cc0-f538c5fdbc92"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("a604a7ce-09ae-44ba-acfd-5ef86115549b")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("df70b590-397d-45e0-b9a0-0590181c2629"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c598f7f0-80c3-4a30-840f-172c75789606"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a13fff0b-ffc5-4f43-b9ab-1c52c1eeb8c2"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 12,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("9726f2ac-5fdf-4938-a5b0-1c8834c0aa25"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 10,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("b84bd646-9fa5-4a35-8041-2b55fe4c1b23"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("1ab2e4fc-8b8b-4f64-8589-3ae9a5eef98b"),
+                        Type = ResultType.Finished,
+                        Position = 17,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("48c7d61a-0230-49ed-b665-3bb346cbc163"),
+                        Type = ResultType.Finished,
+                        Position = 19,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("30d4afdb-e73b-4881-a28e-5e5bd16e4bef"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 19,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("8e9e1e03-12ba-4f60-a37f-672eca9799c6"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("56e9f247-027d-4264-892e-7a475debe087"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("753ac925-c777-4fc3-90a5-7e90d97d52b7"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c192d088-2bcf-4cee-83cc-9003d28078ee"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 8,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("ea6dcdb8-1646-4bd4-919f-92d74250d218"),
+                        Type = ResultType.Finished,
+                        Position = 18,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("89b0ee98-0ea7-4576-9565-9c55fc002fc4"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("6997cede-414c-44c1-8694-bc92a8c239f2"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a3faa5d8-c7c0-4914-a6a0-cde8d2355cbb"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("b2fa681e-e7d4-40ce-a8f7-dc818ae5369e"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("d7590fba-846d-4f3f-b103-e361a1abee5a"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 25,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a775ad39-aa32-44a7-966d-eb968bc946a9"),
+                        Type = ResultType.Finished,
+                        Position = 16,
+                        Point = 0,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("23cb4636-3f6d-44cc-b5ef-f736dcb58f5e"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("5aefd64b-0202-4c8b-a086-068458c4c39e")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("f8e7b1b8-be82-470e-86cf-184b9b6d84af"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 8,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("32b35aff-f243-4b23-b096-cc51938bc523")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("36653b67-b726-4149-9462-1e7dfaaa36c8"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("32b35aff-f243-4b23-b096-cc51938bc523")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("e51802cf-fbfa-4270-b0e1-2498b3f70d85"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("32b35aff-f243-4b23-b096-cc51938bc523")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("0c307429-5750-484d-a788-43794f4d1b46"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 10,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("32b35aff-f243-4b23-b096-cc51938bc523")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("6dead600-1a1c-4eb6-be26-5bd6648e9d47"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("32b35aff-f243-4b23-b096-cc51938bc523")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("d27ea380-548d-4fbc-a8c8-5d46559ecd54"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("32b35aff-f243-4b23-b096-cc51938bc523")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("91c3f43d-1d43-44b9-a751-6313af41eee0"),
+                        Type = ResultType.Finished,
+                        Position = 17,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("32b35aff-f243-4b23-b096-cc51938bc523")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("2f0ec39a-4177-4a56-9dbe-675e42b3b0e4"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("32b35aff-f243-4b23-b096-cc51938bc523")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("951f97ea-4108-4cd0-af8d-6fb5e053c197"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 18,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("32b35aff-f243-4b23-b096-cc51938bc523")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("f79d589c-8c2a-4a3f-bc36-734f2860778a"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 26,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("32b35aff-f243-4b23-b096-cc51938bc523")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("8c9d71a8-d7f8-4cf5-a0ca-971e5f483957"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("32b35aff-f243-4b23-b096-cc51938bc523")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("0cfe34be-a0e4-411f-8588-a65866d8c6c8"),
+                        Type = ResultType.Finished,
+                        Position = 16,
+                        Point = 0,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("32b35aff-f243-4b23-b096-cc51938bc523")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("f715bc99-1254-496c-ae4e-a94b86a05ce1"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("32b35aff-f243-4b23-b096-cc51938bc523")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("02ef580e-7825-43ba-91dd-c5e23c4d1e73"),
+                        Type = ResultType.Finished,
+                        Position = 18,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("32b35aff-f243-4b23-b096-cc51938bc523")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c7c64a35-03b1-4ecb-b201-c8db0fec8516"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("32b35aff-f243-4b23-b096-cc51938bc523")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("475e32a8-81f8-4df8-80b8-cad96b86dcde"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 12,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("32b35aff-f243-4b23-b096-cc51938bc523")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("0dceadc8-a6a3-47b3-adab-d23e26bdb7b8"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("32b35aff-f243-4b23-b096-cc51938bc523")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5b7a457d-862d-4dde-af20-e6db6868ae1e"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("32b35aff-f243-4b23-b096-cc51938bc523")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("78a70a8f-3cfe-4175-abeb-e8191a06389d"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("32b35aff-f243-4b23-b096-cc51938bc523")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("54f77b68-30ce-4abb-885c-f63bd3f99c76"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("32b35aff-f243-4b23-b096-cc51938bc523")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("4ca76071-e866-4a89-b7bb-12da9cfbf461"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 12,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("f7a159d3-0eb1-4e2e-8fcf-27bd4c6252b6"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 8,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("d4483b7d-7f3e-4ebb-b7eb-2a4069b5c0c0"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a5fe0359-1236-4f1e-adbc-40afe3b27844"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("8c589553-860e-4636-87fa-56b2235936eb"),
+                        Type = ResultType.Finished,
+                        Position = 18,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("00b44565-93b2-43ea-8594-5c4f82ea8371"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("0fe3c79b-f75f-44c9-92a6-6f1b38135e3b"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("016a60e6-43c1-488e-9ed1-703dd91c2595"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("45a1ce41-f969-483c-b5ce-81bc7e874c9e"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("603f67d1-2c9a-4892-9100-8b7955bae6a2"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 10,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("9a78823d-6486-4bd6-944c-9523e09c24b0"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("fa4cd0f0-c461-412b-b3a4-a4c584074877"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 18,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("3b04f1e1-b5ae-41f6-afe3-aad340817b3a"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("e4d62b43-836b-4e9c-b083-ad25a8d014e4"),
+                        Type = ResultType.Finished,
+                        Position = 16,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("34f55f4f-0cf6-46a6-8ef3-adc078216e4e"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("3a437b0a-8f17-4c99-b960-b16c19b0a937"),
+                        Type = ResultType.Finished,
+                        Position = 17,
+                        Point = 0,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a14a8c2d-6771-4619-839f-ba9a62c1da48"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("e6ee68a9-6ba2-4c4d-b013-cfd60c67a695"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("6bc2e91e-f2af-4dd5-a49d-df3b646d31a3"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("9448badc-8aeb-4cce-b8fa-e37edeecbf64"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 26,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("e5cbd8b6-9e6f-4884-8db8-f900385647a9")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("7233cb2b-5273-4e6f-986c-06bbfab96c11"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("e3c7fd6e-edc9-4d9e-a2f4-2f80848aefc7"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a7b09b81-8e98-465f-b12e-4178155aba80"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 18,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("bea1efc8-a898-44ff-bd46-4dc4b1db929b"),
+                        Type = ResultType.Finished,
+                        Position = 16,
+                        Point = 0,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("07f44224-87c6-47c6-a307-4e261fd8026a"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("86fe96de-f8ca-4aa7-9c50-676de2a1e20c"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 12,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("de7d7464-a450-4236-9e48-7343206e0d2f"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 9,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("6c58ef9a-f586-4e42-ac25-8130d355989e"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 10,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("88d803b9-0d89-4436-b098-8b064ac0791b"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("b74e2b6d-5516-4132-b50b-a9ca7ed83502"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("f803643e-a685-4c68-a95d-936a75ac0bda"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("8e055e43-61c8-458a-82b4-9971a8207991"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("55d80a74-7058-4705-94c9-9b5c10ed51ca"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("4c4f43ea-4532-42f9-9db9-a25a6970a9f4"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5fe61abc-f01c-4232-8d8a-a27f043c400d"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("8f2a484f-fc4e-4614-a1f4-aa7c134468ae"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 25,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("7f28656d-d43d-4631-a8bf-bfd3d38b4d65"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("ecee8888-1bc5-4bc3-8ec9-c18f38027a65"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("da8c2a32-065d-4aee-8968-dacc54249091"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("cab8cad0-d40a-4163-8b40-e13e85ac39b7"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c25d71e6-56dc-400a-ba65-e44e809e82c6"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("bc27d6df-c975-48c5-be1e-e61b86708cdc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("23db0c2c-24c0-4328-846b-00788ad64311"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("dd05a086-9db5-4505-b37d-0336117c801c"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("91eae04b-88d5-4e08-aef7-14773cdd1a6a"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 12,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("927d4412-3276-45af-bdd7-22786477ea5d"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 10,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5d0c76eb-4266-4b1a-a448-25c460571a7d"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("0da13af6-a567-4a04-90a6-2c8952af183d"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c5487a9b-69f7-4de9-9254-3d902e5189b0"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("ccf5151e-12c2-4fbc-807c-3e107feeb4eb"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("1c8260f1-be5c-4987-9d24-407dae040871"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 18,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("2661e5e0-3da8-4522-8e09-51408c89fd3f"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("748e0599-3fc6-4be8-afe6-5de47ebc9456"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 25,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("65b49d7e-0ac0-4363-b53d-5e05e7fad550"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("ebef87e4-7b95-4422-8042-60462577be1d"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("0d900b18-e64f-4cfe-af7c-6ec87652b2dc"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("6d476af4-44fc-4b6d-9af8-840109608134"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("3ca6fbcd-34b0-4247-9956-a49411d82edc"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 8,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("90957e52-6ec0-4bf8-ac41-e3f291a2933a"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c3a3c7ba-8205-41e7-bead-e416cfa2e13e"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("efff76f7-3fe4-4888-b128-e6442e62fabd"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("f21deb10-ed52-4449-a0df-ec535e42165c"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("62a81cbb-0c53-4125-b786-55a75d9b0ebb")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("97af83b7-c548-4c59-a575-01d4e8c249b0"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 8,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("79ecf959-7ec9-4014-ba9a-05aabdc0f77f"),
+                        Type = ResultType.Finished,
+                        Position = 16,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("1d8ecbc9-358d-4fa1-94ca-08ab4b6c016e"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("202a1def-cf20-40ed-8c14-0a2aef1daf34"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("6ce94e16-60f4-4a70-b5db-17e158dbc06b"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a072709a-c195-4d8e-89e2-3d48f09671a5"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("387359b6-5266-4426-b7dd-4ef000a1ea67"),
+                        Type = ResultType.Finished,
+                        Position = 18,
+                        Point = 0,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("e30a05b9-3a8d-4016-a7b5-63f9a49c401a"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("03662ca6-a2e5-4882-b4d7-66052a254019"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5a2b09ff-3cf0-40e7-bdc4-6a608783dbb9"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("663ec593-6868-4eb0-bef2-74cd81f9938a"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 18,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("fc838207-96f0-4bac-a04e-7f0279d45e5c"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 10,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("18fbdf97-93b0-4ac8-9cf5-a9b1679a2a19"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 25,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("e98ffdd7-3770-4a77-b594-aabf5223c444"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a0a6dbf2-62e6-4a03-8614-b650c2a5c0ed"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("3924cd8c-de53-4024-b4d2-cc241b49b904"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 12,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("de89b7d5-cfa9-4c99-9053-ce18e6d395be"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("f63304bd-b758-4acf-ac60-f737c985f339"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5a619599-5c73-4de7-8a71-fb1191dc8b64"),
+                        Type = ResultType.Finished,
+                        Position = 17,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("6be3570c-625a-4a87-be2f-fe4ab3d52f51"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("6f746a32-4ce6-44df-b449-942dcb28cfbc")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a0614544-2e9d-4099-b299-1c320d9e423c"),
+                        Type = ResultType.Finished,
+                        Position = 17,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("0f7dfd4c-a3b4-4f6b-971f-2783a1db23df"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("829c5baa-f8ce-4f28-bbe7-2884be028743"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 12,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("97b72df9-500c-4643-abc5-29dcd7913f73"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 18,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("d7edecdb-c6be-4074-a2be-2d5d288b0778"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("66468a0d-b3b6-4474-8170-300068a6df0c"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("d5dfe3a6-3763-4fde-a253-3479d4c75f9a"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("b3b747cc-c51c-4214-9d6a-3a902c6653a1"),
+                        Type = ResultType.Finished,
+                        Position = 16,
+                        Point = 0,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("6c5edfff-b032-43e5-93cd-4c0eca658cb8"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("43b6da6a-00fb-437e-a935-511b6165b6e2"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 25,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("5d798945-f10d-4764-8ef6-662cb79f7d1c"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("f40aa013-301d-4d4b-b098-959fd3c3648f"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 8,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a7e16bd5-2340-4cf2-909f-988ae3264336"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 11,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("35808847-7f70-4d59-aa4f-abe00119d7ff"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("10590e7e-8842-450f-b681-b6950690283d"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("d4220e6f-29ce-4c84-8e76-c22fa0b52a18"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("b9b83910-449b-4609-9aa6-eaf1b86f8bdb"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("fc33bcc8-3a87-4fab-9621-f8c2f37f42d2"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("db549f1c-38d1-4c6f-b15e-fd4cdfd06eb0"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("0a083915-e2db-48a9-a6be-ff87a0309f70"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("d52bd8f4-9e77-4102-890d-a6b1e858913a")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("2b067744-8334-4373-9548-0b4f018135ce"),
+                        Type = ResultType.Finished,
+                        Position = 18,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("4a78ee0b-191e-4dc2-a9cd-12f66882db59"),
+                        Type = ResultType.Finished,
+                        Position = 17,
+                        Point = 0,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("50417925-7b0e-4594-860e-1ea2490eb35a"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 8,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("8348aea3-6143-496a-aa38-3bd78355e6fa"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("17e575fd-d8e7-45c2-8c29-47e5805542da"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("676a5ea3-8692-45c2-b977-546834e4158e"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 10,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("b498fca5-9891-4366-b95d-57af0a0aa478"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 25,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("29545309-23f9-485f-93f4-5c2e682e470c"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("d31de712-a5a6-43a7-9549-6c7be9f4c644"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("9c18b249-5e20-411f-aac4-79cbcb62ba98"),
+                        Type = ResultType.Finished,
+                        Position = 16,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("576b4ed9-aa2e-451f-861f-95f694dc0df3"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("f60b295a-e451-402e-8567-97661dbf3b87"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 13,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a0f2951f-f662-438c-91dc-aa9c8fe8ae85"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("e31ab9b1-bed9-446d-932f-bb23fe64dbf4"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("99fc3818-7f36-4441-bd81-c3e49c89f7a7"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("d7553215-e939-4213-af94-ccacd45a8a49"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("ca662168-1da6-4261-beea-ddb665533de3"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("e938d11c-8b11-4330-aa3e-e01b2d5a8ec0"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 18,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("3eac33fc-e920-4497-b593-edb35be5d767"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("727b575c-dabc-4600-a92a-f38c8cfc6b40"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("224244b5-bec3-480e-bb0a-be2ee050de43")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("0d2d0f72-620a-4332-baef-05ecf7b590a2"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 8,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("e39be72c-720c-4679-a260-7346d05fce99")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("2ecc8f9d-c8ab-4df0-9e2d-0c906367355c"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 1,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("e39be72c-720c-4679-a260-7346d05fce99")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("614f2084-4000-43fa-a5d5-0ce5dd05d8e2"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("e39be72c-720c-4679-a260-7346d05fce99")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("82bd751d-577a-46b5-9682-2ffcc668079c"),
+                        Type = ResultType.Finished,
+                        Position = 16,
+                        Point = 0,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("e39be72c-720c-4679-a260-7346d05fce99")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("01b19aee-0263-41f3-af2e-4c58052eca02"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 7,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("e39be72c-720c-4679-a260-7346d05fce99")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("269f9c13-4191-4a1f-bd9e-4d140c011dac"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("e39be72c-720c-4679-a260-7346d05fce99")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("147624de-4e47-4e1a-86fb-532eae77480b"),
+                        Type = ResultType.Finished,
+                        Position = 19,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("e39be72c-720c-4679-a260-7346d05fce99")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("2863ebdb-e30d-4eb9-8908-6a239398ec50"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("e39be72c-720c-4679-a260-7346d05fce99")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("893cf2e7-f3ba-4197-8aa5-75e0c19a3919"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("e39be72c-720c-4679-a260-7346d05fce99")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("09155b4d-af02-44ca-8189-7ac79d4ef3b4"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 5,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("e39be72c-720c-4679-a260-7346d05fce99")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("7b0c5369-25d8-4e37-8bfe-81215254a98f"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 2,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("e39be72c-720c-4679-a260-7346d05fce99")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("e2bbe7ec-89d5-42de-b76a-962f03f15256"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 4,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("e39be72c-720c-4679-a260-7346d05fce99")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("425ae2ed-bebb-4d4f-81b4-99580ca63a63"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 0,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("e39be72c-720c-4679-a260-7346d05fce99")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a022aea6-d422-4a5b-84ae-9a9ee7441bc7"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 6,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("e39be72c-720c-4679-a260-7346d05fce99")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("4b6c2473-81d3-4fd6-846c-9ca53af69b71"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("e39be72c-720c-4679-a260-7346d05fce99")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("041e89e2-26f4-4fe8-b70c-ace8c4177c01"),
+                        Type = ResultType.Finished,
+                        Position = 18,
+                        Point = 0,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("e39be72c-720c-4679-a260-7346d05fce99")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("ec44a83b-1572-49f8-a8e5-b6d8a07b4b08"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 3,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("e39be72c-720c-4679-a260-7346d05fce99")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("1fb51952-2560-4f1d-82cf-c26311a975ed"),
+                        Type = ResultType.Finished,
+                        Position = 17,
+                        Point = 0,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("e39be72c-720c-4679-a260-7346d05fce99")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("14c34abc-fc58-4b30-a5f5-e2add1c79ec5"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("e39be72c-720c-4679-a260-7346d05fce99")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("3a0a2650-b16c-4a72-b009-f0ad13527a3d"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 0,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("e39be72c-720c-4679-a260-7346d05fce99")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("e7b73f2e-d39c-4502-87f5-0188375b87cd"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("72bc06d1-08e8-4e92-b833-0b9829a75724"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 12,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("cc7239be-2e55-4297-831a-4a336795a72c"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("66ff9645-743d-4883-bbb5-4aae82401b1e"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("9ffce53d-0154-46da-a854-4c6fc843a25d"),
+                        Type = ResultType.Finished,
+                        Position = 17,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("515a6ec4-28de-41c7-9657-543d21f007d8"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("265530ba-70d1-4ac9-8f1e-60d8595225f5"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("0c3334ab-06fa-4987-907a-625330ea8818"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 10,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("b477039b-745e-4f4e-8c5b-63741d603769"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 26,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("02097401-85c4-4e7d-9f7c-64e08b5b4c09"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("23d0f740-7284-4d58-aba8-72890250737e"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("987fc4ab-ccc5-4efd-88d3-72aa9b174f46"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("ec9fd1ef-37c6-4553-955c-778542c4c89f"),
+                        Type = ResultType.Finished,
+                        Position = 16,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("25b21c24-a7a6-4152-b239-787cbda11206"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 8,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("7e9eb98c-5ad0-449d-9aed-8d8fa07477a6"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 18,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("be98eb4a-bcef-4abe-9a6a-8ff815e81fb5"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c3f987b5-084c-43df-87cf-a867c3bf8098"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c6c3cdfe-1daf-4cb2-bb1a-c848e5d0809d"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("cb45bfbe-3b26-4233-8bd9-d3c3410402a9"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("854cd533-04be-4ff6-aae9-e135d333f6f9"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("4f180f36-6694-45d8-a9ea-798ea87c65e2")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("45915a6d-2bfc-4553-b2b0-06b28677117d"),
+                        Type = ResultType.Finished,
+                        Position = 9,
+                        Point = 2,
+                        DriverId = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("c7c8314c-bd95-4f1c-ba29-16bc18fd5e37"),
+                        Type = ResultType.Finished,
+                        Position = 7,
+                        Point = 6,
+                        DriverId = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("0fb9c144-8e37-4f9f-8799-25efd354dcda"),
+                        Type = ResultType.Finished,
+                        Position = 12,
+                        Point = 0,
+                        DriverId = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("1537d152-3d53-47f9-8b13-3dd416b9d70c"),
+                        Type = ResultType.Finished,
+                        Position = 11,
+                        Point = 0,
+                        DriverId = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("6e940d11-000d-4705-9917-4b8eb9341e99"),
+                        Type = ResultType.Finished,
+                        Position = 6,
+                        Point = 9,
+                        DriverId = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
+                        TeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
+                        RaceId = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("cb36ee54-bff1-4243-8101-4c95a1128697"),
+                        Type = ResultType.Finished,
+                        Position = 13,
+                        Point = 0,
+                        DriverId = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("9ba6dc30-83a8-4b64-a2e7-577182b34ca6"),
+                        Type = ResultType.Finished,
+                        Position = 8,
+                        Point = 4,
+                        DriverId = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("71046775-8dc0-4625-a29a-60a1f20574a2"),
+                        Type = ResultType.DNF,
+                        Position = null,
+                        Point = 0,
+                        DriverId = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
+                        TeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
+                        RaceId = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("0331261e-86d7-47cb-a9a9-62733ea6280a"),
+                        Type = ResultType.Finished,
+                        Position = 5,
+                        Point = 10,
+                        DriverId = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("cc373cbf-9d6b-4dbf-ba24-7c92ba1af2eb"),
+                        Type = ResultType.Finished,
+                        Position = 15,
+                        Point = 0,
+                        DriverId = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
+                        TeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
+                        RaceId = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("7a8d9b2e-6926-4103-b98d-842f5b5d73fb"),
+                        Type = ResultType.Finished,
+                        Position = 4,
+                        Point = 12,
+                        DriverId = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("9478e450-5849-491c-b91b-9eedadb875b6"),
+                        Type = ResultType.Finished,
+                        Position = 18,
+                        Point = 0,
+                        DriverId = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
+                        TeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
+                        RaceId = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("62687b4b-cbdc-41f0-b54d-a63d297fea8c"),
+                        Type = ResultType.Finished,
+                        Position = 14,
+                        Point = 0,
+                        DriverId = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
+                        TeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
+                        RaceId = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("1a21ce11-8cd2-487c-8ea0-a9dfc6f6713d"),
+                        Type = ResultType.Finished,
+                        Position = 16,
+                        Point = 0,
+                        DriverId = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("966fe32c-56d1-44a8-8e7e-c68d3d787924"),
+                        Type = ResultType.Finished,
+                        Position = 3,
+                        Point = 15,
+                        DriverId = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("274e1de1-39ef-4c9f-a4a3-d039fb965213"),
+                        Type = ResultType.Finished,
+                        Position = 1,
+                        Point = 25,
+                        DriverId = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
+                        TeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
+                        RaceId = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("ae916e88-1043-45da-96ea-d077c95426e6"),
+                        Type = ResultType.Finished,
+                        Position = 10,
+                        Point = 1,
+                        DriverId = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
+                        TeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
+                        RaceId = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("ca07c125-6f14-462a-98e3-d6037f25e036"),
+                        Type = ResultType.Finished,
+                        Position = 2,
+                        Point = 18,
+                        DriverId = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
+                        TeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
+                        RaceId = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("bd106f46-1c6b-49c4-a9f7-ee11a1e91dcb"),
+                        Type = ResultType.Finished,
+                        Position = 19,
+                        Point = 0,
+                        DriverId = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
+                        TeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
+                        RaceId = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae")
+                    },
+                    new Result
+                    {
+                        Id = new Guid("a3623d72-9b8d-4cd7-9b72-fc2a141e2b4f"),
+                        Type = ResultType.Finished,
+                        Position = 17,
+                        Point = 0,
+                        DriverId = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
+                        TeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
+                        RaceId = new Guid("a839b7a9-8bc6-4aad-aa79-c8e1b17778ae")
                     }
                 );
             }
