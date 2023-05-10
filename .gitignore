@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 Migrations/
 .vscode
+tools/seed/*.cs

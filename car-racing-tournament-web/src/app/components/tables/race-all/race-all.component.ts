@@ -90,6 +90,7 @@ export class RaceAllComponent implements OnInit {
     this.isFetching = true;
     this.seasonService.deleteRace(id).subscribe({
       next: () => {
+        this.closeModal();
         this.isFetching = false;
         this.onFetchDataEmitter.emit()
       },

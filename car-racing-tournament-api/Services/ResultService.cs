@@ -71,6 +71,9 @@ namespace car_racing_tournament_api.Services
             if (resultDto.Point < 0)
                 return (false, _configuration["ErrorMessages:ResultPoint"]);
 
+            if (resultDto.Point % 0.5 != 0)
+                return (false, _configuration["ErrorMessages:ResultPointNotHalf"]);
+
             if (await _carRacingTournamentDbContext.Results.CountAsync(
                 x => x.DriverId == resultDto.DriverId && x.RaceId == race.Id) != 0)
                 return (false, _configuration["ErrorMessages:ResultExists"]);
@@ -98,6 +101,9 @@ namespace car_racing_tournament_api.Services
 
             if (resultDto.Point < 0)
                 return (false, _configuration["ErrorMessages:ResultPoint"]);
+
+            if (resultDto.Point % 0.5 != 0)
+                return (false, _configuration["ErrorMessages:ResultPointNotHalf"]);
 
             if ((result.DriverId != resultDto.DriverId || result.RaceId != resultDto.RaceId) && await _carRacingTournamentDbContext.Results.CountAsync(
                 x => x.DriverId == resultDto.DriverId && x.RaceId == resultDto.RaceId) != 0)

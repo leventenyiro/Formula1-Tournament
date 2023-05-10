@@ -26,7 +26,6 @@ export class SeasonsComponent implements OnInit {
   modal: boolean = false;
   user?: User;
 
-  // filters
   checkBoxFavorites = new FormControl('');
   checkBoxAdmin = new FormControl('');
   checkBoxModerator = new FormControl('');
@@ -122,10 +121,11 @@ export class SeasonsComponent implements OnInit {
       event.stopPropagation();
       if (this.isFavorite(season)) {
         this.isFetching = true;
-        this.seasonService.deleteFavorite(this.user!.favorites!.find(x => x.seasonId === season.id && x.userId === this.user!.id)!.id!).subscribe({
+        this.seasonService.deleteFavorite(this.user!.favorites!.find(x => x.seasonId === season.id)!.id!).subscribe({
           next: () => {
             this.isFetching = false;
-            this.onFetchData()
+            this.onFetchData();
+            this.onFetchData();
           },
           error: err => {
             this.error = err
@@ -137,7 +137,8 @@ export class SeasonsComponent implements OnInit {
         this.seasonService.createFavorite(season.id).subscribe({
           next: () => {
             this.isFetching = false;
-            this.onFetchData()
+            this.onFetchData();
+            this.onFetchData();
           },
           error: err => {
             this.error = err
@@ -149,7 +150,12 @@ export class SeasonsComponent implements OnInit {
   }
 
   navigateSeason(id: string) {
-    this.router.navigate([`season/${id}`]);
+    this.router.navigate([`season/${id}`], {
+      queryParams: {
+        'type': 'drivers',
+        'value': 'all'
+      }
+    });
   }
 
   setModal(modal: boolean) {
