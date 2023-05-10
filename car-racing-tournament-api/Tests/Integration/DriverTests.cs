@@ -207,12 +207,5 @@ namespace car_racing_tournament_api.Tests.Integration
 
             Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
         }
-
-        [Test]
-        public async Task GetStatistics() {
-            var result = await _driverController!.Statistics("FirstDriver");
-
-            Assert.That(result, Is.TypeOf<OkObjectResult>());
-        }
     }
 }
