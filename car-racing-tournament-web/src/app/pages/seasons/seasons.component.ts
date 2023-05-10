@@ -134,7 +134,7 @@ export class SeasonsComponent implements OnInit {
         });
       } else {
         this.isFetching = true;
-        this.seasonService.createFavorite(this.user!.id!, season.id).subscribe({
+        this.seasonService.createFavorite(season.id).subscribe({
           next: () => {
             this.isFetching = false;
             this.onFetchData()

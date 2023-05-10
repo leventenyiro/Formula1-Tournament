@@ -24,19 +24,16 @@ namespace car_racing_tournament_api.Controllers
                 .Build();
         }
 
-        [HttpPost, Authorize]
-        public async Task<IActionResult> Post([FromBody] FavoriteDto favoriteDto)
+        [HttpPost("{seasonId}"), Authorize]
+        public async Task<IActionResult> Post(Guid seasonId)
         {
-            var resultGetSeason = await _seasonService.GetSeasonById(favoriteDto.SeasonId);
-            if (!resultGetSeason.IsSuccess)
-                return NotFound(resultGetSeason.ErrorMessage);
-
-            var resultGetUser = await _userService.GetUserById(favoriteDto.UserId);
+            var resultGetUser = await _userService.GetUserById(new Guid(User.Identity!.Name!));
             if (!resultGetUser.IsSuccess)
                 return NotFound(resultGetUser.ErrorMessage);
 
-            if (new Guid(User.Identity!.Name!) != resultGetUser.User!.Id)
-                return Forbid();
+            var resultGetSeason = await _seasonService.GetSeasonById(seasonId);
+            if (!resultGetSeason.IsSuccess)
+                return NotFound(resultGetSeason.ErrorMessage);
 
             var resultAdd = await _favoriteService.AddFavorite(resultGetUser.User!, resultGetSeason.Season!);
             if (!resultAdd.IsSuccess)

@@ -107,36 +107,18 @@ namespace car_racing_tournament_api.Tests.Integration
         public async Task PostFavoriteSeasonNotFound() {
             SetAuthentication(_user2Id);
 
-            var result = await _favoriteController!.Post(new FavoriteDto {
-                UserId = _user2Id,
-                SeasonId = Guid.NewGuid()
-            });
+            var result = await _favoriteController!.Post(Guid.NewGuid());
 
             Assert.That(result, Is.TypeOf<NotFoundObjectResult>());
         }
 
         [Test]
         public async Task PostFavoriteUserNotFound() {
-            SetAuthentication(_user2Id);
+            SetAuthentication(Guid.NewGuid());
 
-            var result = await _favoriteController!.Post(new FavoriteDto {
-                UserId = Guid.NewGuid(),
-                SeasonId = _favorite!.Season.Id
-            });
+            var result = await _favoriteController!.Post(_favorite!.Season.Id);
 
             Assert.That(result, Is.TypeOf<NotFoundObjectResult>());
-        }
-
-        [Test]
-        public async Task PostFavoriteForbid() {
-            SetAuthentication(_user1Id);
-
-            var result = await _favoriteController!.Post(new FavoriteDto {
-                UserId = _user2Id,
-                SeasonId = _favorite!.Season.Id
-            });
-
-            Assert.That(result, Is.TypeOf<ForbidResult>());
         }
 
         [Test]
