@@ -32,7 +32,7 @@ namespace car_racing_tournament_api.Tests.Integration
 
             _context = new CarRacingTournamentDbContext(options);
 
-            Models.User _user = new Models.User
+            _user = new Models.User
             {
                 Id = Guid.NewGuid(),
                 Username = "TestUser2",
@@ -86,16 +86,107 @@ namespace car_racing_tournament_api.Tests.Integration
             _userController!.ControllerContext.HttpContext = httpContext;
         }
 
-        /*[Test]
-        public async Task PostFavoriteSeasonNotFound() {
-            SetAuthentication(_user2Id);
+        [Test]
+        public async Task LoginFailed() {
+            var result = await _userController!.Login(new LoginDto {
+                UsernameEmail = "TestUser2",
+                Password = "Valami1212"
+            });
 
-            var result = await _userController!.(new FavoriteDto {
-                UserId = _user2Id,
-                SeasonId = Guid.NewGuid()
+            Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
+        }
+    
+        [Test]
+        public async Task RegistrationFailed() {
+            var result = await _userController!.Registration(new RegistrationDto {
+                Username = "testUser",
+                Email = "test@test.com",
+                Password = "Valami",
+                PasswordAgain = "Valami12"
+            });
+
+            Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
+        }
+
+        [Test]
+        public async Task GetFailed() {
+            SetAuthentication(Guid.NewGuid());
+
+            var result = await _userController!.Get();
+
+            Assert.That(result, Is.TypeOf<NotFoundObjectResult>());
+        }
+
+        [Test]
+        public async Task PutUserNotFound() {
+            SetAuthentication(Guid.NewGuid());
+
+            var result = await _userController!.Put(new UpdateUserDto {
+                Username = "testUser1",
+                Email = "test@test.com"
             });
 
             Assert.That(result, Is.TypeOf<NotFoundObjectResult>());
-        }*/
+        }
+
+        [Test]
+        public async Task PutBadRequest() {
+            SetAuthentication(_user!.Id);
+
+            var result = await _userController!.Put(new UpdateUserDto {
+                Username = "",
+                Email = "test@test.com"
+            });
+
+            Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
+        }
+
+        [Test]
+        public async Task PutPasswordUserNotFound() {
+            SetAuthentication(Guid.NewGuid());
+
+            var result = await _userController!.Put(new UpdatePasswordDto {
+                PasswordOld = "Valami12",
+                Password = "Valami121",
+                PasswordAgain = "Valami121"
+            });
+
+            Assert.That(result, Is.TypeOf<NotFoundObjectResult>());
+        }
+
+        [Test]
+        public async Task PutPasswordWrongOldPassword() {
+            SetAuthentication(_user!.Id);
+
+            var result = await _userController!.Put(new UpdatePasswordDto {
+                PasswordOld = "Valami12",
+                Password = "Valami121",
+                PasswordAgain = "Valami121"
+            });
+
+            Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
+        }
+
+        [Test]
+        public async Task PutPasswordWrongNewPassword() {
+            SetAuthentication(_user!.Id);
+
+            var result = await _userController!.Put(new UpdatePasswordDto {
+                PasswordOld = "Valami1212",
+                Password = "Valami1212",
+                PasswordAgain = "Valami121"
+            });
+
+            Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
+        }
+
+        [Test]
+        public async Task DeleteUserNotFound() {
+            SetAuthentication(Guid.NewGuid());
+
+            var result = await _userController!.Delete();
+
+            Assert.That(result, Is.TypeOf<NotFoundObjectResult>());
+        }
     }
 }
