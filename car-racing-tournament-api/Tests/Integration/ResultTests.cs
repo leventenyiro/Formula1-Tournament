@@ -211,5 +211,116 @@ namespace car_racing_tournament_api.Tests.Integration
 
             Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
         }
+
+        [Test]
+        public async Task PostResultDriverNotFound() {
+            SetAuthentication(_moderatorUserId);
+
+            var result = await _resultController!.PostResult(new ResultDto {
+                Type = ResultType.Finished,
+                Position = 2,
+                Point = 18,
+                DriverId = Guid.NewGuid(),
+                TeamId = _context!.Teams.First().Id,
+                RaceId = _context.Races.First().Id,
+            });
+
+            Assert.That(result, Is.TypeOf<NotFoundObjectResult>());
+        }
+
+        [Test]
+        public async Task PostResultTeamNotFound() {
+            SetAuthentication(_moderatorUserId);
+
+            var result = await _resultController!.PostResult(new ResultDto {
+                Type = ResultType.Finished,
+                Position = 2,
+                Point = 18,
+                DriverId = _context!.Drivers.Where(x => x.Name == "SecondDriver").First().Id,
+                TeamId = Guid.NewGuid(),
+                RaceId = _context.Races.First().Id,
+            });
+
+            Assert.That(result, Is.TypeOf<NotFoundObjectResult>());
+        }
+
+        [Test]
+        public async Task PutResultNotFound() {
+            SetAuthentication(_moderatorUserId);
+
+            var result = await _resultController!.Put(Guid.NewGuid(), new ResultDto {
+                Type = ResultType.Finished,
+                Position = 2,
+                Point = 18,
+                DriverId = _context!.Drivers.Where(x => x.Name == "FirstDriver").First().Id,
+                TeamId = _context.Teams.First().Id,
+                RaceId = _context.Races.First().Id
+            });
+
+            Assert.That(result, Is.TypeOf<NotFoundObjectResult>());
+        }
+
+        [Test]
+        public async Task PutResultForbid() {
+            SetAuthentication(_anotherUserId);
+
+            var result = await _resultController!.Put(_result!.Id, new ResultDto {
+                Type = ResultType.Finished,
+                Position = 2,
+                Point = 18,
+                DriverId = _context!.Drivers.Where(x => x.Name == "FirstDriver").First().Id,
+                TeamId = _context.Teams.First().Id,
+                RaceId = _context.Races.First().Id
+            });
+
+            Assert.That(result, Is.TypeOf<ForbidResult>());
+        }
+
+        [Test]
+        public async Task PutResultArchived() {
+            SetAuthentication(_moderatorUserId);
+
+            _context!.Seasons.First().IsArchived = true;
+
+            var result = await _resultController!.Put(_result!.Id, new ResultDto {
+                Type = ResultType.Finished,
+                Position = 2,
+                Point = 18,
+                DriverId = _context!.Drivers.Where(x => x.Name == "FirstDriver").First().Id,
+                TeamId = _context.Teams.First().Id,
+                RaceId = _context.Races.First().Id
+            });
+
+            Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
+        }
+
+        [Test]
+        public async Task DeleteResultNotFound() {
+            SetAuthentication(_moderatorUserId);
+
+            var result = await _resultController!.Delete(Guid.NewGuid());
+
+            Assert.That(result, Is.TypeOf<NotFoundObjectResult>());
+        }
+
+        [Test]
+        public async Task DeleteResultForbid() {
+            SetAuthentication(_anotherUserId);
+
+            var result = await _resultController!.Delete(_result!.Id);
+
+            Assert.That(result, Is.TypeOf<ForbidResult>());
+        }
+
+        [Test]
+        public async Task DeleteResultArchived() {
+            SetAuthentication(_moderatorUserId);
+
+            _context!.Seasons.First().IsArchived = true;
+
+            var result = await _resultController!.Delete(_result!.Id);
+
+            Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
+        }
     }
 }
