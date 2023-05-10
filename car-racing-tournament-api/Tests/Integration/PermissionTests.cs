@@ -1,7 +1,6 @@
 using AutoMapper;
 using car_racing_tournament_api.Controllers;
 using car_racing_tournament_api.Data;
-using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Models;
 using car_racing_tournament_api.Profiles;
 using car_racing_tournament_api.Services;
@@ -19,8 +18,6 @@ namespace car_racing_tournament_api.Tests.Integration
         private PermissionController? _permissionController;
         private CarRacingTournamentDbContext? _context;
         private Permission? _permission;
-        private SeasonService? _seasonService;
-        private PermissionService? _permissionService;
         private IConfiguration? _configuration;
         private Guid _adminUserId;
         private Guid _anotherUserId;
@@ -95,12 +92,12 @@ namespace car_racing_tournament_api.Tests.Integration
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            _seasonService = new SeasonService(_context, mapper);
-            _permissionService = new PermissionService(_context);
+            var seasonService = new SeasonService(_context, mapper);
+            var permissionService = new PermissionService(_context);
 
             _permissionController = new PermissionController(
-                _permissionService,
-                _seasonService
+                permissionService,
+                seasonService
             );
         }
 

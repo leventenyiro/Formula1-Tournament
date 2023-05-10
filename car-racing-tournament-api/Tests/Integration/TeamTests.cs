@@ -19,11 +19,6 @@ namespace car_racing_tournament_api.Tests.Integration
         private TeamController? _teamController;
         private CarRacingTournamentDbContext? _context;
         private Team? _team;
-        private SeasonService? _seasonService;
-        private PermissionService? _permissionService;
-        private DriverService? _driverService;
-        private TeamService? _teamService;
-        private ResultService? _resultService;
         private IConfiguration? _configuration;
         private Guid _anotherUserId;
         private Guid _moderatorUserId;
@@ -90,18 +85,18 @@ namespace car_racing_tournament_api.Tests.Integration
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            _seasonService = new SeasonService(_context, mapper);
-            _permissionService = new PermissionService(_context);
-            _driverService = new DriverService(_context, mapper);
-            _teamService = new TeamService(_context);
-            _resultService = new ResultService(_context, mapper);
+            var seasonService = new SeasonService(_context, mapper);
+            var permissionService = new PermissionService(_context);
+            var driverService = new DriverService(_context, mapper);
+            var teamService = new TeamService(_context);
+            var resultService = new ResultService(_context, mapper);
 
             _teamController = new TeamController(
-                _teamService,
-                _permissionService,
-                _seasonService,
-                _driverService,
-                _resultService
+                teamService,
+                permissionService,
+                seasonService,
+                driverService,
+                resultService
             );
         }
 

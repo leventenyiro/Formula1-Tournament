@@ -2,18 +2,14 @@ using AutoMapper;
 using car_racing_tournament_api.Controllers;
 using car_racing_tournament_api.Data;
 using car_racing_tournament_api.DTO;
-using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
 using car_racing_tournament_api.Profiles;
 using car_racing_tournament_api.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using Newtonsoft.Json;
 using NUnit.Framework;
-using System.Net;
 using System.Security.Claims;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace car_racing_tournament_api.Tests.Integration
 {
@@ -23,12 +19,6 @@ namespace car_racing_tournament_api.Tests.Integration
         private SeasonController? _seasonController;
         private CarRacingTournamentDbContext? _context;
         private Season? _season;
-        private SeasonService? _seasonService;
-        private UserService? _userService;
-        private PermissionService? _permissionService;
-        private DriverService? _driverService;
-        private TeamService? _teamService;
-        private RaceService? _raceService;
         private IConfiguration? _configuration;
         private Guid _userId;
         private Guid _anotherUserId;
@@ -145,20 +135,20 @@ namespace car_racing_tournament_api.Tests.Integration
                 .AddJsonFile("appsettings.json")
                 .Build();
             
-            _seasonService = new SeasonService(_context, mapper);
-            _permissionService = new PermissionService(_context);
-            _userService = new UserService(_context);
-            _driverService = new DriverService(_context, mapper);
-            _teamService = new TeamService(_context);
-            _raceService = new RaceService(_context, mapper);
+            var seasonService = new SeasonService(_context, mapper);
+            var permissionService = new PermissionService(_context);
+            var userService = new UserService(_context);
+            var driverService = new DriverService(_context, mapper);
+            var teamService = new TeamService(_context);
+            var raceService = new RaceService(_context, mapper);
 
             _seasonController = new SeasonController(
-                _seasonService,
-                _permissionService,
-                _userService,
-                _driverService,
-                _teamService,
-                _raceService
+                seasonService,
+                permissionService,
+                userService,
+                driverService,
+                teamService,
+                raceService
             );
         }
 

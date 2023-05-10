@@ -19,12 +19,6 @@ namespace car_racing_tournament_api.Tests.Integration
         private ResultController? _resultController;
         private CarRacingTournamentDbContext? _context;
         private Result? _result;
-        private SeasonService? _seasonService;
-        private PermissionService? _permissionService;
-        private DriverService? _driverService;
-        private TeamService? _teamService;
-        private ResultService? _resultService;
-        private RaceService? _raceService;
         private IConfiguration? _configuration;
         private Guid _anotherUserId;
         private Guid _moderatorUserId;
@@ -132,20 +126,20 @@ namespace car_racing_tournament_api.Tests.Integration
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            _seasonService = new SeasonService(_context, mapper);
-            _permissionService = new PermissionService(_context);
-            _driverService = new DriverService(_context, mapper);
-            _teamService = new TeamService(_context);
-            _resultService = new ResultService(_context, mapper);
-            _raceService = new RaceService(_context, mapper);
+            var seasonService = new SeasonService(_context, mapper);
+            var permissionService = new PermissionService(_context);
+            var driverService = new DriverService(_context, mapper);
+            var teamService = new TeamService(_context);
+            var resultService = new ResultService(_context, mapper);
+            var raceService = new RaceService(_context, mapper);
 
             _resultController = new ResultController(
-                _resultService,
-                _permissionService,
-                _driverService,
-                _teamService,
-                _raceService,
-                _seasonService
+                resultService,
+                permissionService,
+                driverService,
+                teamService,
+                raceService,
+                seasonService
             );
         }
 
