@@ -124,8 +124,8 @@ export class SeasonsComponent implements OnInit {
         this.seasonService.deleteFavorite(this.user!.favorites!.find(x => x.seasonId === season.id)!.id!).subscribe({
           next: () => {
             this.isFetching = false;
-            this.onFetchData()
-            this.onFetchData()
+            this.onFetchData();
+            this.onFetchData();
           },
           error: err => {
             this.error = err
