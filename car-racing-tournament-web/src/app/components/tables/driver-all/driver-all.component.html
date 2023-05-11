@@ -1,10 +1,18 @@
 <div class="row row-header my-3 d-flex align-items-center">
     <div class="col-2 col-lg-1">Position</div>
     <div [ngClass]="hasPermission && !season.isArchived ? 'col-2' : 'col-3'">Name</div>
-    <div class="col-lg-3 d-none d-lg-flex">Real Name</div>
+    <div class="col-lg-2 d-none d-lg-flex">Real Name</div>
+    <div class="col-1 col-lg-1">
+        <div class="d-none d-xl-flex">
+            Nationality
+        </div>
+        <div class="d-xl-none">
+            Nat.
+        </div>
+    </div>
     <div class="col-lg-1 d-none d-lg-flex">Number</div>
     <div [ngClass]="hasPermission && !season.isArchived ? 'col-3' : 'col-4'" class="col-lg-2">Team</div>
-    <div class="col-2 col-lg-1">Points</div>
+    <div class="col-1 col-lg-1">Points</div>
     <div *ngIf="hasPermission && !season.isArchived"  [ngClass]="hasPermission && !season.isArchived ? 'col-3 col-lg-2' : 'col-1 col-lg-1'">
         <button class="btn btn-success btn-sm" (mouseup)="openModal('createDriver')">Add driver</button>
     </div>
@@ -22,8 +30,11 @@
             {{ driver.name.substring(0, 3).toUpperCase() }}
         </div>
     </div>
-    <div class="col-lg-3 d-none d-lg-flex">
+    <div class="col-lg-2 d-none d-lg-flex">
         {{ driver.realName }}
+    </div>
+    <div class="col-1 col-lg-1">
+        <img width="30" src="https://hatscripts.github.io/circle-flags/flags/{{driver.nationality?.alpha2.toLowerCase()}}.svg" alt="" title="{{ driver.nationality?.name }}">
     </div>
     <div class="col-lg-1 d-none d-lg-flex">
         {{ driver.number }}
@@ -31,7 +42,7 @@
     <div [ngClass]="hasPermission && !season.isArchived ? 'col-3' : 'col-4'" class="col-lg-2">
         {{ driver.actualTeam.name }}
     </div>
-    <div class="col-2 col-lg-1">
+    <div class="col-1 col-lg-1 fw-bold">
         {{ driver.point }}
     </div>
     <div [ngClass]="hasPermission && !season.isArchived ? 'col-3 col-lg-2' : 'col-1 col-lg-1'">

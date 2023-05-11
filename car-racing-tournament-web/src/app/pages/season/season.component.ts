@@ -115,6 +115,7 @@ export class SeasonComponent implements OnInit {
         id: driver.id,
         name: driver.name,
         realName: driver.realName,
+        nationality: driver.nationality,
         number: driver.number,
         actualTeam: {
           id: actualTeam?.id,

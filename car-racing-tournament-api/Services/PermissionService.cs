@@ -16,7 +16,7 @@ namespace car_racing_tournament_api.Services
             _carRacingTournamentDbContext = carRacingTournamentDbContext;
             _configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
-                .Build();;
+                .Build();
         }
 
         public async Task<bool> IsAdmin(Guid userId, Guid seasonId)

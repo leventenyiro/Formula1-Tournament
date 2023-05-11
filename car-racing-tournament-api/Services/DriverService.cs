@@ -33,6 +33,7 @@ namespace car_racing_tournament_api.Services
                     Id = x.Id,
                     Name = x.Name,
                     RealName = x.RealName,
+                    NationalityAlpha2 = x.NationalityAlpha2,
                     Number = x.Number,
                     ActualTeamId = x.ActualTeamId,
                     SeasonId = x.SeasonId,
@@ -57,6 +58,9 @@ namespace car_racing_tournament_api.Services
             if (string.IsNullOrEmpty(driverDto.Name))
                 return (false, _configuration["ErrorMessages:DriverName"]);
 
+            if (driverDto.Nationality != null && DriverService.GetNationalityByAlpha2(driverDto.Nationality) == null)
+                return (false, _configuration["ErrorMessages:Nationality"]);
+
             if (driverDto.Number <= 0 || driverDto.Number >= 100)
                 return (false, _configuration["ErrorMessages:DriverNumber"]);
 
@@ -72,9 +76,15 @@ namespace car_racing_tournament_api.Services
                 return (false, _configuration["ErrorMessages:DriverNumberExists"]);
 
             driverDto.RealName = driverDto.RealName?.Trim();
-            var driver = _mapper.Map<Driver>(driverDto);
-            driver.Id = Guid.NewGuid();
-            driver.SeasonId = season.Id;
+            var driver = new Driver {
+                Id = Guid.NewGuid(),
+                Name = driverDto.Name,
+                RealName = driverDto.RealName,
+                NationalityAlpha2 = driverDto.Nationality?.ToUpper(),
+                Number = driverDto.Number,
+                ActualTeamId = driverDto.ActualTeamId,
+                SeasonId = season.Id
+            };
             await _carRacingTournamentDbContext.Drivers.AddAsync(driver);
             _carRacingTournamentDbContext.SaveChanges();
 
@@ -86,6 +96,9 @@ namespace car_racing_tournament_api.Services
             driverDto.Name = driverDto.Name.Trim();
             if (string.IsNullOrEmpty(driverDto.Name))
                 return (false, _configuration["ErrorMessages:DriverName"]);
+
+            if (driverDto.Nationality != null && DriverService.GetNationalityByAlpha2(driverDto.Nationality) == null)
+                return (false, _configuration["ErrorMessages:Nationality"]);
 
             if (driverDto.Number <= 0 || driverDto.Number >= 100)
                 return (false, _configuration["ErrorMessages:DriverNumber"]);
@@ -107,6 +120,7 @@ namespace car_racing_tournament_api.Services
             driver.RealName = driverDto.RealName?.Trim();
             driver.Number = driverDto.Number;
             driver.ActualTeamId = driverDto.ActualTeamId;
+            driver.NationalityAlpha2 = driverDto.Nationality?.ToUpper();
             _carRacingTournamentDbContext.Entry(driver).State = EntityState.Modified;
             await _carRacingTournamentDbContext.SaveChangesAsync();
 
@@ -152,6 +166,21 @@ namespace car_racing_tournament_api.Services
             }
         }
 
+        public static Nationality GetNationalityByAlpha2(string alpha2)
+        {
+            try
+            {
+                string path = Path.Combine(Directory.GetCurrentDirectory(), "Data", "nations.json");
+                string json = File.ReadAllText(path);
+                List<Nationality> entities = JsonSerializer.Deserialize<List<Nationality>>(json)!;
+                return entities.Where(x => x.Alpha2 == alpha2.ToUpper()).First()!;
+            }
+            catch (Exception)
+            {
+                return null!;
+            }
+        }
+
         public async Task<(bool IsSuccess, Statistics? DriverStatistics, string? ErrorMessage)> GetStatistics(string name)
         {
             var driverObj = await _carRacingTournamentDbContext.Drivers.Where(x => x.Name == name).Select(x => x.Name).FirstOrDefaultAsync();
@@ -192,7 +221,7 @@ namespace car_racing_tournament_api.Services
                     TeamName = x.ActualTeam?.Name,
                     TeamColor = x.ActualTeam?.Color ?? "#000000",
                     CreatedAt = x.Season.CreatedAt,
-                    Position = getDriverPositionInSeason(x.Season.Id, x)
+                    Position = GetDriverPositionInSeason(x.Season.Id, x)
                 })
                 .OrderBy(x => x.CreatedAt)
                 .ToList();
@@ -221,7 +250,7 @@ namespace car_racing_tournament_api.Services
             return (true, driverStat, null);
         }
 
-        private int getDriverPositionInSeason(Guid seasonId, Driver driver) {
+        private int GetDriverPositionInSeason(Guid seasonId, Driver driver) {
             var season = _carRacingTournamentDbContext
                 .Seasons
                 .Where(x => x.Id == seasonId)

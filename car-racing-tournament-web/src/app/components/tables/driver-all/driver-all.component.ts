@@ -36,7 +36,10 @@ export class DriverAllComponent implements OnInit {
 
   constructor(private seasonService: SeasonService) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    console.log(this.driverAll);
+    
+  }
 
   getNationalities() {
     this.isFetching = true;

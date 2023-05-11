@@ -4,7 +4,7 @@ using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
 using car_racing_tournament_api.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing;
+using System.Text.Json;
 
 namespace car_racing_tournament_api.Services
 {
@@ -89,6 +89,7 @@ namespace car_racing_tournament_api.Services
                         Name = x.Name,
                         RealName = x.RealName,
                         Number = x.Number,
+                        Nationality = x.NationalityAlpha2 != null ? DriverService.GetNationalityByAlpha2(x.NationalityAlpha2) : null,
                         ActualTeamId = x.ActualTeamId
                     }).ToList(),
                     Teams = x.Teams!.Select(x => new Team
