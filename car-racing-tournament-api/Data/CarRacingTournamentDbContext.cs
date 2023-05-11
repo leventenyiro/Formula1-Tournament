@@ -122,6 +122,8 @@ namespace car_racing_tournament_api.Data
 
                 entity.Property(e => e.RealName);
 
+                entity.Property(e => e.NationalityAlpha2);
+
                 entity.Property(e => e.Number)
                     .IsRequired();
 

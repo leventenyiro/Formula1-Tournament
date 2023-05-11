@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment'
 import { Season } from '../models/season';
-import { Driver } from 'app/models/driver';
+import { Driver, Nationality } from 'app/models/driver';
 import { Result } from 'app/models/result';
 import { Team } from 'app/models/team';
 import { Race } from 'app/models/race';
@@ -282,6 +282,7 @@ export class SeasonService {
       {
         "name": driver.name,
         "realName": driver.realName,
+        "nationality": driver.nationality,
         "number": driver.number,
         "actualTeamId": driver.actualTeamId
       },
@@ -308,6 +309,7 @@ export class SeasonService {
       {
         "name": driver.name,
         "realName": driver.realName,
+        "nationality": driver.nationality,
         "number": driver.number,
         "actualTeamId": driver.actualTeamId
       },
@@ -534,6 +536,24 @@ export class SeasonService {
       }
     ).pipe(
       tap(data => data),
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error));
+      })
+    )
+  }
+
+  getNationalities(): Observable<Nationality[]> {
+    let headers = new HttpHeaders()
+    .set('content-type', 'application/x-www-form-urlencoded')
+    .set('Access-Control-Allow-Origin', '*');
+
+    return this.http.get<Nationality[]>(
+      `${environment.backendUrl}/driver/nationality`,
+      {
+        headers: headers
+      }
+    ).pipe(
+      tap(data => JSON.stringify(data)),
       catchError((error: HttpErrorResponse) => {
         return throwError(() => new Error(error.error));
       })
