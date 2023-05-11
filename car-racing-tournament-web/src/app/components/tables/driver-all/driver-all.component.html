@@ -75,12 +75,19 @@
 
         <div class="mb-3">
             <label for="inputNationality" class="form-label">Nationality</label>
-            <select name="nationality" id="inputNationality" class="form-select" [value]="selectedDriver?.nationality?.alpha2 === undefined ? null : selectedDriver?.nationality?.alpha2" [formControl]="inputNationality">
-                <option [ngValue]="null">None</option>
-                <option *ngFor="let option of nationalities" [value]="option.alpha2">
-                    {{ option.name }}
-                </option>
-            </select>
+            <div class="row d-flex align-items-center">
+                <div class="col-1">
+                    <img width="30" src="https://hatscripts.github.io/circle-flags/flags/{{actualNationality()}}.svg" alt="">
+                </div>
+                <div class="col-11">
+                    <select name="nationality" id="inputNationality" class="form-select" [value]="selectedDriver?.nationality?.alpha2 === undefined ? null : selectedDriver?.nationality?.alpha2" [formControl]="inputNationality">
+                        <option [ngValue]="null">None</option>
+                        <option *ngFor="let option of nationalities" [value]="option.alpha2">
+                            {{ option.name }}
+                        </option>
+                    </select>
+                </div>
+            </div>
         </div>
 
         <div class="mb-3">

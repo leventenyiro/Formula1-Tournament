@@ -149,7 +149,13 @@ export class DriverAllComponent implements OnInit {
   closeModal() {
     this.modal = '';
     this.error = '';
+    
     this.selectedDriver = undefined;
+    this.inputName.setValue('');
+    this.inputRealName.setValue('');
+    this.inputNationality.setValue(null);
+    this.inputNumber.setValue(1);
+    this.inputActualTeamId.setValue(null);
   }
 
   openStatistics(name: string) {
@@ -158,6 +164,10 @@ export class DriverAllComponent implements OnInit {
 
   actualTeamColor() {
     return this.season.teams.find(x => x.id === this.inputActualTeamId.value)?.color;
+  }
+
+  actualNationality() {
+    return String(this.inputNationality.value).toLowerCase();
   }
 
   removeError() {
