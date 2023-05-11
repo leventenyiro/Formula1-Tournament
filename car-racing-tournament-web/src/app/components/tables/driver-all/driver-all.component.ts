@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Driver } from 'app/models/driver';
+import { Driver, Nationality } from 'app/models/driver';
 import { Season } from 'app/models/season';
 import { SeasonService } from 'app/services/season.service';
 
@@ -26,9 +26,11 @@ export class DriverAllComponent implements OnInit {
   modal: string = '';
   selectedDriver?: Driver;
   isFetching: boolean = false;
+  nationalities: Nationality[] = [];
 
   inputName = new FormControl('');
   inputRealName = new FormControl('');
+  inputNationality = new FormControl(null);
   inputNumber = new FormControl(1);
   inputActualTeamId = new FormControl(null);
 
@@ -36,8 +38,22 @@ export class DriverAllComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  createDriver() {   
-    this.isFetching = true; 
+  getNationalities() {
+    this.isFetching = true;
+    this.seasonService.getNationalities().subscribe({
+      next: data => {
+        this.nationalities = data;
+        this.isFetching = false;
+      },
+      error: error => {
+        this.error = error;
+        this.isFetching = false;
+      }
+    });
+  }
+
+  createDriver() {
+    this.isFetching = true;
     if (this.inputName.value === '') {
       this.error = 'Driver name is missing!';
       this.isFetching = false;
@@ -114,6 +130,10 @@ export class DriverAllComponent implements OnInit {
   }
 
   openModal(modal: string, selectedDriver?: Driver) {
+    if (modal !== "deleteDriver" && this.nationalities.length === 0) {
+      this.getNationalities();
+    }
+
     this.modal = modal;
     if (selectedDriver) {
       this.selectedDriver = selectedDriver;

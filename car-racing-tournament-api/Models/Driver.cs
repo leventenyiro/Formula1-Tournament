@@ -19,4 +19,14 @@ namespace car_racing_tournament_api.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public List<Result>? Results { get; set; }
     }
+
+    public class Nationality
+    {
+        [JsonPropertyName("name")]
+        public string Name { get; set; } = default!;
+        [JsonPropertyName("alpha2")]
+        public string Alpha2 { get; set; } = default!;
+        [JsonPropertyName("alpha3")]
+        public string Alpha3 { get; set; } = default!;
+    }
 }

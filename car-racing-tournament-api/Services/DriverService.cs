@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Text.Json;
+using AutoMapper;
 using car_racing_tournament_api.Data;
 using car_racing_tournament_api.DTO;
 using car_racing_tournament_api.Interfaces;
@@ -134,6 +135,21 @@ namespace car_racing_tournament_api.Services
             _carRacingTournamentDbContext.Drivers.UpdateRange(drivers);
             await _carRacingTournamentDbContext.SaveChangesAsync();
             return (true, null);
+        }
+
+        public async Task<(bool IsSuccess, List<Nationality>? Nationalities, string? ErrorMessage)> Nationalities()
+        {
+            try
+            {
+                string path = Path.Combine(Directory.GetCurrentDirectory(), "Data", "nations.json");
+                string json = await File.ReadAllTextAsync(path);
+                List<Nationality> entities = JsonSerializer.Deserialize<List<Nationality>>(json)!;
+                return (true, entities, null);
+            }
+            catch (Exception ex)
+            {
+                return (false, null, ex.Message);
+            }
         }
 
         public async Task<(bool IsSuccess, Statistics? DriverStatistics, string? ErrorMessage)> GetStatistics(string name)

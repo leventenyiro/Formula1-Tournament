@@ -74,6 +74,16 @@
         </div>
 
         <div class="mb-3">
+            <label for="inputNationality" class="form-label">Nationality</label>
+            <select name="nationality" id="inputNationality" class="form-select" [value]="selectedDriver?.nationality?.alpha2 === undefined ? null : selectedDriver?.nationality?.alpha2" [formControl]="inputNationality">
+                <option [ngValue]="null">None</option>
+                <option *ngFor="let option of nationalities" [value]="option.alpha2">
+                    {{ option.name }}
+                </option>
+            </select>
+        </div>
+
+        <div class="mb-3">
             <label for="inputNumber" class="form-label">Number</label>
             <input type="number" required min="1" max="99" class="form-control" id="inputNumber" name="number" [formControl]="inputNumber" [class.is-invalid]="!inputNumber.valid && inputNumber.touched">
             <div class="invalid-feedback">Number is required</div>
