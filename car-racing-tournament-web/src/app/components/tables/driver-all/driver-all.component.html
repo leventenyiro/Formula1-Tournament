@@ -34,7 +34,7 @@
         {{ driver.realName }}
     </div>
     <div class="col-1 col-lg-1">
-        <img width="30" src="https://hatscripts.github.io/circle-flags/flags/{{driver.nationality?.alpha2.toLowerCase()}}.svg" alt="" title="{{ driver.nationality?.name }}">
+        <img *ngIf="driver.nationality !== undefined" width="30" src="https://hatscripts.github.io/circle-flags/flags/{{ driver.nationality?.alpha2 }}.svg" alt="" title="{{ driver.nationality?.name }}">
     </div>
     <div class="col-lg-1 d-none d-lg-flex">
         {{ driver.number }}
@@ -88,7 +88,7 @@
             <label for="inputNationality" class="form-label">Nationality</label>
             <div class="row d-flex align-items-center">
                 <div class="col-1">
-                    <img width="30" src="https://hatscripts.github.io/circle-flags/flags/{{actualNationality()}}.svg" alt="">
+                    <img *ngIf="inputNationality.value !== undefined" width="30" src="https://hatscripts.github.io/circle-flags/flags/{{ actualNationality() }}.svg" alt="">
                 </div>
                 <div class="col-11">
                     <select name="nationality" id="inputNationality" class="form-select" [value]="selectedDriver?.nationality?.alpha2 === undefined ? null : selectedDriver?.nationality?.alpha2" [formControl]="inputNationality">

@@ -80,7 +80,7 @@ namespace car_racing_tournament_api.Services
                 Id = Guid.NewGuid(),
                 Name = driverDto.Name,
                 RealName = driverDto.RealName,
-                NationalityAlpha2 = driverDto.Nationality?.ToUpper(),
+                NationalityAlpha2 = driverDto.Nationality?.ToLower(),
                 Number = driverDto.Number,
                 ActualTeamId = driverDto.ActualTeamId,
                 SeasonId = season.Id
@@ -120,7 +120,7 @@ namespace car_racing_tournament_api.Services
             driver.RealName = driverDto.RealName?.Trim();
             driver.Number = driverDto.Number;
             driver.ActualTeamId = driverDto.ActualTeamId;
-            driver.NationalityAlpha2 = driverDto.Nationality?.ToUpper();
+            driver.NationalityAlpha2 = driverDto.Nationality?.ToLower();
             _carRacingTournamentDbContext.Entry(driver).State = EntityState.Modified;
             await _carRacingTournamentDbContext.SaveChangesAsync();
 
@@ -173,7 +173,7 @@ namespace car_racing_tournament_api.Services
                 string path = Path.Combine(Directory.GetCurrentDirectory(), "Data", "nations.json");
                 string json = File.ReadAllText(path);
                 List<Nationality> entities = JsonSerializer.Deserialize<List<Nationality>>(json)!;
-                return entities.Where(x => x.Alpha2 == alpha2.ToUpper()).First()!;
+                return entities.Where(x => x.Alpha2 == alpha2.ToLower()).First()!;
             }
             catch (Exception)
             {

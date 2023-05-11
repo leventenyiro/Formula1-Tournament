@@ -282,6 +282,7 @@ export class SeasonService {
       {
         "name": driver.name,
         "realName": driver.realName,
+        "nationality": driver.nationality,
         "number": driver.number,
         "actualTeamId": driver.actualTeamId
       },
@@ -308,6 +309,7 @@ export class SeasonService {
       {
         "name": driver.name,
         "realName": driver.realName,
+        "nationality": driver.nationality,
         "number": driver.number,
         "actualTeamId": driver.actualTeamId
       },

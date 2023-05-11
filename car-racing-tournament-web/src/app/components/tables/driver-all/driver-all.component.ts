@@ -70,6 +70,7 @@ export class DriverAllComponent implements OnInit {
     const data = {
       'name': this.inputName.value,
       'realName': this.inputRealName.value,
+      'nationality': this.inputNationality.value,
       'number': this.inputNumber.value,
       'actualTeamId': this.inputActualTeamId.value,
     } as Driver;
@@ -101,6 +102,7 @@ export class DriverAllComponent implements OnInit {
     const data = {
       'name': this.inputName.value,
       'realName': this.inputRealName.value,
+      'nationality': this.inputNationality.value,
       'number': this.inputNumber.value,
       'actualTeamId': this.inputActualTeamId.value,
     } as Driver;
@@ -143,6 +145,7 @@ export class DriverAllComponent implements OnInit {
       if (modal === 'updateDriver') {
         this.inputName.setValue(selectedDriver?.name);
         this.inputRealName.setValue(selectedDriver?.realName);
+        this.inputNationality.setValue(selectedDriver?.nationality ? selectedDriver.nationality.alpha2 : null);
         this.inputNumber.setValue(selectedDriver?.number);
         this.inputActualTeamId.setValue(selectedDriver?.actualTeam?.id === undefined ? null : selectedDriver?.actualTeam?.id);
       }
@@ -170,7 +173,7 @@ export class DriverAllComponent implements OnInit {
   }
 
   actualNationality() {
-    return String(this.inputNationality.value).toLowerCase();
+    return this.inputNationality.value;
   }
 
   removeError() {
