@@ -758,6 +758,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("73fcfbba-4c96-4b37-be28-031cea37fedf"),
                         Name = "Mazepin",
                         RealName = "Nikita Mazepin",
+                        NationalityAlpha2 = "ru",
                         Number = 9,
                         ActualTeamId = new Guid("e8ef00d1-6e72-4002-9ac5-4047cca447d3"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -767,6 +768,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("95956026-8b8e-422f-9d9c-0c612fd65286"),
                         Name = "Giovinazzi",
                         RealName = "Antonio Giovinazzi",
+                        NationalityAlpha2 = "it",
                         Number = 99,
                         ActualTeamId = new Guid("4e5bf09f-8c78-4fd7-a78e-d851e2e93b35"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -776,6 +778,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("4abe77d1-5c5c-45de-98b5-0ce706c2a92e"),
                         Name = "Raikkonen",
                         RealName = "Kimi Raikkonen",
+                        NationalityAlpha2 = "fi",
                         Number = 7,
                         ActualTeamId = new Guid("4e5bf09f-8c78-4fd7-a78e-d851e2e93b35"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -785,6 +788,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("66158497-e437-4574-bb13-0ffbb32f5275"),
                         Name = "Hamilton",
                         RealName = "Lewis Hamilton",
+                        NationalityAlpha2 = "gb",
                         Number = 44,
                         ActualTeamId = new Guid("1b742c78-01fb-48fd-bc3c-020787206ecc"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -794,6 +798,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("d367fa9f-6d62-465b-a79c-1a4d301d4d45"),
                         Name = "Tsunoda",
                         RealName = "Yuki Tsunoda",
+                        NationalityAlpha2 = "jp",
                         Number = 22,
                         ActualTeamId = new Guid("4f1af95f-6cce-41b3-9677-cb411348bd13"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -803,6 +808,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("ca473f80-146f-4581-95bf-1c725a37771d"),
                         Name = "Alonso",
                         RealName = "Fernando Alonso",
+                        NationalityAlpha2 = "es",
                         Number = 14,
                         ActualTeamId = new Guid("ef09fdca-d18a-4b98-b779-02d92e707039"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -812,6 +818,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("492ede9f-9565-49c3-987e-1fa4d6688280"),
                         Name = "Vettel",
                         RealName = "Sebastian Vettel",
+                        NationalityAlpha2 = "de",
                         Number = 5,
                         ActualTeamId = new Guid("0d7dccbf-0982-4b46-912c-074fa8c0465f"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -821,6 +828,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("4bc5f5a6-5d6b-4135-a05f-22f0dc07869a"),
                         Name = "Ocon",
                         RealName = "Esteban Ocon",
+                        NationalityAlpha2 = "fr",
                         Number = 31,
                         ActualTeamId = new Guid("ef09fdca-d18a-4b98-b779-02d92e707039"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -830,6 +838,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("06a7cd9f-b418-493e-9639-2e3ab68d05b9"),
                         Name = "Russell",
                         RealName = "George Russell",
+                        NationalityAlpha2 = "gb",
                         Number = 63,
                         ActualTeamId = new Guid("2323203f-67e8-4565-abad-a06ebe4678ee"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -839,6 +848,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("5429d0d4-ab87-40a3-98d8-3af65e7af665"),
                         Name = "Sainz",
                         RealName = "Carlos Sainz",
+                        NationalityAlpha2 = "es",
                         Number = 55,
                         ActualTeamId = new Guid("fb8316fd-290a-4e5b-8790-8caa0237e633"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -848,6 +858,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("6082ad8c-6a85-4d4b-9515-4494c70c095a"),
                         Name = "Latifi",
                         RealName = "Nicholas Latifi",
+                        NationalityAlpha2 = "ca",
                         Number = 6,
                         ActualTeamId = new Guid("2323203f-67e8-4565-abad-a06ebe4678ee"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -857,6 +868,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("a0b49580-e960-49bc-8495-46f923a1c648"),
                         Name = "Schumacher",
                         RealName = "Mick Schumacher",
+                        NationalityAlpha2 = "de",
                         Number = 47,
                         ActualTeamId = new Guid("e8ef00d1-6e72-4002-9ac5-4047cca447d3"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -866,6 +878,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("5e485bf5-dfba-4adf-b355-7cae28a45b1e"),
                         Name = "Leclerc",
                         RealName = "Charles Leclerc",
+                        NationalityAlpha2 = "mc",
                         Number = 16,
                         ActualTeamId = new Guid("fb8316fd-290a-4e5b-8790-8caa0237e633"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -875,6 +888,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("7015da16-b0e1-49c6-a2e7-9f501d936859"),
                         Name = "Ricciardo",
                         RealName = "Daniel Ricciardo",
+                        NationalityAlpha2 = "au",
                         Number = 3,
                         ActualTeamId = new Guid("7c8aeddd-30e8-4ca9-b6fe-cb91ca725bfd"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -884,6 +898,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("50ac6d2d-55e4-4fd1-8a14-d57d59d5dada"),
                         Name = "Bottas",
                         RealName = "Valtteri Bottas",
+                        NationalityAlpha2 = "fi",
                         Number = 77,
                         ActualTeamId = new Guid("1b742c78-01fb-48fd-bc3c-020787206ecc"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -893,6 +908,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("d9f51506-2c85-40a5-b82b-d99ca48fe87f"),
                         Name = "Verstappen",
                         RealName = "Max Verstappen",
+                        NationalityAlpha2 = "nl",
                         Number = 33,
                         ActualTeamId = new Guid("25211f1c-b53e-4776-83c1-503ea35764d2"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -902,6 +918,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("08317333-17a8-44bd-8d3d-db80fa4e4ac9"),
                         Name = "Norris",
                         RealName = "Lando Norris",
+                        NationalityAlpha2 = "gb",
                         Number = 4,
                         ActualTeamId = new Guid("7c8aeddd-30e8-4ca9-b6fe-cb91ca725bfd"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -911,6 +928,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("14079124-1050-4474-ba27-db9432f6a7c1"),
                         Name = "Gasly",
                         RealName = "Pierre Gasly",
+                        NationalityAlpha2 = "fr",
                         Number = 10,
                         ActualTeamId = new Guid("4f1af95f-6cce-41b3-9677-cb411348bd13"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -920,6 +938,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("4b1b6e60-6a50-4d2f-a3d5-dc929a1aa8d1"),
                         Name = "Pérez",
                         RealName = "Sergio Pérez",
+                        NationalityAlpha2 = "mx",
                         Number = 11,
                         ActualTeamId = new Guid("25211f1c-b53e-4776-83c1-503ea35764d2"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -929,6 +948,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("2ebc893a-914a-44b9-b420-ea6e3d9bee85"),
                         Name = "Stroll",
                         RealName = "Lance Stroll",
+                        NationalityAlpha2 = "ca",
                         Number = 18,
                         ActualTeamId = new Guid("0d7dccbf-0982-4b46-912c-074fa8c0465f"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -938,6 +958,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("8ea53266-9f3b-4d74-99c4-ee1e4c68596e"),
                         Name = "Kubica",
                         RealName = "Robert Kubica",
+                        NationalityAlpha2 = "pl",
                         Number = 88,
                         ActualTeamId = new Guid("4e5bf09f-8c78-4fd7-a78e-d851e2e93b35"),
                         SeasonId = new Guid("ef87fc1a-aad7-4835-a80d-25178f418cc1")
@@ -947,6 +968,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("c6e111b8-41fa-4073-bbae-10d40e063ee7"),
                         Name = "Schumacher",
                         RealName = "Mick Schumacher",
+                        NationalityAlpha2 = "de",
                         Number = 47,
                         ActualTeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -956,6 +978,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("dbc2b7ba-4e2c-4892-b817-1c74a31f41a1"),
                         Name = "Vettel",
                         RealName = "Sebastian Vettel",
+                        NationalityAlpha2 = "de",
                         Number = 5,
                         ActualTeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -965,6 +988,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("26d745a0-4db1-418e-8919-3ae89b8a1b5c"),
                         Name = "Latifi",
                         RealName = "Nicholas Latifi",
+                        NationalityAlpha2 = "ca",
                         Number = 6,
                         ActualTeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -974,6 +998,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("8fc76328-637e-4406-8e39-3db570657514"),
                         Name = "Norris",
                         RealName = "Lando Norris",
+                        NationalityAlpha2 = "gb",
                         Number = 4,
                         ActualTeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -983,6 +1008,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("1a24df46-4adb-4fe4-8685-3e15b87c5706"),
                         Name = "Hülkenberg",
                         RealName = "Nico Hülkenberg",
+                        NationalityAlpha2 = "de",
                         Number = 27,
                         ActualTeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -992,6 +1018,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("844281ac-4a62-49e5-a4e6-4e74bb00eba4"),
                         Name = "Gasly",
                         RealName = "Pierre Gasly",
+                        NationalityAlpha2 = "fr",
                         Number = 10,
                         ActualTeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -1001,6 +1028,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("791a7994-dce3-4684-a431-5676863ae6ce"),
                         Name = "Ocon",
                         RealName = "Esteban Ocon",
+                        NationalityAlpha2 = "fr",
                         Number = 31,
                         ActualTeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -1010,6 +1038,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("d5b558b5-2b9e-4264-86ee-57cef4534ddf"),
                         Name = "Verstappen",
                         RealName = "Max Verstappen",
+                        NationalityAlpha2 = "nl",
                         Number = 1,
                         ActualTeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -1019,6 +1048,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("b427561f-7035-4b63-a2e1-5830837c8df7"),
                         Name = "Bottas",
                         RealName = "Valtteri Bottas",
+                        NationalityAlpha2 = "fi",
                         Number = 77,
                         ActualTeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -1028,6 +1058,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("015e876d-49e1-4c32-82a9-6ebc72931562"),
                         Name = "Sainz",
                         RealName = "Carlos Sainz",
+                        NationalityAlpha2 = "es",
                         Number = 55,
                         ActualTeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -1037,6 +1068,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("0f781624-51a2-41e4-9ad1-6f1032d1c225"),
                         Name = "Stroll",
                         RealName = "Lance Stroll",
+                        NationalityAlpha2 = "ca",
                         Number = 18,
                         ActualTeamId = new Guid("d31332b6-903a-410c-9f95-0fb2e6f3a9b7"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -1046,6 +1078,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("1e26e2e4-3b8b-4b9e-a73f-741689d981fa"),
                         Name = "Hamilton",
                         RealName = "Lewis Hamilton",
+                        NationalityAlpha2 = "gb",
                         Number = 44,
                         ActualTeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -1055,6 +1088,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("6d8620df-975d-43dd-a1be-9309b4ebb01d"),
                         Name = "Russell",
                         RealName = "George Russell",
+                        NationalityAlpha2 = "gb",
                         Number = 63,
                         ActualTeamId = new Guid("76ca6f7d-3d6c-43f9-b68d-524c96611ff4"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -1064,6 +1098,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("94bd0be9-8ca1-4bf7-9488-98f87e16ab9a"),
                         Name = "Tsunoda",
                         RealName = "Yuki Tsunoda",
+                        NationalityAlpha2 = "jp",
                         Number = 22,
                         ActualTeamId = new Guid("c70636d0-61e1-4642-981f-0d840ea47dfe"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -1073,6 +1108,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("b74e2b6d-5516-4132-b50b-a9ca7ed83502"),
                         Name = "De",
                         RealName = "Nyck De Vries",
+                        NationalityAlpha2 = "nl",
                         Number = 45,
                         ActualTeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -1082,6 +1118,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("e1bcc2a7-9d6b-4261-a324-c2ec78250b3d"),
                         Name = "Pérez",
                         RealName = "Sergio Pérez",
+                        NationalityAlpha2 = "mx",
                         Number = 11,
                         ActualTeamId = new Guid("792d6d4c-cc3b-491b-9535-55757aa1ac5f"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -1091,6 +1128,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("fcb20019-28da-4ac6-b48c-ce0483228173"),
                         Name = "Zhou",
                         RealName = "Guanyu Zhou",
+                        NationalityAlpha2 = "cn",
                         Number = 24,
                         ActualTeamId = new Guid("f0e181bc-b2a7-4637-808e-dc8463ec6859"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -1100,6 +1138,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("63d1195e-0f4f-4ef4-aaa5-de97ade2bc8e"),
                         Name = "Alonso",
                         RealName = "Fernando Alonso",
+                        NationalityAlpha2 = "es",
                         Number = 14,
                         ActualTeamId = new Guid("f4db90ae-5e32-4b56-8fc5-d82f0c13c5a4"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -1109,6 +1148,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("e09b47a3-1d81-498e-ae41-e6a68ab6aa6b"),
                         Name = "Ricciardo",
                         RealName = "Daniel Ricciardo",
+                        NationalityAlpha2 = "au",
                         Number = 3,
                         ActualTeamId = new Guid("94c5e0fb-96c2-4098-b702-e4c8a02367bc"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -1118,6 +1158,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("3f59af4b-3b68-4334-9989-ebb56b0d4dfc"),
                         Name = "Leclerc",
                         RealName = "Charles Leclerc",
+                        NationalityAlpha2 = "mc",
                         Number = 16,
                         ActualTeamId = new Guid("6c678063-11c6-4a23-9db0-2705a1691731"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -1127,6 +1168,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("d7f48c1f-5173-4db3-bda7-ee43c0a4ceb5"),
                         Name = "Albon",
                         RealName = "Alexander Albon",
+                        NationalityAlpha2 = "th",
                         Number = 23,
                         ActualTeamId = new Guid("0d96385c-b302-4ad8-b220-2f3265139032"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
@@ -1136,6 +1178,7 @@ namespace car_racing_tournament_api.Data
                         Id = new Guid("8a1831a5-7cb5-4acd-aaf4-f3ca7d6bdbb2"),
                         Name = "Magnussen",
                         RealName = "Kevin Magnussen",
+                        NationalityAlpha2 = "dk",
                         Number = 20,
                         ActualTeamId = new Guid("d44544d8-b4a9-4ca8-9dd5-b6e92f25ed88"),
                         SeasonId = new Guid("a68066e1-ca8a-4e31-9edc-5b7f5687a9ee")
