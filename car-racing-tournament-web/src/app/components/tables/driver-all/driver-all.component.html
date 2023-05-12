@@ -20,11 +20,11 @@
     <div class="col-lg-1 d-none d-lg-flex">Number</div>
     <div [ngClass]="hasPermission && !season.isArchived ? 'col-2' : 'col-3'" class="col-lg-2">Team</div>
     <div class="col-1 col-lg-1">Points</div>
-    <div *ngIf="hasPermission && !season.isArchived"  [ngClass]="hasPermission && !season.isArchived ? 'col-3 col-lg-2' : 'col-1 col-lg-1'">
+    <div *ngIf="hasPermission && !season.isArchived" [ngClass]="hasPermission && !season.isArchived ? 'col-3 col-lg-2' : 'col-1 col-lg-1'">
         <button class="btn btn-success btn-sm" (mouseup)="openModal('createDriver')">Add driver</button>
     </div>
 </div>
-<div class="row row-box mb-3 d-flex align-items-center" *ngFor="let driver of driverAll; index as i;">
+<div class="row row-box mb-3 d-flex align-items-center" *ngFor="let driver of drivers; index as i;">
     <div class="col-1 d-flex align-items-center">
         <div class="team-color" [ngStyle]="{'background-color': driver.actualTeam.color}"></div>
         <div>{{ i + 1 }}</div>

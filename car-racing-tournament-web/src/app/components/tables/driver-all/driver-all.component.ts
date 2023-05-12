@@ -27,6 +27,7 @@ export class DriverAllComponent implements OnInit {
   selectedDriver?: Driver;
   isFetching: boolean = false;
   nationalities: Nationality[] = [];
+  drivers: any[] = [];
 
   inputName = new FormControl('');
   inputRealName = new FormControl('');
@@ -36,7 +37,11 @@ export class DriverAllComponent implements OnInit {
 
   constructor(private seasonService: SeasonService) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.drivers = this.driverAll!;
+    console.log(this.drivers);
+    
+  }
 
   getNationalities() {
     this.isFetching = true;
@@ -64,18 +69,28 @@ export class DriverAllComponent implements OnInit {
       this.isFetching = false;
       return;
     }
-    const data = {
+    var data = {
       'name': this.inputName.value,
       'realName': this.inputRealName.value,
       'nationality': this.inputNationality.value,
       'number': this.inputNumber.value,
       'actualTeamId': this.inputActualTeamId.value,
-    } as Driver;
+    } as any;
+    
     this.seasonService.createDriver(data, this.season?.id!).subscribe({
-      next: () => {
+      next: id => {
+        console.log(id.replace(/"/g, ''));
+        
         this.closeModal();
+
+        data.id = id.replace(/"/g, '');;     
+        this.getNationalities();   
+        data.nationality = this.nationalities.find(x => x.alpha2 === data.nationality)!;
+        data.actualTeam = data.actualTeamId !== null ?? this.season.teams.find(x => x.id === data.actualTeamId);
+        data.point = 0;
+        this.drivers.push(data);
+
         this.isFetching = false;
-        this.onFetchDataEmitter.emit();
       },
       error: error => {
         this.error = error;
@@ -96,18 +111,38 @@ export class DriverAllComponent implements OnInit {
       this.isFetching = false;
       return;
     }
-    const data = {
+    var data = {
       'name': this.inputName.value,
       'realName': this.inputRealName.value,
       'nationality': this.inputNationality.value,
       'number': this.inputNumber.value,
       'actualTeamId': this.inputActualTeamId.value,
-    } as Driver;
+    } as any;
+    
     this.seasonService.updateDriver(id, data).subscribe({
       next: () => {
         this.closeModal();
+        
+        const index = this.drivers.findIndex(driver => driver.id === id);
+        if (index >= 0) {
+          if (this.drivers[index].nationality === undefined || this.inputNationality.value !== this.drivers[index].nationality.alpha2) {
+            this.getNationalities();
+          }
+          
+          data.nationality = this.nationalities.find(x => x.alpha2 === data.nationality)!;
+          data.actualTeam = data.actualTeamId !== null ? this.season.teams.find(x => x.id === data.actualTeamId) : {
+            'id': undefined,
+            'name': undefined,
+            'color': undefined
+          };
+
+          this.drivers[index] = {
+            ...this.drivers[index],
+            ...data,
+          };
+        }
+
         this.isFetching = false;
-        this.onFetchDataEmitter.emit();
       },
       error: error => {
         this.error = error;
@@ -121,8 +156,8 @@ export class DriverAllComponent implements OnInit {
     this.seasonService.deleteDriver(id).subscribe({
       next: () => {
         this.closeModal();
+        this.drivers = this.drivers.filter(x => x.id !== id);
         this.isFetching = false;
-        this.onFetchDataEmitter.emit()
       },
       error: error => {
         this.error = error;

@@ -392,7 +392,7 @@ namespace car_racing_tournament_api.Tests.Integration
                 ActualTeamId = null
             });
             
-            Assert.That(result, Is.TypeOf<StatusCodeResult>());
+            Assert.That(result, Is.TypeOf<ObjectResult>());
         }
 
         [Test]

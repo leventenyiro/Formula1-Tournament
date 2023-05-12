@@ -52,28 +52,28 @@ namespace car_racing_tournament_api.Services
             return (true, driver, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> AddDriver(Season season, DriverDto driverDto, Team team)
+        public async Task<(bool IsSuccess, Guid? Id, string? ErrorMessage)> AddDriver(Season season, DriverDto driverDto, Team team)
         {
             driverDto.Name = driverDto.Name.Trim();
             if (string.IsNullOrEmpty(driverDto.Name))
-                return (false, _configuration["ErrorMessages:DriverName"]);
+                return (false, null, _configuration["ErrorMessages:DriverName"]);
 
             if (driverDto.Nationality != null && DriverService.GetNationalityByAlpha2(driverDto.Nationality) == null)
-                return (false, _configuration["ErrorMessages:Nationality"]);
+                return (false, null, _configuration["ErrorMessages:Nationality"]);
 
             if (driverDto.Number <= 0 || driverDto.Number >= 100)
-                return (false, _configuration["ErrorMessages:DriverNumber"]);
+                return (false, null, _configuration["ErrorMessages:DriverNumber"]);
 
             if (driverDto.ActualTeamId != null && season.Id != team.SeasonId)
-                return (false, _configuration["ErrorMessages:DriverTeamNotSameSeason"]);
+                return (false, null, _configuration["ErrorMessages:DriverTeamNotSameSeason"]);
 
             if (await _carRacingTournamentDbContext.Drivers.CountAsync(
                 x => x.Name == driverDto.Name && x.SeasonId == season.Id) != 0)
-                return (false, _configuration["ErrorMessages:DriverNameExists"]);
+                return (false, null, _configuration["ErrorMessages:DriverNameExists"]);
 
             if (await _carRacingTournamentDbContext.Drivers.CountAsync(
                 x => x.Number == driverDto.Number && x.SeasonId == season.Id) != 0)
-                return (false, _configuration["ErrorMessages:DriverNumberExists"]);
+                return (false, null, _configuration["ErrorMessages:DriverNumberExists"]);
 
             driverDto.RealName = driverDto.RealName?.Trim();
             var driver = new Driver {
@@ -88,7 +88,7 @@ namespace car_racing_tournament_api.Services
             await _carRacingTournamentDbContext.Drivers.AddAsync(driver);
             _carRacingTournamentDbContext.SaveChanges();
 
-            return (true, null);
+            return (true, driver.Id, null);
         }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateDriver(Driver driver, DriverDto driverDto, Team team)
