@@ -1,26 +1,33 @@
 <div class="row row-header my-3 d-flex align-items-center">
-    <div class="col-2 col-lg-1">Position</div>
-    <div [ngClass]="hasPermission && !season.isArchived ? 'col-2' : 'col-3'">
+    <div class="col-1">
+        <div class="d-none d-md-flex">
+            Position
+        </div>
+        <div class="d-md-none">
+            Pos
+        </div>
+    </div>
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-1' : 'col-2'">
         <div class="d-none d-sm-flex">
             Name
         </div>
         <div class="d-sm-none">
-            Nm.
+            Nm
         </div>
     </div>
     <div class="col-lg-2 d-none d-lg-flex">Real Name</div>
-    <div class="col-2 col-lg-1">
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-2 col-lg-1' : 'col-3 col-lg-1'">
         <div class="d-none d-xl-flex">
             Nationality
         </div>
         <div class="d-xl-none">
-            Nat.
+            Nat
         </div>
     </div>
     <div class="col-lg-1 d-none d-lg-flex">Number</div>
-    <div [ngClass]="hasPermission && !season.isArchived ? 'col-2' : 'col-3'" class="col-lg-2">Team</div>
-    <div class="col-1 col-lg-1">Points</div>
-    <div *ngIf="hasPermission && !season.isArchived"  [ngClass]="hasPermission && !season.isArchived ? 'col-3 col-lg-2' : 'col-1 col-lg-1'">
+    <div class="col-3 col-lg-2">Team</div>
+    <div class="col-2 col-lg-1">Points</div>
+    <div *ngIf="hasPermission && !season.isArchived" [ngClass]="hasPermission && !season.isArchived ? 'col-3 col-lg-2' : 'col-1'">
         <button class="btn btn-success btn-sm" (mouseup)="openModal('createDriver')">Add driver</button>
     </div>
 </div>
@@ -29,11 +36,11 @@
         <div class="team-color" [ngStyle]="{'background-color': driver.actualTeam.color}"></div>
         <div>{{ i + 1 }}</div>
     </div>
-    <div class="col-lg-2" [ngClass]="hasPermission && !season.isArchived ? 'col-1' : 'col-2'">
-        <div class="d-none d-lg-flex">
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-1' : 'col-2'">
+        <div class="d-none d-xl-flex">
             {{ driver.name }}
         </div>
-        <div class="d-lg-none">
+        <div class="d-xl-none">
             {{ driver.name.substring(0, 3).toUpperCase() }}
         </div>
     </div>
