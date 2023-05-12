@@ -29,6 +29,7 @@ export class DriverResultComponent implements OnInit {
   error: string = '';
   modal: string = '';
   selectedResult?: Result;
+  results: any[] = [];
 
   inputTeamId = new FormControl('');
   inputRaceId = new FormControl('');
@@ -37,7 +38,9 @@ export class DriverResultComponent implements OnInit {
 
   constructor(private seasonService: SeasonService) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.results = this.driverResults!;
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['driverId']) {
@@ -67,10 +70,13 @@ export class DriverResultComponent implements OnInit {
     data.driverId = this.driverId;
 
     this.seasonService.createResult(data).subscribe({
-      next: () => {
+      next: id => {
         this.closeModal();
+
+        data.id = id.replace(/"/g, '');
+        this.results.push(data);
+
         this.isFetching = false;
-        this.onFetchDataEmitter.emit();
       },
       error: error => {
         this.error = error;

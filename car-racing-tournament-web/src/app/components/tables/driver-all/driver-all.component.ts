@@ -39,8 +39,6 @@ export class DriverAllComponent implements OnInit {
 
   ngOnInit(): void {
     this.drivers = this.driverAll!;
-    console.log(this.drivers);
-    
   }
 
   getNationalities() {
@@ -78,15 +76,17 @@ export class DriverAllComponent implements OnInit {
     } as any;
     
     this.seasonService.createDriver(data, this.season?.id!).subscribe({
-      next: id => {
-        console.log(id.replace(/"/g, ''));
-        
+      next: id => {        
         this.closeModal();
 
-        data.id = id.replace(/"/g, '');;     
+        data.id = id.replace(/"/g, '');
         this.getNationalities();   
         data.nationality = this.nationalities.find(x => x.alpha2 === data.nationality)!;
-        data.actualTeam = data.actualTeamId !== null ?? this.season.teams.find(x => x.id === data.actualTeamId);
+        data.actualTeam = data.actualTeamId !== null ? this.season.teams.find(x => x.id === data.actualTeamId) : {
+          'id': undefined,
+          'name': undefined,
+          'color': undefined
+        };
         data.point = 0;
         this.drivers.push(data);
 
