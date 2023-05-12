@@ -462,7 +462,7 @@ namespace car_racing_tournament_api.Tests.Integration
                 Color = "#abcdef"
             });
             
-            Assert.That(result, Is.TypeOf<StatusCodeResult>());
+            Assert.That(result, Is.TypeOf<ObjectResult>());
         }
 
         [Test]
@@ -512,7 +512,7 @@ namespace car_racing_tournament_api.Tests.Integration
                 DateTime = DateTime.Now
             });
             
-            Assert.That(result, Is.TypeOf<StatusCodeResult>());
+            Assert.That(result, Is.TypeOf<ObjectResult>());
         }
 
         [Test]

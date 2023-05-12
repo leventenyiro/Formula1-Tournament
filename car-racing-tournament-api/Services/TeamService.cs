@@ -67,15 +67,15 @@ namespace car_racing_tournament_api.Services
             return (true, team, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> AddTeam(Season season, TeamDto teamDto)
+        public async Task<(bool IsSuccess, Guid? Id, string? ErrorMessage)> AddTeam(Season season, TeamDto teamDto)
         {
             teamDto.Name = teamDto.Name.Trim();
             if (string.IsNullOrEmpty(teamDto.Name))
-                return (false, _configuration["ErrorMessages:TeamName"]);
+                return (false, null, _configuration["ErrorMessages:TeamName"]);
 
             if (await _carRacingTournamentDbContext.Teams.CountAsync(
                 x => x.Name == teamDto.Name && x.SeasonId == season.Id) != 0)
-                return (false, _configuration["ErrorMessages:TeamExists"]);
+                return (false, null, _configuration["ErrorMessages:TeamExists"]);
 
             Team teamObj = new Team
             {
@@ -94,12 +94,12 @@ namespace car_racing_tournament_api.Services
             }
             catch (Exception)
             {
-                return (false, _configuration["ErrorMessages:TeamColor"]);
+                return (false, null, _configuration["ErrorMessages:TeamColor"]);
             }
             await _carRacingTournamentDbContext.Teams.AddAsync(teamObj);
             _carRacingTournamentDbContext.SaveChanges();
 
-            return (true, null);
+            return (true, teamObj.Id, null);
         }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateTeam(Team team, TeamDto teamDto)

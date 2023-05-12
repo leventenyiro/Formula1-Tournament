@@ -66,7 +66,7 @@ namespace car_racing_tournament_api.Controllers
             if (!resultAdd.IsSuccess)
                 return BadRequest(resultAdd.ErrorMessage);
 
-            return StatusCode(StatusCodes.Status201Created);
+            return StatusCode(StatusCodes.Status201Created, resultAdd.Id);
         }
 
         [HttpPut("{id}"), Authorize]

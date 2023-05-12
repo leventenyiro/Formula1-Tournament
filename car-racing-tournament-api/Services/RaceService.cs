@@ -62,15 +62,15 @@ namespace car_racing_tournament_api.Services
             return (true, race, null);
         }
 
-        public async Task<(bool IsSuccess, string? ErrorMessage)> AddRace(Season season, RaceDto raceDto)
+        public async Task<(bool IsSuccess, Guid? Id, string? ErrorMessage)> AddRace(Season season, RaceDto raceDto)
         {
             raceDto.Name = raceDto.Name.Trim();
             if (string.IsNullOrEmpty(raceDto.Name))
-                return (false, _configuration["ErrorMessages:RaceNameCannotBeEmpty"]);
+                return (false, null, _configuration["ErrorMessages:RaceNameCannotBeEmpty"]);
 
             if (await _carRacingTournamentDbContext.Races.CountAsync(
                 x => x.Name == raceDto.Name && x.SeasonId == season.Id) != 0)
-                return (false, _configuration["ErrorMessages:RaceNameExists"]);
+                return (false, null, _configuration["ErrorMessages:RaceNameExists"]);
 
             raceDto.Name = raceDto.Name;
             var race = _mapper.Map<Race>(raceDto);
@@ -79,7 +79,7 @@ namespace car_racing_tournament_api.Services
             await _carRacingTournamentDbContext.Races.AddAsync(race);
             _carRacingTournamentDbContext.SaveChanges();
 
-            return (true, null);
+            return (true, race.Id, null);
         }
 
         public async Task<(bool IsSuccess, string? ErrorMessage)> UpdateRace(Race race, RaceDto raceDto)
