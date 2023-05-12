@@ -25,11 +25,11 @@
     </div>
 </div>
 <div class="row row-box mb-3 d-flex align-items-center" *ngFor="let driver of driverAll; index as i;">
-    <div class="col-2 col-lg-1 d-flex align-items-center">
+    <div class="col-1 d-flex align-items-center">
         <div class="team-color" [ngStyle]="{'background-color': driver.actualTeam.color}"></div>
         <div>{{ i + 1 }}</div>
     </div>
-    <div [ngClass]="hasPermission && !season.isArchived ? 'col-2' : 'col-3'">
+    <div class="col-lg-2" [ngClass]="hasPermission && !season.isArchived ? 'col-1' : 'col-2'">
         <div class="d-none d-lg-flex">
             {{ driver.name }}
         </div>
@@ -40,19 +40,19 @@
     <div class="col-lg-2 d-none d-lg-flex text-wrap">
         {{ driver.realName }}
     </div>
-    <div class="col-2 col-lg-1">
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-2 col-lg-1' : 'col-3 col-lg-1'">
         <img *ngIf="driver.nationality !== undefined" width="30" src="https://hatscripts.github.io/circle-flags/flags/{{ driver.nationality?.alpha2 }}.svg" alt="" title="{{ driver.nationality?.name }}">
     </div>
     <div class="col-lg-1 d-none d-lg-flex">
         {{ driver.number }}
     </div>
-    <div [ngClass]="hasPermission && !season.isArchived ? 'col-2' : 'col-3'" class="col-lg-2 text-wrap">
+    <div class="col-3 col-lg-2 text-wrap">
         {{ driver.actualTeam.name }}
     </div>
-    <div class="col-1 col-lg-1 fw-bold">
+    <div class="col-2 col-lg-1 fw-bold">
         {{ driver.point }}
     </div>
-    <div [ngClass]="hasPermission && !season.isArchived ? 'col-3 col-lg-2' : 'col-1 col-lg-1'">
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-3 col-lg-2' : 'col-1'">
         <div class="row">
             <div class="col-sm-4 d-flex justify-content-end">
                 <button class="btn btn-primary btn-sm my-1" (mouseup)="openStatistics(driver.name)" title="Statistics">
