@@ -1,67 +1,82 @@
 <div class="row row-header my-3 d-flex align-items-center">
-    <div class="col-2 col-lg-1">Position</div>
-    <div class="col-2">Name</div>
-    <div class="col-lg-3 d-none d-lg-flex">Real Name</div>
+    <div class="col-1">
+        <div class="d-none d-md-flex">
+            Position
+        </div>
+        <div class="d-md-none">
+            Pos
+        </div>
+    </div>
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-1' : 'col-2'">
+        <div class="d-none d-sm-flex">
+            Name
+        </div>
+        <div class="d-sm-none">
+            Nm
+        </div>
+    </div>
+    <div class="col-lg-2 d-none d-lg-flex">Real Name</div>
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-2 col-lg-1' : 'col-3 col-lg-1'">
+        <div class="d-none d-xl-flex">
+            Nationality
+        </div>
+        <div class="d-xl-none">
+            Nat
+        </div>
+    </div>
     <div class="col-lg-1 d-none d-lg-flex">Number</div>
     <div class="col-3 col-lg-2">Team</div>
-    <div class="col-2 col-lg-1">Points</div>
-    <div class="col-3 col-lg-2">
-        <button *ngIf="hasPermission && !season?.isArchived" class="btn btn-success btn-sm" (mouseup)="openModal('createDriver')">Add driver</button>
+    <div class="col-2">Points</div>
+    <div *ngIf="hasPermission && !season.isArchived" [ngClass]="hasPermission && !season.isArchived ? 'col-3 col-lg-2' : 'col-1'">
+        <button class="btn btn-success btn-sm" (mouseup)="openModal('createDriver')">Add driver</button>
     </div>
 </div>
 <div class="row row-box mb-3 d-flex align-items-center" *ngFor="let driver of driverAll; index as i;">
-    <div class="col-2 col-lg-1 d-flex align-items-center">
+    <div class="col-1 d-flex align-items-center">
         <div class="team-color" [ngStyle]="{'background-color': driver.actualTeam.color}"></div>
         <div>{{ i + 1 }}</div>
     </div>
-    <div class="col-2">
-        <div class="d-none d-lg-flex">
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-1' : 'col-2'">
+        <div class="d-none d-xl-flex">
             {{ driver.name }}
         </div>
-        <div class="d-lg-none">
+        <div class="d-xl-none">
             {{ driver.name.substring(0, 3).toUpperCase() }}
         </div>
     </div>
-    <div class="col-lg-3 d-none d-lg-flex">
+    <div class="col-lg-2 d-none d-lg-flex text-wrap">
         {{ driver.realName }}
+    </div>
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-2 col-lg-1' : 'col-3 col-lg-1'">
+        <img *ngIf="driver.nationality !== undefined" width="30" src="https://hatscripts.github.io/circle-flags/flags/{{ driver.nationality?.alpha2 }}.svg" alt="" title="{{ driver.nationality?.name }}">
     </div>
     <div class="col-lg-1 d-none d-lg-flex">
         {{ driver.number }}
     </div>
-    <div class="col-3 col-lg-2">
+    <div class="col-3 col-lg-2 text-wrap">
         {{ driver.actualTeam.name }}
     </div>
-    <div class="col-2 col-lg-1">
+    <div class="col-2 fw-bold">
         {{ driver.point }}
     </div>
-    <div class="col-3 col-lg-2">
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-3 col-lg-2' : 'col-1'">
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-4 d-flex justify-content-end">
                 <button class="btn btn-primary btn-sm my-1" (mouseup)="openStatistics(driver.name)" title="Statistics">
                     <i class="bi bi-bar-chart-fill"></i>
                 </button>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4 d-flex justify-content-end">
                 <button *ngIf="hasPermission && !season.isArchived" class="btn btn-primary btn-sm my-1" (mouseup)="openModal('updateDriver', driver)" title="Modify">
                     <i class="bi bi-pen"></i>
                 </button>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4 d-flex justify-content-end">
                 <button *ngIf="hasPermission && !season.isArchived" class="btn btn-danger btn-sm my-1" (mouseup)="openModal('deleteDriver', driver)" title="Delete">
                     <i class="bi bi-trash3"></i>
                 </button>
             </div>
         </div>
-
-        <app-modal type="form" *ngIf="modal === 'deleteDriver' && selectedDriver!.id === driver.id">
-            <app-verify-form
-                title='Delete "{{ driver.name }}" driver'
-                subtext="It will remove all results of the driver!"
-                executeButtonText="Delete"
-                (executionEmitter)="deleteDriver(driver.id)"
-                (closeModalEmitter)="closeModal()"
-            ></app-verify-form>
-        </app-modal>
     </div>
 </div>
 
@@ -81,6 +96,23 @@
         <div class="mb-3">
             <label for="inputRealName" class="form-label">Real Name</label>
             <input type="text" class="form-control" id="inputRealName" [formControl]="inputRealName" name="realName">
+        </div>
+
+        <div class="mb-3">
+            <label for="inputNationality" class="form-label">Nationality</label>
+            <div class="row d-flex align-items-center">
+                <div class="col-1">
+                    <img *ngIf="inputNationality.value !== undefined" width="30" src="https://hatscripts.github.io/circle-flags/flags/{{ actualNationality() }}.svg" alt="">
+                </div>
+                <div class="col-11">
+                    <select name="nationality" id="inputNationality" class="form-select" [value]="selectedDriver?.nationality?.alpha2 === undefined ? null : selectedDriver?.nationality?.alpha2" [formControl]="inputNationality">
+                        <option [ngValue]="null">None</option>
+                        <option *ngFor="let option of nationalities" [value]="option.alpha2">
+                            {{ option.name }}
+                        </option>
+                    </select>
+                </div>
+            </div>
         </div>
 
         <div class="mb-3">
@@ -106,7 +138,7 @@
             </div>
         </div>
 
-        <div class="row d-flex">
+        <div class="row d-flex text-center">
             <div class="col-6">
                 <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="closeModal()">Cancel</button>
             </div>
@@ -117,6 +149,17 @@
             </div>
         </div>
     </form>
+</app-modal>
+
+<app-modal type="form" *ngIf="modal === 'deleteDriver'">
+    <app-verify-form
+        class="text-center"
+        title='Delete "{{ selectedDriver!.name }}" driver'
+        subtext="It will remove all results of the driver!"
+        executeButtonText="Delete"
+        (executionEmitter)="deleteDriver(selectedDriver!.id)"
+        (closeModalEmitter)="closeModal()"
+    ></app-verify-form>
 </app-modal>
 
 <app-modal type="loading" *ngIf="isFetching"></app-modal>

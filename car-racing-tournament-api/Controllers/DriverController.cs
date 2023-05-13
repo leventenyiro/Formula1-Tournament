@@ -100,5 +100,14 @@ namespace car_racing_tournament_api.Controllers
 
             return Ok(result.DriverStatistics);
         }
+
+        [HttpGet("nationality")]
+        public async Task<IActionResult> Nationality() {
+            var result = await _driverService.Nationalities();
+            if (!result.IsSuccess)
+                return NotFound(result.ErrorMessage);
+
+            return Ok(result.Nationalities);
+        }
     }
 }

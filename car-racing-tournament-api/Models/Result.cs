@@ -8,7 +8,7 @@ namespace car_racing_tournament_api.Models
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public ResultType Type { get; set; }
         public int? Position { get; set; }
-        public int Point { get; set; }
+        public double Point { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public virtual Driver Driver { get; set; } = default!;
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

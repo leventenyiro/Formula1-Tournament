@@ -64,7 +64,7 @@
             <div class="invalid-feedback">Passwords are mismatched!</div>
         </div>
     
-        <div class="row d-flex">
+        <div class="row d-flex text-center">
             <div class="col-6">
                 <button class="btn btn-outline-danger btn-sm btn-block" (mouseup)="closeModal()">Cancel</button>
             </div>
@@ -76,7 +76,8 @@
 </app-modal>
 
 <app-modal type="form" *ngIf="modal === 'deleteUser'">
-    <app-verify-form title='Delete your profile' executeButtonText="Delete" (executionEmitter)="deleteUser()"
+    <app-verify-form
+        class="text-center" title='Delete your profile' executeButtonText="Delete" (executionEmitter)="deleteUser()"
         (closeModalEmitter)="closeModal()"></app-verify-form>
 </app-modal>
 

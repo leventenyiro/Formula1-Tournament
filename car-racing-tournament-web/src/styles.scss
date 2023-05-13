@@ -1,6 +1,13 @@
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
+body {
+    background-image: url(assets/background.svg);
+    background-position: top;
+    background-repeat: repeat-y;
+    background-size: cover;
+}
+
 * {
     font-family: 'Poppins', sans-serif;
 }
@@ -23,6 +30,7 @@ h2 {
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     padding: 10px;
     font-size: small;
+    backdrop-filter: blur(5px) contrast(1.4);
 }
 
 .row-header {
@@ -32,7 +40,7 @@ h2 {
 }
 
 .team-color {
-    height: 3.5vh;
+    height: 2rem;
     min-width: 0.7rem;
     max-width: 0.7rem;
     border-radius: 2px;

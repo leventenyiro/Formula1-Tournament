@@ -111,7 +111,7 @@ namespace car_racing_tournament_api.Controllers
         {
             var resultGetResult = await _resultService.GetResultById(id);
             if (!resultGetResult.IsSuccess)
-                return BadRequest(resultGetResult.ErrorMessage);
+                return NotFound(resultGetResult.ErrorMessage);
 
             var resultGetDriver = await _driverService.GetDriverById(resultGetResult.Result!.Driver.Id);
             if (!resultGetDriver.IsSuccess)

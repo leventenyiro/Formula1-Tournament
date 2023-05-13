@@ -64,7 +64,6 @@ namespace car_racing_tournament_api.Tests.Unit.User
             Assert.AreEqual(result.User!.Email, "test@test.com");
         }
 
-        // UpdateUser, UpdatePassword
         [Test]
         public async Task UpdateUserSuccess()
         {
@@ -163,6 +162,64 @@ namespace car_racing_tournament_api.Tests.Unit.User
             result = await _userService!.UpdateUser(_user!, registrationDto);
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:EmailFormat"]);
+        }
+
+        [Test]
+        public async Task UpdatePasswordSuccess() {
+            var result = await _userService!.UpdatePassword(_user!, new UpdatePasswordDto {
+                PasswordOld = "Valami1212",
+                Password = "Valami12121",
+                PasswordAgain = "Valami12121"
+            });
+            
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNull(result.ErrorMessage);
+        }
+
+        [Test]
+        public async Task UpdateIncorrectPassword()
+        {
+            var updatePasswordDto =  new UpdatePasswordDto {
+                PasswordOld = "Valami1212",
+                Password = "password",
+                PasswordAgain = "password"
+            };
+
+            var result = await _userService!.UpdatePassword(_user!, updatePasswordDto);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:PasswordFormat"]);
+
+            updatePasswordDto.Password = "Password";
+            updatePasswordDto.PasswordAgain = "Password";
+            result = await _userService!.UpdatePassword(_user!, updatePasswordDto);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:PasswordFormat"]);
+
+            updatePasswordDto.Password = "password1";
+            updatePasswordDto.PasswordAgain = "password1";
+            result = await _userService!.UpdatePassword(_user!, updatePasswordDto);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:PasswordFormat"]);
+        }
+
+        [Test]
+        public async Task UpdateNotEqualPassword()
+        {
+            var updatePasswordDto =  new UpdatePasswordDto {
+                PasswordOld = "Valami1212",
+                Password = "Password1",
+                PasswordAgain = "Password12"
+            };
+            var result = await _userService!.UpdatePassword(_user!, updatePasswordDto);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:PasswordsPass"]);
+        }
+
+        [Test]
+        public async Task DeleteUser() {
+            var result = await _userService!.DeleteUser(_user!);
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNull(result.ErrorMessage);
         }
     }
 }

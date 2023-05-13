@@ -115,6 +115,7 @@ export class SeasonComponent implements OnInit {
         id: driver.id,
         name: driver.name,
         realName: driver.realName,
+        nationality: driver.nationality,
         number: driver.number,
         actualTeam: {
           id: actualTeam?.id,
@@ -336,7 +337,7 @@ export class SeasonComponent implements OnInit {
     if (this.isLoggedIn) {      
       if (this.isFavorite(season)) {
         this.isFetching = true;
-        this.seasonService.deleteFavorite(this.user!.favorites!.find(x => x.seasonId === season.id && x.userId === this.user!.id)!.id!).subscribe({
+        this.seasonService.deleteFavorite(this.user!.favorites!.find(x => x.seasonId === season.id)!.id!).subscribe({
           next: () => {
             this.isFetching = false;
             this.onFetchData();

@@ -173,7 +173,6 @@ namespace car_racing_tournament_api.Tests.Unit.User
                 PasswordAgain = "password"
             };
             var result = await _userService!.Registration(registrationDto);
-            var valami = result;
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual(result.ErrorMessage, _configuration!["ErrorMessages:PasswordFormat"]);
 
