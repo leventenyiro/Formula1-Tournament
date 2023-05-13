@@ -17,8 +17,6 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-
         builder.Services.AddControllers();
         builder.Services.AddDbContext<CarRacingTournamentDbContext>(options =>
         {
@@ -86,12 +84,12 @@ internal class Program
         {
             options.GeneralRules = new List<RateLimitRule>()
             {
-        new RateLimitRule()
-        {
-            Endpoint = "*",
-            Limit = 100,
-            Period = "1s"
-        }
+                new RateLimitRule()
+                {
+                    Endpoint = "*",
+                    Limit = 100,
+                    Period = "1s"
+                }
             };
         });
         builder.Services.AddInMemoryRateLimiting();
@@ -112,7 +110,6 @@ internal class Program
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -127,10 +124,8 @@ internal class Program
 
         app.MapControllers();
 
-        // RateLimiter
         app.UseIpRateLimiting();
 
-        // app.UseCors(x => x.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true).AllowCredentials());
         app.UseCors("MyPolicy");
 
         app.Run();

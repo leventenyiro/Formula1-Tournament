@@ -152,6 +152,9 @@ namespace car_racing_tournament_api.Controllers
             if (!resultGetSeason.IsSuccess)
                 return NotFound(resultGetSeason.ErrorMessage);
 
+            if (!await _permissionService.IsAdmin(new Guid(User.Identity!.Name!), seasonId))
+                return Forbid();
+
             var resultGetUser = await _userService.GetUserByUsernameEmail(usernameEmail);
             if (!resultGetUser.IsSuccess)
                 return NotFound(resultGetUser.ErrorMessage);
