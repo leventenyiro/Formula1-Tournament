@@ -12,6 +12,6 @@ fi
 
 dotnet ef database update 0;
 rm -rf Migrations
-dotnet ef migrations add init;
+dotnet ef migrations add init --configuration Development;
 dotnet ef database update;
 cd ..;
