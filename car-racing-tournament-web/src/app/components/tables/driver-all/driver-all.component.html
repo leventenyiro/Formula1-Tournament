@@ -7,16 +7,16 @@
             Pos
         </div>
     </div>
-    <div [ngClass]="hasPermission && !season.isArchived ? 'col-1' : 'col-2'">
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-lg-1' : ''" class="col-2">
         <div class="d-none d-sm-flex">
             Name
         </div>
-        <div class="d-sm-none">
+        <div class="d-sm-none ps-3">
             Nm
         </div>
     </div>
     <div class="col-lg-2 d-none d-lg-flex">Real Name</div>
-    <div [ngClass]="hasPermission && !season.isArchived ? 'col-2 col-lg-1' : 'col-3 col-lg-1'">
+    <div class="col-1">
         <div class="d-none d-xl-flex">
             Nationality
         </div>
@@ -26,8 +26,8 @@
     </div>
     <div class="col-lg-1 d-none d-lg-flex">Number</div>
     <div class="col-3 col-lg-2">Team</div>
-    <div class="col-2">Points</div>
-    <div *ngIf="hasPermission && !season.isArchived" [ngClass]="hasPermission && !season.isArchived ? 'col-3 col-lg-2' : 'col-1'">
+    <div class="col-3 col-lg-2">Points</div>
+    <div *ngIf="hasPermission && !season.isArchived" [ngClass]="hasPermission && !season.isArchived ? 'col-2' : 'col-1'">
         <button class="btn btn-success btn-sm" (mouseup)="openModal('createDriver')">Add driver</button>
     </div>
 </div>
@@ -36,30 +36,30 @@
         <div class="team-color" [ngStyle]="{'background-color': driver.actualTeam.color}"></div>
         <div>{{ i + 1 }}</div>
     </div>
-    <div [ngClass]="hasPermission && !season.isArchived ? 'col-1' : 'col-2'">
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-lg-1' : ''" class="col-2">
         <div class="d-none d-xl-flex">
             {{ driver.name }}
         </div>
-        <div class="d-xl-none">
+        <div class="d-xl-none ps-3">
             {{ driver.name.substring(0, 3).toUpperCase() }}
         </div>
     </div>
     <div class="col-lg-2 d-none d-lg-flex text-wrap">
         {{ driver.realName }}
     </div>
-    <div [ngClass]="hasPermission && !season.isArchived ? 'col-2 col-lg-1' : 'col-3 col-lg-1'">
-        <img *ngIf="driver.nationality !== undefined" width="30" src="https://hatscripts.github.io/circle-flags/flags/{{ driver.nationality?.alpha2 }}.svg" alt="" title="{{ driver.nationality?.name }}">
+    <div class="col-1">
+        <img *ngIf="driver.nationality !== undefined" width="30" class="pe-1" src="https://hatscripts.github.io/circle-flags/flags/{{ driver.nationality?.alpha2 }}.svg" alt="" title="{{ driver.nationality?.name }}">
     </div>
     <div class="col-lg-1 d-none d-lg-flex">
         {{ driver.number }}
     </div>
-    <div class="col-3 col-lg-2 text-wrap">
+    <div class="text-wrap col-3 col-lg-2">
         {{ driver.actualTeam.name }}
     </div>
-    <div class="col-2 fw-bold">
+    <div class="col-3 col-lg-2 fw-bold">
         {{ driver.point }}
     </div>
-    <div [ngClass]="hasPermission && !season.isArchived ? 'col-3 col-lg-2' : 'col-1'">
+    <div [ngClass]="hasPermission && !season.isArchived ? 'col-2' : 'col-1'">
         <div class="row">
             <div class="col-sm-4 d-flex justify-content-end">
                 <button class="btn btn-primary btn-sm my-1" (mouseup)="openStatistics(driver.name)" title="Statistics">

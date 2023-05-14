@@ -102,6 +102,7 @@ namespace car_racing_tournament_api.Tests.Unit
         {
             var result = await _resultService!.GetResultById(_result!.Id);
             Assert.IsTrue(result.IsSuccess);
+            Assert.IsNotNull(result.Result);
             Assert.IsNull(result.ErrorMessage);
 
             Result resultOutput = result.Result!;
