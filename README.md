@@ -29,3 +29,8 @@ Running the webapplication
 ```sh
 ng serve --open
 ```
+
+### External sources:
+https://github.com/lukes/ISO-3166-Countries-with-Regional-Codes
+
+https://github.com/HatScripts/circle-flags
